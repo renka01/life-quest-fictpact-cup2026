@@ -11,7 +11,7 @@ export interface Task {
   title: string;
   notes: string;
   category: string;
-  difficulty: number; // 1: Remeh, 2: Mudah, 3: Sedang, 4: Susah
+  difficulty: number; 
   done?: boolean;
   isBoss?: boolean;
   resetCounter?: string;
@@ -20,6 +20,23 @@ export interface Task {
   repeatEvery?: number;
   repeatUnit?: string;
   dueDate?: string;
+}
+
+export interface Account {
+  id: string;
+  name: string;
+  balance: number;
+  type: 'rekening' | 'tabungan';
+  target?: number;
+  weight?: number; 
+}
+
+export interface Transaction {
+  id: string;
+  accountName: string;
+  amount: number;
+  type: 'income' | 'expense'; 
+  timestamp: number;
 }
 
 export interface Stats {
@@ -47,10 +64,12 @@ interface ConfirmDialog {
 }
 
 // ==========================================
-// 2. STATE & ACTIONS BUNDLE
+// 2. STATE & ACTIONS INTERFACE
 // ==========================================
 interface LifeQuestStore {
   tasks: Task[];
+  accounts: Account[];
+  transactions: Transaction[];
   stats: Stats;
   alertDialog: AlertDialog;
   confirmDialog: ConfirmDialog;
@@ -65,8 +84,14 @@ interface LifeQuestStore {
   toggleTaskDone: (task: Task) => void;
   handleHabitPlus: (task: Task) => void;
   handleHabitMinus: (task: Task) => void;
+
+  addAccount: (account: Account) => void;
+  updateBalance: (id: string, amount: number, weightChange?: number) => void; 
+  deleteAccount: (id: string) => void;
+  clearTransactions: () => void;
   
   _applyReward: (baseExp: number, baseGold: number, baseEnergyCost: number, difficulty: number) => void;
+  _applySimpleReward: (expGain: number) => void; // 🔥 Tambahkan interface baru
 }
 
 // ==========================================
@@ -74,10 +99,10 @@ interface LifeQuestStore {
 // ==========================================
 const getDifficultyMultiplier = (difficulty: number) => {
   switch (difficulty) {
-    case 1: return 0.5; // Remeh
-    case 2: return 1.0; // Mudah
-    case 3: return 1.5; // Sedang
-    case 4: return 2.0; // Susah
+    case 1: return 0.5; 
+    case 2: return 1.0; 
+    case 3: return 1.5; 
+    case 4: return 2.0; 
     default: return 1.0;
   }
 };
@@ -88,6 +113,8 @@ const getDifficultyMultiplier = (difficulty: number) => {
 export const useStore = create<LifeQuestStore>((set, get) => ({
   // --- INITIAL DATA ---
   tasks: [],
+  accounts: [], 
+  transactions: [],
   stats: {
     level: 1,
     hp: 50, maxHp: 50,
@@ -111,14 +138,100 @@ export const useStore = create<LifeQuestStore>((set, get) => ({
 
   deleteTask: (id) => {
     const { showConfirm, closeConfirm } = get();
-    showConfirm("Apakah kamu yakin ingin menghapus misi ini? Data yang dihapus akan lenyap selamanya dari Log.", () => {
+    showConfirm("Apakah kamu yakin ingin menghapus misi ini?", () => {
       set((state) => ({ tasks: state.tasks.filter(t => t.id !== id) }));
       closeConfirm();
     });
   },
 
+  // --- ACTIONS FINANCE ---
+  addAccount: (newAcc) => set((state) => {
+    const isExist = state.accounts.find(acc => acc.name === newAcc.name);
+
+    if (isExist) {
+      return {
+        accounts: state.accounts.map(acc => 
+          acc.name === newAcc.name 
+            ? { 
+                ...acc, 
+                balance: newAcc.balance, 
+                weight: newAcc.weight,
+                target: newAcc.target ?? acc.target 
+              } 
+            : acc
+        )
+      };
+    }
+
+    return { accounts: [...state.accounts, newAcc] };
+  }),
+
+  updateBalance: (id, amount, weightChange = 0) => {
+    const { accounts, transactions, showAlert } = get();
+    const targetAccount = accounts.find(acc => acc.id === id);
+    if (!targetAccount) return;
+
+    const isExpense = amount < 0 || weightChange < 0;
+    const logType: 'income' | 'expense' = isExpense ? 'expense' : 'income';
+
+    const newLog: Transaction = {
+      id: Date.now().toString(),
+      accountName: targetAccount.name,
+      amount: amount !== 0 ? Math.abs(amount) : Math.abs(weightChange),
+      type: logType,
+      timestamp: Date.now(),
+    };
+
+    set({
+      accounts: accounts.map(acc => {
+        if (acc.id !== id) return acc;
+
+        let newBalance = acc.balance + amount;
+
+        if (amount > 0 && acc.type === 'tabungan' && acc.target) {
+          if (newBalance >= acc.target) {
+            const kelebihan = newBalance - acc.target;
+            newBalance = acc.target;
+
+            setTimeout(() => {
+              showAlert(
+                "TARGET TERCAPAI! 🏆", 
+                `Misi menabung di ${acc.name} selesai!\n` + 
+                (kelebihan > 0 ? `Sisa Rp ${kelebihan.toLocaleString()} dikembalikan.` : `Target Rp ${acc.target?.toLocaleString()} tercapai!`),
+                "success"
+              );
+            }, 200);
+          }
+        }
+
+        return {
+          ...acc,
+          balance: newBalance,
+          weight: Number(((acc.weight || 0) + weightChange).toFixed(4))
+        };
+      }),
+      transactions: [newLog, ...transactions].slice(0, 30)
+    });
+  },
+
+  deleteAccount: (id) => {
+    const { showConfirm, closeConfirm } = get();
+    showConfirm("Apakah Anda yakin ingin menghapus aset ini dari Vault?", () => {
+      set((state) => ({ accounts: state.accounts.filter(acc => acc.id !== id) }));
+      closeConfirm();
+    });
+  },
+
+  clearTransactions: () => {
+    const { showConfirm, closeConfirm } = get();
+    showConfirm("Hapus seluruh log transaksi selamanya?", () => {
+      set({ transactions: [] });
+      closeConfirm();
+    });
+  },
+
   // --- LOGIKA GAMIFIKASI ---
-  _applyReward: (baseExp: number, baseGold: number, baseEnergyCost: number, difficulty: number) => {
+  _applyReward: (baseExp, baseGold, baseEnergyCost, difficulty) => {
     const { stats, showAlert } = get();
     const multiplier = getDifficultyMultiplier(difficulty);
     
@@ -131,76 +244,88 @@ export const useStore = create<LifeQuestStore>((set, get) => ({
     let newMaxExp = stats.maxExp;
     let newGold = stats.gold + finalGold;
     
-    // 🔥 PERBAIKAN: Membatasi agar energi tidak melebihi 100 (maxEnergy)
     let newEnergy = Math.min(stats.maxEnergy, Math.max(0, stats.energy - finalEnergyCost));
 
-    if (newExp >= newMaxExp) {
+    while (newExp >= newMaxExp) {
       newLevel += 1;
       newExp -= newMaxExp;
       newMaxExp = Math.floor(newMaxExp * 1.5);
-      showAlert("LEVEL UP!", `Luar biasa! Kamu telah mencapai Level ${newLevel}!`, "success");
+      const levelUpLevel = newLevel; 
+      setTimeout(() => showAlert("LEVEL UP!", `Selamat! Level ${levelUpLevel} tercapai!`, "success"), 100);
     }
 
     set({ stats: { ...stats, exp: newExp, level: newLevel, maxExp: newMaxExp, gold: newGold, energy: newEnergy } });
   },
 
+  // 🔥 FUNGSI REWARD SEDERHANA UNTUK FINANCE
+  _applySimpleReward: (expGain) => {
+    const { stats, showAlert } = get();
+    let newExp = stats.exp + expGain;
+    let newLevel = stats.level;
+    let newMaxExp = stats.maxExp;
+
+    while (newExp >= newMaxExp) {
+      newLevel += 1;
+      newExp -= newMaxExp;
+      newMaxExp = Math.floor(newMaxExp * 1.5);
+      const levelUpLevel = newLevel; 
+      setTimeout(() => showAlert("LEVEL UP!", `Selamat! Level ${levelUpLevel} tercapai!`, "success"), 100);
+    }
+
+    set({ stats: { ...stats, exp: newExp, level: newLevel, maxExp: newMaxExp } });
+  },
+
   handleHabitPlus: (task) => {
-    const { tasks, _applyReward } = get();
-    
-    // Habit (+) memberi 10 EXP, 2 Gold, dan MENAMBAH 5 Energi (Karena pakai minus)
+    const { _applyReward } = get();
     _applyReward(10, 2, -5, task.difficulty); 
 
-    set({
-      tasks: tasks.map(t => 
+    set((state) => ({
+      tasks: state.tasks.map(t => 
         t.id === task.id ? { ...t, habitCount: (t.habitCount || 0) + 1 } : t
       )
-    });
+    }));
   },
 
   handleHabitMinus: (task) => {
-    const { tasks, stats, showAlert } = get();
-    
+    const { stats, showAlert } = get();
     const damage = Math.round(5 * getDifficultyMultiplier(task.difficulty));
     const newHp = Math.max(0, stats.hp - damage);
+    
     if (newHp === 0 && stats.hp > 0) {
-      showAlert("NYAWA HABIS", "Karaktermu pingsan! Terlalu banyak kebiasaan buruk. Hati-hati!", "danger");
+      showAlert("DIED", "Karaktermu pingsan! Kurangi kebiasaan buruk.", "danger");
     }
-    set({ stats: { ...stats, hp: newHp } });
 
-    set({
-        tasks: tasks.map(t => 
-          t.id === task.id ? { ...t, habitCount: (t.habitCount || 0) - 1 } : t
-        )
-      });
+    set((state) => ({
+      stats: { ...state.stats, hp: newHp },
+      tasks: state.tasks.map(t => 
+        t.id === task.id ? { ...t, habitCount: (t.habitCount || 0) - 1 } : t
+      )
+    }));
   },
 
   toggleTaskDone: (task) => {
-    const { tasks, stats, showAlert, _applyReward } = get();
+    const { stats, showAlert, _applyReward } = get();
     const isNowDone = !task.done;
     
-    set({ tasks: tasks.map(t => t.id === task.id ? { ...t, done: isNowDone } : t) });
+    set((state) => ({ 
+        tasks: state.tasks.map(t => t.id === task.id ? { ...t, done: isNowDone } : t) 
+    }));
 
     if (isNowDone) {
       const baseExp = task.isBoss ? 50 : 20;
       const baseGold = task.isBoss ? 20 : 5;
       
-      // 🔥 PENGATURAN ENERGI HARIAN & TO-DO:
-      // - Kalau angkanya POSITIF (misal: 10), energi akan BERKURANG
-      // - Kalau angkanya NEGATIF (misal: -10), energi akan BERTAMBAH
-      // - Kalau 0, energi tidak berubah saat dicentang.
-      // Kita set agar Harian menambah energi (+10) dan To-Do memakan energi (-15)
       let baseEnergyCost = 0;
       if (task.type === 'daily') {
-         baseEnergyCost = -10; // Harian = nge-charge energi 10 point!
+          baseEnergyCost = 10; 
       } else if (task.type === 'todo') {
-         baseEnergyCost = task.isBoss ? 20 : 10; // ToDo biasa = nguras 10 point
+          baseEnergyCost = task.isBoss ? 25 : 15; 
       }
 
       const finalEnergyCost = Math.round(baseEnergyCost * getDifficultyMultiplier(task.difficulty));
 
-      // Peringatan jika energi hampir habis (hanya cek jika cost-nya positif / nguras)
-      if (baseEnergyCost > 0 && stats.energy < finalEnergyCost) {
-        showAlert("PERINGATAN ENERGI", "Energimu sangat rendah! Mengerjakan tugas berat bisa membuatmu Burnout. Istirahatlah!", "warning");
+      if (finalEnergyCost > 0 && stats.energy < finalEnergyCost) {
+        showAlert("LOW ENERGY", "Kamu terlalu lelah, istirahatlah sebentar.", "warning");
       }
 
       _applyReward(baseExp, baseGold, baseEnergyCost, task.difficulty);
