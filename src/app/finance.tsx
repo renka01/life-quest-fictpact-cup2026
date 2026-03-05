@@ -1,26 +1,52 @@
 "use client";
 import React, { useState, useEffect } from 'react';
 import { useStore } from "@/store/useStore";
-import FinanceFormModal from "@/components/FinanceModal"; 
 import { 
   Plus, Minus, History, CreditCard, PiggyBank, X,
-  ArrowUpRight, ArrowDownRight, Coins 
+  ArrowUpRight, ArrowDownRight, Coins, Wallet, Landmark, Banknote,
+  CheckCircle2, Building2, Smartphone, CalendarClock, Trash2, Clock
 } from "lucide-react";
+
+// ==========================================
+// 0. HELPER COMPONENTS
+// ==========================================
+const CircularProgress = ({ value, max, color }: { value: number, max: number, color: string }) => {
+  const percentage = Math.min(100, Math.max(0, (value / max) * 100));
+  const radius = 20;
+  const circumference = 2 * Math.PI * radius;
+  const strokeDashoffset = circumference - (percentage / 100) * circumference;
+
+  return (
+    <div className="relative w-14 h-14 flex items-center justify-center shrink-0">
+      <svg className="transform -rotate-90 w-full h-full drop-shadow-lg">
+        <circle cx="28" cy="28" r={radius} stroke="currentColor" strokeWidth="5" fill="transparent" className="text-slate-950/50" />
+        <circle cx="28" cy="28" r={radius} stroke="currentColor" strokeWidth="5" fill="transparent" strokeDasharray={circumference} strokeDashoffset={strokeDashoffset} strokeLinecap="round" className={`${color} transition-all duration-1000 ease-out`} />
+      </svg>
+      <span className={`absolute text-[10px] font-bold ${color}`}>{Math.round(percentage)}%</span>
+    </div>
+  );
+};
 
 // ==========================================
 // 1. MAIN PAGE COMPONENT
 // ==========================================
 export default function Finance() {
-  const { accounts, deleteAccount, transactions } = useStore();
+  const { accounts, deleteAccount, transactions, recurringTransactions, processRecurringTransactions } = useStore();
 
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [modalType, setModalType] = useState<'rekening' | 'tabungan'>('rekening');
+  const [isAddOpen, setIsAddOpen] = useState(false);
+  const [addType, setAddType] = useState<'rekening' | 'tabungan'>('rekening');
   const [isTransModalOpen, setIsTransModalOpen] = useState(false);
   const [transData, setTransData] = useState({ id: '', name: '', balance: 0, isAdding: true });
+  const [isRecurringOpen, setIsRecurringOpen] = useState(false);
 
-  const openModal = (type: 'rekening' | 'tabungan') => {
-    setModalType(type);
-    setIsModalOpen(true);
+  // Cek tagihan rutin saat komponen dimuat
+  useEffect(() => {
+    processRecurringTransactions();
+  }, []);
+
+  const openAddModal = (type: 'rekening' | 'tabungan') => {
+    setAddType(type);
+    setIsAddOpen(true);
   };
 
   const openTransModal = (id: string, name: string, balance: number, isAdding: boolean) => {
@@ -37,47 +63,47 @@ export default function Finance() {
   return (
     <div className="flex flex-col h-full animate-in fade-in duration-500 gap-6 text-left p-4">
       {/* HEADER STATS */}
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-end shrink-0 border-b border-slate-800/50 pb-6 gap-4">
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-end shrink-0 border-b-4 border-slate-700 pb-6 gap-4">
         <div className="text-left">
-          <h1 className="font-pixel text-[10px] text-white tracking-wide mb-1 uppercase">Credit Vault</h1>
-          <p className="text-[10px] text-slate-500 font-pixel uppercase tracking-widest mb-1">Total_Net_Worth</p>
-          <p className="text-3xl font-bold text-white font-mono italic bg-clip-text text-transparent bg-gradient-to-r from-white to-slate-500">
+          <h1 className="font-pixel text-sm text-cyan-400 tracking-wide mb-2 uppercase flex items-center gap-2"><Wallet size={20}/> Financial Command Center</h1>
+          <p className="text-sm text-slate-400 font-bold uppercase tracking-widest mb-1">Total Kekayaan Bersih</p>
+          <p className="text-4xl font-bold text-white font-mono italic bg-clip-text text-transparent bg-gradient-to-r from-white to-slate-500">
             Rp {netWorth.toLocaleString()}
           </p>
         </div>
         <div className="flex gap-4 font-mono italic w-full md:w-auto">
-          <div className="flex-1 md:flex-none bg-slate-900/80 border-b-2 border-emerald-500 px-6 py-3 rounded-t-md">
-            <p className="text-[9px] text-slate-500 font-pixel mb-1 uppercase">Main_Saldo</p>
-            <p className="text-lg font-bold text-emerald-400">Rp {totalRekening.toLocaleString()}</p>
+          <div className="flex-1 md:flex-none bg-[#24283b] border-2 border-slate-600 border-b-4 border-b-emerald-500 px-6 py-3 rounded-none shadow-[4px_4px_0_#000]">
+            <p className="text-xs text-slate-500 font-bold mb-1 uppercase">Uang Tunai / Rekening</p>
+            <p className="text-xl font-bold text-emerald-400">Rp {totalRekening.toLocaleString()}</p>
           </div>
-          <div className="flex-1 md:flex-none bg-slate-900/80 border-b-2 border-cyan-500 px-6 py-3 rounded-t-md">
-            <p className="text-[9px] text-slate-500 font-pixel mb-1 uppercase">Saving_Pool</p>
-            <p className="text-lg font-bold text-cyan-400">Rp {totalTabungan.toLocaleString()}</p>
+          <div className="flex-1 md:flex-none bg-[#24283b] border-2 border-slate-600 border-b-4 border-b-cyan-500 px-6 py-3 rounded-none shadow-[4px_4px_0_#000]">
+            <p className="text-xs text-slate-500 font-bold mb-1 uppercase">Tabungan & Aset</p>
+            <p className="text-xl font-bold text-cyan-400">Rp {totalTabungan.toLocaleString()}</p>
           </div>
         </div>
       </div>
 
       <div className="grid grid-cols-1 xl:grid-cols-3 gap-6 flex-1 items-start">
         {/* KOLOM 1: REKENING */}
-        <div className="bg-slate-900/40 border-t-2 border-emerald-500 rounded-b-lg flex flex-col min-h-[450px]">
-          <div className="p-4 border-b border-slate-800/50 flex items-center gap-2 text-emerald-400">
-            <CreditCard size={18} />
-            <h2 className="text-[10px] font-pixel uppercase font-bold">Rekening_Aktif</h2>
+        <div className="bg-[#1a1b26] border-4 border-emerald-600 rounded-none flex flex-col min-h-[450px] overflow-hidden shadow-[8px_8px_0_rgba(0,0,0,0.5)]">
+          <div className="p-5 border-b-4 border-emerald-600 flex items-center gap-3 text-emerald-400 bg-[#24283b]">
+            <CreditCard size={20} />
+            <h2 className="text-base font-bold uppercase tracking-wider">Dompet & Rekening</h2>
           </div>
-          <div className="p-4 flex flex-col gap-3 overflow-y-auto">
-            <button onClick={() => openModal('rekening')} className="w-full bg-slate-800/30 border-2 border-dashed border-slate-700 hover:border-emerald-500/50 text-slate-500 p-3 rounded-lg flex items-center justify-center gap-2 text-[10px] font-pixel transition-all uppercase">
-               <Plus size={14} /> Tambah Rekening
+          <div className="p-5 flex flex-col gap-4 overflow-y-auto">
+            <button onClick={() => openAddModal('rekening')} className="w-full bg-[#24283b] border-2 border-dashed border-slate-600 hover:border-emerald-500 text-slate-400 hover:text-emerald-400 p-5 rounded-none flex items-center justify-center gap-2 text-sm font-bold transition-all uppercase hover:bg-emerald-500/10">
+               <Plus size={18} /> Tambah Dompet Baru
             </button>
             {rekeningList.map(acc => (
-              <div key={acc.id} className="group bg-slate-800 border border-slate-700 p-3 rounded-lg flex justify-between items-center transition-all hover:border-emerald-500/50 shadow-md">
+              <div key={acc.id} className="group bg-[#24283b] border-2 border-slate-700 p-4 rounded-none flex justify-between items-center transition-all hover:border-emerald-500 shadow-[4px_4px_0_#000] hover:translate-y-[-2px] hover:shadow-[6px_6px_0_#000]">
                 <div className="flex-1 text-left">
-                  <span className="text-xs font-bold text-slate-200">{acc.name}</span>
-                  <p className="text-sm font-bold text-emerald-400 font-mono italic">Rp {acc.balance.toLocaleString()}</p>
+                  <span className="text-base font-bold text-slate-200 block mb-1">{acc.name}</span>
+                  <p className="text-lg font-bold text-emerald-400 font-mono">Rp {acc.balance.toLocaleString()}</p>
                 </div>
                 <div className="flex gap-1 items-center">
-                  <button onClick={() => deleteAccount(acc.id)} className="opacity-0 group-hover:opacity-100 p-1 text-slate-500 hover:text-pink-500 transition-all"><X size={14}/></button>
-                  <button onClick={() => openTransModal(acc.id, acc.name, acc.balance, true)} className="w-7 h-7 bg-slate-900 text-emerald-500 rounded border border-slate-700 hover:bg-emerald-500/10 transition-colors flex items-center justify-center"><Plus size={14}/></button>
-                  <button onClick={() => openTransModal(acc.id, acc.name, acc.balance, false)} className="w-7 h-7 bg-slate-900 text-pink-500 rounded border border-slate-700 hover:bg-pink-500/10 transition-colors flex items-center justify-center"><Minus size={14}/></button>
+                  <button onClick={() => deleteAccount(acc.id)} className="opacity-0 group-hover:opacity-100 p-2 text-slate-500 hover:text-pink-500 transition-all"><X size={18}/></button>
+                  <button onClick={() => openTransModal(acc.id, acc.name, acc.balance, true)} className="w-10 h-10 bg-[#1a1b26] border border-slate-600 text-emerald-500 rounded-none hover:bg-emerald-500 hover:text-slate-900 transition-colors flex items-center justify-center"><Plus size={20}/></button>
+                  <button onClick={() => openTransModal(acc.id, acc.name, acc.balance, false)} className="w-10 h-10 bg-[#1a1b26] border border-slate-600 text-pink-500 rounded-none hover:bg-pink-500 hover:text-slate-900 transition-colors flex items-center justify-center"><Minus size={20}/></button>
                 </div>
               </div>
             ))}
@@ -85,36 +111,38 @@ export default function Finance() {
         </div>
 
         {/* KOLOM 2: ASSET & EMAS */}
-        <div className="bg-slate-900/40 border-t-2 border-cyan-500 rounded-b-lg flex flex-col min-h-[450px]">
-          <div className="p-4 border-b border-slate-800/50 flex items-center gap-2 text-cyan-400">
-            <PiggyBank size={18} />
-            <h2 className="text-[10px] font-pixel uppercase font-bold">Simpanan_&_Asset</h2>
+        <div className="bg-[#1a1b26] border-4 border-cyan-600 rounded-none flex flex-col min-h-[450px] overflow-hidden shadow-[8px_8px_0_rgba(0,0,0,0.5)]">
+          <div className="p-5 border-b-4 border-cyan-600 flex items-center gap-3 text-cyan-400 bg-[#24283b]">
+            <PiggyBank size={20} />
+            <h2 className="text-base font-bold uppercase tracking-wider">Tabungan & Aset</h2>
           </div>
-          <div className="p-4 flex flex-col gap-3 overflow-y-auto">
-            <button onClick={() => openModal('tabungan')} className="w-full bg-slate-800/30 border-2 border-dashed border-slate-700 hover:border-cyan-500/50 text-slate-500 p-3 rounded-lg flex items-center justify-center gap-2 text-[10px] font-pixel transition-all uppercase">
-               <Plus size={14} /> Tambah Asset
+          <div className="p-5 flex flex-col gap-4 overflow-y-auto">
+            <button onClick={() => openAddModal('tabungan')} className="w-full bg-[#24283b] border-2 border-dashed border-slate-600 hover:border-cyan-500 text-slate-400 hover:text-cyan-400 p-5 rounded-none flex items-center justify-center gap-2 text-sm font-bold transition-all uppercase hover:bg-cyan-500/10">
+               <Plus size={18} /> Tambah Target Baru
             </button>
             {tabunganList.map(acc => {
               const isGold = acc.name.toLowerCase().includes('emas') || acc.name.toLowerCase().includes('gold');
               const progress = Math.min(((acc.balance || 0) / (acc.target || 1)) * 100, 100);
               return (
-                <div key={acc.id} className={`group bg-slate-800 border ${isGold ? 'border-yellow-500/30 hover:border-yellow-500/60' : 'border-slate-700 hover:border-cyan-500/50'} p-4 rounded-lg flex flex-col gap-2 transition-all`}>
-                  <div className="flex justify-between items-center text-left">
-                    <div className="flex items-center gap-2">
-                      {isGold ? <Coins size={14} className="text-yellow-500" /> : <PiggyBank size={14} className="text-cyan-400" />}
-                      <span className={`text-[10px] font-pixel ${isGold ? 'text-yellow-500' : 'text-slate-200'} uppercase`}>{acc.name}</span>
+                <div key={acc.id} className={`group bg-[#24283b] border-2 ${isGold ? 'border-yellow-600 hover:border-yellow-400' : 'border-slate-700 hover:border-cyan-500'} p-5 rounded-none flex flex-col gap-3 transition-all shadow-[4px_4px_0_#000] hover:translate-y-[-2px] hover:shadow-[6px_6px_0_#000]`}>
+                  <div className="flex justify-between items-start">
+                    <div className="flex-1">
+                      <div className="flex items-center gap-2 mb-1">
+                        {isGold ? <Coins size={18} className="text-yellow-500" /> : <PiggyBank size={18} className="text-cyan-400" />}
+                        <span className={`text-base font-bold ${isGold ? 'text-yellow-500' : 'text-slate-200'}`}>{acc.name}</span>
+                      </div>
+                      {isGold && <span className="text-xs font-mono text-yellow-500 bg-yellow-500/10 px-2 py-1 rounded-none border border-yellow-500 mb-2 inline-block">{(acc.weight || 0).toFixed(2)} GR</span>}
+                      <div className="text-sm font-mono text-slate-400">Rp {(acc.balance || 0).toLocaleString()}</div>
+                      <div className="text-[10px] text-slate-500 mt-0.5">Target: Rp {(acc.target || 0).toLocaleString()}</div>
                     </div>
-                    {isGold && <span className="text-[9px] font-mono text-yellow-500 bg-yellow-500/10 px-1 rounded">{(acc.weight || 0).toFixed(2)} GR</span>}
+                    <CircularProgress value={acc.balance || 0} max={acc.target || 1} color={isGold ? 'text-yellow-500' : 'text-cyan-400'} />
                   </div>
-                  <div className="h-1 bg-slate-950 rounded-full overflow-hidden">
-                    <div className={`h-full transition-all duration-1000 ${isGold ? 'bg-yellow-500 shadow-[0_0_8px_rgba(234,179,8,0.4)]' : 'bg-cyan-500 shadow-[0_0_8px_rgba(6,182,212,0.4)]'}`} style={{ width: `${progress}%` }} />
-                  </div>
-                  <div className="flex justify-between items-center mt-1">
-                    <span className="text-[10px] font-mono text-slate-400">Rp {(acc.balance || 0).toLocaleString()}</span>
+                  
+                  <div className="flex justify-end items-center mt-1 pt-3 border-t-2 border-slate-700">
                     <div className="flex gap-1">
-                      <button onClick={() => deleteAccount(acc.id)} className="opacity-0 group-hover:opacity-100 p-1 text-slate-500 hover:text-pink-500 transition-all"><X size={12}/></button>
-                      <button onClick={() => openTransModal(acc.id, acc.name, acc.balance, false)} className="w-6 h-6 bg-slate-900 text-pink-500 rounded border border-slate-700 flex items-center justify-center transition-all"><Minus size={12}/></button>
-                      <button onClick={() => openTransModal(acc.id, acc.name, acc.balance, true)} className={`px-2 py-0.5 rounded text-[8px] font-pixel font-bold transition-all ${isGold ? 'bg-yellow-500/10 text-yellow-500 border border-yellow-500/30' : 'bg-cyan-500/10 text-cyan-400 border border-cyan-500/30'}`}>+ STAKE</button>
+                      <button onClick={() => deleteAccount(acc.id)} className="opacity-0 group-hover:opacity-100 p-2 text-slate-500 hover:text-pink-500 transition-all"><X size={16}/></button>
+                      <button onClick={() => openTransModal(acc.id, acc.name, acc.balance, false)} className="w-8 h-8 bg-[#1a1b26] border border-slate-600 text-pink-500 rounded-none flex items-center justify-center transition-all hover:bg-pink-500 hover:text-slate-900"><Minus size={16}/></button>
+                      <button onClick={() => openTransModal(acc.id, acc.name, acc.balance, true)} className={`px-4 py-1 rounded-none text-xs font-bold transition-all border ${isGold ? 'bg-yellow-500/10 text-yellow-500 border-yellow-500 hover:bg-yellow-500 hover:text-slate-900' : 'bg-cyan-500/10 text-cyan-400 border-cyan-500 hover:bg-cyan-500 hover:text-slate-900'}`}>+ ISI</button>
                     </div>
                   </div>
                 </div>
@@ -124,29 +152,52 @@ export default function Finance() {
         </div>
 
         {/* KOLOM 3: LOGS */}
-        <div className="bg-slate-900/40 border-t-2 border-pink-500 rounded-b-lg flex flex-col h-[450px]">
-          <div className="p-4 border-b border-slate-800/50 flex items-center gap-2 text-pink-400">
-            <History size={18} />
-            <h2 className="text-[10px] font-pixel uppercase font-bold">History_Logs</h2>
+        <div className="bg-[#1a1b26] border-4 border-pink-600 rounded-none flex flex-col h-[450px] overflow-hidden shadow-[8px_8px_0_rgba(0,0,0,0.5)]">
+          <div className="p-5 border-b-4 border-pink-600 flex justify-between items-center text-pink-400 bg-[#24283b]">
+            <div className="flex items-center gap-3">
+              <History size={20} />
+              <h2 className="text-base font-bold uppercase tracking-wider">Riwayat</h2>
+            </div>
+            <button onClick={() => setIsRecurringOpen(true)} className="text-[10px] bg-pink-500/10 hover:bg-pink-500 text-pink-400 hover:text-slate-900 border border-pink-500 px-2 py-1 rounded-none flex items-center gap-1 transition-colors" title="Kelola Tagihan Rutin">
+              <CalendarClock size={14}/> Auto-Pay
+            </button>
           </div>
-          <div className="flex-1 overflow-y-auto bg-slate-950/20">
+          <div className="flex-1 overflow-y-auto bg-[#1a1b26]">
+            {/* SECTION: TAGIHAN AKAN DATANG (PENDING) */}
+            {recurringTransactions.length > 0 && (
+              <div className="bg-[#24283b] border-b-2 border-slate-700">
+                <div className="px-4 py-2 text-[10px] font-bold text-slate-500 uppercase tracking-wider bg-[#1a1b26]">Tagihan Akan Datang</div>
+                {recurringTransactions.sort((a, b) => a.nextDueDate - b.nextDueDate).map(tx => (
+                  <div key={tx.id} className="p-4 border-b border-slate-700 flex justify-between items-center hover:bg-slate-800 transition-colors group">
+                    <div className="flex flex-col text-left">
+                      <span className="text-sm text-slate-300 font-bold flex items-center gap-2"><Clock size={12} className="text-amber-500"/> {tx.name}</span>
+                      <span className="text-xs text-amber-500/80 font-mono">Jatuh Tempo: {new Date(tx.nextDueDate).toLocaleDateString()}</span>
+                    </div>
+                    <div className="font-mono font-bold text-sm text-slate-400 group-hover:text-white transition-colors">Rp {tx.amount.toLocaleString()}</div>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {/* SECTION: RIWAYAT TRANSAKSI (SELESAI) */}
+            <div className="px-4 py-2 text-[10px] font-bold text-slate-500 uppercase tracking-wider bg-[#1a1b26] sticky top-0 border-b border-slate-700">Riwayat Selesai</div>
             {transactions?.length > 0 ? transactions.map((log: any) => (
-              <div key={log.id} className="p-3 border-b border-slate-800/30 flex justify-between items-center hover:bg-white/[0.02] transition-colors">
+              <div key={log.id} className="p-4 border-b border-slate-700 flex justify-between items-center hover:bg-slate-800 transition-colors">
                 <div className="flex flex-col text-left">
-                  <span className="text-[10px] text-slate-200 font-bold uppercase tracking-tighter">{log.accountName}</span>
-                  <span className="text-[8px] text-slate-500 font-mono italic">{new Date(log.timestamp).toLocaleTimeString()}</span>
+                  <span className="text-sm text-slate-200 font-bold">{log.accountName}</span>
+                  <span className="text-xs text-slate-500 font-mono">{new Date(log.timestamp).toLocaleDateString()} • {new Date(log.timestamp).toLocaleTimeString()}</span>
                 </div>
-                <div className={`font-mono font-bold text-xs ${log.type === 'income' ? 'text-emerald-400' : 'text-pink-500'}`}>
+                <div className={`font-mono font-bold text-base ${log.type === 'income' ? 'text-emerald-400' : 'text-pink-500'}`}>
                   {log.type === 'income' ? '+' : '-'} Rp {log.amount.toLocaleString()}
-                  {log.type === 'income' ? <ArrowUpRight size={12} className="inline ml-1"/> : <ArrowDownRight size={12} className="inline ml-1"/>}
+                  {log.type === 'income' ? <ArrowUpRight size={14} className="inline ml-1"/> : <ArrowDownRight size={14} className="inline ml-1"/>}
                 </div>
               </div>
-            )) : <div className="p-10 text-center text-[10px] font-pixel text-slate-600 uppercase">No_Logs_Found</div>}
+            )) : <div className="p-10 text-center text-sm text-slate-500 italic">Belum ada riwayat transaksi.</div>}
           </div>
         </div>
       </div>
 
-      <FinanceFormModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} type={modalType} />
+      <AddAccountModal isOpen={isAddOpen} onClose={() => setIsAddOpen(false)} type={addType} />
       
       <TransactionModal 
         isOpen={isTransModalOpen} 
@@ -156,6 +207,276 @@ export default function Finance() {
         currentBalance={transData.balance} 
         isAdding={transData.isAdding} 
       />
+
+      <RecurringModal isOpen={isRecurringOpen} onClose={() => setIsRecurringOpen(false)} />
+    </div>
+  );
+}
+
+// ==========================================
+// 3. RECURRING BILLS MODAL
+// ==========================================
+function RecurringModal({ isOpen, onClose }: { isOpen: boolean, onClose: () => void }) {
+  const { recurringTransactions, addRecurringTransaction, deleteRecurringTransaction, accounts } = useStore();
+  const [name, setName] = useState("");
+  const [amount, setAmount] = useState(0);
+  const [accountId, setAccountId] = useState("");
+  const [date, setDate] = useState("");
+  const [currency, setCurrency] = useState<'IDR' | 'USD'>('IDR');
+  const RATE = 16250;
+
+  const handleAdd = () => {
+    if (!name || amount <= 0 || !accountId || !date) return;
+    
+    const finalAmount = currency === 'USD' ? amount * RATE : amount;
+
+    addRecurringTransaction({
+      id: Date.now().toString(),
+      name,
+      amount: finalAmount,
+      type: 'expense', // Default tagihan adalah pengeluaran
+      accountId,
+      nextDueDate: new Date(date).getTime()
+    });
+    
+    setName("");
+    setAmount(0);
+    setDate("");
+    setCurrency('IDR');
+  };
+
+  const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const val = Number(e.target.value.replace(/\./g, ''));
+    if (!isNaN(val)) setAmount(val);
+  };
+
+  if (!isOpen) return null;
+
+  return (
+    <div className="fixed inset-0 bg-black/80 backdrop-blur-md z-[999] flex items-center justify-center p-4">
+      <div className="bg-[#1a1b26] border-4 border-pink-600 rounded-none w-full max-w-md overflow-hidden shadow-[8px_8px_0_#000] animate-in zoom-in duration-200">
+        <div className="p-5 border-b-4 border-slate-700 flex justify-between items-center bg-[#24283b]">
+          <h2 className="font-bold text-base uppercase tracking-wider text-pink-400 flex items-center gap-2">
+            <CalendarClock size={20}/> Tagihan Rutin (Auto-Pay)
+          </h2>
+          <button onClick={onClose} className="text-slate-500 hover:text-white transition-colors"><X size={24}/></button>
+        </div>
+
+        <div className="p-6 flex flex-col gap-4">
+          {/* LIST TAGIHAN */}
+          <div className="flex flex-col gap-2 max-h-48 overflow-y-auto mb-2">
+            {recurringTransactions.length === 0 && <p className="text-xs text-slate-500 text-center italic py-4">Belum ada tagihan rutin.</p>}
+            {recurringTransactions.map(tx => (
+              <div key={tx.id} className="bg-[#24283b] border-2 border-slate-700 p-3 rounded-none flex justify-between items-center shadow-[2px_2px_0_#000]">
+                <div>
+                  <p className="text-sm font-bold text-white">{tx.name}</p>
+                  <p className="text-[10px] text-slate-500">Next: {new Date(tx.nextDueDate).toLocaleDateString()} • {accounts.find(a => a.id === tx.accountId)?.name}</p>
+                </div>
+                <div className="flex items-center gap-3">
+                  <span className="text-xs font-mono text-pink-400 font-bold">Rp {tx.amount.toLocaleString()}</span>
+                  <button onClick={() => deleteRecurringTransaction(tx.id)} className="text-slate-600 hover:text-pink-500"><Trash2 size={14}/></button>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* FORM TAMBAH */}
+          <div className="border-t-4 border-slate-700 pt-4 flex flex-col gap-3">
+            <p className="text-xs font-bold text-slate-400 uppercase">Tambah Tagihan Baru</p>
+            <input type="text" value={name} onChange={e => setName(e.target.value)} placeholder="Nama Tagihan (mis: Netflix, Listrik)" className="bg-[#24283b] border-2 border-slate-600 rounded-none p-3 text-sm text-white outline-none focus:border-pink-500" />
+            
+            <div className="relative">
+               <div className="absolute right-2 top-2 flex gap-1">
+                  <button onClick={() => setCurrency('IDR')} className={`px-2 py-1 text-[10px] font-bold rounded-none ${currency === 'IDR' ? 'bg-slate-700 text-white' : 'bg-slate-900 text-slate-500'}`}>IDR</button>
+                  <button onClick={() => setCurrency('USD')} className={`px-2 py-1 text-[10px] font-bold rounded-none ${currency === 'USD' ? 'bg-emerald-600 text-white' : 'bg-slate-900 text-slate-500'}`}>USD</button>
+               </div>
+               <input type="text" value={amount === 0 ? '' : amount.toLocaleString('id-ID')} onChange={handleAmountChange} placeholder={`Nominal (${currency})`} className="bg-[#24283b] border-2 border-slate-600 rounded-none p-3 text-sm text-white outline-none focus:border-pink-500 w-full" />
+               {currency === 'USD' && amount > 0 && <p className="text-[10px] text-emerald-500 mt-1 text-right">≈ Rp {(amount * RATE).toLocaleString()}</p>}
+            </div>
+
+            <div className="grid grid-cols-1 gap-3">
+              <input type="date" value={date} onChange={e => setDate(e.target.value)} className="bg-[#24283b] border-2 border-slate-600 rounded-none p-3 text-sm text-white outline-none focus:border-pink-500 [color-scheme:dark]" />
+            </div>
+            <select value={accountId} onChange={e => setAccountId(e.target.value)} className="bg-[#24283b] border-2 border-slate-600 rounded-none p-3 text-sm text-slate-300 outline-none focus:border-pink-500">
+              <option value="" disabled hidden>Pilih Sumber Dana...</option>
+              {accounts.filter(a => a.type === 'rekening').map(acc => (
+                <option key={acc.id} value={acc.id}>{acc.name} (Rp {acc.balance.toLocaleString()})</option>
+              ))}
+            </select>
+            <button onClick={handleAdd} disabled={!name || amount <= 0 || !accountId || !date} className="bg-pink-600 hover:bg-pink-500 disabled:bg-slate-800 disabled:text-slate-500 text-white py-3 rounded-none font-bold text-sm transition-colors mt-2 shadow-[4px_4px_0_#000] active:translate-y-[2px] active:shadow-[2px_2px_0_#000]">
+              Simpan Jadwal
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ==========================================
+// 2. ADD ACCOUNT MODAL (REDESIGNED)
+// ==========================================
+function AddAccountModal({ isOpen, onClose, type }: { isOpen: boolean, onClose: () => void, type: 'rekening' | 'tabungan' }) {
+  const { addAccount } = useStore();
+  const [name, setName] = useState("");
+  const [balance, setBalance] = useState(0);
+  const [target, setTarget] = useState(0);
+  const [isGold, setIsGold] = useState(false);
+  const [goldWeight, setGoldWeight] = useState(0);
+  const [currency, setCurrency] = useState<'IDR' | 'USD'>('IDR');
+  const RATE = 16250;
+
+  // Reset state saat modal dibuka
+  useEffect(() => {
+    if (isOpen) {
+      setName("");
+      setBalance(0);
+      setGoldWeight(0);
+      setTarget(0);
+      setIsGold(false);
+      setCurrency('IDR');
+    }
+  }, [isOpen]);
+
+  if (!isOpen) return null;
+
+  const handleSave = () => {
+    if (!name) return;
+    
+    let finalName = name;
+    let finalBalance = currency === 'USD' ? balance * RATE : balance;
+    let finalTarget = currency === 'USD' ? target * RATE : target;
+    
+    if (type === 'tabungan' && isGold) {
+      if (!finalName.toLowerCase().includes('emas') && !finalName.toLowerCase().includes('gold')) {
+        finalName = `${finalName} (Emas)`;
+      }
+      finalBalance = goldWeight * 2800000; // Estimasi harga emas (Hardcoded sementara)
+    }
+
+    addAccount({
+      id: Date.now().toString(),
+      name: finalName,
+      balance: finalBalance,
+      type,
+      target: type === 'tabungan' ? finalTarget : undefined,
+      weight: (type === 'tabungan' && isGold) ? goldWeight : 0
+    });
+    onClose();
+  };
+
+  // Helper untuk format input angka
+  const handleBalanceChange = (e: React.ChangeEvent<HTMLInputElement>, setter: (val: number) => void) => {
+    const rawValue = e.target.value.replace(/\./g, '');
+    if (!isNaN(Number(rawValue))) setter(Number(rawValue));
+  };
+
+  const providers = [
+    { label: "BCA", icon: Building2, color: "text-blue-400 border-blue-500/30 hover:bg-blue-500/10" },
+    { label: "Mandiri", icon: Building2, color: "text-yellow-400 border-yellow-500/30 hover:bg-yellow-500/10" },
+    { label: "BRI", icon: Building2, color: "text-blue-300 border-blue-400/30 hover:bg-blue-400/10" },
+    { label: "GoPay", icon: Smartphone, color: "text-cyan-400 border-cyan-500/30 hover:bg-cyan-500/10" },
+    { label: "Dana", icon: Smartphone, color: "text-blue-500 border-blue-600/30 hover:bg-blue-600/10" },
+    { label: "OVO", icon: Smartphone, color: "text-purple-400 border-purple-500/30 hover:bg-purple-500/10" },
+    { label: "ShopeePay", icon: Smartphone, color: "text-orange-400 border-orange-500/30 hover:bg-orange-500/10" },
+    { label: "Tunai", icon: Banknote, color: "text-emerald-400 border-emerald-500/30 hover:bg-emerald-500/10" },
+  ];
+
+  return (
+    <div className="fixed inset-0 bg-black/80 backdrop-blur-md z-[999] flex items-center justify-center p-4">
+      <div className={`bg-[#1a1b26] border-4 rounded-none w-full max-w-md overflow-hidden shadow-[8px_8px_0_#000] animate-in zoom-in duration-200 ${type === 'rekening' ? 'border-emerald-500' : 'border-cyan-500'}`}>
+        <div className="p-5 border-b-4 border-slate-700 flex justify-between items-center bg-[#24283b]">
+          <h2 className={`font-bold text-base uppercase tracking-wider flex items-center gap-2 ${type === 'rekening' ? 'text-emerald-400' : 'text-cyan-400'}`}>
+            {type === 'rekening' ? <CreditCard size={20}/> : <PiggyBank size={20}/>}
+            {type === 'rekening' ? 'Tambah Dompet / Rekening' : 'Buat Target Tabungan'}
+          </h2>
+          <button onClick={onClose} className="text-slate-500 hover:text-white transition-colors"><X size={24}/></button>
+        </div>
+
+        <div className="p-6 flex flex-col gap-5">
+          {/* PILIH PROVIDER CEPAT */}
+          {type === 'rekening' && (
+            <div>
+              <label className="text-sm font-bold text-slate-400 mb-3 block uppercase">Pilih Cepat (Opsional)</label>
+              <div className="grid grid-cols-3 sm:grid-cols-4 gap-3">
+                {providers.map((p) => (
+                  <button key={p.label} onClick={() => setName(p.label)} className={`flex flex-col items-center justify-center gap-2 p-4 rounded-none border-2 transition-all ${p.color} ${name === p.label ? 'bg-slate-800 ring-2 ring-white/20' : 'bg-[#24283b]'}`}>
+                    <p.icon size={24} />
+                    <span className="text-xs font-bold">{p.label}</span>
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* PILIHAN TIPE TABUNGAN (UANG / EMAS) */}
+          {type === 'tabungan' && (
+            <div className="bg-[#24283b] p-1 rounded-none border-2 border-slate-700 flex">
+              <button onClick={() => setIsGold(false)} className={`flex-1 py-2 text-xs font-bold uppercase rounded-none transition-all ${!isGold ? 'bg-cyan-500 text-slate-950 shadow' : 'text-slate-500 hover:text-slate-300'}`}>
+                Tabungan Uang
+              </button>
+              <button onClick={() => setIsGold(true)} className={`flex-1 py-2 text-xs font-bold uppercase rounded-none transition-all ${isGold ? 'bg-yellow-500 text-slate-950 shadow' : 'text-slate-500 hover:text-slate-300'}`}>
+                Investasi Emas
+              </button>
+            </div>
+          )}
+
+          <div>
+            <label className="text-sm font-bold text-slate-400 mb-2 block uppercase">Nama Akun / Target</label>
+            <input type="text" value={name} onChange={e => setName(e.target.value)} placeholder={type === 'rekening' ? "Contoh: BCA Utama, Dompet Saku" : (isGold ? "Contoh: Tabungan Emas Antam" : "Contoh: Beli Laptop, Dana Darurat")} className="w-full bg-[#24283b] border-2 border-slate-600 rounded-none p-4 text-base text-white outline-none focus:border-white transition-all" autoFocus />
+          </div>
+
+          {/* CURRENCY TOGGLE (Only if not Gold) */}
+          {!isGold && (
+            <div className="flex justify-end">
+               <div className="bg-[#24283b] p-0.5 rounded-none flex text-[10px] font-bold border-2 border-slate-600">
+                  <button onClick={() => setCurrency('IDR')} className={`px-3 py-1 rounded-none transition-all ${currency === 'IDR' ? 'bg-slate-700 text-white shadow' : 'text-slate-500 hover:text-slate-300'}`}>IDR</button>
+                  <button onClick={() => setCurrency('USD')} className={`px-3 py-1 rounded-none transition-all ${currency === 'USD' ? 'bg-emerald-600 text-white shadow' : 'text-slate-500 hover:text-slate-300'}`}>USD</button>
+               </div>
+            </div>
+          )}
+
+          <div className="grid grid-cols-2 gap-4">
+            {isGold ? (
+              <div>
+                <label className="text-sm font-bold text-yellow-500 mb-2 block uppercase">Berat Awal (Gram)</label>
+                <input type="number" value={goldWeight} onChange={e => setGoldWeight(Number(e.target.value))} className="w-full bg-[#24283b] border-2 border-slate-600 rounded-none p-4 text-base text-white outline-none focus:border-yellow-500 transition-all" placeholder="0.00" />
+                <p className="text-[10px] text-slate-500 mt-1">≈ Rp {(goldWeight * 2800000).toLocaleString()}</p>
+              </div>
+            ) : (
+              <div>
+                <label className="text-sm font-bold text-slate-400 mb-2 block uppercase">Saldo Awal ({currency})</label>
+                <input 
+                  type="text" 
+                  value={balance === 0 ? '' : balance.toLocaleString('id-ID')} 
+                  onChange={(e) => handleBalanceChange(e, setBalance)} 
+                  className="w-full bg-[#24283b] border-2 border-slate-600 rounded-none p-4 text-base text-white outline-none focus:border-white transition-all" 
+                  placeholder="0"
+                />
+                {currency === 'USD' && <p className="text-[10px] text-emerald-500 mt-1">≈ Rp {(balance * RATE).toLocaleString()}</p>}
+              </div>
+            )}
+            
+            {type === 'tabungan' && (
+              <div>
+                <label className="text-sm font-bold text-slate-400 mb-2 block uppercase">Target Akhir ({currency})</label>
+                <input 
+                  type="text" 
+                  value={target === 0 ? '' : target.toLocaleString('id-ID')} 
+                  onChange={(e) => handleBalanceChange(e, setTarget)} 
+                  className="w-full bg-[#24283b] border-2 border-slate-600 rounded-none p-4 text-base text-white outline-none focus:border-white transition-all" 
+                  placeholder="0"
+                />
+                {currency === 'USD' && <p className="text-[10px] text-emerald-500 mt-1">≈ Rp {(target * RATE).toLocaleString()}</p>}
+              </div>
+            )}
+          </div>
+
+          <button onClick={handleSave} disabled={!name} className={`w-full py-4 rounded-none font-bold text-base text-slate-950 transition-all mt-2 shadow-[4px_4px_0_#000] active:translate-y-[2px] active:shadow-[2px_2px_0_#000] ${type === 'rekening' ? 'bg-emerald-500 hover:bg-emerald-400' : 'bg-cyan-500 hover:bg-cyan-400'} disabled:opacity-50 disabled:cursor-not-allowed`}>
+            Simpan Akun
+          </button>
+        </div>
+      </div>
     </div>
   );
 }
@@ -168,6 +489,8 @@ function TransactionModal({ isOpen, onClose, accountId, accountName, currentBala
   
   const [money, setMoney] = useState<number>(0);
   const [gram, setGram] = useState<number>(0);
+  const [currency, setCurrency] = useState<'IDR' | 'USD'>('IDR');
+  const RATE = 16250;
 
   // Harga Emas 1 gram = 2.800.000
   const GOLD_PRICE_PER_GRAM = 2800000; 
@@ -177,20 +500,27 @@ function TransactionModal({ isOpen, onClose, accountId, accountName, currentBala
     if (isOpen) {
       setMoney(0);
       setGram(0);
+      setCurrency('IDR');
     }
   }, [isOpen]);
 
-  const handleMoneyChange = (val: number) => {
+  const handleMoneyChange = (rawVal: string) => {
+    const val = Number(rawVal.replace(/\./g, ''));
+    if (isNaN(val)) return;
+    
     setMoney(val);
     if (isGold) {
-      setGram(Number((val / GOLD_PRICE_PER_GRAM).toFixed(4)));
+      const idrValue = currency === 'USD' ? val * RATE : val;
+      setGram(Number((idrValue / GOLD_PRICE_PER_GRAM).toFixed(4)));
     }
   };
 
   const handleGramChangeLocal = (val: number) => {
     setGram(val);
     if (isGold) {
-      setMoney(Math.round(val * GOLD_PRICE_PER_GRAM));
+      const idrValue = Math.round(val * GOLD_PRICE_PER_GRAM);
+      // Jika currency USD, tampilkan dalam USD
+      setMoney(currency === 'USD' ? Number((idrValue / RATE).toFixed(2)) : idrValue);
     }
   };
 
@@ -202,9 +532,11 @@ function TransactionModal({ isOpen, onClose, accountId, accountName, currentBala
     const acc = accounts.find(a => a.id === accountId);
     if (!acc) return;
 
+    const finalAmount = currency === 'USD' ? money * RATE : money;
+
     // Proteksi penarikan berlebih
     if (!isAdding) {
-      if (acc.balance < money) {
+      if (acc.balance < finalAmount) {
         showAlert("VAULT_ERROR", "DANA TIDAK MENCUKUPI.", "danger");
         return;
       }
@@ -213,7 +545,7 @@ function TransactionModal({ isOpen, onClose, accountId, accountName, currentBala
     // Eksekusi update ke Store
     updateBalance(
       accountId, 
-      isAdding ? money : -money, 
+      isAdding ? finalAmount : -finalAmount, 
       isGold ? (isAdding ? gram : -gram) : 0
     );
 
@@ -222,59 +554,66 @@ function TransactionModal({ isOpen, onClose, accountId, accountName, currentBala
 
   return (
     <div className="fixed inset-0 bg-black/80 backdrop-blur-md z-[999] flex items-center justify-center p-4">
-      <div className={`bg-[#020617] border-2 rounded-lg w-full max-w-sm overflow-hidden shadow-2xl animate-in zoom-in duration-200 ${isAdding ? 'border-emerald-500' : 'border-pink-500'}`}>
-        <div className="p-3 border-b border-slate-800 flex justify-between items-center bg-slate-900/50">
-          <h2 className="font-pixel text-[8px] text-white uppercase tracking-widest">
-            {isAdding ? 'Deposit_Resource' : 'Withdraw_Resource'}
+      <div className={`bg-[#1a1b26] border-4 rounded-none w-full max-w-sm overflow-hidden shadow-[8px_8px_0_#000] animate-in zoom-in duration-200 ${isAdding ? 'border-emerald-500' : 'border-pink-500'}`}>
+        <div className="p-5 border-b-4 border-slate-700 flex justify-between items-center bg-[#24283b]">
+          <h2 className={`font-bold text-base uppercase tracking-wider ${isAdding ? 'text-emerald-400' : 'text-pink-400'}`}>
+            {isAdding ? 'Pemasukan / Deposit' : 'Pengeluaran / Tarik'}
           </h2>
           <button onClick={onClose} className="text-slate-500 hover:text-white transition-colors">
-            <X size={18}/>
+            <X size={24}/>
           </button>
         </div>
         
         <div className="p-6 flex flex-col gap-4 text-left">
-          <p className="text-[8px] font-pixel text-slate-500 uppercase text-center italic tracking-widest">
-            Target: {accountName}
-          </p>
+          <div className="text-center bg-[#24283b] p-3 rounded-none border-2 border-slate-600">
+            <p className="text-sm text-slate-400 uppercase font-bold">Akun: <span className="text-white">{accountName}</span></p>
+          </div>
           
           <div className="relative">
-            <label className="text-[7px] font-pixel text-slate-500 mb-1 block uppercase tracking-tighter">Amount_IDR (Rp)</label>
+            <div className="flex justify-between items-center mb-2">
+              <label className="text-sm font-bold text-slate-400 uppercase">Nominal ({currency})</label>
+              <div className="bg-[#24283b] p-0.5 rounded-none flex text-[10px] font-bold border-2 border-slate-600">
+                  <button onClick={() => setCurrency('IDR')} className={`px-2 py-0.5 rounded-none transition-all ${currency === 'IDR' ? 'bg-slate-700 text-white shadow' : 'text-slate-500 hover:text-slate-300'}`}>IDR</button>
+                  <button onClick={() => setCurrency('USD')} className={`px-2 py-0.5 rounded-none transition-all ${currency === 'USD' ? 'bg-emerald-600 text-white shadow' : 'text-slate-500 hover:text-slate-300'}`}>USD</button>
+              </div>
+            </div>
             <input 
-              type="number" autoFocus value={money || ""} 
-              onChange={(e) => handleMoneyChange(parseFloat(e.target.value) || 0)}
-              className="w-full bg-slate-950 border border-slate-800 h-12 px-4 font-mono text-white text-lg outline-none focus:border-emerald-500 transition-all"
+              type="text" autoFocus value={money === 0 ? '' : money.toLocaleString('id-ID')} 
+              onChange={(e) => handleMoneyChange(e.target.value)}
+              className="w-full bg-[#24283b] border-2 border-slate-600 rounded-none h-14 px-4 font-mono text-white text-xl outline-none focus:border-emerald-500 transition-all"
               placeholder="0"
             />
+            {currency === 'USD' && <p className="text-[10px] text-emerald-500 mt-1 text-right">≈ Rp {(money * RATE).toLocaleString()}</p>}
           </div>
 
           {isGold && (
             <div className="relative">
-              <label className="text-[7px] font-pixel text-yellow-500 mb-1 block uppercase tracking-tighter">Gold_Weight (Gr)</label>
+              <label className="text-sm font-bold text-yellow-500 mb-2 block uppercase">Berat Emas (Gram)</label>
               <input 
                 type="number" value={gram || ""} 
                 onChange={(e) => handleGramChangeLocal(parseFloat(e.target.value) || 0)}
-                className="w-full bg-slate-950 border border-slate-800 h-12 px-4 font-mono text-white text-lg outline-none focus:border-yellow-500 transition-all"
+                className="w-full bg-[#24283b] border-2 border-slate-600 rounded-none h-14 px-4 font-mono text-white text-xl outline-none focus:border-yellow-500 transition-all"
                 placeholder="0.0000"
               />
-              <p className="text-[6px] font-pixel text-slate-600 mt-1 uppercase italic text-right">Rate: 2.800.000 / Gr</p>
+              <p className="text-xs text-slate-500 mt-1 italic text-right">Rate: Rp 2.800.000 / Gram</p>
             </div>
           )}
 
           {!isAdding && (
             <button 
-              onClick={() => handleMoneyChange(currentBalance)}
-              className="text-[8px] font-pixel text-pink-500 border border-pink-500/20 py-1 hover:bg-pink-500 hover:text-white transition-all uppercase"
+              onClick={() => setMoney(currentBalance)}
+              className="text-sm font-bold text-pink-500 border-2 border-pink-500 py-3 rounded-none hover:bg-pink-500 hover:text-white transition-all uppercase"
             >
-              Use_Max_Available
+              Gunakan Semua Saldo
             </button>
           )}
         </div>
 
-        <div className="p-3 bg-slate-950 border-t border-slate-800 flex gap-2 font-pixel">
-          <button onClick={onClose} className="flex-1 py-3 text-[8px] text-slate-500 hover:text-white transition-colors uppercase">Batal</button>
+        <div className="p-5 bg-[#24283b] border-t-4 border-slate-700 flex gap-4">
+          <button onClick={onClose} className="flex-1 py-3 text-sm font-bold text-slate-400 hover:text-white transition-colors uppercase">Batal</button>
           <button 
             onClick={handleConfirm} 
-            className={`flex-1 py-3 text-white text-[8px] rounded transition-all uppercase font-bold ${isAdding ? 'bg-emerald-600 hover:bg-emerald-500' : 'bg-pink-600 hover:bg-pink-500'}`}
+            className={`flex-1 py-3 text-slate-950 text-sm rounded-none transition-all uppercase font-bold shadow-[4px_4px_0_#000] active:translate-y-[2px] active:shadow-[2px_2px_0_#000] ${isAdding ? 'bg-emerald-500 hover:bg-emerald-400' : 'bg-pink-500 hover:bg-pink-400'}`}
           >
             Konfirmasi
           </button>

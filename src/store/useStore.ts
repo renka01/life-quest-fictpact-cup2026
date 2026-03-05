@@ -39,6 +39,15 @@ export interface Transaction {
   timestamp: number;
 }
 
+export interface RecurringTransaction {
+  id: string;
+  name: string;
+  amount: number;
+  type: 'income' | 'expense';
+  accountId: string;
+  nextDueDate: number; // Timestamp tanggal jatuh tempo berikutnya
+}
+
 export interface Stats {
   level: number;
   hp: number;
@@ -48,6 +57,14 @@ export interface Stats {
   exp: number;
   maxExp: number;
   gold: number;
+  streak: number;
+  lastLoginDate: string;
+}
+
+export interface CoinPopup {
+  show: boolean;
+  amount: number;
+  id: number;
 }
 
 interface AlertDialog {
@@ -71,6 +88,14 @@ interface LifeQuestStore {
   accounts: Account[];
   transactions: Transaction[];
   stats: Stats;
+  recurringTransactions: RecurringTransaction[];
+  coinPopup: CoinPopup;
+
+  addRecurringTransaction: (tx: RecurringTransaction) => void;
+  deleteRecurringTransaction: (id: string) => void;
+  processRecurringTransactions: () => void;
+  checkDailyStreak: () => void;
+
   alertDialog: AlertDialog;
   confirmDialog: ConfirmDialog;
 
@@ -115,12 +140,16 @@ export const useStore = create<LifeQuestStore>((set, get) => ({
   tasks: [],
   accounts: [], 
   transactions: [],
+  recurringTransactions: [],
+  coinPopup: { show: false, amount: 0, id: 0 },
   stats: {
     level: 1,
     hp: 50, maxHp: 50,
     energy: 100, maxEnergy: 100,
     exp: 0, maxExp: 300,
-    gold: 0
+    gold: 0,
+    streak: 0,
+    lastLoginDate: ""
   },
   alertDialog: { isOpen: false, title: "", message: "", type: "info" },
   confirmDialog: { isOpen: false, message: "", onConfirm: () => {} },
@@ -189,15 +218,11 @@ export const useStore = create<LifeQuestStore>((set, get) => ({
         let newBalance = acc.balance + amount;
 
         if (amount > 0 && acc.type === 'tabungan' && acc.target) {
-          if (newBalance >= acc.target) {
-            const kelebihan = newBalance - acc.target;
-            newBalance = acc.target;
-
+          if (newBalance >= acc.target && acc.balance < acc.target) {
             setTimeout(() => {
               showAlert(
                 "TARGET TERCAPAI! 🏆", 
-                `Misi menabung di ${acc.name} selesai!\n` + 
-                (kelebihan > 0 ? `Sisa Rp ${kelebihan.toLocaleString()} dikembalikan.` : `Target Rp ${acc.target?.toLocaleString()} tercapai!`),
+                `Misi menabung di ${acc.name} selesai!\nTarget Rp ${acc.target?.toLocaleString()} tercapai!`,
                 "success"
               );
             }, 200);
@@ -230,105 +255,149 @@ export const useStore = create<LifeQuestStore>((set, get) => ({
     });
   },
 
+  // --- ACTIONS RECURRING ---
+  addRecurringTransaction: (tx) => set((state) => ({ 
+    recurringTransactions: [...state.recurringTransactions, tx] 
+  })),
+
+  deleteRecurringTransaction: (id) => set((state) => ({ 
+    recurringTransactions: state.recurringTransactions.filter(t => t.id !== id) 
+  })),
+
+  processRecurringTransactions: () => {
+    const { recurringTransactions, updateBalance, showAlert } = get();
+    const now = Date.now();
+    let hasUpdates = false;
+
+    const updatedRecurring = recurringTransactions.map(tx => {
+      if (tx.nextDueDate <= now) {
+        // Proses transaksi
+        updateBalance(tx.accountId, tx.type === 'income' ? tx.amount : -tx.amount);
+        hasUpdates = true;
+        
+        // Update tanggal ke bulan depan
+        const nextDate = new Date(tx.nextDueDate);
+        nextDate.setMonth(nextDate.getMonth() + 1);
+        return { ...tx, nextDueDate: nextDate.getTime() };
+      }
+      return tx;
+    });
+
+    if (hasUpdates) {
+      set({ recurringTransactions: updatedRecurring });
+      showAlert("AUTOPAY", "Tagihan rutin berhasil diproses otomatis.", "info");
+    }
+  },
+
+  checkDailyStreak: () => {
+    const { stats, showAlert } = get();
+    const today = new Date().toDateString();
+    const lastLogin = stats.lastLoginDate;
+
+    if (lastLogin === today) return; // Sudah login hari ini
+
+    const yesterday = new Date();
+    yesterday.setDate(yesterday.getDate() - 1);
+    
+    let newStreak = 1;
+    // Jika login terakhir adalah kemarin, tambah streak
+    if (lastLogin === yesterday.toDateString()) {
+      newStreak = stats.streak + 1;
+    }
+
+    // Reward logic
+    const expBonus = newStreak * 10;
+    const goldBonus = newStreak * 5;
+    
+    set((state) => ({
+      stats: {
+        ...state.stats,
+        streak: newStreak,
+        lastLoginDate: today,
+        exp: state.stats.exp + expBonus,
+        gold: state.stats.gold + goldBonus
+      },
+      coinPopup: { show: true, amount: goldBonus, id: Date.now() }
+    }));
+
+    showAlert("DAILY STREAK! 🔥", `Login ${newStreak} hari beruntun! \n+${expBonus} EXP, +${goldBonus} Gold`, "success");
+  },
+
   // --- LOGIKA GAMIFIKASI ---
   _applyReward: (baseExp, baseGold, baseEnergyCost, difficulty) => {
     const { stats, showAlert } = get();
     const multiplier = getDifficultyMultiplier(difficulty);
     
-    const finalExp = Math.round(baseExp * multiplier);
-    const finalGold = Math.round(baseGold * multiplier);
-    const finalEnergyCost = Math.round(baseEnergyCost * multiplier);
+    const expGain = Math.round(baseExp * multiplier);
+    const goldGain = Math.round(baseGold * multiplier);
+    const energyCost = Math.round(baseEnergyCost * multiplier);
 
-    let newExp = stats.exp + finalExp;
-    let newLevel = stats.level;
-    let newMaxExp = stats.maxExp;
-    let newGold = stats.gold + finalGold;
-    
-    let newEnergy = Math.min(stats.maxEnergy, Math.max(0, stats.energy - finalEnergyCost));
-
-    while (newExp >= newMaxExp) {
-      newLevel += 1;
-      newExp -= newMaxExp;
-      newMaxExp = Math.floor(newMaxExp * 1.5);
-      const levelUpLevel = newLevel; 
-      setTimeout(() => showAlert("LEVEL UP!", `Selamat! Level ${levelUpLevel} tercapai!`, "success"), 100);
+    if (stats.energy < energyCost) {
+      showAlert("LELAH!", "Energi tidak cukup. Istirahatlah sejenak!", "warning");
+      return;
     }
 
-    set({ stats: { ...stats, exp: newExp, level: newLevel, maxExp: newMaxExp, gold: newGold, energy: newEnergy } });
+    let newExp = stats.exp + expGain;
+    let newLevel = stats.level;
+    let newMaxExp = stats.maxExp;
+    let newHp = stats.hp;
+    let newMaxHp = stats.maxHp;
+
+    if (newExp >= stats.maxExp) {
+      newLevel += 1;
+      newExp -= stats.maxExp;
+      newMaxExp = Math.floor(stats.maxExp * 1.2);
+      newMaxHp += 10;
+      newHp = newMaxHp; // Full heal on level up
+      showAlert("LEVEL UP!", `Selamat! Kamu naik ke level ${newLevel}!`, "success");
+    }
+
+    set({
+      stats: {
+        ...stats,
+        exp: newExp,
+        level: newLevel,
+        maxExp: newMaxExp,
+        gold: stats.gold + goldGain,
+        energy: Math.max(0, stats.energy - energyCost),
+        hp: newHp,
+        maxHp: newMaxHp
+      },
+      coinPopup: { show: true, amount: goldGain, id: Date.now() }
+    });
   },
 
-  // 🔥 FUNGSI REWARD SEDERHANA UNTUK FINANCE
   _applySimpleReward: (expGain) => {
     const { stats, showAlert } = get();
     let newExp = stats.exp + expGain;
     let newLevel = stats.level;
     let newMaxExp = stats.maxExp;
 
-    while (newExp >= newMaxExp) {
+    if (newExp >= stats.maxExp) {
       newLevel += 1;
-      newExp -= newMaxExp;
-      newMaxExp = Math.floor(newMaxExp * 1.5);
-      const levelUpLevel = newLevel; 
-      setTimeout(() => showAlert("LEVEL UP!", `Selamat! Level ${levelUpLevel} tercapai!`, "success"), 100);
+      newExp -= stats.maxExp;
+      newMaxExp = Math.floor(stats.maxExp * 1.2);
+      showAlert("LEVEL UP!", `Selamat! Kamu naik ke level ${newLevel}!`, "success");
     }
 
     set({ stats: { ...stats, exp: newExp, level: newLevel, maxExp: newMaxExp } });
   },
 
-  handleHabitPlus: (task) => {
-    const { _applyReward } = get();
-    _applyReward(10, 2, -5, task.difficulty); 
+  toggleTaskDone: (task) => {
+    const { tasks, _applyReward } = get();
+    const isDone = !task.done;
+    set({ tasks: tasks.map(t => t.id === task.id ? { ...t, done: isDone } : t) });
+    if (isDone) _applyReward(20, 10, 5, task.difficulty);
+  },
 
-    set((state) => ({
-      tasks: state.tasks.map(t => 
-        t.id === task.id ? { ...t, habitCount: (t.habitCount || 0) + 1 } : t
-      )
-    }));
+  handleHabitPlus: (task) => {
+    const { tasks, _applyReward } = get();
+    set({ tasks: tasks.map(t => t.id === task.id ? { ...t, habitCount: (t.habitCount || 0) + 1 } : t) });
+    _applyReward(5, 2, 1, task.difficulty);
   },
 
   handleHabitMinus: (task) => {
-    const { stats, showAlert } = get();
-    const damage = Math.round(5 * getDifficultyMultiplier(task.difficulty));
-    const newHp = Math.max(0, stats.hp - damage);
-    
-    if (newHp === 0 && stats.hp > 0) {
-      showAlert("DIED", "Karaktermu pingsan! Kurangi kebiasaan buruk.", "danger");
-    }
-
-    set((state) => ({
-      stats: { ...state.stats, hp: newHp },
-      tasks: state.tasks.map(t => 
-        t.id === task.id ? { ...t, habitCount: (t.habitCount || 0) - 1 } : t
-      )
-    }));
-  },
-
-  toggleTaskDone: (task) => {
-    const { stats, showAlert, _applyReward } = get();
-    const isNowDone = !task.done;
-    
-    set((state) => ({ 
-        tasks: state.tasks.map(t => t.id === task.id ? { ...t, done: isNowDone } : t) 
-    }));
-
-    if (isNowDone) {
-      const baseExp = task.isBoss ? 50 : 20;
-      const baseGold = task.isBoss ? 20 : 5;
-      
-      let baseEnergyCost = 0;
-      if (task.type === 'daily') {
-          baseEnergyCost = 10; 
-      } else if (task.type === 'todo') {
-          baseEnergyCost = task.isBoss ? 25 : 15; 
-      }
-
-      const finalEnergyCost = Math.round(baseEnergyCost * getDifficultyMultiplier(task.difficulty));
-
-      if (finalEnergyCost > 0 && stats.energy < finalEnergyCost) {
-        showAlert("LOW ENERGY", "Kamu terlalu lelah, istirahatlah sebentar.", "warning");
-      }
-
-      _applyReward(baseExp, baseGold, baseEnergyCost, task.difficulty);
-    }
+    const { tasks } = get();
+    set({ tasks: tasks.map(t => t.id === task.id ? { ...t, habitCount: (t.habitCount || 0) - 1 } : t) });
   }
 }));
