@@ -7,11 +7,12 @@ import { LayoutDashboard, Calendar, Timer, BarChart2, ShoppingCart, ChevronRight
 export default function Navbar({ activeMenu, setActiveMenu }: { activeMenu: string, setActiveMenu: (name: string) => void }) {
   return (
     <aside className="w-20 lg:w-64 bg-[#1a1b26] border-r-4 border-slate-700 flex flex-col z-20 shadow-[4px_0_0_rgba(0,0,0,0.5)]">
-      <div className="h-20 flex items-center justify-center lg:justify-start lg:px-6 border-b-4 border-slate-700 shrink-0 bg-[#24283b]">
-        <div className="font-pixel text-cyan-400 text-sm lg:text-lg flex items-center gap-2">
-          <span className="text-pink-500">L</span>Q
-          <span className="hidden lg:inline text-xs mt-1">LifeQuest</span>
-        </div>
+      <div className="h-20 w-full flex items-center justify-center border-b-4 border-slate-700 shrink-0 bg-[#24283b]">
+        <img 
+          src="/logo.png"
+          alt="Daily Dungeon" 
+          className="w-[85%] max-h-full object-contain drop-shadow-[3px_3px_0_rgba(0,0,0,1)] transform -translate-x-1" 
+        />
       </div>
 
       <nav className="flex-1 py-6 flex flex-col gap-3 px-3 overflow-y-auto">

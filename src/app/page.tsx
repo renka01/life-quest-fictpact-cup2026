@@ -9,6 +9,7 @@ import {
   Search, Plus, Bell, Settings, Diamond, Coins, X, Check, CheckSquare, Filter
 } from "lucide-react";
 import Finance from "./finance";
+import CalendarBoard from "@/components/CalendarBoard";
 
 // --- KOMPONEN TRANSISI RETRO (CYBER SHUTTERS) ---
 const RetroTransition = ({ isActive }: { isActive: boolean }) => {
@@ -131,6 +132,12 @@ export default function Home() {
               Modul <span className="text-purple-400 font-bold">{activeMenu}</span> sedang dalam pengembangan. 
               Silakan kembali lagi nanti!
             </p>
+          </div>
+        );
+        case "Kalender":
+        return (
+          <div className="animate-in fade-in slide-in-from-left-4 duration-500 h-full">
+            <CalendarBoard />
           </div>
         );
     }
