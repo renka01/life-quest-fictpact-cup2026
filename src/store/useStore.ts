@@ -316,8 +316,7 @@ export const useStore = create<LifeQuestStore>((set, get) => ({
         lastLoginDate: today,
         exp: state.stats.exp + expBonus,
         gold: state.stats.gold + goldBonus
-      },
-      coinPopup: { show: true, amount: goldBonus, id: Date.now() }
+      }
     }));
 
   },
