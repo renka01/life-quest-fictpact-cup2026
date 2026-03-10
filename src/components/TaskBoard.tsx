@@ -38,15 +38,24 @@ export default function TaskBoard({ searchQuery, activeCategory, openAddModal, s
     const activeColor = type === 'habit' ? "fill-amber-400 text-amber-400 drop-shadow-[0_0_5px_rgba(251,191,36,0.5)]" : type === 'daily' ? "fill-cyan-400 text-cyan-400 drop-shadow-[0_0_5px_rgba(34,211,238,0.5)]" : "fill-pink-400 text-pink-400 drop-shadow-[0_0_5px_rgba(236,72,153,0.5)]";
     return (
       <div className="flex gap-0.5">
-        {[1, 2, 3, 4].map(star => <Star key={star} size={10} className={star <= difficulty ? activeColor : "fill-slate-800 text-slate-700"} />)}
+        {[1, 2, 3, 4].map(star => <Star key={star} size={12} className={star <= difficulty ? activeColor : "fill-slate-800 text-slate-700"} />)}
       </div>
     );
   };
 
   return (
-    <div className="grid grid-cols-1 xl:grid-cols-3 gap-6 flex-1 items-start">
+    <div className="grid grid-cols-1 xl:grid-cols-3 gap-6 flex-1 items-start pb-10">
+      <style jsx global>{`
+        @keyframes task-pop {
+          0% { transform: scale(1); }
+          50% { transform: scale(1.02); filter: brightness(1.2); }
+          100% { transform: scale(1); }
+        }
+        .animate-pop { animation: task-pop 0.3s ease-out; }
+      `}</style>
+
       {/* ==================== KOLOM 1: SIKLUS MISI (HABIT) ==================== */}
-      <div className="bg-[#1a1b26] border-4 border-amber-600 rounded-none flex flex-col h-full max-h-[calc(100vh-200px)] overflow-hidden shadow-[8px_8px_0_rgba(0,0,0,0.5)]">
+      <div className="bg-[#1a1b26] border-4 border-amber-600 rounded-none flex flex-col h-full min-h-[50vh] md:min-h-[75vh] overflow-hidden shadow-[8px_8px_0_rgba(0,0,0,0.5)]">
         <div className="p-4 border-b-4 border-amber-600 flex flex-col gap-3 bg-[#24283b]">
           <div className="flex items-center gap-2">
             <Activity size={18} className="text-amber-500" />
@@ -76,13 +85,13 @@ export default function TaskBoard({ searchQuery, activeCategory, openAddModal, s
           )}
 
           {habits.map(task => (
-            <div key={task.id} onClick={() => setSelectedTask(task)} className="group bg-[#24283b] border-2 border-slate-700 hover:border-amber-500 p-3 rounded-none flex justify-between items-center shadow-[4px_4px_0_#000] hover:translate-y-[-2px] hover:shadow-[6px_6px_0_#000] transition-all cursor-pointer">
+            <div key={task.id} onClick={() => setSelectedTask(task)} className={`group bg-[#24283b] border-2 border-slate-700 hover:border-amber-500 p-4 rounded-none flex justify-between items-center shadow-[4px_4px_0_#000] hover:translate-y-[-2px] hover:shadow-[6px_6px_0_#000] transition-all cursor-pointer ${task.done ? 'animate-pop' : ''}`}>
               <button onClick={(e) => { e.stopPropagation(); handleHabitPlus(task); }} className="w-8 h-8 shrink-0 bg-[#1a1b26] border border-slate-600 hover:bg-emerald-500 hover:text-slate-900 text-emerald-500 rounded-none flex items-center justify-center transition-colors"><Plus size={16}/></button>
               <div className="flex-1 px-3 flex flex-col">
-                <span className="text-sm font-bold text-slate-200 line-clamp-1">{task.title}</span>
+                <span className="text-base font-bold text-slate-200 line-clamp-1">{task.title}</span>
                 <div className="flex flex-wrap items-center gap-x-3 gap-y-1 mt-1.5">
                   {renderDifficultyStars(task.difficulty, task.type)}
-                  <span className="text-[10px] text-slate-500 flex items-center gap-1"><Circle size={6} className="fill-slate-500"/> {task.category}</span>
+                  <span className="text-xs text-slate-500 flex items-center gap-1"><Circle size={8} className="fill-slate-500"/> {task.category}</span>
                 </div>
               </div>
               <div className="flex flex-col items-end gap-1 shrink-0">
@@ -90,7 +99,7 @@ export default function TaskBoard({ searchQuery, activeCategory, openAddModal, s
                   <button onClick={(e) => { e.stopPropagation(); deleteTask(task.id); }} className="opacity-0 group-hover:opacity-100 text-slate-500 hover:text-pink-500 transition-opacity mr-1"><X size={14}/></button>
                   <button onClick={(e) => { e.stopPropagation(); handleHabitMinus(task); }} className="w-8 h-8 bg-[#1a1b26] border border-slate-600 hover:bg-pink-500 hover:text-slate-900 text-pink-500 rounded-none flex items-center justify-center transition-colors"><Minus size={16}/></button>
                 </div>
-                <span className={`text-[9px] font-pixel mr-1 ${(task.habitCount || 0) < 0 ? 'text-pink-500' : 'text-slate-500'}`}>{task.habitCount || 0}</span>
+                <span className={`text-xs font-pixel mr-1 ${(task.habitCount || 0) < 0 ? 'text-pink-500' : 'text-slate-500'}`}>{task.habitCount || 0}</span>
               </div>
             </div>
           ))}
@@ -98,7 +107,7 @@ export default function TaskBoard({ searchQuery, activeCategory, openAddModal, s
       </div>
 
       {/* ==================== KOLOM 2: OPERASI HARIAN (DAILY) ==================== */}
-      <div className="bg-[#1a1b26] border-4 border-cyan-600 rounded-none flex flex-col h-full max-h-[calc(100vh-200px)] overflow-hidden shadow-[8px_8px_0_rgba(0,0,0,0.5)]">
+      <div className="bg-[#1a1b26] border-4 border-cyan-600 rounded-none flex flex-col h-full min-h-[50vh] md:min-h-[75vh] overflow-hidden shadow-[8px_8px_0_rgba(0,0,0,0.5)]">
         <div className="p-4 border-b-4 border-cyan-600 flex flex-col gap-3 bg-[#24283b]">
           <div className="flex items-center gap-2">
             <Repeat size={18} className="text-cyan-500" />
@@ -128,16 +137,16 @@ export default function TaskBoard({ searchQuery, activeCategory, openAddModal, s
           )}
 
           {dailies.map(task => (
-            <div key={task.id} onClick={() => setSelectedTask(task)} className={`group border-2 p-3 rounded-none flex items-center gap-3 transition-all cursor-pointer shadow-[4px_4px_0_#000] hover:translate-y-[-2px] hover:shadow-[6px_6px_0_#000] ${task.done ? 'bg-[#1a1b26] border-slate-700 opacity-60' : 'bg-[#24283b] border-slate-700 hover:border-cyan-500'}`}>
+            <div key={task.id} onClick={() => setSelectedTask(task)} className={`group border-2 p-4 rounded-none flex items-center gap-3 transition-all cursor-pointer shadow-[4px_4px_0_#000] hover:translate-y-[-2px] hover:shadow-[6px_6px_0_#000] ${task.done ? 'bg-[#1a1b26] border-slate-700 opacity-60 animate-pop' : 'bg-[#24283b] border-slate-700 hover:border-cyan-500'}`}>
               <button onClick={(e) => { e.stopPropagation(); toggleTaskDone(task); }} className={`w-6 h-6 shrink-0 rounded-none flex items-center justify-center transition-colors border-2 ${task.done ? 'bg-emerald-500 border-emerald-500 text-slate-950' : 'border-slate-500 hover:border-cyan-400'}`}>
                 {task.done && <Check size={14} strokeWidth={3} />}
               </button>
               <div className="flex-1 flex flex-col">
-                <span className={`text-sm font-bold line-clamp-1 transition-colors ${task.done ? 'text-slate-500 line-through' : 'text-slate-200'}`}>{task.title}</span>
+                <span className={`text-base font-bold line-clamp-1 transition-colors ${task.done ? 'text-slate-500 line-through' : 'text-slate-200'}`}>{task.title}</span>
                 <div className="flex flex-wrap items-center gap-x-3 gap-y-1 mt-1.5">
                   {renderDifficultyStars(task.difficulty, task.type)}
-                  <span className="text-[10px] text-slate-500 flex items-center gap-1"><Circle size={6} className="fill-slate-500"/> {task.category}</span>
-                  <span className="text-[9px] text-cyan-500/70 flex items-center gap-1"><Repeat size={10}/> Tiap {task.repeatEvery} {task.repeatUnit}</span>
+                  <span className="text-xs text-slate-500 flex items-center gap-1"><Circle size={8} className="fill-slate-500"/> {task.category}</span>
+                  <span className="text-[10px] text-cyan-500/70 flex items-center gap-1"><Repeat size={12}/> Tiap {task.repeatEvery} {task.repeatUnit}</span>
                 </div>
               </div>
               <button onClick={(e) => { e.stopPropagation(); deleteTask(task.id); }} className="opacity-0 group-hover:opacity-100 text-slate-500 hover:text-pink-500 transition-opacity"><X size={14}/></button>
@@ -147,7 +156,7 @@ export default function TaskBoard({ searchQuery, activeCategory, openAddModal, s
       </div>
 
       {/* ==================== KOLOM 3: TARGET UTAMA (TO-DO) ==================== */}
-      <div className="bg-[#1a1b26] border-4 border-pink-600 rounded-none flex flex-col h-full max-h-[calc(100vh-200px)] overflow-hidden shadow-[8px_8px_0_rgba(0,0,0,0.5)]">
+      <div className="bg-[#1a1b26] border-4 border-pink-600 rounded-none flex flex-col h-full min-h-[50vh] md:min-h-[75vh] overflow-hidden shadow-[8px_8px_0_rgba(0,0,0,0.5)]">
         <div className="p-4 border-b-4 border-pink-600 flex flex-col gap-3 bg-[#24283b]">
           <div className="flex items-center gap-2">
             <ListTodo size={18} className="text-pink-500" />
@@ -179,15 +188,15 @@ export default function TaskBoard({ searchQuery, activeCategory, openAddModal, s
           )}
 
           {todos.map(task => (
-            <div key={task.id} onClick={() => setSelectedTask(task)} className={`group border-2 p-3 rounded-none flex items-center gap-3 transition-all cursor-pointer shadow-[4px_4px_0_#000] hover:translate-y-[-2px] hover:shadow-[6px_6px_0_#000] ${task.done ? 'bg-[#1a1b26] border-slate-700 opacity-60' : 'bg-[#24283b] border-slate-700 hover:border-pink-500'}`}>
+            <div key={task.id} onClick={() => setSelectedTask(task)} className={`group border-2 p-4 rounded-none flex items-center gap-3 transition-all cursor-pointer shadow-[4px_4px_0_#000] hover:translate-y-[-2px] hover:shadow-[6px_6px_0_#000] ${task.done ? 'bg-[#1a1b26] border-slate-700 opacity-60 animate-pop' : 'bg-[#24283b] border-slate-700 hover:border-pink-500'}`}>
               <button onClick={(e) => { e.stopPropagation(); toggleTaskDone(task); }} className={`w-6 h-6 shrink-0 rounded-none flex items-center justify-center transition-colors border-2 ${task.done ? 'bg-emerald-500 border-emerald-500 text-slate-950' : 'border-slate-500 hover:border-pink-400'}`}>
                 {task.done && <Check size={14} strokeWidth={3} />}
               </button>
               <div className="flex-1 flex flex-col">
-                <span className={`text-sm font-bold line-clamp-1 transition-colors ${task.done ? 'text-slate-500 line-through' : 'text-slate-200'}`}>{task.title}</span>
+                <span className={`text-base font-bold line-clamp-1 transition-colors ${task.done ? 'text-slate-500 line-through' : 'text-slate-200'}`}>{task.title}</span>
                 <div className="flex flex-wrap items-center gap-x-3 gap-y-1 mt-1.5">
                   {renderDifficultyStars(task.difficulty, task.type)}
-                  <span className="text-[10px] text-slate-500 flex items-center gap-1"><Circle size={6} className="fill-slate-500"/> {task.category}</span>
+                  <span className="text-xs text-slate-500 flex items-center gap-1"><Circle size={8} className="fill-slate-500"/> {task.category}</span>
                 </div>
               </div>
               <div className="flex items-center gap-2 shrink-0">

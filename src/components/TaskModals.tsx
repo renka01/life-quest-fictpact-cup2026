@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { useStore, TaskType, Task as StoreTask } from "@/store/useStore";
 import { 
   Plus, Minus, Star, Flame, X, FileText, Trash2, 
-  CalendarDays, RotateCcw, Hash, AlertTriangle, Trophy, Skull, Repeat
+  CalendarDays, RotateCcw, Hash, AlertTriangle, Trophy, Skull, Repeat, Menu
 } from "lucide-react";
 
 export interface ExtendedTask extends StoreTask {
@@ -286,5 +286,20 @@ export const GlobalAlerts = () => {
         </div>
       )}
     </>
+  );
+};
+
+// ==========================================
+// 4. KOMPONEN TOMBOL TOGGLE STATUS PANEL
+// ==========================================
+export const ToggleStatusPanelButton = ({ isOpen, onToggle }: { isOpen: boolean, onToggle: () => void }) => {
+  return (
+    <button 
+      onClick={onToggle} 
+      className="text-slate-400 hover:text-white transition-colors xl:hidden p-2 rounded-none bg-[#24283b] border-2 border-slate-600 shadow-[4px_4px_0_#000]"
+      title="Toggle Status Log"
+    >
+      <Menu size={20} />
+    </button>
   );
 };

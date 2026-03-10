@@ -290,7 +290,7 @@ export const useStore = create<LifeQuestStore>((set, get) => ({
   },
 
   checkDailyStreak: () => {
-    const { stats, showAlert } = get();
+    const { stats } = get();
     const today = new Date().toDateString();
     const lastLogin = stats.lastLoginDate;
 
@@ -320,7 +320,6 @@ export const useStore = create<LifeQuestStore>((set, get) => ({
       coinPopup: { show: true, amount: goldBonus, id: Date.now() }
     }));
 
-    showAlert("DAILY STREAK! 🔥", `Login ${newStreak} hari beruntun! \n+${expBonus} EXP, +${goldBonus} Gold`, "success");
   },
 
   // --- LOGIKA GAMIFIKASI ---

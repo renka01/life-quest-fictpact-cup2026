@@ -4,9 +4,9 @@ import Navbar from "@/components/Navbar";
 import StatusPanel from "@/components/StatusPanel";
 import TaskBoard from "@/components/TaskBoard";
 import { useStore, TaskType } from "@/store/useStore";
-import { TaskFormModal, TaskDetailModal, GlobalAlerts, ExtendedTask } from "@/components/TaskModals";
+import { TaskFormModal, TaskDetailModal, GlobalAlerts, ExtendedTask, ToggleStatusPanelButton } from "@/components/TaskModals"; // Import ToggleStatusPanelButton
 import { 
-  Search, Plus, Bell, Settings, Diamond, Coins, X, Check, CheckSquare, Filter
+  Search, Plus, Bell, Settings, Diamond, Coins, X, Check, CheckSquare, Filter, LayoutDashboard
 } from "lucide-react";
 import Finance from "./finance";
 import CalendarBoard from "@/components/CalendarBoard";
@@ -47,6 +47,7 @@ export default function Home() {
   const [isFixed, setIsFixed] = useState(false);
   const [selectedTask, setSelectedTask] = useState<ExtendedTask | null>(null);
   const [isNotifOpen, setIsNotifOpen] = useState(false);
+  const [isStatusPanelOpen, setIsStatusPanelOpen] = useState(false); // State for StatusPanel drawer
   const [activeMenu, setActiveMenu] = useState("Dashboard");
   const [showCoinAnim, setShowCoinAnim] = useState(false);
   const [isTransitioning, setIsTransitioning] = useState(false);
@@ -94,10 +95,23 @@ export default function Home() {
     switch (activeMenu) {
       case "Dashboard":
         return (
-          <div className="animate-in fade-in slide-in-from-left-4 duration-500">
+          <div className="flex flex-col items-center justify-center min-h-full text-slate-500 animate-in zoom-in duration-300">
+            <div className="w-24 h-24 bg-[#24283b] rounded-none flex items-center justify-center mb-6 border-4 border-slate-700 border-dashed">
+               <LayoutDashboard size={40} className="animate-pulse opacity-50"/>
+            </div>
+            <h2 className="text-2xl font-bold text-slate-300 mb-2">Dashboard Utama</h2>
+            <p className="text-sm max-w-md text-center text-slate-400">
+              Area ini sedang dipersiapkan untuk fitur analitik dan ringkasan karaktermu.
+              <br/>Silakan akses menu <span className="text-cyan-400 font-bold">Misi</span> untuk melihat tugas.
+            </p>
+          </div>
+        );
+      case "Misi":
+        return (
+          <div className="animate-in fade-in slide-in-from-left-4 duration-500 flex flex-col h-full">
             <div className="flex justify-between items-end mb-6 shrink-0">
               <div>
-                <h1 className="text-2xl font-bold text-white tracking-wide mb-1">Command Center</h1>
+                <h1 className="text-2xl font-bold text-white tracking-wide mb-1">Log Misi</h1>
                 <p className="text-sm text-slate-400">Status misi dan operasi harian.</p>
               </div>
               <button 
@@ -181,17 +195,17 @@ export default function Home() {
       <Navbar activeMenu={activeMenu} setActiveMenu={handleMenuChange} />
 
       <div className="flex-1 flex flex-col h-screen relative z-10">
-        {/* HEADER */}
-        <header className="h-20 bg-[#1a1b26] border-b-4 border-slate-700 flex justify-between items-center px-8 z-50 shrink-0">
+        {/* HEADER */} {/* Added ToggleStatusPanelButton */}
+        <header className="min-h-20 bg-[#1a1b26] border-b-4 border-slate-700 flex flex-col lg:flex-row justify-between items-center gap-4 p-4 lg:px-8 z-50 shrink-0">
           
-          <div className="flex items-center gap-4 w-2/3 max-w-2xl relative">
+          <div className="flex items-center gap-4 w-full lg:w-2/3 max-w-2xl relative">
             <div className="relative flex-1">
               <Search size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500" />
               <input 
                 type="text" 
                 value={searchQuery} 
                 onChange={(e) => setSearchQuery(e.target.value)} 
-                placeholder="Cari tugas atau proyek..." 
+                placeholder="Cari misi..." 
                 className="w-full bg-[#24283b] border-2 border-slate-600 rounded-none py-2.5 pl-12 pr-4 text-sm outline-none focus:border-purple-500 transition-all placeholder:text-slate-500 text-slate-200 shadow-[4px_4px_0_#000]"
               />
             </div>
@@ -208,12 +222,13 @@ export default function Home() {
             </div>
           </div>
 
-          <div className="flex items-center gap-6">
+          <div className="flex items-center justify-end gap-4 w-full lg:w-auto">
             <div className="flex items-center gap-4 px-4 py-1.5 bg-[#24283b] border-2 border-slate-600 rounded-none shadow-[inset_2px_2px_4px_rgba(0,0,0,0.5)]">
               <div className="flex items-center gap-1.5 text-emerald-400 font-pixel text-[8px]"><Diamond size={14}/> 0</div>
               <div className="w-px h-4 bg-slate-700"></div>
               <div className="flex items-center gap-1.5 text-amber-400 font-pixel text-[8px]"><Coins size={14}/> {stats.gold}</div>
             </div>
+            <ToggleStatusPanelButton isOpen={isStatusPanelOpen} onToggle={() => setIsStatusPanelOpen(!isStatusPanelOpen)} />
 
             <div className="relative">
               <button 
@@ -274,12 +289,15 @@ export default function Home() {
 
         {/* MAIN LAYOUT */}
         <div className="flex-1 flex overflow-hidden">
-          <main className="flex-1 overflow-y-auto p-6 lg:p-8 relative flex flex-col scroll-smooth">
+          <main className="flex-1 overflow-y-auto p-4 lg:p-8 relative flex flex-col scroll-smooth pb-24 md:pb-8">
             {renderContent()}
           </main>
 
           {/* STATUS PANEL (Character HP/Energy) */}
-          <StatusPanel />
+          <StatusPanel isOpen={isStatusPanelOpen} onClose={() => setIsStatusPanelOpen(false)} />
+
+          {/* Backdrop for StatusPanel on small screens */}
+          {isStatusPanelOpen && <div className="fixed inset-0 bg-black/50 z-40 xl:hidden" onClick={() => setIsStatusPanelOpen(false)}></div>}
         </div>
       </div>
 
@@ -292,15 +310,10 @@ export default function Home() {
       />
       
       <TaskDetailModal 
-        task={selectedTask} 
+        task={selectedTask}
         onClose={() => setSelectedTask(null)} 
       />
-
-      {/* ALERTS SYSTEM - Pastikan ini paling bawah dengan z-index tinggi */}
-      <div className="relative z-[999]">
-        <GlobalAlerts />
-      </div>
-      
+      <GlobalAlerts />
     </div>
   );
 }
