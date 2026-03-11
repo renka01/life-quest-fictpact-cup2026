@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import Navbar from "@/components/Navbar";
 import StatusPanel from "@/components/StatusPanel";
 import TaskBoard from "@/components/TaskBoard";
+import DashboardBoard from "@/components/DashboardBoard";
 import { useStore, TaskType } from "@/store/useStore";
 import { TaskFormModal, TaskDetailModal, GlobalAlerts, ExtendedTask, ToggleStatusPanelButton } from "@/components/TaskModals"; // Import ToggleStatusPanelButton
 import { 
@@ -93,19 +94,12 @@ export default function Home() {
 
   const renderContent = () => {
     switch (activeMenu) {
-      case "Dashboard":
-        return (
-          <div className="flex flex-col items-center justify-center min-h-full text-slate-500 animate-in zoom-in duration-300">
-            <div className="w-24 h-24 bg-[#24283b] rounded-none flex items-center justify-center mb-6 border-4 border-slate-700 border-dashed">
-               <LayoutDashboard size={40} className="animate-pulse opacity-50"/>
-            </div>
-            <h2 className="text-2xl font-bold text-slate-300 mb-2">Dashboard Utama</h2>
-            <p className="text-sm max-w-md text-center text-slate-400">
-              Area ini sedang dipersiapkan untuk fitur analitik dan ringkasan karaktermu.
-              <br/>Silakan akses menu <span className="text-cyan-400 font-bold">Misi</span> untuk melihat tugas.
-            </p>
-          </div>
-        );
+case "Dashboard":
+  return (
+    <div className="animate-in fade-in slide-in-from-left-4 duration-500 h-full">
+      <DashboardBoard />
+    </div>
+  );
       case "Misi":
         return (
           <div className="animate-in fade-in slide-in-from-left-4 duration-500 flex flex-col h-full">

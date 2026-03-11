@@ -35,8 +35,10 @@ export interface Transaction {
   id: string;
   accountName: string;
   amount: number;
-  type: 'income' | 'expense'; 
+  type: 'income' | 'expense';
   timestamp: number;
+  expGained?: number;
+  gram?: number;
 }
 
 export interface RecurringTransaction {
@@ -45,7 +47,8 @@ export interface RecurringTransaction {
   amount: number;
   type: 'income' | 'expense';
   accountId: string;
-  nextDueDate: number; // Timestamp tanggal jatuh tempo berikutnya
+  nextDueDate: number;
+  status?: 'upcoming' | 'due' | 'overdue';
 }
 
 export interface Stats {
@@ -91,6 +94,9 @@ interface LifeQuestStore {
   recurringTransactions: RecurringTransaction[];
   coinPopup: CoinPopup;
 
+  markRecurringDue: () => void;
+confirmRecurringPayment: (id: string) => void;
+snoozeRecurringTransaction: (id: string) => void;
   addRecurringTransaction: (tx: RecurringTransaction) => void;
   deleteRecurringTransaction: (id: string) => void;
   processRecurringTransactions: () => void;
@@ -111,12 +117,17 @@ interface LifeQuestStore {
   handleHabitMinus: (task: Task) => void;
 
   addAccount: (account: Account) => void;
-  updateBalance: (id: string, amount: number, weightChange?: number) => void; 
+  updateBalance: (
+  id: string,
+  amount: number,
+  weightChange?: number,
+  meta?: { exp?: number; gram?: number; gold?: number }
+) => void;
   deleteAccount: (id: string) => void;
   clearTransactions: () => void;
   
   _applyReward: (baseExp: number, baseGold: number, baseEnergyCost: number, difficulty: number) => void;
-  _applySimpleReward: (expGain: number) => void; // 🔥 Tambahkan interface baru
+  _applySimpleReward: (expGain: number, goldGain?: number) => void;
 }
 
 // ==========================================
@@ -174,70 +185,109 @@ export const useStore = create<LifeQuestStore>((set, get) => ({
   },
 
   // --- ACTIONS FINANCE ---
-  addAccount: (newAcc) => set((state) => {
-    const isExist = state.accounts.find(acc => acc.name === newAcc.name);
+ addAccount: (newAcc) => set((state) => {
+  const isExist = state.accounts.find(acc => acc.name === newAcc.name);
+  const initialAmount = Math.abs(newAcc.balance || 0);
+  const initialGram = Math.abs(newAcc.weight || 0);
 
-    if (isExist) {
-      return {
-        accounts: state.accounts.map(acc => 
-          acc.name === newAcc.name 
-            ? { 
-                ...acc, 
-                balance: newAcc.balance, 
-                weight: newAcc.weight,
-                target: newAcc.target ?? acc.target 
-              } 
-            : acc
-        )
-      };
-    }
+  // bikin log kalau ada saldo awal / gram awal
+  const shouldCreateLog = initialAmount > 0 || initialGram > 0;
 
-    return { accounts: [...state.accounts, newAcc] };
-  }),
+  const newLog: Transaction | null = shouldCreateLog
+    ? {
+        id: Date.now().toString(),
+        accountName: newAcc.name,
+        amount: initialAmount,
+        type: 'income',
+        timestamp: Date.now(),
+        expGained: undefined,
+        gram: initialGram > 0 ? initialGram : undefined,
+      }
+    : null;
 
-  updateBalance: (id, amount, weightChange = 0) => {
-    const { accounts, transactions, showAlert } = get();
-    const targetAccount = accounts.find(acc => acc.id === id);
-    if (!targetAccount) return;
-
-    const isExpense = amount < 0 || weightChange < 0;
-    const logType: 'income' | 'expense' = isExpense ? 'expense' : 'income';
-
-    const newLog: Transaction = {
-      id: Date.now().toString(),
-      accountName: targetAccount.name,
-      amount: amount !== 0 ? Math.abs(amount) : Math.abs(weightChange),
-      type: logType,
-      timestamp: Date.now(),
+  if (isExist) {
+    return {
+      accounts: state.accounts.map(acc =>
+        acc.name === newAcc.name
+          ? {
+              ...acc,
+              balance: newAcc.balance,
+              weight: newAcc.weight,
+              target: newAcc.target ?? acc.target
+            }
+          : acc
+      ),
+      transactions: newLog
+        ? [newLog, ...state.transactions].slice(0, 30)
+        : state.transactions
     };
+  }
 
-    set({
-      accounts: accounts.map(acc => {
-        if (acc.id !== id) return acc;
+  return {
+    accounts: [...state.accounts, newAcc],
+    transactions: newLog
+      ? [newLog, ...state.transactions].slice(0, 30)
+      : state.transactions
+  };
+}),
 
-        let newBalance = acc.balance + amount;
+updateBalance: (id, amount, weightChange = 0, meta) => {
+  const { accounts, transactions, showAlert, _applySimpleReward, stats } = get();
+  const targetAccount = accounts.find(acc => acc.id === id);
+  if (!targetAccount) return;
 
-        if (amount > 0 && acc.type === 'tabungan' && acc.target) {
-          if (newBalance >= acc.target && acc.balance < acc.target) {
-            setTimeout(() => {
-              showAlert(
-                "TARGET TERCAPAI! 🏆", 
-                `Misi menabung di ${acc.name} selesai!\nTarget Rp ${acc.target?.toLocaleString()} tercapai!`,
-                "success"
-              );
-            }, 200);
-          }
+  const hasMoney = Math.abs(amount) > 0;
+  const hasWeight = Math.abs(weightChange) > 0;
+  if (!hasMoney && !hasWeight) return;
+
+  const isExpense = amount < 0 || weightChange < 0;
+  const logType: 'income' | 'expense' = isExpense ? 'expense' : 'income';
+
+  // EXP hanya untuk transaksi masuk / deposit
+  const expGain = logType === 'income' ? (meta?.exp || 0) : 0;
+  const goldGain = logType === 'income' ? (meta?.gold || 0) : 0;
+
+if (expGain > 0 || goldGain > 0) {
+  _applySimpleReward(expGain, goldGain);
+}
+
+const newLog: Transaction = {
+  id: Date.now().toString(),
+  accountName: targetAccount.name,
+  amount: Math.abs(amount),
+  type: logType,
+  timestamp: Date.now(),
+  expGained: expGain, 
+  gram: weightChange ? Math.abs(weightChange) : undefined
+};
+
+  set({
+    accounts: accounts.map(acc => {
+      if (acc.id !== id) return acc;
+
+      let newBalance = acc.balance + amount;
+
+      if (amount > 0 && acc.type === 'tabungan' && acc.target) {
+        if (newBalance >= acc.target && acc.balance < acc.target) {
+          setTimeout(() => {
+            showAlert(
+              "TARGET TERCAPAI! 🏆",
+              `Misi menabung di ${acc.name} selesai!\nTarget Rp ${acc.target?.toLocaleString()} tercapai!`,
+              "success"
+            );
+          }, 200);
         }
+      }
 
-        return {
-          ...acc,
-          balance: newBalance,
-          weight: Number(((acc.weight || 0) + weightChange).toFixed(4))
-        };
-      }),
-      transactions: [newLog, ...transactions].slice(0, 30)
-    });
-  },
+      return {
+        ...acc,
+        balance: newBalance,
+        weight: Number(((acc.weight || 0) + weightChange).toFixed(4))
+      };
+    }),
+    transactions: [newLog, ...transactions].slice(0, 30)
+  });
+},
 
   deleteAccount: (id) => {
     const { showConfirm, closeConfirm } = get();
@@ -256,38 +306,91 @@ export const useStore = create<LifeQuestStore>((set, get) => ({
   },
 
   // --- ACTIONS RECURRING ---
-  addRecurringTransaction: (tx) => set((state) => ({ 
-    recurringTransactions: [...state.recurringTransactions, tx] 
+addRecurringTransaction: (tx) =>
+  set((state) => ({
+    recurringTransactions: [
+      ...state.recurringTransactions,
+      { ...tx, status: 'upcoming' as const },
+    ],
   })),
 
   deleteRecurringTransaction: (id) => set((state) => ({ 
     recurringTransactions: state.recurringTransactions.filter(t => t.id !== id) 
   })),
 
-  processRecurringTransactions: () => {
-    const { recurringTransactions, updateBalance, showAlert } = get();
-    const now = Date.now();
-    let hasUpdates = false;
+ processRecurringTransactions: () => {
+  const { recurringTransactions } = get();
+  const now = new Date();
+  const todayOnly = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
 
-    const updatedRecurring = recurringTransactions.map(tx => {
-      if (tx.nextDueDate <= now) {
-        // Proses transaksi
-        updateBalance(tx.accountId, tx.type === 'income' ? tx.amount : -tx.amount);
-        hasUpdates = true;
-        
-        // Update tanggal ke bulan depan
-        const nextDate = new Date(tx.nextDueDate);
-        nextDate.setMonth(nextDate.getMonth() + 1);
-        return { ...tx, nextDueDate: nextDate.getTime() };
-      }
-      return tx;
-    });
+  const updatedRecurring = recurringTransactions.map((tx) => {
+    const dueDate = new Date(tx.nextDueDate);
+    const dueOnly = new Date(dueDate.getFullYear(), dueDate.getMonth(), dueDate.getDate()).getTime();
 
-    if (hasUpdates) {
-      set({ recurringTransactions: updatedRecurring });
-      showAlert("AUTOPAY", "Tagihan rutin berhasil diproses otomatis.", "info");
+    if (dueOnly === todayOnly) {
+      return { ...tx, status: 'due' as const };
     }
-  },
+
+    if (dueOnly < todayOnly && tx.status !== 'due') {
+      return { ...tx, status: 'overdue' as const };
+    }
+
+    if (dueOnly > todayOnly) {
+      return { ...tx, status: 'upcoming' as const };
+    }
+
+    return tx;
+  });
+
+  set({ recurringTransactions: updatedRecurring });
+},
+
+markRecurringDue: () => {
+  const { processRecurringTransactions } = get();
+  processRecurringTransactions();
+},
+
+confirmRecurringPayment: (id) => {
+  const { recurringTransactions, updateBalance, showAlert } = get();
+  const tx = recurringTransactions.find((item) => item.id === id);
+  if (!tx) return;
+
+  updateBalance(tx.accountId, tx.type === 'income' ? tx.amount : -tx.amount);
+
+  const nextDate = new Date(tx.nextDueDate);
+  nextDate.setMonth(nextDate.getMonth() + 1);
+
+  set((state) => ({
+    recurringTransactions: state.recurringTransactions.map((item) =>
+      item.id === id
+        ? {
+            ...item,
+            nextDueDate: nextDate.getTime(),
+            status: 'upcoming',
+          }
+        : item
+    ),
+  }));
+
+  showAlert("TAGIHAN DIBAYAR", `${tx.name} berhasil diproses.`, "success");
+},
+
+snoozeRecurringTransaction: (id) => {
+  const { showAlert } = get();
+
+  set((state) => ({
+    recurringTransactions: state.recurringTransactions.map((item) =>
+      item.id === id
+        ? {
+            ...item,
+            status: 'overdue',
+          }
+        : item
+    ),
+  }));
+
+  showAlert("DITUNDA", "Tagihan ditunda. Akan tetap muncul sampai dibayar.", "warning");
+},
 
   checkDailyStreak: () => {
     const { stats } = get();
@@ -365,21 +468,32 @@ export const useStore = create<LifeQuestStore>((set, get) => ({
     });
   },
 
-  _applySimpleReward: (expGain) => {
-    const { stats, showAlert } = get();
-    let newExp = stats.exp + expGain;
-    let newLevel = stats.level;
-    let newMaxExp = stats.maxExp;
+_applySimpleReward: (expGain, goldGain = 0) => {
+  const { stats, showAlert } = get();
+  let newExp = stats.exp + expGain;
+  let newLevel = stats.level;
+  let newMaxExp = stats.maxExp;
 
-    if (newExp >= stats.maxExp) {
-      newLevel += 1;
-      newExp -= stats.maxExp;
-      newMaxExp = Math.floor(stats.maxExp * 1.2);
-      showAlert("LEVEL UP!", `Selamat! Kamu naik ke level ${newLevel}!`, "success");
-    }
+  if (newExp >= stats.maxExp) {
+    newLevel += 1;
+    newExp -= stats.maxExp;
+    newMaxExp = Math.floor(stats.maxExp * 1.2);
+    showAlert("LEVEL UP!", `Selamat! Kamu naik ke level ${newLevel}!`, "success");
+  }
 
-    set({ stats: { ...stats, exp: newExp, level: newLevel, maxExp: newMaxExp } });
-  },
+  set({
+    stats: {
+      ...stats,
+      exp: newExp,
+      level: newLevel,
+      maxExp: newMaxExp,
+      gold: stats.gold + goldGain
+    },
+    coinPopup: goldGain > 0
+      ? { show: true, amount: goldGain, id: Date.now() }
+      : { show: false, amount: 0, id: 0 }
+  });
+},
 
   toggleTaskDone: (task) => {
     const { tasks, _applyReward } = get();

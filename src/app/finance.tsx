@@ -31,7 +31,15 @@ const CircularProgress = ({ value, max, color }: { value: number, max: number, c
 // 1. MAIN PAGE COMPONENT
 // ==========================================
 export default function Finance() {
-  const { accounts, deleteAccount, transactions, recurringTransactions, processRecurringTransactions } = useStore();
+  const {
+  accounts,
+  deleteAccount,
+  transactions,
+  recurringTransactions,
+  processRecurringTransactions,
+  confirmRecurringPayment,
+  snoozeRecurringTransaction,
+} = useStore();
 
   const [isAddOpen, setIsAddOpen] = useState(false);
   const [addType, setAddType] = useState<'rekening' | 'tabungan'>('rekening');
@@ -59,6 +67,11 @@ export default function Finance() {
   const totalRekening = rekeningList.reduce((acc: number, curr: any) => acc + curr.balance, 0);
   const totalTabungan = tabunganList.reduce((acc: number, curr: any) => acc + (curr.balance || 0), 0);
   const netWorth = totalRekening + totalTabungan;
+  const dueTodayBills = recurringTransactions.filter((tx: any) => tx.status === 'due');
+const overdueBills = recurringTransactions.filter((tx: any) => tx.status === 'overdue');
+const upcomingBills = recurringTransactions
+  .filter((tx: any) => tx.status === 'upcoming')
+  .sort((a: any, b: any) => a.nextDueDate - b.nextDueDate);
 
   return (
     <div className="flex flex-col h-full animate-in fade-in duration-500 gap-6 text-left p-4">
@@ -159,40 +172,152 @@ export default function Finance() {
               <h2 className="text-base font-bold uppercase tracking-wider">Riwayat</h2>
             </div>
             <button onClick={() => setIsRecurringOpen(true)} className="text-[10px] bg-pink-500/10 hover:bg-pink-500 text-pink-400 hover:text-slate-900 border border-pink-500 px-2 py-1 rounded-none flex items-center gap-1 transition-colors" title="Kelola Tagihan Rutin">
-              <CalendarClock size={14}/> Auto-Pay
+              <CalendarClock size={14}/> Tagihan Rutin
             </button>
           </div>
           <div className="flex-1 overflow-y-auto bg-[#1a1b26]">
             {/* SECTION: TAGIHAN AKAN DATANG (PENDING) */}
-            {recurringTransactions.length > 0 && (
-              <div className="bg-[#24283b] border-b-2 border-slate-700">
-                <div className="px-4 py-2 text-[10px] font-bold text-slate-500 uppercase tracking-wider bg-[#1a1b26]">Tagihan Akan Datang</div>
-                {recurringTransactions.sort((a, b) => a.nextDueDate - b.nextDueDate).map(tx => (
-                  <div key={tx.id} className="p-4 border-b border-slate-700 flex justify-between items-center hover:bg-slate-800 transition-colors group">
-                    <div className="flex flex-col text-left">
-                      <span className="text-sm text-slate-300 font-bold flex items-center gap-2"><Clock size={12} className="text-amber-500"/> {tx.name}</span>
-                      <span className="text-xs text-amber-500/80 font-mono">Jatuh Tempo: {new Date(tx.nextDueDate).toLocaleDateString()}</span>
-                    </div>
-                    <div className="font-mono font-bold text-sm text-slate-400 group-hover:text-white transition-colors">Rp {tx.amount.toLocaleString()}</div>
-                  </div>
-                ))}
-              </div>
-            )}
+            {/* SECTION: JATUH TEMPO HARI INI */}
+{dueTodayBills.length > 0 && (
+  <div className="bg-[#24283b] border-b-2 border-slate-700">
+    <div className="px-4 py-2 text-[10px] font-bold text-pink-400 uppercase tracking-wider bg-[#1a1b26]">
+      Perlu Konfirmasi Hari Ini
+    </div>
+
+    {dueTodayBills.map((tx: any) => (
+      <div key={tx.id} className="p-4 border-b border-slate-700 flex flex-col gap-3 bg-pink-500/5">
+        <div className="flex justify-between items-start">
+          <div className="flex flex-col text-left">
+            <span className="text-sm text-slate-200 font-bold flex items-center gap-2">
+              <Clock size={12} className="text-pink-400" />
+              {tx.name}
+            </span>
+            <span className="text-xs text-pink-300/80 font-mono">
+              Jatuh Tempo: {new Date(tx.nextDueDate).toLocaleDateString()}
+            </span>
+          </div>
+
+          <div className="font-mono font-bold text-sm text-pink-400">
+            Rp {tx.amount.toLocaleString()}
+          </div>
+        </div>
+
+        <div className="flex gap-2 justify-end">
+          <button
+            onClick={() => snoozeRecurringTransaction(tx.id)}
+            className="px-3 py-1 text-[10px] font-bold uppercase border border-yellow-500 text-yellow-400 hover:bg-yellow-500 hover:text-slate-950 transition-all"
+          >
+            Tunda
+          </button>
+          <button
+            onClick={() => confirmRecurringPayment(tx.id)}
+            className="px-3 py-1 text-[10px] font-bold uppercase border border-emerald-500 text-emerald-400 hover:bg-emerald-500 hover:text-slate-950 transition-all"
+          >
+            Bayar Sekarang
+          </button>
+        </div>
+      </div>
+    ))}
+  </div>
+)}
+
+{/* SECTION: OVERDUE */}
+{overdueBills.length > 0 && (
+  <div className="bg-[#24283b] border-b-2 border-slate-700">
+    <div className="px-4 py-2 text-[10px] font-bold text-yellow-400 uppercase tracking-wider bg-[#1a1b26]">
+      Tagihan Tertunda
+    </div>
+
+    {overdueBills.map((tx: any) => (
+      <div key={tx.id} className="p-4 border-b border-slate-700 flex flex-col gap-3 bg-yellow-500/5">
+        <div className="flex justify-between items-start">
+          <div className="flex flex-col text-left">
+            <span className="text-sm text-slate-200 font-bold flex items-center gap-2">
+              <Clock size={12} className="text-yellow-400" />
+              {tx.name}
+            </span>
+            <span className="text-xs text-yellow-300/80 font-mono">
+              Lewat jatuh tempo: {new Date(tx.nextDueDate).toLocaleDateString()}
+            </span>
+          </div>
+
+          <div className="font-mono font-bold text-sm text-yellow-400">
+            Rp {tx.amount.toLocaleString()}
+          </div>
+        </div>
+
+        <div className="flex gap-2 justify-end">
+          <button
+            onClick={() => confirmRecurringPayment(tx.id)}
+            className="px-3 py-1 text-[10px] font-bold uppercase border border-emerald-500 text-emerald-400 hover:bg-emerald-500 hover:text-slate-950 transition-all"
+          >
+            Bayar
+          </button>
+        </div>
+      </div>
+    ))}
+  </div>
+)}
+
+{/* SECTION: TAGIHAN AKAN DATANG */}
+{upcomingBills.length > 0 && (
+  <div className="bg-[#24283b] border-b-2 border-slate-700">
+    <div className="px-4 py-2 text-[10px] font-bold text-slate-500 uppercase tracking-wider bg-[#1a1b26]">
+      Tagihan Akan Datang
+    </div>
+
+    {upcomingBills.map((tx: any) => (
+      <div key={tx.id} className="p-4 border-b border-slate-700 flex justify-between items-center hover:bg-slate-800 transition-colors group">
+        <div className="flex flex-col text-left">
+          <span className="text-sm text-slate-300 font-bold flex items-center gap-2">
+            <Clock size={12} className="text-amber-500" />
+            {tx.name}
+          </span>
+          <span className="text-xs text-amber-500/80 font-mono">
+            Jatuh Tempo: {new Date(tx.nextDueDate).toLocaleDateString()}
+          </span>
+        </div>
+        <div className="font-mono font-bold text-sm text-slate-400 group-hover:text-white transition-colors">
+          Rp {tx.amount.toLocaleString()}
+        </div>
+      </div>
+    ))}
+  </div>
+)}
 
             {/* SECTION: RIWAYAT TRANSAKSI (SELESAI) */}
             <div className="px-4 py-2 text-[10px] font-bold text-slate-500 uppercase tracking-wider bg-[#1a1b26] sticky top-0 border-b border-slate-700">Riwayat Selesai</div>
             {transactions?.length > 0 ? transactions.map((log: any) => (
-              <div key={log.id} className="p-4 border-b border-slate-700 flex justify-between items-center hover:bg-slate-800 transition-colors">
-                <div className="flex flex-col text-left">
-                  <span className="text-sm text-slate-200 font-bold">{log.accountName}</span>
-                  <span className="text-xs text-slate-500 font-mono">{new Date(log.timestamp).toLocaleDateString()} • {new Date(log.timestamp).toLocaleTimeString()}</span>
-                </div>
-                <div className={`font-mono font-bold text-base ${log.type === 'income' ? 'text-emerald-400' : 'text-pink-500'}`}>
-                  {log.type === 'income' ? '+' : '-'} Rp {log.amount.toLocaleString()}
-                  {log.type === 'income' ? <ArrowUpRight size={14} className="inline ml-1"/> : <ArrowDownRight size={14} className="inline ml-1"/>}
-                </div>
-              </div>
-            )) : <div className="p-10 text-center text-sm text-slate-500 italic">Belum ada riwayat transaksi.</div>}
+  <div key={log.id} className="p-4 border-b border-slate-700 flex justify-between items-center hover:bg-slate-800 transition-colors">
+    <div className="flex flex-col text-left">
+      <span className="text-sm text-slate-200 font-bold">{log.accountName}</span>
+      <span className="text-xs text-slate-500 font-mono">
+        {new Date(log.timestamp).toLocaleDateString()} • {new Date(log.timestamp).toLocaleTimeString()}
+      </span>
+    </div>
+
+    <div className="flex flex-col items-end">
+      <div className={`font-mono font-bold text-base ${log.type === 'income' ? 'text-emerald-400' : 'text-pink-500'}`}>
+        {log.type === 'income' ? '+' : '-'} Rp {log.amount.toLocaleString()}
+        {log.type === 'income'
+          ? <ArrowUpRight size={14} className="inline ml-1"/>
+          : <ArrowDownRight size={14} className="inline ml-1"/>}
+      </div>
+
+      {typeof log.expGained === "number" && log.expGained > 0 && (
+        <div className="text-[10px] text-yellow-400 font-bold uppercase mt-1">
+          +{log.expGained} EXP
+        </div>
+      )}
+
+      {typeof log.gram === "number" && log.gram > 0 && (
+        <div className="text-[10px] text-yellow-500 font-mono italic">
+          {log.type === 'income' ? '+' : '-'} {log.gram.toFixed(4)} GR
+        </div>
+      )}
+    </div>
+  </div>
+)) : <div className="p-10 text-center text-sm text-slate-500 italic">Belum ada riwayat transaksi.</div>}
           </div>
         </div>
       </div>
@@ -223,7 +348,7 @@ function RecurringModal({ isOpen, onClose }: { isOpen: boolean, onClose: () => v
   const [accountId, setAccountId] = useState("");
   const [date, setDate] = useState("");
   const [currency, setCurrency] = useState<'IDR' | 'USD'>('IDR');
-  const RATE = 16250;
+  const RATE = 17000;
 
   const handleAdd = () => {
     if (!name || amount <= 0 || !accountId || !date) return;
@@ -317,14 +442,14 @@ function RecurringModal({ isOpen, onClose }: { isOpen: boolean, onClose: () => v
 // 2. ADD ACCOUNT MODAL (REDESIGNED)
 // ==========================================
 function AddAccountModal({ isOpen, onClose, type }: { isOpen: boolean, onClose: () => void, type: 'rekening' | 'tabungan' }) {
-  const { addAccount } = useStore();
+  const { addAccount, _applySimpleReward } = useStore();
   const [name, setName] = useState("");
   const [balance, setBalance] = useState(0);
   const [target, setTarget] = useState(0);
   const [isGold, setIsGold] = useState(false);
   const [goldWeight, setGoldWeight] = useState(0);
   const [currency, setCurrency] = useState<'IDR' | 'USD'>('IDR');
-  const RATE = 16250;
+  const RATE = 17000;
 
   // Reset state saat modal dibuka
   useEffect(() => {
@@ -354,16 +479,23 @@ function AddAccountModal({ isOpen, onClose, type }: { isOpen: boolean, onClose: 
       finalBalance = goldWeight * 2800000; // Estimasi harga emas (Hardcoded sementara)
     }
 
-    addAccount({
-      id: Date.now().toString(),
-      name: finalName,
-      balance: finalBalance,
-      type,
-      target: type === 'tabungan' ? finalTarget : undefined,
-      weight: (type === 'tabungan' && isGold) ? goldWeight : 0
-    });
-    onClose();
-  };
+addAccount({
+  id: Date.now().toString(),
+  name: finalName,
+  balance: finalBalance,
+  type,
+  target: type === 'tabungan' ? finalTarget : undefined,
+  weight: (type === 'tabungan' && isGold) ? goldWeight : 0
+});
+
+if (type === 'rekening') {
+  _applySimpleReward(10, 3);
+} else {
+  _applySimpleReward(isGold ? 20 : 15, isGold ? 5 : 4);
+}
+
+onClose();
+  }
 
   // Helper untuk format input angka
   const handleBalanceChange = (e: React.ChangeEvent<HTMLInputElement>, setter: (val: number) => void) => {
@@ -487,10 +619,10 @@ function AddAccountModal({ isOpen, onClose, type }: { isOpen: boolean, onClose: 
 function TransactionModal({ isOpen, onClose, accountId, accountName, currentBalance, isAdding }: any) {
   const { updateBalance, showAlert, accounts } = useStore();
   
-  const [money, setMoney] = useState<number>(0);
-  const [gram, setGram] = useState<number>(0);
+const [money, setMoney] = useState<number>(0);
+const [gramInput, setGramInput] = useState<string>("");
   const [currency, setCurrency] = useState<'IDR' | 'USD'>('IDR');
-  const RATE = 16250;
+  const RATE = 17000;
 
   // Harga Emas 1 gram = 2.800.000
   const GOLD_PRICE_PER_GRAM = 2800000; 
@@ -499,30 +631,51 @@ function TransactionModal({ isOpen, onClose, accountId, accountName, currentBala
   useEffect(() => {
     if (isOpen) {
       setMoney(0);
-      setGram(0);
+      setGramInput("");
       setCurrency('IDR');
     }
   }, [isOpen]);
 
-  const handleMoneyChange = (rawVal: string) => {
-    const val = Number(rawVal.replace(/\./g, ''));
-    if (isNaN(val)) return;
-    
-    setMoney(val);
-    if (isGold) {
-      const idrValue = currency === 'USD' ? val * RATE : val;
-      setGram(Number((idrValue / GOLD_PRICE_PER_GRAM).toFixed(4)));
-    }
-  };
+const handleMoneyChange = (rawVal: string) => {
+  const val = Number(rawVal.replace(/\./g, ''));
+  if (isNaN(val)) return;
+  
+  setMoney(val);
 
-  const handleGramChangeLocal = (val: number) => {
-    setGram(val);
-    if (isGold) {
-      const idrValue = Math.round(val * GOLD_PRICE_PER_GRAM);
-      // Jika currency USD, tampilkan dalam USD
-      setMoney(currency === 'USD' ? Number((idrValue / RATE).toFixed(2)) : idrValue);
-    }
-  };
+  if (isGold) {
+    const idrValue = currency === 'USD' ? val * RATE : val;
+    const calcGram = (idrValue / GOLD_PRICE_PER_GRAM).toFixed(4);
+    setGramInput(parseFloat(calcGram).toString());
+  }
+};
+
+const handleGramChangeLocal = (val: string) => {
+  let cleaned = val.replace(/,/g, '.').replace(/[^\d.]/g, '');
+
+  const firstDot = cleaned.indexOf('.');
+  if (firstDot !== -1) {
+    cleaned =
+      cleaned.slice(0, firstDot + 1) +
+      cleaned.slice(firstDot + 1).replace(/\./g, '');
+  }
+
+  setGramInput(cleaned);
+
+  if (cleaned === "" || cleaned === ".") {
+    setMoney(0);
+    return;
+  }
+
+  const num = Number(cleaned);
+
+  if (!Number.isNaN(num)) {
+    const idrValue = Math.round(num * GOLD_PRICE_PER_GRAM);
+    setMoney(currency === 'USD'
+      ? Number((idrValue / RATE).toFixed(2))
+      : idrValue
+    );
+  }
+};
 
   if (!isOpen) return null;
 
@@ -532,6 +685,7 @@ function TransactionModal({ isOpen, onClose, accountId, accountName, currentBala
     const acc = accounts.find(a => a.id === accountId);
     if (!acc) return;
 
+    const inputGram = parseFloat((gramInput || "0").replace(',', '.')) || 0;
     const finalAmount = currency === 'USD' ? money * RATE : money;
 
     // Proteksi penarikan berlebih
@@ -543,11 +697,32 @@ function TransactionModal({ isOpen, onClose, accountId, accountName, currentBala
     }
 
     // Eksekusi update ke Store
-    updateBalance(
-      accountId, 
-      isAdding ? finalAmount : -finalAmount, 
-      isGold ? (isAdding ? gram : -gram) : 0
-    );
+const expGain = isAdding
+  ? (
+      isGold
+        ? Math.max(1, Math.floor(inputGram * 5))
+        : Math.max(1, Math.floor(finalAmount / 50000))
+    )
+  : 0;
+
+const goldGain = isAdding
+  ? (
+      isGold
+        ? Math.max(1, Math.floor(inputGram * 2))
+        : Math.min(20, Math.max(1, Math.floor(finalAmount / 100000)))
+    )
+  : 0;
+
+updateBalance(
+  accountId,
+  isAdding ? finalAmount : -finalAmount,
+  isGold ? (isAdding ? inputGram : -inputGram) : 0,
+  {
+    exp: expGain,
+    gold: goldGain,
+    gram: isGold ? inputGram : undefined,
+  }
+);
 
     onClose();
   };
@@ -589,12 +764,14 @@ function TransactionModal({ isOpen, onClose, accountId, accountName, currentBala
           {isGold && (
             <div className="relative">
               <label className="text-sm font-bold text-yellow-500 mb-2 block uppercase">Berat Emas (Gram)</label>
-              <input 
-                type="number" value={gram || ""} 
-                onChange={(e) => handleGramChangeLocal(parseFloat(e.target.value) || 0)}
-                className="w-full bg-[#24283b] border-2 border-slate-600 rounded-none h-14 px-4 font-mono text-white text-xl outline-none focus:border-yellow-500 transition-all"
-                placeholder="0.0000"
-              />
+             <input 
+  type="text"
+  inputMode="decimal"
+  value={gramInput}
+  onChange={(e) => handleGramChangeLocal(e.target.value)}
+  className="w-full bg-[#24283b] border-2 border-slate-600 rounded-none h-14 px-4 font-mono text-white text-xl outline-none focus:border-yellow-500 transition-all"
+  placeholder="0.0000"
+/>
               <p className="text-xs text-slate-500 mt-1 italic text-right">Rate: Rp 2.800.000 / Gram</p>
             </div>
           )}
