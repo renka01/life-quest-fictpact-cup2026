@@ -1254,9 +1254,7 @@ function TransactionModal({
               isAdding ? "bg-emerald-500 hover:bg-emerald-400" : "bg-pink-500 hover:bg-pink-400"
             }`}
           >
-            
             Konfirmasi
-
           </button>
         </div>
       </div>

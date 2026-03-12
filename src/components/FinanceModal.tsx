@@ -142,7 +142,6 @@ export default function FinanceFormModal({ isOpen, onClose, type }: FinanceModal
           </button>
         </div>
 
-
         <div className="p-6 flex flex-col gap-5 max-h-[70vh] overflow-y-auto custom-scrollbar text-left text-white">
           
           {/* 1. PILIH PROVIDER */}

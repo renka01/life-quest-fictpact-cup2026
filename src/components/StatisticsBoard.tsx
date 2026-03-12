@@ -414,7 +414,6 @@ function StatCard({
   );
 }
 
-
 function MiniBox({
   label,
   value,
