@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import { useStore } from "@/store/useStore";
+import { useStore, TaskType } from "@/store/useStore";
 import {
   LayoutDashboard,
   Wallet,
@@ -15,9 +15,23 @@ import {
   CalendarClock,
   Target,
   CheckCircle2,
+  CreditCard,
+  Sparkles,
 } from "lucide-react";
 
-export default function DashboardBoard() {
+interface DashboardBoardProps {
+  onOpenTaskModal: (type?: TaskType | null) => void;
+  onOpenFinanceAction: (type: "rekening" | "tabungan") => void;
+  onOpenBills: () => void;
+  onGoToFinance: () => void;
+}
+
+export default function DashboardBoard({
+  onOpenTaskModal,
+  onOpenFinanceAction,
+  onOpenBills,
+  onGoToFinance,
+}: DashboardBoardProps) {
   const { tasks, stats, accounts, transactions, recurringTransactions } = useStore();
 
   const totalTasks = tasks.length;
@@ -43,10 +57,16 @@ export default function DashboardBoard() {
 
   const netWorth = totalRekening + totalTabungan;
   const recentTransactions = transactions.slice(0, 5);
+
   const upcomingBills = recurringTransactions
     .slice()
     .sort((a, b) => a.nextDueDate - b.nextDueDate)
     .slice(0, 4);
+
+  const incomeTransactions = transactions.filter((t) => t.type === "income");
+  const totalIncome = incomeTransactions.reduce((sum, t) => sum + t.amount, 0);
+  const avgIncome =
+    incomeTransactions.length > 0 ? Math.round(totalIncome / incomeTransactions.length) : 0;
 
   const progress =
     totalTasks > 0 ? Math.round((completedTasks / totalTasks) * 100) : 0;
@@ -57,9 +77,12 @@ export default function DashboardBoard() {
   const energyPercent =
     stats.maxEnergy > 0 ? Math.min(100, (stats.energy / stats.maxEnergy) * 100) : 0;
 
+  const savingRatio =
+    netWorth > 0 ? Math.round((totalTabungan / netWorth) * 100) : 0;
+
   const greeting =
     stats.energy <= 20
-      ? "Energi rendah. Ambil misi kecil dulu."
+      ? "Energi rendah. Ambil misi kecil atau rapikan keuangan dulu."
       : focusTasks.length > 0
       ? `Kamu punya ${focusTasks.length} fokus utama hari ini.`
       : "Hari ini cukup tenang. Saatnya susun langkah berikutnya.";
@@ -68,7 +91,7 @@ export default function DashboardBoard() {
     <div className="animate-in fade-in duration-500 flex flex-col gap-6">
       {/* HERO */}
       <div className="bg-[#24283b] border-4 border-slate-700 shadow-[6px_6px_0_#000] p-5 lg:p-6">
-        <div className="grid grid-cols-1 xl:grid-cols-[1.4fr_0.9fr] gap-6 items-start">
+        <div className="grid grid-cols-1 xl:grid-cols-[1.5fr_0.9fr] gap-6 items-start">
           <div className="space-y-4">
             <div>
               <p className="text-[10px] uppercase tracking-[0.2em] text-cyan-400 font-bold mb-2">
@@ -78,17 +101,17 @@ export default function DashboardBoard() {
                 Dashboard Utama
               </h1>
               <p className="text-sm text-slate-400 max-w-2xl">
-                Ringkasan progres karakter, misi, dan keuanganmu.
+                Ringkasan progres karakter, misi, dan keuanganmu dalam satu layar.
               </p>
             </div>
 
             <div className="flex flex-wrap gap-3">
-              <div className="bg-[#1a1b26] border-2 border-cyan-500 px-4 py-2 shadow-[3px_3px_0_#000]">
+              <div className="bg-[#1a1b26] border-2 border-cyan-500 px-4 py-2 shadow-[3px_3px_0_#000] min-w-[150px]">
                 <p className="text-[10px] uppercase text-slate-500 mb-1">Role</p>
                 <p className="text-cyan-400 font-bold">Lv. {stats.level} Adventurer</p>
               </div>
 
-              <div className="bg-[#1a1b26] border-2 border-orange-500 px-4 py-2 shadow-[3px_3px_0_#000]">
+              <div className="bg-[#1a1b26] border-2 border-orange-500 px-4 py-2 shadow-[3px_3px_0_#000] min-w-[120px]">
                 <p className="text-[10px] uppercase text-slate-500 mb-1">Streak</p>
                 <p className="text-orange-400 font-bold flex items-center gap-2">
                   <Flame size={14} />
@@ -96,7 +119,7 @@ export default function DashboardBoard() {
                 </p>
               </div>
 
-              <div className="bg-[#1a1b26] border-2 border-yellow-500 px-4 py-2 shadow-[3px_3px_0_#000]">
+              <div className="bg-[#1a1b26] border-2 border-yellow-500 px-4 py-2 shadow-[3px_3px_0_#000] min-w-[100px]">
                 <p className="text-[10px] uppercase text-slate-500 mb-1">Gold</p>
                 <p className="text-yellow-400 font-bold flex items-center gap-2">
                   <Coins size={14} />
@@ -111,44 +134,66 @@ export default function DashboardBoard() {
             </div>
           </div>
 
+          {/* QUICK ACTIONS */}
           <div className="bg-[#1a1b26] border-2 border-slate-700 p-4 shadow-[4px_4px_0_#000]">
             <p className="text-[10px] uppercase text-slate-500 mb-3">Quick Actions</p>
             <div className="grid grid-cols-2 gap-3">
-              <button className="bg-[#24283b] border-2 border-cyan-500 text-cyan-400 px-3 py-3 text-xs font-bold hover:bg-cyan-500 hover:text-slate-950 transition-all shadow-[3px_3px_0_#000]">
+              <button
+                onClick={() => onOpenTaskModal(null)}
+                className="bg-[#24283b] border-2 border-cyan-500 text-cyan-400 px-3 py-3 text-xs font-bold hover:bg-cyan-500 hover:text-slate-950 transition-all shadow-[3px_3px_0_#000]"
+              >
                 <span className="flex items-center justify-center gap-2">
                   <Plus size={14} />
                   Misi Baru
                 </span>
               </button>
 
-              <button className="bg-[#24283b] border-2 border-emerald-500 text-emerald-400 px-3 py-3 text-xs font-bold hover:bg-emerald-500 hover:text-slate-950 transition-all shadow-[3px_3px_0_#000]">
+              <button
+                onClick={() => onOpenFinanceAction("rekening")}
+                className="bg-[#24283b] border-2 border-emerald-500 text-emerald-400 px-3 py-3 text-xs font-bold hover:bg-emerald-500 hover:text-slate-950 transition-all shadow-[3px_3px_0_#000]"
+              >
                 <span className="flex items-center justify-center gap-2">
-                  <Wallet size={14} />
-                  Tambah Dana
+                  <CreditCard size={14} />
+                  Rekening Baru
                 </span>
               </button>
 
-              <button className="bg-[#24283b] border-2 border-yellow-500 text-yellow-400 px-3 py-3 text-xs font-bold hover:bg-yellow-500 hover:text-slate-950 transition-all shadow-[3px_3px_0_#000]">
+              <button
+                onClick={() => onOpenFinanceAction("tabungan")}
+                className="bg-[#24283b] border-2 border-yellow-500 text-yellow-400 px-3 py-3 text-xs font-bold hover:bg-yellow-500 hover:text-slate-950 transition-all shadow-[3px_3px_0_#000]"
+              >
                 <span className="flex items-center justify-center gap-2">
                   <PiggyBank size={14} />
                   Tambah Aset
                 </span>
               </button>
 
-              <button className="bg-[#24283b] border-2 border-pink-500 text-pink-400 px-3 py-3 text-xs font-bold hover:bg-pink-500 hover:text-slate-950 transition-all shadow-[3px_3px_0_#000]">
+              <button
+                onClick={onOpenBills}
+                className="bg-[#24283b] border-2 border-pink-500 text-pink-400 px-3 py-3 text-xs font-bold hover:bg-pink-500 hover:text-slate-950 transition-all shadow-[3px_3px_0_#000]"
+              >
                 <span className="flex items-center justify-center gap-2">
                   <CalendarClock size={14} />
                   Tagihan
                 </span>
               </button>
             </div>
+
+            <button
+              onClick={onGoToFinance}
+              className="w-full mt-3 bg-[#24283b] border-2 border-slate-600 text-slate-300 px-3 py-3 text-xs font-bold hover:border-white hover:text-white transition-all shadow-[3px_3px_0_#000]"
+            >
+              <span className="flex items-center justify-center gap-2">
+                <Sparkles size={14} />
+                Buka Financial Command Center
+              </span>
+            </button>
           </div>
         </div>
       </div>
 
       {/* TOP WIDGETS */}
       <div className="grid grid-cols-1 xl:grid-cols-4 gap-6">
-        {/* Status Karakter */}
         <div className="bg-[#24283b] border-4 border-cyan-500 shadow-[6px_6px_0_#000] p-5 flex flex-col gap-4">
           <div className="flex items-center gap-2 text-cyan-400">
             <Zap size={16} />
@@ -182,10 +227,7 @@ export default function DashboardBoard() {
               <span>{stats.exp}/{stats.maxExp}</span>
             </div>
             <div className="h-3 bg-slate-900 border border-slate-700 overflow-hidden">
-              <div
-                className="h-full bg-yellow-400 transition-all"
-                style={{ width: `${expPercent}%` }}
-              />
+              <div className="h-full bg-yellow-400 transition-all" style={{ width: `${expPercent}%` }} />
             </div>
           </div>
 
@@ -195,15 +237,11 @@ export default function DashboardBoard() {
               <span>{stats.energy}/{stats.maxEnergy}</span>
             </div>
             <div className="h-3 bg-slate-900 border border-slate-700 overflow-hidden">
-              <div
-                className="h-full bg-cyan-400 transition-all"
-                style={{ width: `${energyPercent}%` }}
-              />
+              <div className="h-full bg-cyan-400 transition-all" style={{ width: `${energyPercent}%` }} />
             </div>
           </div>
         </div>
 
-        {/* Balance Overview */}
         <div className="bg-[#24283b] border-4 border-emerald-500 shadow-[6px_6px_0_#000] p-5 flex flex-col gap-4">
           <div className="flex items-center gap-2 text-emerald-400">
             <Wallet size={16} />
@@ -234,49 +272,37 @@ export default function DashboardBoard() {
           </div>
         </div>
 
-        {/* Income Summary */}
         <div className="bg-[#24283b] border-4 border-yellow-500 shadow-[6px_6px_0_#000] p-5 flex flex-col gap-4">
           <div className="flex items-center gap-2 text-yellow-400">
             <Coins size={16} />
             <h2 className="text-sm font-bold uppercase">Ringkasan Pemasukan</h2>
           </div>
 
-          {(() => {
-            const incomeTransactions = transactions.filter((t) => t.type === "income");
-            const totalIncome = incomeTransactions.reduce((sum, t) => sum + t.amount, 0);
-            const avgIncome =
-              incomeTransactions.length > 0
-                ? Math.round(totalIncome / incomeTransactions.length)
-                : 0;
+          <div>
+            <p className="text-slate-500 text-xs uppercase">Total Pemasukan</p>
+            <p className="text-yellow-400 font-bold text-3xl">
+              Rp {totalIncome.toLocaleString()}
+            </p>
+          </div>
 
-            return (
-              <>
-                <div>
-                  <p className="text-slate-500 text-xs uppercase">Total Pemasukan</p>
-                  <p className="text-yellow-400 font-bold text-3xl">
-                    Rp {totalIncome.toLocaleString()}
-                  </p>
-                </div>
+          <div className="grid grid-cols-2 gap-3">
+            <div className="bg-[#1a1b26] border-2 border-slate-700 p-3">
+              <p className="text-[10px] uppercase text-slate-500 mb-1">Transaksi Masuk</p>
+              <p className="text-white font-bold text-xl">{incomeTransactions.length}</p>
+            </div>
 
-                <div className="grid grid-cols-2 gap-3">
-                  <div className="bg-[#1a1b26] border-2 border-slate-700 p-3">
-                    <p className="text-[10px] uppercase text-slate-500 mb-1">Transaksi Masuk</p>
-                    <p className="text-white font-bold text-xl">{incomeTransactions.length}</p>
-                  </div>
+            <div className="bg-[#1a1b26] border-2 border-slate-700 p-3">
+              <p className="text-[10px] uppercase text-slate-500 mb-1">Rata-rata</p>
+              <p className="text-white font-bold text-xl">Rp {avgIncome.toLocaleString()}</p>
+            </div>
+          </div>
 
-                  <div className="bg-[#1a1b26] border-2 border-slate-700 p-3">
-                    <p className="text-[10px] uppercase text-slate-500 mb-1">Rata-rata</p>
-                    <p className="text-white font-bold text-xl">
-                      Rp {avgIncome.toLocaleString()}
-                    </p>
-                  </div>
-                </div>
-              </>
-            );
-          })()}
+          <div className="bg-[#1a1b26] border-2 border-slate-700 p-3">
+            <p className="text-[10px] uppercase text-slate-500 mb-1">Saving Ratio</p>
+            <p className="text-cyan-400 font-bold text-xl">{savingRatio}%</p>
+          </div>
         </div>
 
-        {/* Progress Misi */}
         <div className="bg-[#24283b] border-4 border-pink-500 shadow-[6px_6px_0_#000] p-5 flex flex-col gap-4">
           <div className="flex items-center gap-2 text-pink-400">
             <ScrollText size={16} />
@@ -304,10 +330,7 @@ export default function DashboardBoard() {
               <span>{progress}%</span>
             </div>
             <div className="h-3 bg-slate-900 border border-slate-700 overflow-hidden">
-              <div
-                className="h-full bg-pink-500 transition-all"
-                style={{ width: `${progress}%` }}
-              />
+              <div className="h-full bg-pink-500 transition-all" style={{ width: `${progress}%` }} />
             </div>
           </div>
         </div>
@@ -315,7 +338,6 @@ export default function DashboardBoard() {
 
       {/* MAIN WIDGETS */}
       <div className="grid grid-cols-1 xl:grid-cols-[1.2fr_1fr] gap-6">
-        {/* Fokus Hari Ini */}
         <div className="bg-[#24283b] border-4 border-slate-700 shadow-[6px_6px_0_#000] p-5">
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-sm font-bold text-white uppercase">Fokus Hari Ini</h2>
@@ -371,9 +393,7 @@ export default function DashboardBoard() {
           </div>
         </div>
 
-        {/* Side widgets */}
         <div className="flex flex-col gap-6">
-          {/* Aktivitas terbaru */}
           <div className="bg-[#24283b] border-4 border-slate-700 shadow-[6px_6px_0_#000] p-5">
             <div className="flex items-center justify-between mb-4">
               <h2 className="text-sm font-bold text-white uppercase">Aktivitas Terbaru</h2>
@@ -423,7 +443,6 @@ export default function DashboardBoard() {
             </div>
           </div>
 
-          {/* Upcoming bills */}
           <div className="bg-[#24283b] border-4 border-slate-700 shadow-[6px_6px_0_#000] p-5">
             <div className="flex items-center justify-between mb-4">
               <h2 className="text-sm font-bold text-white uppercase">Upcoming Bills</h2>
