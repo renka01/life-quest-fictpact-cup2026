@@ -181,6 +181,7 @@ updateBalance(
             </div>
           </div>
 
+
           <div className="bg-slate-900/50 border border-dashed border-slate-700 p-3 rounded text-center">
             <p className="text-[7px] font-pixel text-slate-500 uppercase mb-1 italic">
               // Rate: 1 Gr = 2.800.000

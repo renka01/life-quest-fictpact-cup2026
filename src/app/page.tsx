@@ -404,7 +404,6 @@ export default function Home() {
         task={selectedTask}
         onClose={() => setSelectedTask(null)}
       />
-
       <GlobalAlerts />
     </div>
   );

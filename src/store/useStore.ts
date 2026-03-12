@@ -231,6 +231,7 @@ export const useStore = create<LifeQuestStore>((set, get) => ({
   };
 }),
 
+
 updateBalance: (id, amount, weightChange = 0, meta) => {
   const { accounts, transactions, showAlert, _applySimpleReward, stats } = get();
   const targetAccount = accounts.find(acc => acc.id === id);

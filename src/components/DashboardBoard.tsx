@@ -26,6 +26,7 @@ interface DashboardBoardProps {
   onGoToFinance: () => void;
 }
 
+
 export default function DashboardBoard({
   onOpenTaskModal,
   onOpenFinanceAction,
