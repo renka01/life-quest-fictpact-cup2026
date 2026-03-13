@@ -5,6 +5,8 @@ import StatusPanel from "@/components/StatusPanel";
 import TaskBoard from "@/components/TaskBoard";
 import DashboardBoard from "@/components/DashboardBoard";
 import StatisticsBoard from "@/components/StatisticsBoard";
+import ShopBoard from "@/components/ShopBoard";
+import CharacterSelection from "@/components/CharacterSelection"; // <-- TAMBAHAN: Import form karakter
 import { useStore, TaskType } from "@/store/useStore";
 import {
   TaskFormModal,
@@ -48,8 +50,12 @@ const RetroTransition = ({ isActive }: { isActive: boolean }) => {
 };
 
 export default function Home() {
-  const { tasks, stats, checkDailyStreak, coinPopup } = useStore();
+  // <-- TAMBAHAN: Panggil userProfile dari store
+  const { tasks, stats, checkDailyStreak, coinPopup, userProfile } = useStore();
   const extendedTasks = tasks as ExtendedTask[];
+
+  // <-- TAMBAHAN: State untuk mencegah Hydration Error
+  const [isMounted, setIsMounted] = useState(false);
 
   // --- STATE PENCARIAN & FILTER GLOBAL ---
   const [searchQuery, setSearchQuery] = useState("");
@@ -74,6 +80,11 @@ export default function Home() {
   const isTaskCreated = tasks.length > 0;
   const isTaskCompleted = tasks.some(t => t.done === true);
   const onboardingProgress = (((isTaskCreated ? 1 : 0) + (isTaskCompleted ? 1 : 0)) / 2) * 100;
+
+  // <-- TAMBAHAN: Menandakan bahwa komponen sudah di-mount di browser
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
   useEffect(() => {
     checkDailyStreak();
@@ -124,6 +135,28 @@ export default function Home() {
     }, 800);
   };
 
+  // ========================================================
+  // <-- TAMBAHAN: LOGIC GATES UNTUK HYDRATION & KARAKTER -->
+  // ========================================================
+
+  // 1. Mencegah Hydration Error (Tunggu sampai browser siap)
+  if (!isMounted) {
+    return (
+      <div className="min-h-screen bg-[#1a1b26] flex items-center justify-center">
+        <span className="font-pixel text-xl text-cyan-400 tracking-[0.2em] animate-pulse">
+          SYSTEM BOOTING...
+        </span>
+      </div>
+    );
+  }
+
+  // 2. Jika user belum memilih karakter, arahkan ke form pemilihan karakter
+  if (!userProfile?.gender) {
+    return <CharacterSelection onComplete={() => console.log("Karakter siap!")} />;
+  }
+
+  // ========================================================
+
   const renderContent = () => {
     switch (activeMenu) {
       case "Dashboard":
@@ -163,6 +196,13 @@ export default function Home() {
             />
           </div>
         );
+
+        case "Toko & Loot":
+  return (
+    <div className="animate-in fade-in slide-in-from-left-4 duration-500 h-full">
+      <ShopBoard />
+    </div>
+  );
 
       case "Keuangan":
         return (

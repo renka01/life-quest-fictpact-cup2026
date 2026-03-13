@@ -141,7 +141,9 @@ export default function DashboardBoard({
             <div className="grid grid-cols-2 gap-3">
               <button
                 onClick={() => onOpenTaskModal(null)}
-                className="bg-[#24283b] border-2 border-cyan-500 text-cyan-400 px-3 py-3 text-xs font-bold hover:bg-cyan-500 hover:text-slate-950 transition-all shadow-[3px_3px_0_#000]"
+               // Contoh untuk tombol "Misi Baru"
+              className="bg-[#24283b] border-2 border-cyan-500 text-cyan-400 px-3 py-3 text-xs font-bold transition-all shadow-[3px_3px_0_#000] 
+              hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[1px_1px_0_#000] active:translate-x-[3px] active:translate-y-[3px] active:shadow-none"
               >
                 <span className="flex items-center justify-center gap-2">
                   <Plus size={14} />
