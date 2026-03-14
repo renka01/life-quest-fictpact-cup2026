@@ -10,19 +10,27 @@ interface CharacterSelectionProps {
 }
 
 export default function CharacterSelection({ onComplete }: CharacterSelectionProps) {
-  const { setUserProfile } = useStore();
+  const { setUserProfile, userProfile } = useStore();
   
   // State lokal untuk form
-  const [playerName, setPlayerName] = useState("");
+  const [characterNickname, setCharacterNickname] = useState("");
   const [selectedGender, setSelectedGender] = useState<"Pria" | "Wanita" | null>(null);
 
   const handleStartJourney = () => {
-    if (selectedGender && playerName.trim() !== "") {
-      // Simpan ke Zustand (Local Storage)
+    if (selectedGender && characterNickname.trim() !== "") {
+      // PERBAIKAN: Simpan ke Zustand dengan properti yang benar
       setUserProfile({
-        name: playerName,
+        // Tetap pertahankan accountName yang sudah diisi saat Login
+        accountName: userProfile?.accountName || "Adventurer", 
+        nickname: characterNickname, // Ini untuk nama karakter (Roleplay)
         gender: selectedGender,
+        avatarId: 'default'
       });
+      
+      // Jalankan suara success (Opsional)
+      const audio = new Audio('/sounds/start-game.mp3');
+      audio.play().catch(() => {});
+
       onComplete();
     }
   };
@@ -34,37 +42,40 @@ export default function CharacterSelection({ onComplete }: CharacterSelectionPro
 
       <div className="bg-[#24283b] border-4 border-slate-700 shadow-[12px_12px_0_#000] p-6 md:p-10 max-w-3xl w-full relative z-10 animate-in zoom-in-95 duration-500">
         
+        {/* HEADER */}
         <div className="text-center mb-10">
-          <p className="font-pixel text-[10px] text-cyan-400 tracking-widest mb-3">SYSTEM INITIALIZATION</p>
+          <p className="font-pixel text-[8px] text-cyan-400 tracking-widest mb-3 uppercase">
+            Account: {userProfile?.accountName || "Guest"} Initialized
+          </p>
           <h1 className="text-2xl md:text-4xl font-bold text-white uppercase tracking-widest drop-shadow-[2px_2px_0_#000]">
             Buat Karaktermu
           </h1>
+          <p className="text-slate-500 text-[10px] uppercase mt-2">Pilih identitas untuk petualanganmu</p>
         </div>
 
-        {/* INPUT NAMA */}
+        {/* INPUT NICKNAME */}
         <div className="mb-8 max-w-md mx-auto">
           <label className="flex items-center gap-2 text-xs font-bold text-slate-400 uppercase tracking-widest mb-3">
             <User size={14} className="text-emerald-400" />
-            Nama Karakter
+            Nickname Karakter
           </label>
           <input
             type="text"
             maxLength={15}
-            value={playerName}
-            onChange={(e) => setPlayerName(e.target.value)}
-            placeholder="Masukkan namamu..."
-            className="w-full bg-[#1a1b26] border-4 border-slate-600 p-4 text-white text-lg font-bold outline-none focus:border-emerald-500 transition-colors shadow-[inset_4px_4px_0_rgba(0,0,0,0.5)] placeholder:text-slate-600 text-center"
+            value={characterNickname}
+            onChange={(e) => setCharacterNickname(e.target.value)}
+            placeholder="Contoh: Micel, Kuro, dll..."
+            className="w-full bg-[#1a1b26] border-4 border-slate-600 p-4 text-white text-lg font-bold outline-none focus:border-emerald-500 transition-colors shadow-[inset_4px_4px_0_rgba(0,0,0,0.5)] placeholder:text-slate-700 text-center"
           />
         </div>
 
-        {/* PILIHAN GENDER */}
+        {/* PILIHAN GENDER / CLASS */}
         <div className="mb-10">
           <label className="flex items-center justify-center gap-2 text-xs font-bold text-slate-400 uppercase tracking-widest mb-4">
-            Pilih Class / Avatar
+            Pilih Avatar Karakter
           </label>
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            
             {/* OPSI PRIA */}
             <button
               onClick={() => setSelectedGender("Pria")}
@@ -74,11 +85,11 @@ export default function CharacterSelection({ onComplete }: CharacterSelectionPro
                   : "border-slate-700 bg-[#1a1b26]/50 hover:border-slate-500 hover:bg-[#1a1b26]"
               }`}
             >
-              <div className="w-32 h-32 relative mb-4">
+              <div className="w-32 h-32 relative mb-4 transform group-hover:scale-110 transition-transform">
                 <Technomancer />
               </div>
-              <div className={`font-pixel text-xs px-4 py-2 border-2 ${selectedGender === "Pria" ? "border-cyan-500 text-cyan-400" : "border-slate-600 text-slate-500"}`}>
-                PRIA
+              <div className={`font-pixel text-[10px] px-4 py-2 border-2 ${selectedGender === "Pria" ? "border-cyan-500 text-cyan-400" : "border-slate-600 text-slate-500"}`}>
+                MALE HERO
               </div>
             </button>
 
@@ -91,26 +102,25 @@ export default function CharacterSelection({ onComplete }: CharacterSelectionPro
                   : "border-slate-700 bg-[#1a1b26]/50 hover:border-slate-500 hover:bg-[#1a1b26]"
               }`}
             >
-              <div className="w-32 h-32 relative mb-4">
+              <div className="w-32 h-32 relative mb-4 transform group-hover:scale-110 transition-transform">
                 <TechnomancerGirl />
               </div>
-              <div className={`font-pixel text-xs px-4 py-2 border-2 ${selectedGender === "Wanita" ? "border-pink-500 text-pink-400" : "border-slate-600 text-slate-500"}`}>
-                WANITA
+              <div className={`font-pixel text-[10px] px-4 py-2 border-2 ${selectedGender === "Wanita" ? "border-pink-500 text-pink-400" : "border-slate-600 text-slate-500"}`}>
+                FEMALE HERO
               </div>
             </button>
-
           </div>
         </div>
 
-        {/* TOMBOL SUBMIT */}
+        {/* TOMBOL START */}
         <div className="flex justify-center mt-8">
           <button
             onClick={handleStartJourney}
-            disabled={!selectedGender || playerName.trim() === ""}
-            className="group relative bg-emerald-500 disabled:bg-slate-700 disabled:text-slate-500 text-slate-950 font-bold px-8 py-4 uppercase tracking-widest transition-all border-4 border-transparent disabled:border-slate-600 shadow-[6px_6px_0_#000] disabled:shadow-none hover:bg-emerald-400 active:translate-y-[4px] active:translate-x-[4px] active:shadow-none disabled:active:translate-y-0 disabled:active:translate-x-0"
+            disabled={!selectedGender || characterNickname.trim() === ""}
+            className="group relative bg-emerald-500 disabled:bg-slate-700 disabled:text-slate-500 text-slate-950 font-bold px-10 py-4 uppercase tracking-widest transition-all border-4 border-emerald-400 disabled:border-slate-600 shadow-[8px_8px_0_#000] disabled:shadow-none hover:bg-emerald-400 active:translate-y-[4px] active:translate-x-[4px] active:shadow-none"
           >
-            <span className="flex items-center justify-center gap-3 font-pixel text-xs">
-              <Sparkles size={16} className={(!selectedGender || playerName.trim() === "") ? "opacity-50" : "animate-pulse"} />
+            <span className="flex items-center justify-center gap-3 font-pixel text-[10px]">
+              <Sparkles size={16} className={(!selectedGender || characterNickname.trim() === "") ? "opacity-30" : "animate-pulse"} />
               Mulai Petualangan
               <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
             </span>

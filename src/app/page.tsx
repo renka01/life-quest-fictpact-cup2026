@@ -1,12 +1,13 @@
 "use client";
 import React, { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation'; 
 import Navbar from "@/components/Navbar";
 import StatusPanel from "@/components/StatusPanel";
 import TaskBoard from "@/components/TaskBoard";
 import DashboardBoard from "@/components/DashboardBoard";
 import StatisticsBoard from "@/components/StatisticsBoard";
 import ShopBoard from "@/components/ShopBoard";
-import CharacterSelection from "@/components/CharacterSelection"; // <-- TAMBAHAN: Import form karakter
+import CharacterSelection from "@/components/CharacterSelection";
 import { useStore, TaskType } from "@/store/useStore";
 import {
   TaskFormModal,
@@ -50,19 +51,15 @@ const RetroTransition = ({ isActive }: { isActive: boolean }) => {
 };
 
 export default function Home() {
-  // <-- TAMBAHAN: Panggil userProfile dari store
   const { tasks, stats, checkDailyStreak, coinPopup, userProfile } = useStore();
+  const router = useRouter(); 
   const extendedTasks = tasks as ExtendedTask[];
 
-  // <-- TAMBAHAN: State untuk mencegah Hydration Error
   const [isMounted, setIsMounted] = useState(false);
-
-  // --- STATE PENCARIAN & FILTER GLOBAL ---
   const [searchQuery, setSearchQuery] = useState("");
   const [activeCategory, setActiveCategory] = useState("Semua");
   const availableCategories = ["Semua", ...Array.from(new Set(extendedTasks.map(t => t.category)))];
 
-  // --- STATE MODAL CONTROLS ---
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [formType, setFormType] = useState<TaskType | null>(null);
   const [isFixed, setIsFixed] = useState(false);
@@ -73,22 +70,30 @@ export default function Home() {
   const [showCoinAnim, setShowCoinAnim] = useState(false);
   const [isTransitioning, setIsTransitioning] = useState(false);
 
-  // Trigger dari dashboard ke finance
   const [dashboardFinanceAction, setDashboardFinanceAction] = useState<"rekening" | "tabungan" | null>(null);
 
-  // Kalkulasi Notifikasi Onboarding
   const isTaskCreated = tasks.length > 0;
   const isTaskCompleted = tasks.some(t => t.done === true);
   const onboardingProgress = (((isTaskCreated ? 1 : 0) + (isTaskCompleted ? 1 : 0)) / 2) * 100;
 
-  // <-- TAMBAHAN: Menandakan bahwa komponen sudah di-mount di browser
-  useEffect(() => {
-    setIsMounted(true);
-  }, []);
+  // ========================================================
+  // <-- PERBAIKAN LOGIC GATES: URUTAN WAJIB -->
+  // ========================================================
 
   useEffect(() => {
-    checkDailyStreak();
-  }, [checkDailyStreak]);
+    setIsMounted(true);
+    
+    // 1. Jika sistem sudah siap (mounted) tapi accountName kosong, pindah ke login
+    if (isMounted && !userProfile?.accountName) {
+      router.push('/login');
+    }
+  }, [isMounted, userProfile?.accountName, router]);
+
+  useEffect(() => {
+    if (isMounted) {
+      checkDailyStreak();
+    }
+  }, [checkDailyStreak, isMounted]);
 
   useEffect(() => {
     if (coinPopup.show) {
@@ -135,11 +140,8 @@ export default function Home() {
     }, 800);
   };
 
-  // ========================================================
-  // <-- TAMBAHAN: LOGIC GATES UNTUK HYDRATION & KARAKTER -->
-  // ========================================================
+  // --- RENDER GATES ---
 
-  // 1. Mencegah Hydration Error (Tunggu sampai browser siap)
   if (!isMounted) {
     return (
       <div className="min-h-screen bg-[#1a1b26] flex items-center justify-center">
@@ -150,13 +152,18 @@ export default function Home() {
     );
   }
 
-  // 2. Jika user belum memilih karakter, arahkan ke form pemilihan karakter
+  // 1. JIKA BELUM LOGIN (accountName kosong), jangan render apapun biar kena push router
+  if (!userProfile?.accountName) {
+    return <div className="min-h-screen bg-[#1a1b26]" />;
+  }
+
+  // 2. JIKA SUDAH LOGIN TAPI BELUM PILIH KARAKTER (gender kosong)
+  // Tampilkan form pemilihan karakter (WAJIB)
   if (!userProfile?.gender) {
     return <CharacterSelection onComplete={() => console.log("Karakter siap!")} />;
   }
 
-  // ========================================================
-
+  // 3. JIKA SEMUA LENGKAP, BARU MASUK KE DASHBOARD UTAMA
   const renderContent = () => {
     switch (activeMenu) {
       case "Dashboard":
@@ -197,12 +204,12 @@ export default function Home() {
           </div>
         );
 
-        case "Toko & Loot":
-  return (
-    <div className="animate-in fade-in slide-in-from-left-4 duration-500 h-full">
-      <ShopBoard />
-    </div>
-  );
+      case "Toko & Loot":
+        return (
+          <div className="animate-in fade-in slide-in-from-left-4 duration-500 h-full">
+            <ShopBoard />
+          </div>
+        );
 
       case "Keuangan":
         return (
@@ -234,7 +241,6 @@ export default function Home() {
             <h2 className="text-2xl font-bold text-slate-300 mb-2">Fitur Belum Tersedia</h2>
             <p className="text-sm max-w-md text-center">
               Modul <span className="text-purple-400 font-bold">{activeMenu}</span> sedang dalam pengembangan.
-              Silakan kembali lagi nanti!
             </p>
           </div>
         );
@@ -251,50 +257,17 @@ export default function Home() {
           text-transform: uppercase;
         }
 
-        ::-webkit-scrollbar {
-          width: 6px;
-        }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #0f172a; }
+        ::-webkit-scrollbar-thumb { background: #334155; border-radius: 10px; }
 
-        ::-webkit-scrollbar-track {
-          background: #0f172a;
-        }
+        @keyframes shutterTop { 0% { height: 0; } 40%, 60% { height: 50%; } 100% { height: 0; } }
+        @keyframes shutterBottom { 0% { height: 0; } 40%, 60% { height: 50%; } 100% { height: 0; } }
+        @keyframes textFade { 0%, 30% { opacity: 0; transform: scale(0.9); } 40%, 60% { opacity: 1; transform: scale(1); } 70%, 100% { opacity: 0; transform: scale(1.1); } }
 
-        ::-webkit-scrollbar-thumb {
-          background: #334155;
-          border-radius: 10px;
-        }
-
-        @keyframes shutterTop {
-          0% { height: 0; }
-          40% { height: 50%; }
-          60% { height: 50%; }
-          100% { height: 0; }
-        }
-
-        @keyframes shutterBottom {
-          0% { height: 0; }
-          40% { height: 50%; }
-          60% { height: 50%; }
-          100% { height: 0; }
-        }
-
-        @keyframes textFade {
-          0%, 30% { opacity: 0; transform: scale(0.9); }
-          40%, 60% { opacity: 1; transform: scale(1); }
-          70%, 100% { opacity: 0; transform: scale(1.1); }
-        }
-
-        .animate-shutter-top {
-          animation: shutterTop 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-        }
-
-        .animate-shutter-bottom {
-          animation: shutterBottom 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-        }
-
-        .animate-text-fade {
-          animation: textFade 0.8s linear forwards;
-        }
+        .animate-shutter-top { animation: shutterTop 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards; }
+        .animate-shutter-bottom { animation: shutterBottom 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards; }
+        .animate-text-fade { animation: textFade 0.8s linear forwards; }
       `}</style>
 
       <RetroTransition isActive={isTransitioning} />
@@ -357,25 +330,19 @@ export default function Home() {
               </button>
 
               {showCoinAnim && (
-                <div className="absolute top-full mt-4 right-0 w-max bg-[#24283b] border-2 border-amber-500 px-4 py-2.5 rounded-none shadow-[4px_4px_0_#000] flex items-center gap-3 animate-in slide-in-from-top-2 fade-in duration-300 z-[60] pointer-events-none">
-                  <div className="bg-amber-500/20 p-1.5 rounded-none border border-amber-500">
-                    <Coins size={16} className="text-amber-400 animate-bounce" />
-                  </div>
-                  <div className="flex flex-col text-left">
-                    <span className="text-[9px] text-slate-400 font-bold uppercase tracking-wider leading-none mb-0.5">
-                      Pendapatan
-                    </span>
-                    <span className="text-amber-400 font-pixel text-xs drop-shadow-sm">
-                      +{coinPopup.amount} Gold
-                    </span>
-                  </div>
+                <div className="absolute top-full mt-4 right-0 w-max bg-[#24283b] border-2 border-amber-500 px-4 py-2.5 rounded-none shadow-[4px_4px_0_#000] flex items-center gap-3 animate-in slide-in-from-top-2 fade-in duration-300 z-[60] pointer-events-none text-left">
+                   <Coins size={16} className="text-amber-400 animate-bounce" />
+                   <div className="flex flex-col">
+                     <span className="text-[9px] text-slate-400 font-bold uppercase tracking-wider mb-0.5">Pendapatan</span>
+                     <span className="text-amber-400 font-pixel text-xs drop-shadow-sm">+{coinPopup.amount} Gold</span>
+                   </div>
                 </div>
               )}
 
               {isNotifOpen && (
-                <div className="absolute right-0 mt-4 w-80 bg-[#1a1b26] border-4 border-slate-700 rounded-none shadow-[8px_8px_0_#000] z-[100] animate-in fade-in slide-in-from-top-2 overflow-hidden">
+                <div className="absolute right-0 mt-4 w-80 bg-[#1a1b26] border-4 border-slate-700 rounded-none shadow-[8px_8px_0_#000] z-[100] animate-in fade-in slide-in-from-top-2 overflow-hidden text-left">
                   <div className="p-4 border-b-4 border-slate-700 flex justify-between items-center bg-[#24283b]">
-                    <span className="font-bold text-sm text-white">System Logs</span>
+                    <span className="font-bold text-sm text-white uppercase tracking-widest">System Logs</span>
                     <button onClick={() => setIsNotifOpen(false)} className="text-slate-500 hover:text-white">
                       <X size={16} />
                     </button>
@@ -383,13 +350,13 @@ export default function Home() {
 
                   <div className="p-5 flex flex-col gap-4">
                     <div className="mt-1">
-                      <div className="flex justify-between text-[10px] font-bold mb-1.5 text-slate-300">
+                      <div className="flex justify-between text-[10px] font-bold mb-1.5 text-slate-300 uppercase">
                         <span>Onboarding</span>
                         <span className="text-amber-400">{onboardingProgress}%</span>
                       </div>
-                      <div className="h-3 bg-slate-800 rounded-none border border-slate-600 overflow-hidden">
+                      <div className="h-3 bg-slate-800 border border-slate-600">
                         <div
-                          className="h-full bg-amber-400 transition-all"
+                          className="h-full bg-amber-400 transition-all shadow-[0_0_8px_#fbbf24]"
                           style={{ width: `${onboardingProgress}%` }}
                         ></div>
                       </div>
@@ -398,12 +365,12 @@ export default function Home() {
                     <div className="flex flex-col gap-3">
                       <div className={`flex items-center gap-3 text-xs ${isTaskCreated ? 'text-slate-500' : 'text-slate-200'}`}>
                         {isTaskCreated ? <Check size={14} className="text-emerald-500" /> : <Plus size={14} />}
-                        <span>Buat misi pertamamu</span>
+                        <span className="uppercase tracking-tight">Buat misi pertamamu</span>
                       </div>
 
                       <div className={`flex items-center gap-3 text-xs ${isTaskCompleted ? 'text-slate-500' : 'text-slate-200'}`}>
                         {isTaskCompleted ? <Check size={14} className="text-emerald-500" /> : <CheckSquare size={14} />}
-                        <span>Selesaikan sebuah misi</span>
+                        <span className="uppercase tracking-tight">Selesaikan sebuah misi</span>
                       </div>
                     </div>
                   </div>

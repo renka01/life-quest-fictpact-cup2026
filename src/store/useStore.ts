@@ -86,7 +86,8 @@ interface ConfirmDialog {
 
 // <-- TAMBAHAN: Interface untuk User Profile
 export interface UserProfile {
-  name: string;
+  accountName: string; // Tambahkan ini
+  nickname: string;    // Tambahkan ini
   gender: 'Pria' | 'Wanita' | null;
   avatarId: string | null;
 }
@@ -165,12 +166,13 @@ export const useStore = create<LifeQuestStore>()(
       // --- INITIAL DATA ---
       
       // <-- TAMBAHAN: Nilai awal profil
-      userProfile: {
-        name: "",
-        gender: null,
-        avatarId: null
-      },
-
+  // --- INITIAL DATA ---
+userProfile: {
+  accountName: "", // Atau biarkan "" jika ingin kosong dulu
+  nickname: "",             // Gunakan nickname, jangan name
+  gender: null,
+  avatarId: null
+},
       tasks: [],
       accounts: [], 
       transactions: [],
@@ -190,9 +192,13 @@ export const useStore = create<LifeQuestStore>()(
 
       // --- ACTIONS PROFILE ---
       // <-- TAMBAHAN: Fungsi untuk ganti nama/gender
-      setUserProfile: (profile) => set((state) => ({
-        userProfile: { ...state.userProfile, ...profile }
-      })),
+// Cari bagian setUserProfile di dalam useStore.ts, pastikan kodenya begini:
+setUserProfile: (profile) => set((state) => ({
+  userProfile: { 
+    ...state.userProfile, 
+    ...profile 
+  }
+})),
 
       // --- ACTIONS MODAL ---
       showAlert: (title, message, type) => set({ alertDialog: { isOpen: true, title, message, type } }),
