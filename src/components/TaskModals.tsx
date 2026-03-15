@@ -259,28 +259,49 @@ export const GlobalAlerts = () => {
 
   return (
     <>
-      {alertDialog.isOpen && (
-        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[200] flex justify-center items-center p-4" onClick={closeAlert}>
-          <div className={`w-full max-w-sm bg-slate-900 border-2 rounded-lg flex flex-col items-center text-center p-6 shadow-2xl animate-in zoom-in duration-200 ${alertDialog.type === 'success' ? 'border-amber-400 shadow-[0_0_30px_rgba(251,191,36,0.3)]' : alertDialog.type === 'danger' ? 'border-pink-500 shadow-[0_0_30px_rgba(236,72,153,0.3)]' : alertDialog.type === 'warning' ? 'border-orange-500 shadow-[0_0_30px_rgba(249,115,22,0.3)]' : 'border-cyan-500 shadow-[0_0_30px_rgba(34,211,238,0.3)]'}`} onClick={e => e.stopPropagation()}>
-            {alertDialog.type === 'success' && <Trophy size={48} className="text-amber-400 mb-4 animate-bounce" />}
-            {alertDialog.type === 'danger' && <Skull size={48} className="text-pink-500 mb-4 animate-pulse" />}
-            {alertDialog.type === 'warning' && <AlertTriangle size={48} className="text-orange-500 mb-4" />}
-            <h2 className={`font-pixel text-xs tracking-widest mb-3 ${alertDialog.type === 'success' ? 'text-amber-400' : alertDialog.type === 'danger' ? 'text-pink-500' : alertDialog.type === 'warning' ? 'text-orange-500' : 'text-cyan-400'}`}>{alertDialog.title}</h2>
-            <p className="text-sm text-slate-300 mb-6 leading-relaxed">{alertDialog.message}</p>
-            <button onClick={closeAlert} className="bg-slate-800 hover:bg-slate-700 text-white px-8 py-2 rounded-full text-xs font-bold transition-colors w-full">Lanjutkan</button>
+      {alertDialog.isOpen && alertDialog.type === 'levelup' && (
+        <div className="fixed inset-0 bg-black/90 backdrop-blur-sm z-[9999] flex justify-center items-center p-4" onClick={closeAlert}>
+          <div className="relative w-full max-w-sm bg-[#1a1b26] border-4 border-yellow-400 p-8 flex flex-col items-center text-center shadow-[0_0_40px_rgba(250,204,21,0.4)] animate-in zoom-in-75 duration-500" onClick={e => e.stopPropagation()}>
+            <div className="absolute -top-12">
+              <div className="relative flex items-center justify-center">
+                <Star size={80} className="text-yellow-400 animate-[spin_4s_linear_infinite] drop-shadow-[0_0_15px_#facc15]" />
+                <Star size={40} className="text-white absolute animate-pulse" />
+              </div>
+            </div>
+            <h2 className="font-pixel text-xl text-yellow-400 tracking-[0.1em] mt-8 mb-3 drop-shadow-[3px_3px_0_#000] animate-bounce">LEVEL UP!</h2>
+            <p className="text-sm text-slate-200 mb-8 font-mono leading-relaxed">{alertDialog.message}</p>
+            <button onClick={closeAlert} className="px-8 py-3 bg-yellow-400 text-yellow-950 font-pixel text-[10px] uppercase shadow-[4px_4px_0_#000] hover:bg-yellow-300 active:translate-y-[2px] active:shadow-[2px_2px_0_#000] transition-all w-full">Lanjutkan</button>
+          </div>
+        </div>
+      )}
+
+      {alertDialog.isOpen && alertDialog.type !== 'levelup' && (
+        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-[9999] flex justify-center items-center p-4" onClick={closeAlert}>
+          <div className={`w-full max-w-sm bg-[#1a1b26] border-4 rounded-none flex flex-col items-center text-center p-6 shadow-[8px_8px_0_#000] animate-in zoom-in-95 duration-200 ${alertDialog.type === 'success' ? 'border-amber-400' : alertDialog.type === 'danger' ? 'border-pink-500' : alertDialog.type === 'warning' ? 'border-orange-500' : 'border-cyan-500'}`} onClick={e => e.stopPropagation()}>
+            <div className={`p-4 rounded-none mb-4 border-2 ${alertDialog.type === 'success' ? 'bg-amber-400/20 border-amber-400' : alertDialog.type === 'danger' ? 'bg-pink-500/20 border-pink-500' : alertDialog.type === 'warning' ? 'bg-orange-500/20 border-orange-500' : 'bg-cyan-500/20 border-cyan-500'}`}>
+              {alertDialog.type === 'success' && <Trophy size={40} className="text-amber-400 animate-bounce" />}
+              {alertDialog.type === 'danger' && <Skull size={40} className="text-pink-500 animate-pulse" />}
+              {alertDialog.type === 'warning' && <AlertTriangle size={40} className="text-orange-500" />}
+              {alertDialog.type === 'info' && <FileText size={40} className="text-cyan-500" />}
+            </div>
+            <h2 className={`font-pixel text-[10px] tracking-widest mb-3 uppercase ${alertDialog.type === 'success' ? 'text-amber-400' : alertDialog.type === 'danger' ? 'text-pink-500' : alertDialog.type === 'warning' ? 'text-orange-500' : 'text-cyan-400'}`}>{alertDialog.title}</h2>
+            <p className="text-xs text-slate-300 mb-6 leading-relaxed font-mono px-4">{alertDialog.message}</p>
+            <button onClick={closeAlert} className={`px-8 py-3 rounded-none text-[10px] font-pixel transition-all uppercase w-full shadow-[4px_4px_0_#000] active:translate-y-[2px] active:shadow-[2px_2px_0_#000] ${alertDialog.type === 'success' ? 'bg-amber-400 text-amber-950 hover:bg-amber-300' : alertDialog.type === 'danger' ? 'bg-pink-500 text-white hover:bg-pink-400' : alertDialog.type === 'warning' ? 'bg-orange-500 text-white hover:bg-orange-400' : 'bg-cyan-500 text-cyan-950 hover:bg-cyan-400'}`}>Tutup / Lanjutkan</button>
           </div>
         </div>
       )}
 
       {confirmDialog.isOpen && (
-        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[200] flex justify-center items-center p-4">
-          <div className="w-full max-w-sm bg-slate-900 border-2 border-pink-500 rounded-lg p-6 shadow-[0_0_30px_rgba(236,72,153,0.3)] text-center animate-in zoom-in duration-200">
-            <AlertTriangle size={40} className="text-pink-500 mx-auto mb-4" />
-            <h2 className="font-pixel text-[10px] text-pink-500 tracking-widest mb-3">PERINGATAN</h2>
-            <p className="text-sm text-slate-300 mb-6">{confirmDialog.message}</p>
-            <div className="flex gap-3 justify-center">
-              <button onClick={closeConfirm} className="flex-1 bg-slate-800 hover:bg-slate-700 text-slate-300 px-4 py-2.5 rounded text-xs font-bold transition-colors">Batal</button>
-              <button onClick={() => { confirmDialog.onConfirm(); closeConfirm(); }} className="flex-1 bg-pink-500 hover:bg-pink-600 text-white px-4 py-2.5 rounded text-xs font-bold transition-colors">Hapus</button>
+        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-[9999] flex justify-center items-center p-4">
+          <div className="w-full max-w-sm bg-[#1a1b26] border-4 border-cyan-500 p-6 shadow-[8px_8px_0_#000] text-center animate-in zoom-in-95 duration-200">
+            <div className="bg-[#24283b] w-16 h-16 mx-auto rounded-none flex items-center justify-center mb-4 border-2 border-cyan-500/50 shadow-inner">
+              <AlertTriangle size={32} className="text-cyan-400 animate-pulse" />
+            </div>
+            <h2 className="font-pixel text-[10px] text-cyan-400 tracking-widest mb-3 uppercase">Sistem Konfirmasi</h2>
+            <p className="text-xs text-slate-300 mb-6 font-mono leading-relaxed">{confirmDialog.message}</p>
+            <div className="flex gap-3 justify-center w-full">
+              <button onClick={closeConfirm} className="flex-1 bg-[#24283b] border-2 border-slate-600 hover:border-slate-400 text-slate-300 px-4 py-3 text-[10px] font-pixel transition-all uppercase shadow-[4px_4px_0_#000] active:translate-y-[2px] active:shadow-[2px_2px_0_#000]">Batal</button>
+              <button onClick={() => { confirmDialog.onConfirm(); closeConfirm(); }} className="flex-1 bg-cyan-500 border-2 border-cyan-400 text-cyan-950 hover:bg-cyan-400 px-4 py-3 text-[10px] font-pixel transition-all uppercase shadow-[4px_4px_0_#000] active:translate-y-[2px] active:shadow-[2px_2px_0_#000]">Lanjutkan</button>
             </div>
           </div>
         </div>

@@ -56,8 +56,6 @@ export interface Stats {
   level: number;
   hp: number;
   maxHp: number;
-  energy: number;
-  maxEnergy: number;
   exp: number;
   maxExp: number;
   gold: number;
@@ -75,7 +73,7 @@ interface AlertDialog {
   isOpen: boolean;
   title: string;
   message: string;
-  type: 'info' | 'success' | 'danger' | 'warning';
+  type: 'info' | 'success' | 'danger' | 'warning' | 'levelup';
 }
 
 interface ConfirmDialog {
@@ -92,6 +90,17 @@ export interface UserProfile {
   avatarId: string | null;
 }
 
+export type EquipSlot = 'weapon' | 'armor' | 'helmet' | 'cloak' | 'accessory' | 'material';
+
+export interface InventoryItem {
+  id: number;
+  quantity: number;
+}
+
+export type EquippedItems = {
+  [key in EquipSlot]?: number;
+};
+
 // ==========================================
 // 2. STATE & ACTIONS INTERFACE
 // ==========================================
@@ -106,6 +115,13 @@ interface LifeQuestStore {
   // <-- TAMBAHAN: State & Action untuk Profile
   userProfile: UserProfile;
   setUserProfile: (profile: Partial<UserProfile>) => void;
+
+  inventory: InventoryItem[];
+  equippedItems: EquippedItems;
+  buyItem: (itemId: number, price: number) => boolean;
+  sellItem: (itemId: number, price: number) => void;
+  equipItem: (slot: EquipSlot, itemId: number) => void;
+  unequipItem: (slot: EquipSlot) => void;
 
   markRecurringDue: () => void;
   confirmRecurringPayment: (id: string) => void;
@@ -139,7 +155,7 @@ interface LifeQuestStore {
   deleteAccount: (id: string) => void;
   clearTransactions: () => void;
   
-  _applyReward: (baseExp: number, baseGold: number, baseEnergyCost: number, difficulty: number) => void;
+  _applyReward: (baseExp: number, baseGold: number, difficulty: number) => void;
   _applySimpleReward: (expGain: number, goldGain?: number) => void;
 }
 
@@ -173,6 +189,8 @@ userProfile: {
   gender: null,
   avatarId: null
 },
+      inventory: [],
+      equippedItems: {},
       tasks: [],
       accounts: [], 
       transactions: [],
@@ -181,7 +199,6 @@ userProfile: {
       stats: {
         level: 1,
         hp: 50, maxHp: 50,
-        energy: 100, maxEnergy: 100,
         exp: 0, maxExp: 300,
         gold: 0,
         streak: 0,
@@ -199,6 +216,43 @@ setUserProfile: (profile) => set((state) => ({
     ...profile 
   }
 })),
+
+      // --- ACTIONS INVENTORY & SHOP ---
+      buyItem: (itemId, price) => {
+        const { stats, inventory, showAlert } = get();
+        if (stats.gold < price) {
+          showAlert("EMAS TIDAK CUKUP", "Kumpulkan lebih banyak gold dari misi!", "warning");
+          return false;
+        }
+        
+        const existing = inventory.find(i => i.id === itemId);
+        let newInv = [];
+        if (existing) {
+          newInv = inventory.map(i => i.id === itemId ? { ...i, quantity: i.quantity + 1 } : i);
+        } else {
+          newInv = [...inventory, { id: itemId, quantity: 1 }];
+        }
+
+        set({
+          stats: { ...stats, gold: stats.gold - price },
+          inventory: newInv
+        });
+        return true;
+      },
+      sellItem: (itemId, price) => {
+        // Optional: Implement if needed
+      },
+      equipItem: (slot, itemId) => set((state) => ({
+        equippedItems: {
+          ...state.equippedItems,
+          [slot]: itemId
+        }
+      })),
+      unequipItem: (slot) => set((state) => {
+        const newEquipped = { ...state.equippedItems };
+        delete newEquipped[slot];
+        return { equippedItems: newEquipped };
+      }),
 
       // --- ACTIONS MODAL ---
       showAlert: (title, message, type) => set({ alertDialog: { isOpen: true, title, message, type } }),
@@ -460,18 +514,12 @@ setUserProfile: (profile) => set((state) => ({
       },
 
       // --- LOGIKA GAMIFIKASI ---
-      _applyReward: (baseExp, baseGold, baseEnergyCost, difficulty) => {
+      _applyReward: (baseExp, baseGold, difficulty) => {
         const { stats, showAlert } = get();
         const multiplier = getDifficultyMultiplier(difficulty);
         
         const expGain = Math.round(baseExp * multiplier);
         const goldGain = Math.round(baseGold * multiplier);
-        const energyCost = Math.round(baseEnergyCost * multiplier);
-
-        if (stats.energy < energyCost) {
-          showAlert("LELAH!", "Energi tidak cukup. Istirahatlah sejenak!", "warning");
-          return;
-        }
 
         let newExp = stats.exp + expGain;
         let newLevel = stats.level;
@@ -485,7 +533,7 @@ setUserProfile: (profile) => set((state) => ({
           newMaxExp = Math.floor(stats.maxExp * 1.2);
           newMaxHp += 10;
           newHp = newMaxHp; // Full heal on level up
-          showAlert("LEVEL UP!", `Selamat! Kamu naik ke level ${newLevel}!`, "success");
+          showAlert("LEVEL UP!", `Selamat! Kamu naik ke level ${newLevel}!`, "levelup");
         }
 
         set({
@@ -495,7 +543,6 @@ setUserProfile: (profile) => set((state) => ({
             level: newLevel,
             maxExp: newMaxExp,
             gold: stats.gold + goldGain,
-            energy: Math.max(0, stats.energy - energyCost),
             hp: newHp,
             maxHp: newMaxHp
           },
@@ -513,7 +560,7 @@ setUserProfile: (profile) => set((state) => ({
           newLevel += 1;
           newExp -= stats.maxExp;
           newMaxExp = Math.floor(stats.maxExp * 1.2);
-          showAlert("LEVEL UP!", `Selamat! Kamu naik ke level ${newLevel}!`, "success");
+          showAlert("LEVEL UP!", `Selamat! Kamu naik ke level ${newLevel}!`, "levelup");
         }
 
         set({
@@ -534,22 +581,23 @@ setUserProfile: (profile) => set((state) => ({
         const { tasks, _applyReward } = get();
         const isDone = !task.done;
         set({ tasks: tasks.map(t => t.id === task.id ? { ...t, done: isDone } : t) });
-        if (isDone) _applyReward(20, 10, 5, task.difficulty);
+        if (isDone) _applyReward(20, 10, task.difficulty);
       },
 
       handleHabitPlus: (task) => {
         const { tasks, _applyReward } = get();
         set({ tasks: tasks.map(t => t.id === task.id ? { ...t, habitCount: (t.habitCount || 0) + 1 } : t) });
-        _applyReward(5, 2, 1, task.difficulty);
+        _applyReward(5, 2, task.difficulty);
       },
 
       handleHabitMinus: (task) => {
         const { tasks } = get();
         set({ tasks: tasks.map(t => t.id === task.id ? { ...t, habitCount: (t.habitCount || 0) - 1 } : t) });
       }
+
     }),
     {
-      name: 'lifequest-storage', // Nama penyimpanan di local storage
+      name: 'lifequest-storage',
     }
   )
 );

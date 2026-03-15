@@ -75,16 +75,10 @@ export default function DashboardBoard({
   const expPercent =
     stats.maxExp > 0 ? Math.min(100, (stats.exp / stats.maxExp) * 100) : 0;
 
-  const energyPercent =
-    stats.maxEnergy > 0 ? Math.min(100, (stats.energy / stats.maxEnergy) * 100) : 0;
-
   const savingRatio =
     netWorth > 0 ? Math.round((totalTabungan / netWorth) * 100) : 0;
 
-  const greeting =
-    stats.energy <= 20
-      ? "Energi rendah. Ambil misi kecil atau rapikan keuangan dulu."
-      : focusTasks.length > 0
+  const greeting = focusTasks.length > 0
       ? `Kamu punya ${focusTasks.length} fokus utama hari ini.`
       : "Hari ini cukup tenang. Saatnya susun langkah berikutnya.";
 
@@ -216,12 +210,6 @@ export default function DashboardBoard({
               <p className="text-slate-500 text-xs uppercase">Gold</p>
               <p className="text-yellow-400 font-bold text-xl">{stats.gold}</p>
             </div>
-            <div>
-              <p className="text-slate-500 text-xs uppercase">Energi</p>
-              <p className="text-cyan-300 font-bold text-xl">
-                {stats.energy}/{stats.maxEnergy}
-              </p>
-            </div>
           </div>
 
           <div>
@@ -234,15 +222,6 @@ export default function DashboardBoard({
             </div>
           </div>
 
-          <div>
-            <div className="flex justify-between text-[10px] text-slate-400 mb-1">
-              <span>ENERGI</span>
-              <span>{stats.energy}/{stats.maxEnergy}</span>
-            </div>
-            <div className="h-3 bg-slate-900 border border-slate-700 overflow-hidden">
-              <div className="h-full bg-cyan-400 transition-all" style={{ width: `${energyPercent}%` }} />
-            </div>
-          </div>
         </div>
 
         <div className="bg-[#24283b] border-4 border-emerald-500 shadow-[6px_6px_0_#000] p-5 flex flex-col gap-4">

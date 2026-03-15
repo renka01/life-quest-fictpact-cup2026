@@ -94,9 +94,6 @@ export default function StatisticsBoard() {
   const expPercent =
     stats.maxExp > 0 ? Math.min(100, (stats.exp / stats.maxExp) * 100) : 0;
 
-  const energyPercent =
-    stats.maxEnergy > 0 ? Math.min(100, (stats.energy / stats.maxEnergy) * 100) : 0;
-
   const hpPercent =
     stats.maxHp > 0 ? Math.min(100, (stats.hp / stats.maxHp) * 100) : 0;
 
@@ -336,16 +333,13 @@ export default function StatisticsBoard() {
 
           <div className="space-y-4">
             <SimpleBar label="HP" value={stats.hp} max={stats.maxHp || 1} color="bg-pink-400" />
-            <SimpleBar label="Energy" value={stats.energy} max={stats.maxEnergy || 1} color="bg-cyan-400" />
             <SimpleBar label="EXP" value={stats.exp} max={stats.maxExp || 1} color="bg-yellow-400" />
           </div>
 
           <div className="mt-5 border-t-2 border-slate-700 pt-4">
             <p className="text-[10px] uppercase text-slate-500 mb-1">Insight</p>
             <p className="text-sm text-slate-200">
-              {stats.energy <= 20
-                ? "Energi kamu rendah. Lebih baik fokus ke misi ringan dulu."
-                : stats.exp >= stats.maxExp * 0.8
+              {stats.exp >= stats.maxExp * 0.8
                 ? "Kamu hampir naik level. Sedikit lagi!"
                 : "Progress karakter stabil. Lanjut pertahankan ritme."}
             </p>

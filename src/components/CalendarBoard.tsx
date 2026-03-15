@@ -216,7 +216,7 @@ export default function CalendarBoard() {
                 <div className="py-8 flex flex-col items-center justify-center text-slate-500 gap-2">
                   <Swords size={32} className="opacity-20" />
                   <p className="text-xs font-bold uppercase tracking-wider">Tidak Ada Misi</p>
-                  <p className="text-[10px] text-center">Waktu kosong. Gunakan untuk memulihkan energi!</p>
+                  <p className="text-[10px] text-center">Waktu kosong. Saatnya bersantai dan mengevaluasi strategimu!</p>
                 </div>
               )}
             </div>
