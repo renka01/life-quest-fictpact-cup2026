@@ -318,18 +318,672 @@ const PhoenixHelmIcon = () => (
   </svg>
 );
 
+// weapon baru
+
+const EnmaKatanaIcon = () => (
+  <svg viewBox="0 0 32 32" width="56" height="56" xmlns="http://www.w3.org/2000/svg" style={{ imageRendering: 'pixelated' }}>
+    {/* Blade Core */}
+    <rect x="15" y="4" width="2" height="16" fill="#1e1b4b"/>
+    {/* Purple/Pink Aura (Hamon) */}
+    <rect x="14" y="5" width="1" height="14" fill="#a855f7"/> 
+    <rect x="14" y="7" width="1" height="2" fill="#d946ef"/>
+    <rect x="14" y="11" width="1" height="2" fill="#d946ef"/>
+    <rect x="14" y="15" width="1" height="2" fill="#d946ef"/>
+    <rect x="16" y="4" width="1" height="1" fill="#cbd5e1"/> {/* Tip */}
+    {/* Guard (Tsuba) */}
+    <rect x="12" y="20" width="8" height="1" fill="#fbbf24"/>
+    <rect x="13" y="21" width="6" height="1" fill="#b45309"/>
+    {/* Handle (Tsuka) with wrapping */}
+    <rect x="14" y="22" width="4" height="6" fill="#1e1b4b"/>
+    <rect x="14" y="22" width="4" height="1" fill="#a855f7"/>
+    <rect x="14" y="24" width="4" height="1" fill="#a855f7"/>
+    <rect x="14" y="26" width="4" height="1" fill="#a855f7"/>
+    <rect x="15" y="28" width="2" height="1" fill="#fbbf24"/>
+  </svg>
+);
+
+const KasakaFangIcon = () => (
+  <svg viewBox="0 0 32 32" width="56" height="56" xmlns="http://www.w3.org/2000/svg" style={{ imageRendering: 'pixelated' }}>
+    {/* Venom Aura Particles */}
+    <rect x="12" y="8" width="1" height="2" fill="#67e8f9" opacity="0.5"/>
+    <rect x="19" y="14" width="1" height="2" fill="#67e8f9" opacity="0.5"/>
+    {/* Jagged Glowing Blade */}
+    <rect x="15" y="6" width="2" height="2" fill="#0891b2"/>
+    <rect x="14" y="8" width="4" height="2" fill="#06b6d4"/>
+    <rect x="14" y="10" width="3" height="2" fill="#22d3ee"/>
+    <rect x="15" y="12" width="4" height="2" fill="#06b6d4"/>
+    <rect x="14" y="14" width="3" height="2" fill="#22d3ee"/>
+    <rect x="15" y="16" width="4" height="2" fill="#06b6d4"/>
+    <rect x="14" y="18" width="3" height="2" fill="#0891b2"/>
+    {/* Bone/Core line */}
+    <rect x="15" y="8" width="1" height="10" fill="#cffafe"/>
+    {/* Guard & Handle */}
+    <rect x="13" y="20" width="6" height="2" fill="#1e1b4b"/>
+    <rect x="14" y="22" width="4" height="4" fill="#312e81"/>
+    <rect x="15" y="26" width="2" height="2" fill="#0f172a"/>
+  </svg>
+);
+
+const ElucidatorIcon = () => (
+  <svg viewBox="0 0 32 32" width="56" height="56" xmlns="http://www.w3.org/2000/svg" style={{ imageRendering: 'pixelated' }}>
+    {/* Black Blade with silver edges */}
+    <rect x="15" y="3" width="2" height="2" fill="#cbd5e1"/>
+    <rect x="14" y="5" width="4" height="15" fill="#0f172a"/>
+    <rect x="14" y="5" width="1" height="15" fill="#94a3b8"/> 
+    <rect x="17" y="5" width="1" height="15" fill="#94a3b8"/> 
+    <rect x="15" y="5" width="2" height="15" fill="#020617"/> 
+    {/* Cylinder Crossguard */}
+    <rect x="11" y="19" width="10" height="2" fill="#475569"/>
+    <rect x="10" y="20" width="12" height="1" fill="#94a3b8"/>
+    <rect x="15" y="18" width="2" height="3" fill="#cbd5e1"/> 
+    {/* Handle */}
+    <rect x="14" y="21" width="4" height="5" fill="#1e293b"/>
+    <rect x="14" y="26" width="4" height="2" fill="#94a3b8"/> 
+    <rect x="15" y="27" width="2" height="2" fill="#475569"/>
+  </svg>
+);
+
+const BusterSwordIcon = () => (
+  <svg viewBox="0 0 32 32" width="56" height="56" xmlns="http://www.w3.org/2000/svg" style={{ imageRendering: 'pixelated' }}>
+    {/* Blade */}
+    <rect x="13" y="4" width="6" height="18" fill="#64748b"/>
+    <rect x="13" y="4" width="1" height="18" fill="#e2e8f0"/> {/* Sharp Edge */}
+    {/* Materia Holes */}
+    <rect x="15" y="16" width="2" height="2" fill="#0f172a"/>
+    <rect x="15" y="12" width="2" height="2" fill="#0f172a"/>
+    {/* Guard & Handle */}
+    <rect x="11" y="22" width="10" height="2" fill="#b45309"/>
+    <rect x="14" y="24" width="4" height="6" fill="#7f1d1d"/>
+    <rect x="14" y="25" width="4" height="1" fill="#450a0a"/>
+    <rect x="14" y="27" width="4" height="1" fill="#450a0a"/>
+  </svg>
+);
+
+const ZangetsuIcon = () => (
+  <svg viewBox="0 0 32 32" width="56" height="56" xmlns="http://www.w3.org/2000/svg" style={{ imageRendering: 'pixelated' }}>
+    {/* Giant Cleaver Blade */}
+    <rect x="12" y="2" width="6" height="20" fill="#cbd5e1"/>
+    <rect x="11" y="4" width="1" height="16" fill="#f8fafc"/> {/* Curved Edge */}
+    <rect x="17" y="2" width="1" height="20" fill="#0f172a"/> {/* Flat Back */}
+    {/* Cloth Wrapped Handle */}
+    <rect x="14" y="22" width="4" height="6" fill="#f8fafc"/>
+    <rect x="14" y="23" width="4" height="1" fill="#0f172a"/>
+    <rect x="14" y="25" width="4" height="1" fill="#0f172a"/>
+    <rect x="14" y="27" width="4" height="1" fill="#0f172a"/>
+    {/* Flowing Cloth Tail */}
+    <rect x="15" y="28" width="2" height="3" fill="#f8fafc"/>
+    <rect x="16" y="30" width="2" height="2" fill="#f8fafc"/>
+  </svg>
+);
+
+const ExcaliburIcon = () => (
+  <svg viewBox="0 0 32 32" width="56" height="56" xmlns="http://www.w3.org/2000/svg" style={{ imageRendering: 'pixelated' }}>
+    {/* Holy Blade */}
+    <rect x="15" y="3" width="2" height="18" fill="#f1f5f9"/>
+    <rect x="14" y="5" width="1" height="16" fill="#94a3b8"/>
+    <rect x="17" y="5" width="1" height="16" fill="#94a3b8"/>
+    <rect x="15" y="3" width="2" height="18" fill="#fbbf24" opacity="0.4"/> {/* Holy Glow */}
+    {/* Guard (Gold & Blue) */}
+    <rect x="10" y="21" width="12" height="2" fill="#fbbf24"/>
+    <rect x="11" y="20" width="10" height="1" fill="#f59e0b"/>
+    <rect x="14" y="21" width="4" height="2" fill="#1e3a8a"/> 
+    {/* Blue Handle & Pommel */}
+    <rect x="15" y="23" width="2" height="5" fill="#1e3a8a"/>
+    <rect x="14" y="28" width="4" height="2" fill="#fbbf24"/>
+  </svg>
+);
+
+const DeathScytheIcon = () => (
+  <svg viewBox="0 0 32 32" width="56" height="56" xmlns="http://www.w3.org/2000/svg" style={{ imageRendering: 'pixelated' }}>
+    {/* Long Pole */}
+    <rect x="16" y="2" width="2" height="28" fill="#1c1917"/>
+    {/* Giant Blade */}
+    <rect x="4" y="4" width="12" height="2" fill="#dc2626"/>
+    <rect x="2" y="6" width="4" height="2" fill="#dc2626"/>
+    <rect x="2" y="8" width="2" height="6" fill="#dc2626"/>
+    {/* Silver Edge */}
+    <rect x="4" y="4" width="12" height="1" fill="#f8fafc"/>
+    <rect x="2" y="6" width="2" height="8" fill="#f8fafc"/>
+    {/* Mount & Eye Detail */}
+    <rect x="15" y="3" width="4" height="4" fill="#94a3b8"/>
+    <rect x="15" y="7" width="2" height="2" fill="#fbbf24"/> 
+  </svg>
+);
+
+const LeviathanAxeIcon = () => (
+  <svg viewBox="0 0 32 32" width="56" height="56" xmlns="http://www.w3.org/2000/svg" style={{ imageRendering: 'pixelated' }}>
+    {/* Axe Handle */}
+    <rect x="14" y="6" width="2" height="22" fill="#78350f"/>
+    <rect x="13" y="18" width="4" height="6" fill="#451a03"/> {/* Wrap */}
+    <rect x="13" y="28" width="4" height="2" fill="#fbbf24"/> {/* Pommel */}
+    {/* Axe Head (Right) */}
+    <rect x="16" y="8" width="6" height="8" fill="#94a3b8"/>
+    <rect x="22" y="6" width="2" height="12" fill="#e2e8f0"/> {/* Sharp Edge */}
+    {/* Glowing Frost Runes */}
+    <rect x="17" y="10" width="2" height="2" fill="#38bdf8"/>
+    <rect x="19" y="12" width="2" height="2" fill="#38bdf8"/>
+    {/* Back Spike (Left) */}
+    <rect x="10" y="10" width="4" height="3" fill="#94a3b8"/>
+  </svg>
+);
+
+// armor baru
+
+const TurtleGiIcon = () => (
+  <svg viewBox="0 0 32 32" width="56" height="56" xmlns="http://www.w3.org/2000/svg" style={{ imageRendering: 'pixelated' }}>
+    <rect x="10" y="8" width="12" height="16" fill="#ea580c"/>
+    <rect x="13" y="8" width="6" height="4" fill="#1e3a8a"/> {/* Blue undershirt */}
+    <rect x="10" y="20" width="12" height="4" fill="#1e3a8a"/> {/* Blue belt */}
+    <rect x="8" y="10" width="2" height="6" fill="#ea580c"/> {/* Sleeves */}
+    <rect x="22" y="10" width="2" height="6" fill="#ea580c"/>
+    <rect x="18" y="12" width="3" height="3" fill="#fef08a"/> {/* Turtle Logo hint */}
+  </svg>
+);
+
+const SurveyCorpsIcon = () => (
+  <svg viewBox="0 0 32 32" width="56" height="56" xmlns="http://www.w3.org/2000/svg" style={{ imageRendering: 'pixelated' }}>
+    <rect x="11" y="8" width="10" height="16" fill="#f8fafc"/> {/* White shirt */}
+    <rect x="10" y="8" width="12" height="8" fill="#78350f"/> {/* Brown Jacket */}
+    <rect x="13" y="8" width="6" height="8" fill="#f8fafc"/> {/* Jacket open */}
+    <rect x="10" y="20" width="12" height="2" fill="#451a03"/> {/* Belt */}
+    <rect x="8" y="10" width="2" height="10" fill="#78350f"/> {/* Sleeves */}
+    <rect x="22" y="10" width="2" height="10" fill="#78350f"/>
+    <rect x="11" y="14" width="1" height="8" fill="#0f172a"/> {/* Straps */}
+    <rect x="20" y="14" width="1" height="8" fill="#0f172a"/>
+  </svg>
+);
+
+const AkatsukiIcon = () => (
+  <svg viewBox="0 0 32 32" width="56" height="56" xmlns="http://www.w3.org/2000/svg" style={{ imageRendering: 'pixelated' }}>
+    <rect x="10" y="8" width="12" height="18" fill="#0f172a"/> {/* Black robe */}
+    <rect x="8" y="10" width="16" height="14" fill="#0f172a"/> {/* Wide sleeves */}
+    <rect x="12" y="8" width="8" height="2" fill="#dc2626"/> {/* Red collar inside */}
+    <rect x="13" y="14" width="3" height="2" fill="#dc2626"/> {/* Red Cloud 1 */}
+    <rect x="18" y="20" width="3" height="2" fill="#dc2626"/> {/* Red Cloud 2 */}
+    <rect x="12" y="14" width="1" height="1" fill="#f8fafc"/> {/* White outline hint */}
+    <rect x="17" y="20" width="1" height="1" fill="#f8fafc"/>
+  </svg>
+);
+
+const IronArmorIcon = () => (
+  <svg viewBox="0 0 32 32" width="56" height="56" xmlns="http://www.w3.org/2000/svg" style={{ imageRendering: 'pixelated' }}>
+    <rect x="10" y="8" width="12" height="16" fill="#dc2626"/> {/* Red suit */}
+    <rect x="12" y="10" width="8" height="12" fill="#b91c1c"/> {/* Shading */}
+    <rect x="8" y="10" width="2" height="14" fill="#dc2626"/> {/* Arms */}
+    <rect x="22" y="10" width="2" height="14" fill="#dc2626"/>
+    <rect x="14" y="12" width="4" height="4" fill="#22d3ee"/> {/* Arc Reactor */}
+    <rect x="15" y="13" width="2" height="2" fill="#f8fafc"/> {/* Reactor core */}
+    <rect x="11" y="18" width="2" height="6" fill="#fbbf24"/> {/* Gold plates */}
+    <rect x="19" y="18" width="2" height="6" fill="#fbbf24"/>
+    <rect x="8" y="14" width="2" height="4" fill="#fbbf24"/> {/* Arm gold */}
+    <rect x="22" y="14" width="2" height="4" fill="#fbbf24"/>
+  </svg>
+);
+
+const N7SuitIcon = () => (
+  <svg viewBox="0 0 32 32" width="56" height="56" xmlns="http://www.w3.org/2000/svg" style={{ imageRendering: 'pixelated' }}>
+    <rect x="10" y="8" width="12" height="16" fill="#1e293b"/> {/* Carbon black */}
+    <rect x="12" y="10" width="8" height="12" fill="#334155"/> {/* Shading */}
+    <rect x="18" y="10" width="2" height="14" fill="#dc2626"/> {/* N7 Red Stripe */}
+    <rect x="20" y="10" width="1" height="14" fill="#f8fafc"/> {/* N7 White Stripe */}
+    <rect x="8" y="10" width="2" height="14" fill="#1e293b"/> {/* Left arm */}
+    <rect x="22" y="10" width="2" height="14" fill="#1e293b"/> {/* Right arm */}
+    <rect x="13" y="12" width="6" height="4" fill="#0f172a"/> {/* Chest plate indent */}
+  </svg>
+);
+
+const DemonSlayerIcon = () => (
+  <svg viewBox="0 0 32 32" width="56" height="56" xmlns="http://www.w3.org/2000/svg" style={{ imageRendering: 'pixelated' }}>
+    <rect x="11" y="8" width="10" height="16" fill="#0f172a"/> {/* Black Uniform */}
+    <rect x="14" y="10" width="1" height="10" fill="#94a3b8"/> {/* Silver buttons */}
+    <rect x="11" y="18" width="10" height="2" fill="#f8fafc"/> {/* White belt */}
+    <rect x="8" y="10" width="4" height="12" fill="#166534"/> {/* Haori Green */}
+    <rect x="20" y="10" width="4" height="12" fill="#166534"/> 
+    <rect x="8" y="12" width="4" height="2" fill="#0f172a"/> {/* Haori Black Checkers */}
+    <rect x="8" y="16" width="4" height="2" fill="#0f172a"/>
+    <rect x="20" y="12" width="4" height="2" fill="#0f172a"/>
+    <rect x="20" y="16" width="4" height="2" fill="#0f172a"/>
+  </svg>
+);
+
+const JediRobeIcon = () => (
+  <svg viewBox="0 0 32 32" width="56" height="56" xmlns="http://www.w3.org/2000/svg" style={{ imageRendering: 'pixelated' }}>
+    <rect x="10" y="8" width="12" height="18" fill="#d6d3d1"/> {/* Beige Tunic */}
+    <rect x="14" y="8" width="4" height="6" fill="#a8a29e"/> {/* V-Neck Fold */}
+    <rect x="10" y="18" width="12" height="3" fill="#451a03"/> {/* Brown Belt */}
+    <rect x="15" y="18" width="2" height="3" fill="#94a3b8"/> {/* Belt Buckle */}
+    <rect x="7" y="10" width="3" height="12" fill="#78350f"/> {/* Brown Outer Robe Sleeve */}
+    <rect x="22" y="10" width="3" height="12" fill="#78350f"/>
+  </svg>
+);
+
+const HevSuitIcon = () => (
+  <svg viewBox="0 0 32 32" width="56" height="56" xmlns="http://www.w3.org/2000/svg" style={{ imageRendering: 'pixelated' }}>
+    <rect x="10" y="8" width="12" height="16" fill="#0f172a"/> {/* Black undersuit */}
+    <rect x="11" y="10" width="10" height="8" fill="#f97316"/> {/* Orange chest plate */}
+    <rect x="14" y="12" width="4" height="4" fill="#fbbf24"/> {/* Lambda BG (Gold) */}
+    <rect x="15" y="13" width="2" height="2" fill="#1e293b"/> {/* Lambda hint */}
+    <rect x="11" y="20" width="10" height="4" fill="#f97316"/> {/* Orange belt/pelvis */}
+    <rect x="8" y="10" width="2" height="6" fill="#f97316"/> {/* Shoulders */}
+    <rect x="22" y="10" width="2" height="6" fill="#f97316"/>
+    <rect x="8" y="16" width="2" height="8" fill="#0f172a"/> {/* Lower arms black */}
+    <rect x="22" y="16" width="2" height="8" fill="#0f172a"/>
+  </svg>
+);
+
+// helmet baru
+
+const IronHelmIcon = () => (
+  <svg viewBox="0 0 32 32" width="56" height="56" xmlns="http://www.w3.org/2000/svg" style={{ imageRendering: 'pixelated' }}>
+    <rect x="11" y="8" width="10" height="12" fill="#dc2626"/> {/* Red Base */}
+    <rect x="13" y="10" width="6" height="8" fill="#fbbf24"/> {/* Gold Faceplate */}
+    <rect x="14" y="12" width="1" height="1" fill="#22d3ee"/> {/* Eye L */}
+    <rect x="17" y="12" width="1" height="1" fill="#22d3ee"/> {/* Eye R */}
+  </svg>
+);
+
+const StrawHatIcon = () => (
+  <svg viewBox="0 0 32 32" width="56" height="56" xmlns="http://www.w3.org/2000/svg" style={{ imageRendering: 'pixelated' }}>
+    <rect x="10" y="12" width="12" height="4" fill="#fde047"/> {/* Yellow Base */}
+    <rect x="8" y="16" width="16" height="2" fill="#fde047"/> {/* Brim */}
+    <rect x="10" y="14" width="12" height="2" fill="#dc2626"/> {/* Red Band */}
+  </svg>
+);
+
+const HiddenLeafIcon = () => (
+  <svg viewBox="0 0 32 32" width="56" height="56" xmlns="http://www.w3.org/2000/svg" style={{ imageRendering: 'pixelated' }}>
+    <rect x="10" y="12" width="12" height="4" fill="#1e293b"/> {/* Dark Blue cloth */}
+    <rect x="12" y="13" width="8" height="2" fill="#94a3b8"/> {/* Metal plate */}
+    <rect x="15" y="13" width="2" height="1" fill="#0f172a"/> {/* Symbol hint */}
+  </svg>
+);
+
+const InosukeHelmIcon = () => (
+  <svg viewBox="0 0 32 32" width="56" height="56" xmlns="http://www.w3.org/2000/svg" style={{ imageRendering: 'pixelated' }}>
+    <rect x="10" y="8" width="12" height="12" fill="#a8a29e"/> {/* Boar Fur */}
+    <rect x="13" y="14" width="2" height="2" fill="#334155"/> {/* Nose */}
+    <rect x="11" y="11" width="2" height="2" fill="#38bdf8"/> {/* Blue Eye L */}
+    <rect x="19" y="11" width="2" height="2" fill="#38bdf8"/> {/* Blue Eye R */}
+    <rect x="11" y="6" width="2" height="3" fill="#fb7185"/> {/* Ear L */}
+    <rect x="19" y="6" width="2" height="3" fill="#fb7185"/> {/* Ear R */}
+  </svg>
+);
+
+const VaderHelmIcon = () => (
+  <svg viewBox="0 0 32 32" width="56" height="56" xmlns="http://www.w3.org/2000/svg" style={{ imageRendering: 'pixelated' }}>
+    <rect x="11" y="8" width="10" height="12" fill="#0f172a"/> {/* Black Mask */}
+    <rect x="13" y="12" width="2" height="2" fill="#1e293b"/> {/* Eye L */}
+    <rect x="17" y="12" width="2" height="2" fill="#1e293b"/> {/* Eye R */}
+    <rect x="15" y="15" width="2" height="3" fill="#334155"/> {/* Grill */}
+  </svg>
+);
+
+const SpartanHelmIcon = () => (
+  <svg viewBox="0 0 32 32" width="56" height="56" xmlns="http://www.w3.org/2000/svg" style={{ imageRendering: 'pixelated' }}>
+    <rect x="11" y="10" width="10" height="10" fill="#1e293b"/> {/* Green Base */}
+    <rect x="12" y="12" width="8" height="4" fill="#fbbf24"/> {/* Gold Visor */}
+    <rect x="13" y="13" width="6" height="1" fill="#22d3ee" opacity="0.6"/> {/* Visor Glow */}
+  </svg>
+);
+
+const SaitamaBaldIcon = () => (
+  <svg viewBox="0 0 32 32" width="56" height="56" xmlns="http://www.w3.org/2000/svg" style={{ imageRendering: 'pixelated' }}>
+    <rect x="11" y="10" width="10" height="10" fill="#ffdbac" rx="5"/> {/* Skin/Bald head */}
+    <rect x="13" y="14" width="1" height="1" fill="#000"/> {/* Dot eye L */}
+    <rect x="18" y="14" width="1" height="1" fill="#000"/> {/* Dot eye R */}
+  </svg>
+);
+
+const HollowMaskIcon = () => (
+  <svg viewBox="0 0 32 32" width="56" height="56" xmlns="http://www.w3.org/2000/svg" style={{ imageRendering: 'pixelated' }}>
+    <rect x="11" y="8" width="10" height="12" fill="#f8fafc"/> {/* White Mask */}
+    <rect x="13" y="11" width="2" height="2" fill="#0f172a"/> {/* Eye L */}
+    <rect x="17" y="11" width="2" height="2" fill="#0f172a"/> {/* Eye R */}
+    <rect x="11" y="8" width="3" height="1" fill="#dc2626"/>
+    <rect x="11" y="10" width="2" height="1" fill="#dc2626"/>
+    <rect x="11" y="12" width="1" height="3" fill="#dc2626"/>
+    <rect x="14" y="16" width="4" height="1" fill="#94a3b8"/>
+  </svg>
+);
+const GordonGlassesIcon = () => (
+  <svg viewBox="0 0 32 32" width="56" height="56" xmlns="http://www.w3.org/2000/svg" style={{ imageRendering: 'pixelated' }}>
+    <rect x="11" y="10" width="10" height="4" fill="#451a03"/> {/* Brown Hair */}
+    <rect x="12" y="13" width="3" height="2" fill="#000"/> {/* Lens L */}
+    <rect x="17" y="13" width="3" height="2" fill="#000"/> {/* Lens R */}
+    <rect x="15" y="13" width="2" height="1" fill="#000"/> {/* Bridge */}
+  </svg>
+);
+
+// cloak baru
+
+const SurveyCapeIcon = () => (
+  <svg viewBox="0 0 32 32" width="56" height="56" xmlns="http://www.w3.org/2000/svg" style={{ imageRendering: 'pixelated' }}>
+    <rect x="8" y="6" width="16" height="18" fill="#166534"/>
+    <rect x="10" y="8" width="12" height="14" fill="#14532d"/> {/* Folds */}
+  </svg>
+);
+
+const HokageCloakIcon = () => (
+  <svg viewBox="0 0 32 32" width="56" height="56" xmlns="http://www.w3.org/2000/svg" style={{ imageRendering: 'pixelated' }}>
+    <rect x="8" y="6" width="16" height="14" fill="#f8fafc"/>
+    <rect x="8" y="20" width="16" height="4" fill="#ef4444"/> {/* Red Flames */}
+    <rect x="10" y="18" width="2" height="2" fill="#ef4444"/>
+    <rect x="14" y="18" width="4" height="2" fill="#ef4444"/>
+    <rect x="20" y="18" width="2" height="2" fill="#ef4444"/>
+  </svg>
+);
+
+const LevitationCloakIcon = () => (
+  <svg viewBox="0 0 32 32" width="56" height="56" xmlns="http://www.w3.org/2000/svg" style={{ imageRendering: 'pixelated' }}>
+    <rect x="8" y="10" width="16" height="14" fill="#b91c1c"/>
+    <rect x="6" y="6" width="20" height="4" fill="#dc2626"/> {/* High Collar */}
+    <rect x="6" y="6" width="20" height="1" fill="#fbbf24"/> {/* Gold Trim */}
+  </svg>
+);
+
+const DarkCapeIcon = () => (
+  <svg viewBox="0 0 32 32" width="56" height="56" xmlns="http://www.w3.org/2000/svg" style={{ imageRendering: 'pixelated' }}>
+    <rect x="6" y="6" width="20" height="16" fill="#0f172a"/>
+    <rect x="6" y="22" width="3" height="2" fill="#0f172a"/> {/* Scalloped edges */}
+    <rect x="11" y="22" width="4" height="2" fill="#0f172a"/>
+    <rect x="17" y="22" width="4" height="2" fill="#0f172a"/>
+    <rect x="23" y="22" width="3" height="2" fill="#0f172a"/>
+  </svg>
+);
+
+const SaitamaCapeIcon = () => (
+  <svg viewBox="0 0 32 32" width="56" height="56" xmlns="http://www.w3.org/2000/svg" style={{ imageRendering: 'pixelated' }}>
+    <rect x="9" y="6" width="14" height="18" fill="#f1f5f9"/>
+    <rect x="10" y="8" width="12" height="14" fill="#e2e8f0"/> {/* Shadows */}
+    <rect x="11" y="6" width="2" height="2" fill="#0f172a"/> {/* Buttons */}
+    <rect x="19" y="6" width="2" height="2" fill="#0f172a"/>
+  </svg>
+);
+
+const GutsCapeIcon = () => (
+  <svg viewBox="0 0 32 32" width="56" height="56" xmlns="http://www.w3.org/2000/svg" style={{ imageRendering: 'pixelated' }}>
+    <rect x="7" y="6" width="18" height="14" fill="#1e293b"/>
+    <rect x="7" y="20" width="2" height="4" fill="#1e293b"/> {/* Ragged edges */}
+    <rect x="11" y="20" width="3" height="2" fill="#1e293b"/>
+    <rect x="16" y="20" width="2" height="3" fill="#1e293b"/>
+    <rect x="21" y="20" width="4" height="2" fill="#1e293b"/>
+    <rect x="14" y="6" width="4" height="2" fill="#94a3b8"/> {/* Silver Clasp */}
+  </svg>
+);
+
+const CrimsonCapeIcon = () => (
+  <svg viewBox="0 0 32 32" width="56" height="56" xmlns="http://www.w3.org/2000/svg" style={{ imageRendering: 'pixelated' }}>
+    <rect x="8" y="8" width="16" height="16" fill="#dc2626"/>
+    <rect x="6" y="6" width="4" height="4" fill="#ef4444"/> {/* Pointy Shoulder L */}
+    <rect x="22" y="6" width="4" height="4" fill="#ef4444"/> {/* Pointy Shoulder R */}
+  </svg>
+);
+
+const VampireMantleIcon = () => (
+  <svg viewBox="0 0 32 32" width="56" height="56" xmlns="http://www.w3.org/2000/svg" style={{ imageRendering: 'pixelated' }}>
+    <rect x="6" y="6" width="20" height="18" fill="#020617"/> {/* Black outer */}
+    <rect x="8" y="6" width="16" height="2" fill="#9f1239"/> {/* Red inner collar */}
+    <rect x="14" y="8" width="4" height="2" fill="#fbbf24"/> {/* Gold chain */}
+  </svg>
+);
+
+const WinterWolfIcon = () => (
+  <svg viewBox="0 0 32 32" width="56" height="56" xmlns="http://www.w3.org/2000/svg" style={{ imageRendering: 'pixelated' }}>
+    <rect x="8" y="10" width="16" height="14" fill="#292524"/> {/* Brown leather/cloth */}
+    <rect x="6" y="6" width="20" height="6" fill="#94a3b8"/> {/* Grey Fur Collar */}
+    <rect x="8" y="12" width="16" height="2" fill="#475569"/> {/* Fur trim */}
+  </svg>
+);
+
+// amulet baru
+
+const OneRingIcon = () => (
+  <svg viewBox="0 0 32 32" width="56" height="56" xmlns="http://www.w3.org/2000/svg" style={{ imageRendering: 'pixelated' }}>
+    <rect x="10" y="14" width="12" height="4" fill="#fbbf24"/>
+    <rect x="12" y="12" width="8" height="2" fill="#fbbf24"/>
+    <rect x="12" y="18" width="8" height="2" fill="#fbbf24"/>
+    <rect x="12" y="14" width="8" height="4" fill="#0f172a"/> {/* Hole */}
+    <rect x="14" y="12" width="4" height="1" fill="#fef08a"/> {/* Shine */}
+  </svg>
+);
+
+const MillenniumPuzzleIcon = () => (
+  <svg viewBox="0 0 32 32" width="56" height="56" xmlns="http://www.w3.org/2000/svg" style={{ imageRendering: 'pixelated' }}>
+    <rect x="10" y="10" width="12" height="2" fill="#fbbf24"/>
+    <rect x="12" y="12" width="8" height="2" fill="#f59e0b"/>
+    <rect x="14" y="14" width="4" height="2" fill="#d97706"/>
+    <rect x="15" y="16" width="2" height="2" fill="#b45309"/>
+    <rect x="14" y="10" width="4" height="2" fill="#1e293b"/> {/* Eye slot */}
+    <rect x="15" y="10" width="2" height="2" fill="#fef08a"/> {/* Eye */}
+    <rect x="15" y="6" width="2" height="4" fill="#94a3b8"/> {/* Chain */}
+  </svg>
+);
+
+const EyeAgamottoIcon = () => (
+  <svg viewBox="0 0 32 32" width="56" height="56" xmlns="http://www.w3.org/2000/svg" style={{ imageRendering: 'pixelated' }}>
+    <rect x="10" y="12" width="12" height="8" fill="#d4af37"/>
+    <rect x="12" y="14" width="8" height="4" fill="#1e293b"/> {/* Inner shadow */}
+    <rect x="14" y="14" width="4" height="4" fill="#22c55e"/> {/* Time Stone */}
+    <rect x="15" y="15" width="2" height="2" fill="#86efac"/> {/* Glow */}
+    <rect x="15" y="8" width="2" height="4" fill="#94a3b8"/> {/* String */}
+  </svg>
+);
+
+const PhilosopherStoneIcon = () => (
+  <svg viewBox="0 0 32 32" width="56" height="56" xmlns="http://www.w3.org/2000/svg" style={{ imageRendering: 'pixelated' }}>
+    <rect x="12" y="10" width="8" height="12" fill="#dc2626"/>
+    <rect x="10" y="12" width="2" height="8" fill="#b91c1c"/>
+    <rect x="20" y="12" width="2" height="8" fill="#b91c1c"/>
+    <rect x="14" y="12" width="2" height="4" fill="#fca5a5"/> {/* Shine */}
+  </svg>
+);
+
+const WolfMedallionIcon = () => (
+  <svg viewBox="0 0 32 32" width="56" height="56" xmlns="http://www.w3.org/2000/svg" style={{ imageRendering: 'pixelated' }}>
+    <rect x="10" y="10" width="12" height="12" fill="#94a3b8"/> {/* Silver Base */}
+    <rect x="12" y="12" width="2" height="2" fill="#dc2626"/> {/* Red Eye L */}
+    <rect x="18" y="12" width="2" height="2" fill="#dc2626"/> {/* Red Eye R */}
+    <rect x="14" y="16" width="4" height="4" fill="#475569"/> {/* Snout */}
+    <rect x="12" y="8" width="2" height="2" fill="#e2e8f0"/> {/* Ear L */}
+    <rect x="18" y="8" width="2" height="2" fill="#e2e8f0"/> {/* Ear R */}
+  </svg>
+);
+
+const MaraAmuletIcon = () => (
+  <svg viewBox="0 0 32 32" width="56" height="56" xmlns="http://www.w3.org/2000/svg" style={{ imageRendering: 'pixelated' }}>
+    <rect x="12" y="10" width="8" height="12" fill="#fbbf24"/> {/* Gold frame */}
+    <rect x="14" y="12" width="4" height="8" fill="#0d9488"/> {/* Teal gem */}
+    <rect x="15" y="14" width="2" height="2" fill="#5eead4"/> {/* Gem shine */}
+  </svg>
+);
+
+const BehelitIcon = () => (
+  <svg viewBox="0 0 32 32" width="56" height="56" xmlns="http://www.w3.org/2000/svg" style={{ imageRendering: 'pixelated' }}>
+    <rect x="12" y="10" width="8" height="12" fill="#b91c1c"/> {/* Fleshy red egg */}
+    <rect x="13" y="12" width="2" height="2" fill="#0f172a"/> {/* Eye out of place */}
+    <rect x="17" y="16" width="2" height="2" fill="#0f172a"/> {/* Eye out of place */}
+    <rect x="14" y="18" width="2" height="2" fill="#0f172a"/> {/* Mouth */}
+  </svg>
+);
+
+const CoreDrillIcon = () => (
+  <svg viewBox="0 0 32 32" width="56" height="56" xmlns="http://www.w3.org/2000/svg" style={{ imageRendering: 'pixelated' }}>
+    <rect x="12" y="10" width="8" height="4" fill="#fbbf24"/>
+    <rect x="14" y="14" width="4" height="4" fill="#f59e0b"/>
+    <rect x="15" y="18" width="2" height="4" fill="#d97706"/>
+    <rect x="14" y="12" width="4" height="2" fill="#22c55e"/> {/* Green glow core */}
+  </svg>
+);
+
+const TriforceIcon = () => (
+  <svg viewBox="0 0 32 32" width="56" height="56" xmlns="http://www.w3.org/2000/svg" style={{ imageRendering: 'pixelated' }}>
+    <rect x="14" y="10" width="4" height="4" fill="#fbbf24"/> {/* Top */}
+    <rect x="10" y="16" width="4" height="4" fill="#fbbf24"/> {/* Bottom Left */}
+    <rect x="18" y="16" width="4" height="4" fill="#fbbf24"/> {/* Bottom Right */}
+  </svg>
+);
+
+// material baru
+
+const MithrilIngotIcon = () => (
+  <svg viewBox="0 0 32 32" width="56" height="56" xmlns="http://www.w3.org/2000/svg" style={{ imageRendering: 'pixelated' }}>
+    <rect x="10" y="14" width="12" height="8" fill="#94a3b8"/> {/* Base silver */}
+    <rect x="12" y="12" width="8" height="2" fill="#cbd5e1"/> {/* Top face */}
+    <rect x="12" y="14" width="8" height="2" fill="#f8fafc"/> {/* Shine */}
+    <rect x="8" y="20" width="16" height="2" fill="#475569"/> {/* Shadow */}
+  </svg>
+);
+
+const BeskarIngotIcon = () => (
+  <svg viewBox="0 0 32 32" width="56" height="56" xmlns="http://www.w3.org/2000/svg" style={{ imageRendering: 'pixelated' }}>
+    <rect x="10" y="12" width="12" height="10" fill="#334155"/> {/* Dark grey */}
+    <rect x="11" y="14" width="10" height="1" fill="#1e293b"/> {/* Damascus pattern */}
+    <rect x="11" y="16" width="10" height="1" fill="#0f172a"/>
+    <rect x="11" y="18" width="10" height="1" fill="#1e293b"/>
+    <rect x="10" y="22" width="12" height="2" fill="#0f172a"/> {/* Shadow */}
+  </svg>
+);
+
+const VibraniumOreIcon = () => (
+  <svg viewBox="0 0 32 32" width="56" height="56" xmlns="http://www.w3.org/2000/svg" style={{ imageRendering: 'pixelated' }}>
+    <rect x="10" y="12" width="12" height="10" fill="#1e1b4b"/> {/* Dark rock */}
+    <rect x="12" y="10" width="6" height="2" fill="#1e1b4b"/>
+    <rect x="13" y="14" width="2" height="4" fill="#a855f7"/> {/* Purple glow */}
+    <rect x="16" y="16" width="4" height="2" fill="#a855f7"/>
+    <rect x="14" y="15" width="2" height="2" fill="#d946ef"/> {/* Core glow */}
+  </svg>
+);
+
+const SenzuBeanIcon = () => (
+  <svg viewBox="0 0 32 32" width="56" height="56" xmlns="http://www.w3.org/2000/svg" style={{ imageRendering: 'pixelated' }}>
+    <rect x="12" y="14" width="8" height="8" fill="#b45309"/> {/* Brown pouch */}
+    <rect x="14" y="10" width="4" height="4" fill="#78350f"/> {/* Pouch tie */}
+    <rect x="10" y="20" width="12" height="2" fill="#78350f"/> {/* Pouch bottom */}
+    <rect x="14" y="16" width="4" height="2" fill="#4ade80"/> {/* Green bean peeking */}
+    <rect x="13" y="12" width="6" height="2" fill="#fbbf24"/> {/* Rope */}
+  </svg>
+);
+
+const SlimeJellyIcon = () => (
+  <svg viewBox="0 0 32 32" width="56" height="56" xmlns="http://www.w3.org/2000/svg" style={{ imageRendering: 'pixelated' }}>
+    <rect x="10" y="16" width="12" height="6" fill="#38bdf8"/> {/* Blue blob base */}
+    <rect x="12" y="12" width="8" height="4" fill="#38bdf8"/>
+    <rect x="14" y="10" width="4" height="2" fill="#38bdf8"/> {/* Blob tip */}
+    <rect x="12" y="14" width="2" height="2" fill="#bae6fd"/> {/* Shine */}
+  </svg>
+);
+
+const DragonScaleIcon = () => (
+  <svg viewBox="0 0 32 32" width="56" height="56" xmlns="http://www.w3.org/2000/svg" style={{ imageRendering: 'pixelated' }}>
+    <rect x="14" y="8" width="4" height="4" fill="#dc2626"/> {/* Top point */}
+    <rect x="12" y="12" width="8" height="8" fill="#b91c1c"/> {/* Middle wide */}
+    <rect x="14" y="20" width="4" height="4" fill="#991b1b"/> {/* Bottom point */}
+    <rect x="16" y="12" width="2" height="8" fill="#fca5a5" opacity="0.3"/> {/* Shine */}
+    <rect x="10" y="14" width="12" height="2" fill="#7f1d1d"/> {/* Texture lines */}
+    <rect x="12" y="18" width="8" height="2" fill="#7f1d1d"/>
+  </svg>
+);
+
+const DemonHornIcon = () => (
+  <svg viewBox="0 0 32 32" width="56" height="56" xmlns="http://www.w3.org/2000/svg" style={{ imageRendering: 'pixelated' }}>
+    <rect x="12" y="20" width="6" height="4" fill="#dc2626"/> {/* Red base */}
+    <rect x="12" y="16" width="4" height="4" fill="#1e293b"/> {/* Black curve */}
+    <rect x="14" y="12" width="4" height="4" fill="#1e293b"/>
+    <rect x="16" y="8" width="2" height="4" fill="#0f172a"/> {/* Tip */}
+    <rect x="12" y="22" width="6" height="1" fill="#7f1d1d"/> {/* Base shadow */}
+  </svg>
+);
+
+const KryptoniteIcon = () => (
+  <svg viewBox="0 0 32 32" width="56" height="56" xmlns="http://www.w3.org/2000/svg" style={{ imageRendering: 'pixelated' }}>
+    <rect x="14" y="8" width="4" height="16" fill="#22c55e"/> {/* Main crystal */}
+    <rect x="12" y="12" width="2" height="10" fill="#16a34a"/> {/* Side cluster L */}
+    <rect x="18" y="14" width="2" height="8" fill="#16a34a"/> {/* Side cluster R */}
+    <rect x="15" y="10" width="2" height="12" fill="#86efac"/> {/* Inner glow */}
+    <rect x="14" y="6" width="2" height="2" fill="#22c55e"/> {/* Sharp tip */}
+  </svg>
+);
+
+const StarFragmentIcon = () => (
+  <svg viewBox="0 0 32 32" width="56" height="56" xmlns="http://www.w3.org/2000/svg" style={{ imageRendering: 'pixelated' }}>
+    <rect x="14" y="10" width="4" height="12" fill="#fef08a"/> {/* Vertical beam */}
+    <rect x="10" y="14" width="12" height="4" fill="#fef08a"/> {/* Horizontal beam */}
+    <rect x="12" y="12" width="8" height="8" fill="#fde047"/> {/* Core */}
+    <rect x="14" y="14" width="4" height="4" fill="#ca8a04"/> {/* Inner core */}
+    <rect x="15" y="15" width="2" height="2" fill="#fff"/> {/* Sparkle */}
+  </svg>
+);
+
 // ============================================================
 // ITEM DATA
 // ============================================================
 export const ITEMS: ShopItem[] = [
   { id: 1, name: "Shadow Monarch's Cloak", price: 250, rarity: 'legendary', slot: 'cloak',     stat: 'SHADOW ATK +50 / MAGIC DEF +30', icon: <ShadowCloakIcon /> },
-  { id: 2, name: "Demon's Edge",           price: 180, rarity: 'epic',      slot: 'weapon',    stat: 'ATK +80 / LIFESTEAL 5%',          icon: <DemonEdgeIcon /> },
-  { id: 3, name: "Arcane Mage Robe",       price: 130, rarity: 'rare',      slot: 'armor',     stat: 'MAGIC ATK +60 / MP +20',          icon: <ArcaneMageRobeIcon /> },
-  { id: 4, name: "Knight's Aegis",         price: 120, rarity: 'rare',      slot: 'armor',     stat: 'DEF +100 / HP +30',               icon: <KnightAegisIcon /> },
-  { id: 5, name: "Dragon's Eye Amulet",    price: 300, rarity: 'legendary', slot: 'accessory', stat: 'ALL STATS +40 / FIRE IMMUNE',     icon: <DragonEyeAmuletIcon /> },
-  { id: 6, name: "Soul Crystal",           price: 75,  rarity: 'uncommon',  slot: 'material',  stat: 'XP +15 / CRAFTING MAT',           icon: <SoulCrystalIcon /> },
-  { id: 7, name: "Void Archer's Bow",      price: 200, rarity: 'epic',      slot: 'weapon',    stat: 'AGI +70 / RANGE ATK +50',         icon: <VoidBowIcon /> },
-  { id: 8, name: "Phoenix Helm",           price: 160, rarity: 'rare',      slot: 'helmet',    stat: 'DEF +40 / REVIVE 1x/BATTLE',      icon: <PhoenixHelmIcon /> },
+  { id: 2, name: "Demon's Edge",           price: 180, rarity: 'epic',      slot: 'weapon',    stat: 'ATK +80 / LIFESTEAL 5%',         icon: <DemonEdgeIcon /> },
+  { id: 3, name: "Arcane Mage Robe",       price: 130, rarity: 'rare',      slot: 'armor',     stat: 'MAGIC ATK +60 / MP +20',         icon: <ArcaneMageRobeIcon /> },
+  { id: 4, name: "Knight's Aegis",         price: 120, rarity: 'rare',      slot: 'armor',     stat: 'DEF +100 / HP +30',              icon: <KnightAegisIcon /> },
+  { id: 5, name: "Dragon's Eye Amulet",    price: 300, rarity: 'legendary', slot: 'accessory', stat: 'ALL STATS +40 / FIRE IMMUNE',    icon: <DragonEyeAmuletIcon /> },
+  { id: 6, name: "Soul Crystal",           price: 75,  rarity: 'uncommon',  slot: 'material',  stat: 'XP +15 / CRAFTING MAT',          icon: <SoulCrystalIcon /> },
+  { id: 7, name: "Void Archer's Bow",      price: 200, rarity: 'epic',      slot: 'weapon',    stat: 'AGI +70 / RANGE ATK +50',        icon: <VoidBowIcon /> },
+  { id: 8, name: "Phoenix Helm",           price: 160, rarity: 'rare',      slot: 'helmet',    stat: 'DEF +40 / REVIVE 1x/BATTLE',     icon: <PhoenixHelmIcon /> },
+  // klo nyari senjata disini
+  { id: 9,  name: "Cursed Katana 'Enma'",  price: 750, rarity: 'legendary', slot: 'weapon', stat: 'ATK +120 / HAKI DRAIN',  icon: <EnmaKatanaIcon /> },
+  { id: 10, name: "Kasaka's Venom Fang",   price: 400, rarity: 'epic',      slot: 'weapon', stat: 'AGI +60 / POISON 10%',   icon: <KasakaFangIcon /> },
+  { id: 11, name: "The Elucidator",        price: 800, rarity: 'legendary', slot: 'weapon', stat: 'STR +90 / DUAL WIELD',   icon: <ElucidatorIcon /> },
+  { id: 12, name: "Buster Sword",          price: 450, rarity: 'epic',      slot: 'weapon', stat: 'STR +100 / HEAVY',       icon: <BusterSwordIcon /> },
+  { id: 13, name: "Zangetsu (Shikai)",     price: 850, rarity: 'legendary', slot: 'weapon', stat: 'ATK +150 / GETSUGA',     icon: <ZangetsuIcon /> },
+  { id: 14, name: "Holy Sword Excalibur",  price: 900, rarity: 'legendary', slot: 'weapon', stat: 'MAGIC ATK +120 / HOLY',  icon: <ExcaliburIcon /> },
+  { id: 15, name: "Death Scythe",          price: 420, rarity: 'epic',      slot: 'weapon', stat: 'ATK +90 / SOUL STEAL',      icon: <DeathScytheIcon /> },
+  { id: 16, name: "Leviathan Axe",         price: 750, rarity: 'legendary', slot: 'weapon', stat: 'STR +130 / FROSTBITE',      icon: <LeviathanAxeIcon /> },
+  // klo nyari armor disini
+  { id: 17, name: "Turtle School Gi",      price: 120, rarity: 'uncommon',  slot: 'armor', stat: 'STR +30 / DEF +20',       icon: <TurtleGiIcon /> },
+  { id: 18, name: "Survey Corps Jacket",   price: 220, rarity: 'rare',      slot: 'armor', stat: 'AGI +40 / DEF +25',       icon: <SurveyCorpsIcon /> },
+  { id: 19, name: "Akatsuki Robe",         price: 450, rarity: 'epic',      slot: 'armor', stat: 'MAGIC ATK +60 / DEF +30', icon: <AkatsukiIcon /> },
+  { id: 20, name: "Iron Powered Suit",     price: 850, rarity: 'legendary', slot: 'armor', stat: 'DEF +120 / FLIGHT',       icon: <IronArmorIcon /> },
+  { id: 21, name: "N7 Space Armor",        price: 480, rarity: 'epic',      slot: 'armor', stat: 'DEF +80 / SHIELD +50',    icon: <N7SuitIcon /> },
+  { id: 22, name: "Demon Slayer Haori",    price: 250, rarity: 'rare',      slot: 'armor', stat: 'ATK +50 / DEF +40',       icon: <DemonSlayerIcon /> },
+  { id: 23, name: "Jedi Master Tunic",     price: 400, rarity: 'epic',      slot: 'armor', stat: 'INT +70 / EVASION +30',   icon: <JediRobeIcon /> },
+  { id: 24, name: "HEV Hazard Suit",       price: 780, rarity: 'legendary', slot: 'armor', stat: 'DEF +100 / RAD RESIST',   icon: <HevSuitIcon /> },
+  // klo nyari helmet disini
+  { id: 25, name: "Mark 85 Helmet",        price: 800, rarity: 'legendary', slot: 'helmet', stat: 'DEF +40 / HUD SCAN',      icon: <IronHelmIcon /> },
+  { id: 26, name: "Straw Hat",             price: 150, rarity: 'uncommon',  slot: 'helmet', stat: 'LUCK +50 / WILLPOWER',    icon: <StrawHatIcon /> },
+  { id: 27, name: "Hidden Leaf Headband",  price: 200, rarity: 'rare',      slot: 'helmet', stat: 'AGI +20 / CHAKRA +10',    icon: <HiddenLeafIcon /> },
+  { id: 28, name: "Boar Head Mask",        price: 230, rarity: 'rare',      slot: 'helmet', stat: 'STR +30 / PERCEPTION',    icon: <InosukeHelmIcon /> },
+  { id: 29, name: "Dark Lord Mask",        price: 500, rarity: 'epic',      slot: 'helmet', stat: 'DEF +60 / FEAR AURA',     icon: <VaderHelmIcon /> },
+  { id: 30, name: "Spartan-117 Helmet",    price: 480, rarity: 'epic',      slot: 'helmet', stat: 'DEF +80 / SHIELD +20',    icon: <SpartanHelmIcon /> },
+  { id: 31, name: "Hero's Baldness",       price: 999, rarity: 'legendary', slot: 'helmet', stat: 'ALL STATS +100',          icon: <SaitamaBaldIcon /> },
+  { id: 32, name: "Vixard's Hollow Mask",  price: 770, rarity: 'legendary', slot: 'helmet', stat: 'DEF +100 / IMMUTABLE',    icon: <HollowMaskIcon /> },
+  { id: 33, name: "Scientist Glasses",     price: 210, rarity: 'rare',      slot: 'helmet', stat: 'INT +50 / HAZARD SENSE',  icon: <GordonGlassesIcon /> },
+  // klo nyari cloak disini
+  { id: 34, name: "Wings of Freedom Cape", price: 240, rarity: 'rare',      slot: 'cloak', stat: 'AGI +40 / DODGE +10%',     icon: <SurveyCapeIcon /> },
+  { id: 35, name: "Seventh Fire Cloak",    price: 460, rarity: 'epic',      slot: 'cloak', stat: 'MAGIC ATK +60 / WILL',     icon: <HokageCloakIcon /> },
+  { id: 36, name: "Cloak of Levitation",   price: 850, rarity: 'legendary', slot: 'cloak', stat: 'AGI +100 / FLIGHT',        icon: <LevitationCloakIcon /> },
+  { id: 37, name: "The Dark Cape",         price: 430, rarity: 'epic',      slot: 'cloak', stat: 'DEF +70 / STEALTH',        icon: <DarkCapeIcon /> },
+  { id: 38, name: "Caped Baldy's Cape",    price: 999, rarity: 'legendary', slot: 'cloak', stat: 'ALL STATS +100',           icon: <SaitamaCapeIcon /> },
+  { id: 39, name: "Black Swordsman Cape",  price: 450, rarity: 'epic',      slot: 'cloak', stat: 'STR +50 / GUTS',           icon: <GutsCapeIcon /> },
+  { id: 40, name: "Crimson Lotus Cape",    price: 250, rarity: 'rare',      slot: 'cloak', stat: 'STR +40 / SPIRIT +20',     icon: <CrimsonCapeIcon /> },
+  { id: 41, name: "Vampire Lord Mantle",   price: 820, rarity: 'legendary', slot: 'cloak', stat: 'MAGIC DEF +90 / LIFESTEAL',icon: <VampireMantleIcon /> },
+  { id: 42, name: "Winter Wolf Cloak",     price: 140, rarity: 'uncommon',  slot: 'cloak', stat: 'DEF +40 / ICE RESIST',     icon: <WinterWolfIcon /> },
+  // klo nyari amulet disini
+  { id: 43, name: "The One Ring",          price: 999, rarity: 'legendary', slot: 'accessory', stat: 'ALL STATS +50 / INVISIBILITY', icon: <OneRingIcon /> },
+  { id: 44, name: "Millennium Puzzle",     price: 500, rarity: 'epic',      slot: 'accessory', stat: 'INT +80 / DESTINY DRAW',       icon: <MillenniumPuzzleIcon /> },
+  { id: 45, name: "Eye of Agamotto",       price: 900, rarity: 'legendary', slot: 'accessory', stat: 'MAGIC ATK +100 / TIME REWIND', icon: <EyeAgamottoIcon /> },
+  { id: 46, name: "Philosopher's Stone",   price: 950, rarity: 'legendary', slot: 'accessory', stat: 'HP +500 / ALCHEMY',            icon: <PhilosopherStoneIcon /> },
+  { id: 47, name: "Wolf Medallion",        price: 260, rarity: 'rare',      slot: 'accessory', stat: 'PERCEPTION +50 / MAGIC SENSE', icon: <WolfMedallionIcon /> },
+  { id: 48, name: "Amulet of Mara",        price: 130, rarity: 'uncommon',  slot: 'accessory', stat: 'CHARISMA +50 / RESTORATION',   icon: <MaraAmuletIcon /> },
+  { id: 49, name: "The Behelit",           price: 666, rarity: 'epic',      slot: 'accessory', stat: 'ATK +150 / CURSED',            icon: <BehelitIcon /> },
+  { id: 50, name: "Core Drill",            price: 440, rarity: 'epic',      slot: 'accessory', stat: 'STR +80 / SPIRAL POWER',       icon: <CoreDrillIcon /> },
+  { id: 51, name: "Triforce Relic",        price: 999, rarity: 'legendary', slot: 'accessory', stat: 'COURAGE / WISDOM / POWER',     icon: <TriforceIcon /> },
+  // klo nyari material disini
+  { id: 52, name: "Mithril Ingot",         price: 200, rarity: 'rare',      slot: 'material', stat: 'CRAFTING: WEAPON',   icon: <MithrilIngotIcon /> },
+  { id: 53, name: "Beskar Ingot",          price: 350, rarity: 'epic',      slot: 'material', stat: 'CRAFTING: ARMOR',    icon: <BeskarIngotIcon /> },
+  { id: 54, name: "Vibranium Ore",         price: 600, rarity: 'legendary', slot: 'material', stat: 'CRAFTING: SHIELD',   icon: <VibraniumOreIcon /> },
+  { id: 55, name: "Senzu Bean",            price: 100,  rarity: 'uncommon',  slot: 'material', stat: 'CONSUMABLE: FULL HP',icon: <SenzuBeanIcon /> },
+  { id: 56, name: "Slime Jelly",           price: 30,  rarity: 'common',    slot: 'material', stat: 'CRAFTING: POTION',   icon: <SlimeJellyIcon /> },
+  { id: 57, name: "Dragon Scale",          price: 400, rarity: 'epic',      slot: 'material', stat: 'CRAFTING: FIRE RES', icon: <DragonScaleIcon /> },
+  { id: 58, name: "Demon Horn",            price: 220, rarity: 'rare',      slot: 'material', stat: 'CRAFTING: DARK ATK', icon: <DemonHornIcon /> },
+  { id: 59, name: "Kryptonite Shard",      price: 750, rarity: 'legendary', slot: 'material', stat: 'WEAKNESS EXPLOIT',   icon: <KryptoniteIcon /> },
+  { id: 60, name: "Star Fragment",         price: 800, rarity: 'legendary', slot: 'material', stat: 'UPGRADE MATERIAL',   icon: <StarFragmentIcon /> },
 ];
 
 // ============================================================

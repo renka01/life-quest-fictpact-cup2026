@@ -48,6 +48,8 @@ export default function StatusPanel({ isOpen, onClose }: { isOpen: boolean, onCl
       weaponId: equippedItems?.weapon,   // sword / bow
       armorId:  equippedItems?.armor,    // changes torso + arm pixels
       helmetId: equippedItems?.helmet,   // changes head area pixels
+      cloakId:  equippedItems?.cloak,
+      accessoryId: equippedItems?.accessory
     };
 
     if (userProfile?.gender === 'Wanita') return <TechnomancerGirl {...props}/>;
@@ -98,18 +100,6 @@ export default function StatusPanel({ isOpen, onClose }: { isOpen: boolean, onCl
 
           <div className="transform scale-[1.2] relative z-10 mt-10 flex items-center justify-center">
 
-            {/* ── LAYER 0: Cloak (behind sprite) ── */}
-            {/* Cloak is a full-body overlay behind the character.
-                It stays as an HTML layer because it wraps AROUND
-                the sprite silhouette — it doesn't replace body pixels. */}
-            {equippedItems?.cloak && (
-              <div
-                className="absolute top-[-10px] left-[50%] -translate-x-1/2 -z-10 pointer-events-none opacity-80"
-                style={{ transform: 'translateX(-50%) scale(2)' }}
-              >
-                {ITEMS.find(i => i.id === equippedItems.cloak)?.icon}
-              </div>
-            )}
 
             {/* ── LAYER 1: Character sprite ──
                 weapon  → drawn inside SVG at hand position
@@ -118,17 +108,6 @@ export default function StatusPanel({ isOpen, onClose }: { isOpen: boolean, onCl
                 (no more overlay divs for these three)            */}
             {renderAvatar()}
 
-            {/* ── LAYER 2: Accessory (neck amulet) ──
-                Small icon floated at collar. Kept as overlay because
-                it's a tiny decorative piece, not a body-shape change. */}
-            {equippedItems?.accessory && (
-              <div
-                className="absolute top-[28px] left-[50%] -translate-x-1/2 z-30 pointer-events-none drop-shadow-[0_0_8px_rgba(251,191,36,0.8)]"
-                style={{ transform: 'translateX(-50%) scale(0.55)' }}
-              >
-                {ITEMS.find(i => i.id === equippedItems.accessory)?.icon}
-              </div>
-            )}
 
           </div>
         </div>
