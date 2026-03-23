@@ -1,5 +1,6 @@
 "use client";
 import React, { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { useStore, TaskType, Task as StoreTask } from "@/store/useStore";
 import { 
   Plus, Minus, Star, Flame, X, FileText, Trash2, 
@@ -256,8 +257,13 @@ export const TaskDetailModal = ({ task, onClose }: { task: ExtendedTask | null, 
 // ==========================================
 export const GlobalAlerts = () => {
   const { alertDialog, confirmDialog, closeAlert, closeConfirm } = useStore();
+  const [mounted, setMounted] = useState(false);
 
-  return (
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  const content = (
     <>
       {alertDialog.isOpen && alertDialog.type === 'levelup' && (
         <div className="fixed inset-0 bg-black/90 backdrop-blur-sm z-[9999] flex justify-center items-center p-4" onClick={closeAlert}>
@@ -308,6 +314,9 @@ export const GlobalAlerts = () => {
       )}
     </>
   );
+
+  if (!mounted) return null;
+  return createPortal(content, document.body);
 };
 
 // ==========================================

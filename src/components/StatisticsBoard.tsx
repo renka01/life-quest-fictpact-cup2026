@@ -25,9 +25,9 @@ export default function StatisticsBoard() {
   const totalTasks = tasks.length;
   const completedTasks = tasks.filter((t) => t.done).length;
   const pendingTasks = tasks.filter((t) => !t.done).length;
-  const habitTasks = tasks.filter((t) => t.type === "habit").length;
-  const dailyTasks = tasks.filter((t) => t.type === "daily").length;
-  const todoTasks = tasks.filter((t) => t.type === "todo").length;
+  const habitTasks = tasks.filter((t) => t.type === "Siklus Misi").length;
+  const dailyTasks = tasks.filter((t) => t.type === "Operasi Harian").length;
+  const todoTasks = tasks.filter((t) => t.type === "Target Utama").length;
 
   const completionRate =
     totalTasks > 0 ? Math.round((completedTasks / totalTasks) * 100) : 0;
@@ -383,9 +383,9 @@ function StatCard({
 
       <div className="space-y-3">
         {lines.map(([label, value]) => (
-          <div key={label}>
-            <p className="text-slate-500 text-xs uppercase">{label}</p>
-            <p className="text-white font-bold text-xl break-words">{value}</p>
+          <div key={label} className="min-w-0">
+            <p className="text-slate-500 text-xs uppercase truncate" title={label}>{label}</p>
+            <p className="text-white font-bold text-xl truncate" title={value}>{value}</p>
           </div>
         ))}
       </div>
@@ -420,11 +420,11 @@ function MiniBox({
   icon?: React.ReactNode;
 }) {
   return (
-    <div className="bg-[#1a1b26] border-2 border-slate-700 p-3">
-      <p className="text-[10px] uppercase text-slate-500 mb-2">{label}</p>
-      <div className={`font-bold text-lg flex items-center gap-2 ${color}`}>
-        {icon}
-        <span>{value}</span>
+    <div className="bg-[#1a1b26] border-2 border-slate-700 p-3 min-w-0">
+      <p className="text-[10px] uppercase text-slate-500 mb-2 truncate" title={label}>{label}</p>
+      <div className={`font-bold text-lg flex items-center gap-2 ${color} min-w-0`} title={value}>
+        {icon && <span className="shrink-0">{icon}</span>}
+        <span className="truncate">{value}</span>
       </div>
     </div>
   );

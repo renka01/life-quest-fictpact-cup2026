@@ -68,7 +68,7 @@ export default function LoginPage() {
   if (!isMounted) return null;
 
   return (
-    <main className="relative min-h-screen w-full flex items-center justify-center overflow-hidden font-mono">
+    <main className="relative h-screen w-full flex items-center justify-center overflow-hidden font-mono">
       
       {/* BACKGROUND */}
       <div 

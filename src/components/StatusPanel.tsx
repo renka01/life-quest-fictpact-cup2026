@@ -61,7 +61,7 @@ export default function StatusPanel({ isOpen, onClose }: { isOpen: boolean, onCl
     <aside
       className={`
         fixed top-0 right-0 h-full w-64 bg-[#1a1b26] border-l-4 border-slate-700
-        p-6 flex-col gap-6 z-50 shadow-[-4px_0_0_rgba(0,0,0,0.5)] overflow-y-auto
+        p-6 flex-col gap-6 z-40 shadow-[-4px_0_0_rgba(0,0,0,0.5)] overflow-y-auto
         shrink-0 transition-transform duration-300 pb-24
         ${isOpen ? 'translate-x-0 flex' : 'translate-x-full hidden xl:flex'}
         xl:static xl:translate-x-0 xl:w-80

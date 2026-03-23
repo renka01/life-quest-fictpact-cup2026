@@ -74,8 +74,10 @@ const CircularProgress = ({
 // ==========================================
 export default function Finance({
   initialOpenType,
+  searchQuery = "",
 }: {
   initialOpenType?: "rekening" | "tabungan" | null;
+  searchQuery?: string;
 }) {
   const {
     accounts,
@@ -124,6 +126,7 @@ export default function Finance({
     setIsTransModalOpen(true);
   };
 
+  const q = searchQuery.toLowerCase();
   const rekeningList = accounts?.filter((acc) => acc.type === "rekening") || [];
   const tabunganList = accounts?.filter((acc) => acc.type === "tabungan") || [];
 
@@ -137,11 +140,15 @@ export default function Finance({
   );
   const netWorth = totalRekening + totalTabungan;
 
-  const dueTodayBills = recurringTransactions.filter((tx: any) => tx.status === "due");
-  const overdueBills = recurringTransactions.filter((tx: any) => tx.status === "overdue");
+  const filteredRekening = rekeningList.filter(acc => acc.name.toLowerCase().includes(q));
+  const filteredTabungan = tabunganList.filter(acc => acc.name.toLowerCase().includes(q));
+  
+  const dueTodayBills = recurringTransactions.filter((tx: any) => tx.status === "due" && tx.name.toLowerCase().includes(q));
+  const overdueBills = recurringTransactions.filter((tx: any) => tx.status === "overdue" && tx.name.toLowerCase().includes(q));
   const upcomingBills = recurringTransactions
-    .filter((tx: any) => tx.status === "upcoming")
+    .filter((tx: any) => tx.status === "upcoming" && tx.name.toLowerCase().includes(q))
     .sort((a: any, b: any) => a.nextDueDate - b.nextDueDate);
+  const filteredTransactions = transactions.filter((log: any) => log.accountName.toLowerCase().includes(q));
 
   return (
     <div className="flex flex-col h-full animate-in fade-in duration-500 gap-6 text-left p-4">
@@ -198,7 +205,10 @@ export default function Finance({
               <Plus size={18} /> Tambah Dompet Baru
             </button>
 
-            {rekeningList.map((acc) => (
+          {filteredRekening.length === 0 && q && (
+            <p className="text-sm text-slate-500 italic text-center py-4">Tidak ada rekening ditemukan.</p>
+          )}
+          {filteredRekening.map((acc) => (
               <div
                 key={acc.id}
                 className="group bg-[#24283b] border-2 border-slate-700 p-4 rounded-none flex justify-between items-center transition-all hover:border-emerald-500 shadow-[4px_4px_0_#000] hover:translate-y-[-2px] hover:shadow-[6px_6px_0_#000]"
@@ -256,7 +266,10 @@ export default function Finance({
               <Plus size={18} /> Tambah Target Baru
             </button>
 
-            {tabunganList.map((acc) => {
+          {filteredTabungan.length === 0 && q && (
+            <p className="text-sm text-slate-500 italic text-center py-4">Tidak ada tabungan/aset ditemukan.</p>
+          )}
+          {filteredTabungan.map((acc) => {
               const isGold =
                 acc.name.toLowerCase().includes("emas") ||
                 acc.name.toLowerCase().includes("gold");
@@ -483,8 +496,8 @@ export default function Finance({
               Riwayat Selesai
             </div>
 
-            {transactions?.length > 0 ? (
-              transactions.map((log: any) => (
+          {filteredTransactions.length > 0 ? (
+            filteredTransactions.map((log: any) => (
                 <div
                   key={log.id}
                   className="p-4 border-b border-slate-700 flex justify-between items-center hover:bg-slate-800 transition-colors"
@@ -529,7 +542,7 @@ export default function Finance({
               ))
             ) : (
               <div className="p-10 text-center text-sm text-slate-500 italic">
-                Belum ada riwayat transaksi.
+              {q ? "Transaksi tidak ditemukan." : "Belum ada riwayat transaksi."}
               </div>
             )}
           </div>

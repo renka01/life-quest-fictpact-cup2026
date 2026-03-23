@@ -28,7 +28,7 @@ export default function CharacterSelection({ onComplete }: CharacterSelectionPro
   };
 
   return (
-    <div className="min-h-screen bg-[#1a1b26] flex items-center justify-center p-4 font-mono relative overflow-hidden">
+    <div className="h-screen w-full bg-[#1a1b26] flex items-center justify-center p-4 font-mono relative overflow-hidden overflow-y-auto">
       {/* Background Pattern */}
       <div className="absolute inset-0 bg-[linear-gradient(rgba(30,41,59,0.3)_1px,transparent_1px),linear-gradient(90deg,rgba(30,41,59,0.3)_1px,transparent_1px)] bg-[size:30px_30px] pointer-events-none opacity-20"></div>
 

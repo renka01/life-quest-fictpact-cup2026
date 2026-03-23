@@ -58,7 +58,9 @@ export default function Home() {
   const [isMounted, setIsMounted] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [activeCategory, setActiveCategory] = useState("Semua");
-  const availableCategories = ["Semua", ...Array.from(new Set(extendedTasks.map(t => t.category)))];
+  const defaultCategories = ["Kesehatan", "Pendidikan", "Pekerjaan", "Proyek"];
+  const customCategories = Array.from(new Set(extendedTasks.map(t => t.category).filter(c => c && !defaultCategories.includes(c))));
+  const availableCategories = ["Semua", ...defaultCategories, ...customCategories];
 
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [formType, setFormType] = useState<TaskType | null>(null);
@@ -130,6 +132,7 @@ export default function Home() {
     const audio = new Audio('/sounds/glitch.mp3');
     audio.volume = 0.5;
     audio.play().catch(() => {});
+    setSearchQuery("");
 
     setIsTransitioning(true);
     setTimeout(() => {
@@ -144,7 +147,7 @@ export default function Home() {
 
   if (!isMounted) {
     return (
-      <div className="min-h-screen bg-[#1a1b26] flex items-center justify-center">
+      <div className="h-screen w-full bg-[#1a1b26] flex items-center justify-center">
         <span className="font-pixel text-xl text-cyan-400 tracking-[0.2em] animate-pulse">
           SYSTEM BOOTING...
         </span>
@@ -154,7 +157,7 @@ export default function Home() {
 
   // 1. JIKA BELUM LOGIN (accountName kosong), jangan render apapun biar kena push router
   if (!userProfile?.accountName) {
-    return <div className="min-h-screen bg-[#1a1b26]" />;
+    return <div className="h-screen w-full bg-[#1a1b26]" />;
   }
 
   // 2. JIKA SUDAH LOGIN TAPI BELUM PILIH KARAKTER (gender kosong)
@@ -207,14 +210,14 @@ export default function Home() {
       case "Toko & Loot":
         return (
           <div className="animate-in fade-in slide-in-from-left-4 duration-500 h-full">
-            <ShopBoard />
+            <ShopBoard searchQuery={searchQuery} />
           </div>
         );
 
       case "Keuangan":
         return (
           <div className="animate-in fade-in slide-in-from-right-4 duration-500">
-            <Finance initialOpenType={dashboardFinanceAction} />
+            <Finance initialOpenType={dashboardFinanceAction} searchQuery={searchQuery} />
           </div>
         );
 
@@ -247,36 +250,11 @@ export default function Home() {
     }
   };
 
-  return (
-    <div className="min-h-screen bg-[#1a1b26] text-slate-200 font-mono flex overflow-hidden selection:bg-purple-500 selection:text-white relative">
-      <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
-
-        .font-pixel {
-          font-family: 'Press Start 2P', monospace;
-          text-transform: uppercase;
-        }
-
-        ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-track { background: #0f172a; }
-        ::-webkit-scrollbar-thumb { background: #334155; border-radius: 10px; }
-
-        @keyframes shutterTop { 0% { height: 0; } 40%, 60% { height: 50%; } 100% { height: 0; } }
-        @keyframes shutterBottom { 0% { height: 0; } 40%, 60% { height: 50%; } 100% { height: 0; } }
-        @keyframes textFade { 0%, 30% { opacity: 0; transform: scale(0.9); } 40%, 60% { opacity: 1; transform: scale(1); } 70%, 100% { opacity: 0; transform: scale(1.1); } }
-
-        .animate-shutter-top { animation: shutterTop 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards; }
-        .animate-shutter-bottom { animation: shutterBottom 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards; }
-        .animate-text-fade { animation: textFade 0.8s linear forwards; }
-      `}</style>
-
-      <RetroTransition isActive={isTransitioning} />
-
-      <Navbar activeMenu={activeMenu} setActiveMenu={handleMenuChange} />
-
-      <div className="flex-1 flex flex-col h-screen relative z-10">
-        <header className="min-h-20 bg-[#1a1b26] border-b-4 border-slate-700 flex flex-col lg:flex-row justify-between items-center gap-4 p-4 lg:px-8 z-50 shrink-0">
-          <div className="flex items-center gap-4 w-full lg:w-2/3 max-w-2xl relative">
+  const renderHeaderContent = () => {
+    switch (activeMenu) {
+      case "Misi":
+        return (
+          <>
             <div className="relative flex-1">
               <Search size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500" />
               <input
@@ -302,6 +280,69 @@ export default function Home() {
                 ))}
               </select>
             </div>
+          </>
+        );
+      case "Toko & Loot":
+      case "Keuangan":
+        return (
+          <div className="relative flex-1">
+            <Search size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500" />
+            <input
+              type="text"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder={`Cari di ${activeMenu}...`}
+              className="w-full bg-[#24283b] border-2 border-slate-600 rounded-none py-2.5 pl-12 pr-4 text-sm outline-none focus:border-purple-500 transition-all placeholder:text-slate-500 text-slate-200 shadow-[4px_4px_0_#000]"
+            />
+          </div>
+        );
+      case "Dashboard": return <HeaderQuote text="Setiap hari adalah kesempatan untuk grinding." />;
+      case "Kalender": return <HeaderQuote text="Pantau tenggat waktu dan jadwalkan misimu." />;
+      case "Focus Arena": return <HeaderQuote text="Kalahkan monster kemalasan dengan fokus penuh." />;
+      case "Statistik": return <HeaderQuote text="Data tidak pernah berbohong." />;
+      default: return null;
+    }
+  };
+
+  // Desain Quote Header Baru
+  const HeaderQuote = ({ text }: { text: string }) => (
+    <div className="hidden md:flex items-center gap-3 px-4 py-2.5 bg-[#24283b] border-2 border-slate-600 shadow-[4px_4px_0_#000] w-full max-w-xl">
+      <div className="w-2 h-2 bg-purple-500 rounded-none animate-pulse shrink-0"></div>
+      <p className="text-xs text-slate-300 font-mono italic tracking-wide">&quot;{text}&quot;</p>
+    </div>
+  );
+
+  return (
+    <div className="h-screen w-full bg-[#1a1b26] text-slate-200 font-mono flex overflow-hidden selection:bg-purple-500 selection:text-white relative">
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
+        .font-pixel {
+          font-family: 'Press Start 2P', monospace;
+          text-transform: uppercase;
+        }
+
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #0f172a; }
+        ::-webkit-scrollbar-thumb { background: #334155; border-radius: 10px; }
+
+        @keyframes shutterTop { 0% { height: 0; } 40%, 60% { height: 50%; } 100% { height: 0; } }
+        @keyframes shutterBottom { 0% { height: 0; } 40%, 60% { height: 50%; } 100% { height: 0; } }
+        @keyframes textFade { 0%, 30% { opacity: 0; transform: scale(0.9); } 40%, 60% { opacity: 1; transform: scale(1); } 70%, 100% { opacity: 0; transform: scale(1.1); } }
+
+        .animate-shutter-top { animation: shutterTop 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards; }
+        .animate-shutter-bottom { animation: shutterBottom 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards; }
+        .animate-text-fade { animation: textFade 0.8s linear forwards; }
+      `}</style>
+
+      <RetroTransition isActive={isTransitioning} />
+
+      <Navbar activeMenu={activeMenu} setActiveMenu={handleMenuChange} />
+
+      <div className="flex-1 flex flex-col h-full relative z-10 min-w-0">
+        <header className="min-h-20 bg-[#1a1b26] border-b-4 border-slate-700 flex flex-col lg:flex-row justify-between items-center gap-4 p-4 lg:px-8 z-50 shrink-0">
+          <div className="flex items-center gap-4 w-full lg:w-2/3 max-w-2xl relative">
+            {renderHeaderContent()}
           </div>
 
           <div className="flex items-center justify-end gap-4 w-full lg:w-auto">
@@ -352,66 +393,76 @@ export default function Home() {
                     <div className="mt-1">
                       <div className="flex justify-between text-[10px] font-bold mb-1.5 text-slate-300 uppercase">
                         <span>Onboarding</span>
-                        <span className="text-amber-400">{onboardingProgress}%</span>
+                        <span>{onboardingProgress}%</span>
                       </div>
-                      <div className="h-3 bg-slate-800 border border-slate-600">
-                        <div
-                          className="h-full bg-amber-400 transition-all shadow-[0_0_8px_#fbbf24]"
-                          style={{ width: `${onboardingProgress}%` }}
-                        ></div>
+                      <div className="h-2 bg-slate-900 border border-slate-700 rounded-none overflow-hidden">
+                        <div className="h-full bg-cyan-500 transition-all duration-500" style={{ width: `${onboardingProgress}%` }}></div>
                       </div>
                     </div>
 
                     <div className="flex flex-col gap-3">
-                      <div className={`flex items-center gap-3 text-xs ${isTaskCreated ? 'text-slate-500' : 'text-slate-200'}`}>
-                        {isTaskCreated ? <Check size={14} className="text-emerald-500" /> : <Plus size={14} />}
-                        <span className="uppercase tracking-tight">Buat misi pertamamu</span>
-                      </div>
+                      {!isTaskCreated ? (
+                        <div className="flex items-start gap-3 p-3 bg-pink-500/10 border-l-2 border-pink-500">
+                          <CheckSquare size={14} className="text-pink-500 shrink-0 mt-0.5" />
+                          <div className="flex flex-col">
+                            <span className="text-xs font-bold text-pink-400">Buat Misi Pertama</span>
+                            <span className="text-[10px] text-slate-400">Gunakan tombol + Misi Baru</span>
+                          </div>
+                        </div>
+                      ) : (
+                        <div className="flex items-start gap-3 p-3 bg-emerald-500/10 border-l-2 border-emerald-500 opacity-60">
+                          <Check size={14} className="text-emerald-500 shrink-0 mt-0.5" />
+                          <div className="flex flex-col">
+                            <span className="text-xs font-bold text-emerald-400 line-through">Buat Misi Pertama</span>
+                            <span className="text-[10px] text-slate-500">Selesai</span>
+                          </div>
+                        </div>
+                      )}
 
-                      <div className={`flex items-center gap-3 text-xs ${isTaskCompleted ? 'text-slate-500' : 'text-slate-200'}`}>
-                        {isTaskCompleted ? <Check size={14} className="text-emerald-500" /> : <CheckSquare size={14} />}
-                        <span className="uppercase tracking-tight">Selesaikan sebuah misi</span>
-                      </div>
+                      {!isTaskCompleted ? (
+                        <div className="flex items-start gap-3 p-3 bg-pink-500/10 border-l-2 border-pink-500">
+                          <CheckSquare size={14} className="text-pink-500 shrink-0 mt-0.5" />
+                          <div className="flex flex-col">
+                            <span className="text-xs font-bold text-pink-400">Selesaikan Misi</span>
+                            <span className="text-[10px] text-slate-400">Centang misi pertamamu</span>
+                          </div>
+                        </div>
+                      ) : (
+                        <div className="flex items-start gap-3 p-3 bg-emerald-500/10 border-l-2 border-emerald-500 opacity-60">
+                          <Check size={14} className="text-emerald-500 shrink-0 mt-0.5" />
+                          <div className="flex flex-col">
+                            <span className="text-xs font-bold text-emerald-400 line-through">Selesaikan Misi</span>
+                            <span className="text-[10px] text-slate-500">Selesai</span>
+                          </div>
+                        </div>
+                      )}
                     </div>
                   </div>
                 </div>
               )}
             </div>
-
-            <button className="text-slate-400 hover:text-white">
-              <Settings size={20} />
-            </button>
           </div>
         </header>
 
-        <div className="flex-1 flex overflow-hidden">
-          <main className="flex-1 overflow-y-auto p-4 lg:p-8 relative flex flex-col scroll-smooth pb-24 md:pb-8">
-            {renderContent()}
-          </main>
-
-          <StatusPanel isOpen={isStatusPanelOpen} onClose={() => setIsStatusPanelOpen(false)} />
-
-          {isStatusPanelOpen && (
-            <div
-              className="fixed inset-0 bg-black/50 z-40 xl:hidden"
-              onClick={() => setIsStatusPanelOpen(false)}
-            ></div>
-          )}
-        </div>
+        <main className="flex-1 overflow-y-auto overflow-x-hidden bg-[#1a1b26] p-4 lg:p-8 pb-24 md:pb-8 custom-scrollbar">
+          {renderContent()}
+        </main>
       </div>
 
-      <TaskFormModal
-        isOpen={isFormOpen}
-        onClose={() => setIsFormOpen(false)}
+      <StatusPanel isOpen={isStatusPanelOpen} onClose={() => setIsStatusPanelOpen(false)} />
+      
+      <TaskFormModal 
+        isOpen={isFormOpen} 
+        onClose={() => setIsFormOpen(false)} 
         initialType={formType}
         isFixed={isFixed}
       />
-
+      
       <TaskDetailModal
         task={selectedTask}
         onClose={() => setSelectedTask(null)}
       />
-      
+
       <GlobalAlerts />
     </div>
   );

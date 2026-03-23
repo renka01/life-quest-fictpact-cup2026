@@ -75,9 +75,6 @@ export default function DashboardBoard({
   const expPercent =
     stats.maxExp > 0 ? Math.min(100, (stats.exp / stats.maxExp) * 100) : 0;
 
-  const savingRatio =
-    netWorth > 0 ? Math.round((totalTabungan / netWorth) * 100) : 0;
-
   const greeting = focusTasks.length > 0
       ? `Kamu punya ${focusTasks.length} fokus utama hari ini.`
       : "Hari ini cukup tenang. Saatnya susun langkah berikutnya.";
@@ -193,126 +190,120 @@ export default function DashboardBoard({
       <div className="grid grid-cols-1 xl:grid-cols-4 gap-6">
         <div className="bg-[#24283b] border-4 border-cyan-500 shadow-[6px_6px_0_#000] p-5 flex flex-col gap-4">
           <div className="flex items-center gap-2 text-cyan-400">
-            <Zap size={16} />
+            <Zap size={18} />
             <h2 className="text-sm font-bold uppercase">Status Karakter</h2>
           </div>
 
-          <div className="grid grid-cols-2 gap-4 text-sm">
-            <div>
-              <p className="text-slate-500 text-xs uppercase">Level</p>
-              <p className="text-white font-bold text-2xl">{stats.level}</p>
+          <div className="grid grid-cols-3 gap-4">
+            <div className="min-w-0">
+              <p className="text-slate-500 text-[10px] uppercase mb-1 truncate">Level</p>
+              <p className="text-white font-bold text-xl truncate">{stats.level}</p>
             </div>
-            <div>
-              <p className="text-slate-500 text-xs uppercase">Streak</p>
-              <p className="text-orange-400 font-bold text-2xl">{stats.streak}</p>
+            <div className="min-w-0">
+              <p className="text-slate-500 text-[10px] uppercase mb-1 truncate">Streak</p>
+              <p className="text-orange-400 font-bold text-xl truncate">{stats.streak}</p>
             </div>
-            <div>
-              <p className="text-slate-500 text-xs uppercase">Gold</p>
-              <p className="text-yellow-400 font-bold text-xl">{stats.gold}</p>
-            </div>
-          </div>
-
-          <div>
-            <div className="flex justify-between text-[10px] text-slate-400 mb-1">
-              <span>EXP</span>
-              <span>{stats.exp}/{stats.maxExp}</span>
-            </div>
-            <div className="h-3 bg-slate-900 border border-slate-700 overflow-hidden">
-              <div className="h-full bg-yellow-400 transition-all" style={{ width: `${expPercent}%` }} />
+            <div className="min-w-0">
+              <p className="text-slate-500 text-[10px] uppercase mb-1 truncate">Gold</p>
+              <p className="text-yellow-400 font-bold text-xl truncate">{stats.gold}</p>
             </div>
           </div>
 
+          <div className="mt-auto pt-4 border-t-2 border-slate-700">
+            <div className="flex justify-between text-[10px] text-slate-400 font-bold mb-1.5 uppercase">
+              <span>EXP Progress</span>
+              <span className="text-cyan-400">{stats.exp} / {stats.maxExp}</span>
+            </div>
+            <div className="h-2 bg-slate-900 border border-slate-700 overflow-hidden">
+              <div className="h-full bg-cyan-400 transition-all duration-500" style={{ width: `${expPercent}%` }} />
+            </div>
+          </div>
         </div>
 
         <div className="bg-[#24283b] border-4 border-emerald-500 shadow-[6px_6px_0_#000] p-5 flex flex-col gap-4">
           <div className="flex items-center gap-2 text-emerald-400">
-            <Wallet size={16} />
+            <Wallet size={18} />
             <h2 className="text-sm font-bold uppercase">Balance Overview</h2>
           </div>
 
-          <div className="space-y-4">
-            <div>
-              <p className="text-slate-500 text-xs uppercase">Uang Tunai / Rekening</p>
-              <p className="text-emerald-400 font-bold text-2xl">
+          <div className="space-y-4 flex-1">
+            <div className="min-w-0">
+              <p className="text-slate-500 text-[10px] uppercase mb-1 truncate">Tunai / Rekening</p>
+              <p className="text-white font-bold text-lg truncate" title={`Rp ${totalRekening.toLocaleString()}`}>
                 Rp {totalRekening.toLocaleString()}
               </p>
             </div>
-
-            <div>
-              <p className="text-slate-500 text-xs uppercase">Tabungan & Aset</p>
-              <p className="text-cyan-400 font-bold text-2xl">
+            <div className="min-w-0">
+              <p className="text-slate-500 text-[10px] uppercase mb-1 truncate">Aset / Tabungan</p>
+              <p className="text-white font-bold text-lg truncate" title={`Rp ${totalTabungan.toLocaleString()}`}>
                 Rp {totalTabungan.toLocaleString()}
               </p>
             </div>
+          </div>
 
-            <div className="pt-2 border-t-2 border-slate-700">
-              <p className="text-slate-500 text-xs uppercase">Total Net Worth</p>
-              <p className="text-white font-bold text-3xl">
-                Rp {netWorth.toLocaleString()}
-              </p>
-            </div>
+          <div className="pt-4 border-t-2 border-slate-700 min-w-0 mt-auto">
+            <p className="text-slate-500 text-[10px] uppercase mb-1 truncate">Total Net Worth</p>
+            <p className="text-emerald-400 font-bold text-2xl truncate" title={`Rp ${netWorth.toLocaleString()}`}>
+              Rp {netWorth.toLocaleString()}
+            </p>
           </div>
         </div>
 
         <div className="bg-[#24283b] border-4 border-yellow-500 shadow-[6px_6px_0_#000] p-5 flex flex-col gap-4">
           <div className="flex items-center gap-2 text-yellow-400">
-            <Coins size={16} />
-            <h2 className="text-sm font-bold uppercase">Ringkasan Pemasukan</h2>
+            <Coins size={18} />
+            <h2 className="text-sm font-bold uppercase">Pemasukan</h2>
           </div>
 
-          <div>
-            <p className="text-slate-500 text-xs uppercase">Total Pemasukan</p>
-            <p className="text-yellow-400 font-bold text-3xl">
+          <div className="min-w-0 mb-2">
+            <p className="text-slate-500 text-[10px] uppercase mb-1 truncate">Total Pemasukan</p>
+            <p className="text-yellow-400 font-bold text-2xl truncate" title={`Rp ${totalIncome.toLocaleString()}`}>
               Rp {totalIncome.toLocaleString()}
             </p>
           </div>
 
-          <div className="grid grid-cols-2 gap-3">
-            <div className="bg-[#1a1b26] border-2 border-slate-700 p-3">
-              <p className="text-[10px] uppercase text-slate-500 mb-1">Transaksi Masuk</p>
-              <p className="text-white font-bold text-xl">{incomeTransactions.length}</p>
+          <div className="grid grid-cols-2 gap-4 mt-auto pt-4 border-t-2 border-slate-700">
+            <div className="min-w-0">
+              <p className="text-slate-500 text-[10px] uppercase mb-1 truncate">Transaksi</p>
+              <p className="text-white font-bold text-lg truncate">{incomeTransactions.length}x</p>
             </div>
-
-            <div className="bg-[#1a1b26] border-2 border-slate-700 p-3">
-              <p className="text-[10px] uppercase text-slate-500 mb-1">Rata-rata</p>
-              <p className="text-white font-bold text-xl">Rp {avgIncome.toLocaleString()}</p>
+            <div className="min-w-0">
+              <p className="text-slate-500 text-[10px] uppercase mb-1 truncate">Rata-rata</p>
+              <p className="text-white font-bold text-lg truncate" title={`Rp ${avgIncome.toLocaleString()}`}>
+                Rp {avgIncome.toLocaleString()}
+              </p>
             </div>
-          </div>
-
-          <div className="bg-[#1a1b26] border-2 border-slate-700 p-3">
-            <p className="text-[10px] uppercase text-slate-500 mb-1">Saving Ratio</p>
-            <p className="text-cyan-400 font-bold text-xl">{savingRatio}%</p>
           </div>
         </div>
 
         <div className="bg-[#24283b] border-4 border-pink-500 shadow-[6px_6px_0_#000] p-5 flex flex-col gap-4">
           <div className="flex items-center gap-2 text-pink-400">
-            <ScrollText size={16} />
+            <ScrollText size={18} />
             <h2 className="text-sm font-bold uppercase">Progress Misi</h2>
           </div>
 
-          <div className="grid grid-cols-3 gap-4 text-center">
-            <div>
-              <p className="text-slate-500 text-xs uppercase">Total</p>
-              <p className="text-white font-bold text-2xl">{totalTasks}</p>
+          <div className="grid grid-cols-3 gap-4">
+            <div className="min-w-0">
+              <p className="text-slate-500 text-[10px] uppercase mb-1 truncate">Total</p>
+              <p className="text-white font-bold text-xl truncate">{totalTasks}</p>
             </div>
-            <div>
-              <p className="text-slate-500 text-xs uppercase">Selesai</p>
-              <p className="text-emerald-400 font-bold text-2xl">{completedTasks}</p>
+            <div className="min-w-0">
+              <p className="text-slate-500 text-[10px] uppercase mb-1 truncate">Selesai</p>
+              <p className="text-emerald-400 font-bold text-xl truncate">{completedTasks}</p>
             </div>
-            <div>
-              <p className="text-slate-500 text-xs uppercase">Pending</p>
-              <p className="text-yellow-400 font-bold text-2xl">{pendingTasks}</p>
+            <div className="min-w-0">
+              <p className="text-slate-500 text-[10px] uppercase mb-1 truncate">Pending</p>
+              <p className="text-pink-400 font-bold text-xl truncate">{pendingTasks}</p>
             </div>
           </div>
 
-          <div>
-            <div className="flex justify-between text-[10px] text-slate-400 mb-1">
+          <div className="mt-auto pt-4 border-t-2 border-slate-700">
+            <div className="flex justify-between text-[10px] text-slate-400 font-bold mb-1.5 uppercase">
               <span>Completion Rate</span>
-              <span>{progress}%</span>
+              <span className="text-pink-400">{progress}%</span>
             </div>
-            <div className="h-3 bg-slate-900 border border-slate-700 overflow-hidden">
-              <div className="h-full bg-pink-500 transition-all" style={{ width: `${progress}%` }} />
+            <div className="h-2 bg-slate-900 border border-slate-700 overflow-hidden">
+              <div className="h-full bg-pink-500 transition-all duration-500" style={{ width: `${progress}%` }} />
             </div>
           </div>
         </div>
