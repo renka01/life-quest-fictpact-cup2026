@@ -25,9 +25,9 @@ export default function StatisticsBoard() {
   const totalTasks = tasks.length;
   const completedTasks = tasks.filter((t) => t.done).length;
   const pendingTasks = tasks.filter((t) => !t.done).length;
-  const habitTasks = tasks.filter((t) => t.type === "Siklus Misi").length;
-  const dailyTasks = tasks.filter((t) => t.type === "Operasi Harian").length;
-  const todoTasks = tasks.filter((t) => t.type === "Target Utama").length;
+  const habitTasks = tasks.filter((t) => t.type === "habit").length;
+  const dailyTasks = tasks.filter((t) => t.type === "daily").length;
+  const todoTasks = tasks.filter((t) => t.type === "todo").length;
 
   const completionRate =
     totalTasks > 0 ? Math.round((completedTasks / totalTasks) * 100) : 0;

@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 // Import komponen yang baru saja kita buat
-import GlobalAlert from "@/components/GlobalAlert"; 
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -33,7 +32,6 @@ export default function RootLayout({
 
         {/* --- GLOBAL COMPONENTS LAYER --- */}
         {/* Komponen ini akan stand-by menunggu trigger dari useStore */}
-        <GlobalAlert />
       </body>
     </html>
   );

@@ -58,11 +58,11 @@ export default function Navbar({ activeMenu, setActiveMenu }: { activeMenu: stri
               onClick={() => setActiveMenu(item.name)}
               className={`flex flex-col md:flex-row items-center justify-center md:justify-start gap-1 md:gap-4 px-1 py-1 md:px-4 md:py-3 border-0 md:border-2 transition-all group rounded-none flex-1 md:flex-none w-full ${
                 isActive 
-                  ? 'text-cyan-400 md:bg-[#24283b] md:border-cyan-500 md:shadow-[4px_4px_0_#000] md:translate-x-[-2px] md:translate-y-[-2px]' 
+                  ? 'text-amber-400 md:bg-[#24283b] md:border-amber-500 md:shadow-[4px_4px_0_#000] md:translate-x-[-2px] md:translate-y-[-2px]' 
                   : 'text-slate-500 hover:text-slate-300 md:border-transparent md:hover:bg-slate-800 md:hover:border-slate-600'
               }`}
             >
-              <item.icon size={20} className={isActive ? 'text-cyan-400 drop-shadow-[0_0_5px_rgba(34,211,238,0.8)]' : ''} />
+              <item.icon size={20} className={isActive ? 'text-amber-400 drop-shadow-[0_0_5px_rgba(251,191,36,0.8)]' : ''} />
               <span className="text-[9px] md:hidden lg:block md:text-sm md:font-bold tracking-wider">{item.name}</span>
               {isActive && <ChevronRight size={16} className="hidden lg:block ml-auto opacity-50" />}
             </button>
@@ -85,7 +85,7 @@ export default function Navbar({ activeMenu, setActiveMenu }: { activeMenu: stri
             {userProfile?.accountName || "Guest User"}
           </span>
           {/* Level Dinamis */}
-          <span className="text-[10px] text-cyan-400">
+          <span className="text-[10px] text-amber-400">
             Lv. {stats.level} Adventurer
           </span>
         </div>

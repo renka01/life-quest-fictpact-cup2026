@@ -90,7 +90,15 @@ export interface UserProfile {
   avatarId: string | null;
 }
 
-export type EquipSlot = 'weapon' | 'armor' | 'helmet' | 'cloak' | 'accessory' | 'material';
+export interface DailyProgress {
+  loginClaimed: boolean;
+  tasksCompleted: number;
+  taskClaimed: boolean;
+  bossesDefeated: number;
+  bossClaimed: boolean;
+}
+
+export type EquipSlot = 'weapon' | 'armor' | 'helmet' | 'cloak' | 'accessory' | 'potion';
 
 export interface InventoryItem {
   id: number;
@@ -115,6 +123,10 @@ interface LifeQuestStore {
   // <-- TAMBAHAN: State & Action untuk Profile
   userProfile: UserProfile;
   setUserProfile: (profile: Partial<UserProfile>) => void;
+
+  dailyProgress: DailyProgress;
+  claimDailyReward: (type: 'login' | 'task' | 'boss') => void;
+  recordBossDefeated: () => void;
 
   inventory: InventoryItem[];
   equippedItems: EquippedItems;
@@ -157,6 +169,10 @@ interface LifeQuestStore {
   
   _applyReward: (baseExp: number, baseGold: number, difficulty: number) => void;
   _applySimpleReward: (expGain: number, goldGain?: number) => void;
+
+  takeDamage: (amount: number) => void;
+  healPlayer: (amount: number) => void;
+  consumeItem: (itemId: number) => void;
 }
 
 // ==========================================
@@ -189,6 +205,13 @@ userProfile: {
   gender: null,
   avatarId: null
 },
+      dailyProgress: {
+        loginClaimed: false,
+        tasksCompleted: 0,
+        taskClaimed: false,
+        bossesDefeated: 0,
+        bossClaimed: false,
+      },
       inventory: [],
       equippedItems: {},
       tasks: [],
@@ -360,7 +383,7 @@ setUserProfile: (profile) => set((state) => ({
               if (newBalance >= acc.target && acc.balance < acc.target) {
                 setTimeout(() => {
                   showAlert(
-                    "TARGET TERCAPAI! 🏆",
+                    "TARGET TERCAPAI!",
                     `Misi menabung di ${acc.name} selesai!\nTarget Rp ${acc.target?.toLocaleString()} tercapai!`,
                     "success"
                   );
@@ -482,7 +505,7 @@ setUserProfile: (profile) => set((state) => ({
       },
 
       checkDailyStreak: () => {
-        const { stats } = get();
+        const { stats, dailyProgress } = get();
         const today = new Date().toDateString();
         const lastLogin = stats.lastLoginDate;
 
@@ -507,11 +530,40 @@ setUserProfile: (profile) => set((state) => ({
             streak: newStreak,
             lastLoginDate: today,
             exp: state.stats.exp + expBonus,
-            gold: state.stats.gold + goldBonus
+            gold: state.stats.gold + goldBonus,
+            hp: state.stats.maxHp // HP dipulihkan sepenuhnya setiap hari berganti
+          },
+          dailyProgress: {
+            loginClaimed: false,
+            tasksCompleted: 0,
+            taskClaimed: false,
+            bossesDefeated: 0,
+            bossClaimed: false,
           }
         }));
 
       },
+
+      claimDailyReward: (type) => {
+        const { dailyProgress, _applySimpleReward } = get();
+        const dp = dailyProgress || { loginClaimed: false, tasksCompleted: 0, taskClaimed: false, bossesDefeated: 0, bossClaimed: false };
+        
+        if (type === 'login' && !dp.loginClaimed) {
+          set({ dailyProgress: { ...dp, loginClaimed: true } });
+          _applySimpleReward(15, 10);
+        } else if (type === 'task' && dp.tasksCompleted >= 3 && !dp.taskClaimed) {
+          set({ dailyProgress: { ...dp, taskClaimed: true } });
+          _applySimpleReward(30, 20);
+        } else if (type === 'boss' && dp.bossesDefeated >= 1 && !dp.bossClaimed) {
+          set({ dailyProgress: { ...dp, bossClaimed: true } });
+          _applySimpleReward(50, 30);
+        }
+      },
+
+      recordBossDefeated: () => set((state) => {
+        const dp = state.dailyProgress || { loginClaimed: false, tasksCompleted: 0, taskClaimed: false, bossesDefeated: 0, bossClaimed: false };
+        return { dailyProgress: { ...dp, bossesDefeated: dp.bossesDefeated + 1 } };
+      }),
 
       // --- LOGIKA GAMIFIKASI ---
       _applyReward: (baseExp, baseGold, difficulty) => {
@@ -578,9 +630,14 @@ setUserProfile: (profile) => set((state) => ({
       },
 
       toggleTaskDone: (task) => {
-        const { tasks, _applyReward } = get();
+        const { tasks, _applyReward, dailyProgress } = get();
         const isDone = !task.done;
-        set({ tasks: tasks.map(t => t.id === task.id ? { ...t, done: isDone } : t) });
+        const dp = dailyProgress || { loginClaimed: false, tasksCompleted: 0, taskClaimed: false, bossesDefeated: 0, bossClaimed: false };
+
+        set({ 
+          tasks: tasks.map(t => t.id === task.id ? { ...t, done: isDone } : t),
+          dailyProgress: { ...dp, tasksCompleted: isDone ? dp.tasksCompleted + 1 : Math.max(0, dp.tasksCompleted - 1) }
+        });
         if (isDone) _applyReward(20, 10, task.difficulty);
       },
 
@@ -591,9 +648,40 @@ setUserProfile: (profile) => set((state) => ({
       },
 
       handleHabitMinus: (task) => {
-        const { tasks } = get();
+        const { tasks, stats, takeDamage, showAlert } = get();
+        
+        // Hitung damage berdasarkan tingkat kesulitan (minimal 1 damage)
+        const damage = Math.max(1, Math.round(5 * getDifficultyMultiplier(task.difficulty)));
+        takeDamage(damage);
+        
+        // Munculkan peringatan jika karakter kehabisan darah
+        if (stats.hp > 0 && stats.hp - damage <= 0) {
+          showAlert("NYAWA HABIS", "Karaktermu pingsan karena terlalu banyak kebiasaan buruk! Segera gunakan potion dari Toko.", "danger");
+        }
+
         set({ tasks: tasks.map(t => t.id === task.id ? { ...t, habitCount: (t.habitCount || 0) - 1 } : t) });
-      }
+      },
+
+      takeDamage: (amount) => set((state) => ({
+        stats: {
+          ...state.stats,
+          hp: Math.max(0, state.stats.hp - amount)
+        }
+      })),
+
+      healPlayer: (amount) => set((state) => ({
+        stats: {
+          ...state.stats,
+          hp: Math.min(state.stats.maxHp, state.stats.hp + amount)
+        }
+      })),
+
+      consumeItem: (itemId) => set((state) => {
+        const existing = state.inventory.find(i => i.id === itemId);
+        if (!existing) return state;
+        const newInv = state.inventory.map(i => i.id === itemId ? { ...i, quantity: i.quantity - 1 } : i).filter(i => i.quantity > 0);
+        return { inventory: newInv };
+      })
 
     }),
     {

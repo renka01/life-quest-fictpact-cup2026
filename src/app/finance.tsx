@@ -723,7 +723,7 @@ function RecurringModal({
                 type="date"
                 value={date}
                 onChange={(e) => setDate(e.target.value)}
-                className="bg-[#24283b] border-2 border-slate-600 rounded-none p-3 text-sm text-white outline-none focus:border-pink-500 [color-scheme:dark]"
+                className="bg-[#24283b] border-2 border-slate-600 rounded-none p-3 text-sm text-white outline-none focus:border-pink-500 [color-scheme:dark] cursor-pointer"
               />
             </div>
 
@@ -776,7 +776,7 @@ function AddAccountModal({
   const [balance, setBalance] = useState(0);
   const [target, setTarget] = useState(0);
   const [isGold, setIsGold] = useState(false);
-  const [goldWeight, setGoldWeight] = useState(0);
+  const [goldWeight, setGoldWeight] = useState<number | string>("");
   const [currency, setCurrency] = useState<"IDR" | "USD">("IDR");
   const RATE = 17000;
 
@@ -784,7 +784,7 @@ function AddAccountModal({
     if (isOpen) {
       setName("");
       setBalance(0);
-      setGoldWeight(0);
+      setGoldWeight("");
       setTarget(0);
       setIsGold(false);
       setCurrency("IDR");
@@ -807,7 +807,8 @@ function AddAccountModal({
       ) {
         finalName = `${finalName} (Emas)`;
       }
-      finalBalance = goldWeight * 2800000;
+      const gw = Number(goldWeight) || 0;
+      finalBalance = gw * 2800000;
     }
 
     addAccount({
@@ -816,7 +817,7 @@ function AddAccountModal({
       balance: finalBalance,
       type,
       target: type === "tabungan" ? finalTarget : undefined,
-      weight: type === "tabungan" && isGold ? goldWeight : 0,
+      weight: type === "tabungan" && isGold ? (Number(goldWeight) || 0) : 0,
     });
 
     if (type === "rekening") {
@@ -972,12 +973,12 @@ function AddAccountModal({
                 <input
                   type="number"
                   value={goldWeight}
-                  onChange={(e) => setGoldWeight(Number(e.target.value))}
+                  onChange={(e) => setGoldWeight(e.target.value === '' ? '' : Number(e.target.value))}
                   className="w-full bg-[#24283b] border-2 border-slate-600 rounded-none p-4 text-base text-white outline-none focus:border-yellow-500 transition-all"
                   placeholder="0.00"
                 />
                 <p className="text-[10px] text-slate-500 mt-1">
-                  ≈ Rp {(goldWeight * 2800000).toLocaleString()}
+                  ≈ Rp {((Number(goldWeight) || 0) * 2800000).toLocaleString()}
                 </p>
               </div>
             ) : (

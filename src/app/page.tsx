@@ -8,6 +8,7 @@ import DashboardBoard from "@/components/DashboardBoard";
 import StatisticsBoard from "@/components/StatisticsBoard";
 import ShopBoard from "@/components/ShopBoard";
 import CharacterSelection from "@/components/CharacterSelection";
+import FocusArena from "@/components/FocusArena";
 import { useStore, TaskType } from "@/store/useStore";
 import {
   TaskFormModal,
@@ -26,7 +27,9 @@ import {
   X,
   Check,
   CheckSquare,
-  Filter
+  Filter,
+  Trophy,
+  LogOut
 } from "lucide-react";
 import Finance from "./finance";
 import CalendarBoard from "@/components/CalendarBoard";
@@ -37,7 +40,7 @@ const RetroTransition = ({ isActive }: { isActive: boolean }) => {
 
   return (
     <div className="absolute inset-0 z-[9999] pointer-events-none flex flex-col">
-      <div className="bg-[#1a1b26] w-full animate-shutter-top border-b-4 border-cyan-500 shadow-[0_0_50px_rgba(6,182,212,0.5)] z-20"></div>
+      <div className="bg-[#1a1b26] w-full animate-shutter-top border-b-4 border-amber-500 shadow-[0_0_50px_rgba(251,191,36,0.5)] z-20"></div>
 
       <div className="absolute inset-0 flex items-center justify-center z-30">
         <span className="font-pixel text-2xl text-white tracking-[0.5em] animate-text-fade drop-shadow-[0_0_10px_rgba(255,255,255,0.8)]">
@@ -45,13 +48,13 @@ const RetroTransition = ({ isActive }: { isActive: boolean }) => {
         </span>
       </div>
 
-      <div className="bg-[#1a1b26] w-full animate-shutter-bottom border-t-4 border-pink-500 shadow-[0_0_50px_rgba(236,72,153,0.5)] mt-auto z-20"></div>
+      <div className="bg-[#1a1b26] w-full animate-shutter-bottom border-t-4 border-amber-500 shadow-[0_0_50px_rgba(251,191,36,0.5)] mt-auto z-20"></div>
     </div>
   );
 };
 
 export default function Home() {
-  const { tasks, stats, checkDailyStreak, coinPopup, userProfile } = useStore();
+  const { tasks, stats, checkDailyStreak, coinPopup, userProfile, dailyProgress, claimDailyReward } = useStore();
   const router = useRouter(); 
   const extendedTasks = tasks as ExtendedTask[];
 
@@ -67,6 +70,7 @@ export default function Home() {
   const [isFixed, setIsFixed] = useState(false);
   const [selectedTask, setSelectedTask] = useState<ExtendedTask | null>(null);
   const [isNotifOpen, setIsNotifOpen] = useState(false);
+  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [isStatusPanelOpen, setIsStatusPanelOpen] = useState(false);
   const [activeMenu, setActiveMenu] = useState("Dashboard");
   const [showCoinAnim, setShowCoinAnim] = useState(false);
@@ -77,6 +81,9 @@ export default function Home() {
   const isTaskCreated = tasks.length > 0;
   const isTaskCompleted = tasks.some(t => t.done === true);
   const onboardingProgress = (((isTaskCreated ? 1 : 0) + (isTaskCompleted ? 1 : 0)) / 2) * 100;
+
+  const dp = dailyProgress || { loginClaimed: false, tasksCompleted: 0, taskClaimed: false, bossesDefeated: 0, bossClaimed: false };
+  const hasClaimableQuests = (!dp.loginClaimed) || (dp.tasksCompleted >= 3 && !dp.taskClaimed) || (dp.bossesDefeated >= 1 && !dp.bossClaimed);
 
   // ========================================================
   // <-- PERBAIKAN LOGIC GATES: URUTAN WAJIB -->
@@ -126,6 +133,16 @@ export default function Home() {
     setActiveMenu("Keuangan");
   };
 
+  const handleLogout = () => {
+    useStore.getState().setUserProfile({ accountName: "", nickname: "", gender: null, avatarId: null });
+    router.push('/login');
+  };
+
+  const handleClaimReward = (type: 'login' | 'task' | 'boss') => {
+    claimDailyReward(type);
+    new Audio('/sounds/coin.mp3').play().catch(() => {});
+  };
+
   const handleMenuChange = (menuName: string) => {
     if (menuName === activeMenu) return;
 
@@ -148,7 +165,7 @@ export default function Home() {
   if (!isMounted) {
     return (
       <div className="h-screen w-full bg-[#1a1b26] flex items-center justify-center">
-        <span className="font-pixel text-xl text-cyan-400 tracking-[0.2em] animate-pulse">
+        <span className="font-pixel text-xl text-amber-400 tracking-[0.2em] animate-pulse">
           SYSTEM BOOTING...
         </span>
       </div>
@@ -192,7 +209,7 @@ export default function Home() {
 
               <button
                 onClick={() => openAddModal(null, false)}
-                className="bg-[#24283b] border-2 border-cyan-500 text-cyan-400 hover:bg-cyan-500 hover:text-slate-900 px-6 py-2.5 rounded-none flex items-center gap-2 text-xs font-bold transition-all shadow-[4px_4px_0_#000] active:translate-y-[2px] active:shadow-[2px_2px_0_#000]"
+                className="bg-[#24283b] border-2 border-amber-500 text-amber-400 hover:bg-amber-500 hover:text-slate-900 px-6 py-2.5 rounded-none flex items-center gap-2 text-xs font-bold transition-all shadow-[4px_4px_0_#000] active:translate-y-[2px] active:shadow-[2px_2px_0_#000]"
               >
                 <Plus size={18} /> Misi Baru
               </button>
@@ -225,6 +242,13 @@ export default function Home() {
         return (
           <div className="animate-in fade-in slide-in-from-left-4 duration-500 h-full">
             <CalendarBoard />
+          </div>
+        );
+
+      case "Focus Arena":
+        return (
+          <div className="animate-in fade-in slide-in-from-left-4 duration-500 h-full">
+            <FocusArena />
           </div>
         );
 
@@ -326,6 +350,16 @@ export default function Home() {
         ::-webkit-scrollbar-track { background: #0f172a; }
         ::-webkit-scrollbar-thumb { background: #334155; border-radius: 10px; }
 
+        ::-webkit-calendar-picker-indicator {
+          filter: invert(0.8) sepia(1) saturate(5) hue-rotate(350deg);
+          cursor: pointer;
+        }
+
+        /* Mengubah warna bawaan browser (seperti panah input number) menjadi gelap */
+        input[type="number"] {
+          color-scheme: dark;
+        }
+
         @keyframes shutterTop { 0% { height: 0; } 40%, 60% { height: 50%; } 100% { height: 0; } }
         @keyframes shutterBottom { 0% { height: 0; } 40%, 60% { height: 50%; } 100% { height: 0; } }
         @keyframes textFade { 0%, 30% { opacity: 0; transform: scale(0.9); } 40%, 60% { opacity: 1; transform: scale(1); } 70%, 100% { opacity: 0; transform: scale(1.1); } }
@@ -363,11 +397,13 @@ export default function Home() {
 
             <div className="relative">
               <button
-                onClick={() => setIsNotifOpen(!isNotifOpen)}
+                onClick={() => { setIsNotifOpen(!isNotifOpen); setIsSettingsOpen(false); }}
                 className={`text-slate-400 hover:text-white transition-colors relative ${isNotifOpen ? "text-white" : ""}`}
               >
                 <Bell size={20} />
-                <span className="absolute -top-1 -right-1 w-3 h-3 bg-pink-500 rounded-none border-2 border-[#1a1b26]"></span>
+                {hasClaimableQuests && (
+                  <span className="absolute -top-1 -right-1 w-3 h-3 bg-pink-500 rounded-none border-2 border-[#1a1b26] animate-pulse"></span>
+                )}
               </button>
 
               {showCoinAnim && (
@@ -389,54 +425,138 @@ export default function Home() {
                     </button>
                   </div>
 
-                  <div className="p-5 flex flex-col gap-4">
-                    <div className="mt-1">
-                      <div className="flex justify-between text-[10px] font-bold mb-1.5 text-slate-300 uppercase">
-                        <span>Onboarding</span>
-                        <span>{onboardingProgress}%</span>
-                      </div>
-                      <div className="h-2 bg-slate-900 border border-slate-700 rounded-none overflow-hidden">
-                        <div className="h-full bg-cyan-500 transition-all duration-500" style={{ width: `${onboardingProgress}%` }}></div>
-                      </div>
-                    </div>
-
+                  <div className="p-4 flex flex-col gap-4 max-h-[75vh] overflow-y-auto custom-scrollbar">
+                    {/* DAILY QUESTS SECTION */}
                     <div className="flex flex-col gap-3">
-                      {!isTaskCreated ? (
-                        <div className="flex items-start gap-3 p-3 bg-pink-500/10 border-l-2 border-pink-500">
-                          <CheckSquare size={14} className="text-pink-500 shrink-0 mt-0.5" />
-                          <div className="flex flex-col">
-                            <span className="text-xs font-bold text-pink-400">Buat Misi Pertama</span>
-                            <span className="text-[10px] text-slate-400">Gunakan tombol + Misi Baru</span>
+                      <h4 className="text-[10px] font-bold text-amber-400 uppercase tracking-widest border-b-2 border-slate-700 pb-2 mb-1 flex items-center gap-2">
+                        <CheckSquare size={14}/> Misi Sistem Harian
+                      </h4>
+                      
+                      {/* Quest 1: Login */}
+                      <div className={`flex flex-col gap-2 p-3 border-2 ${dp.loginClaimed ? 'bg-emerald-950/20 border-emerald-900/50' : 'bg-[#24283b] border-slate-600'}`}>
+                        <div className="flex items-center justify-between">
+                          <div className="flex flex-col gap-0.5">
+                            <span className={`text-xs font-bold ${dp.loginClaimed ? 'text-emerald-500/70 line-through' : 'text-slate-200'}`}>Login Harian</span>
+                            <span className="text-[9px] text-amber-400 font-pixel mt-1">15 XP | 10 G</span>
                           </div>
+                          {dp.loginClaimed ? (
+                            <span className="text-[10px] text-emerald-500 font-bold bg-emerald-500/10 px-2 py-1 border border-emerald-500/20">SELESAI</span>
+                          ) : (
+                            <button onClick={() => handleClaimReward('login')} className="px-3 py-1.5 bg-amber-500 text-amber-950 text-[10px] font-bold uppercase hover:bg-amber-400 transition-all shadow-[2px_2px_0_#000] active:translate-y-[2px] active:shadow-none shrink-0">Klaim</button>
+                          )}
                         </div>
-                      ) : (
-                        <div className="flex items-start gap-3 p-3 bg-emerald-500/10 border-l-2 border-emerald-500 opacity-60">
-                          <Check size={14} className="text-emerald-500 shrink-0 mt-0.5" />
-                          <div className="flex flex-col">
-                            <span className="text-xs font-bold text-emerald-400 line-through">Buat Misi Pertama</span>
-                            <span className="text-[10px] text-slate-500">Selesai</span>
-                          </div>
-                        </div>
-                      )}
+                      </div>
 
-                      {!isTaskCompleted ? (
-                        <div className="flex items-start gap-3 p-3 bg-pink-500/10 border-l-2 border-pink-500">
-                          <CheckSquare size={14} className="text-pink-500 shrink-0 mt-0.5" />
-                          <div className="flex flex-col">
-                            <span className="text-xs font-bold text-pink-400">Selesaikan Misi</span>
-                            <span className="text-[10px] text-slate-400">Centang misi pertamamu</span>
+                      {/* Quest 2: Selesaikan 3 Misi */}
+                      <div className={`flex flex-col gap-2 p-3 border-2 ${dp.taskClaimed ? 'bg-emerald-950/20 border-emerald-900/50' : 'bg-[#24283b] border-slate-600'}`}>
+                        <div className="flex items-center justify-between">
+                          <div className="flex flex-col gap-0.5 w-full pr-4">
+                            <span className={`text-xs font-bold ${dp.taskClaimed ? 'text-emerald-500/70 line-through' : 'text-slate-200'}`}>Selesaikan 3 Operasi</span>
+                            <span className="text-[9px] text-amber-400 font-pixel mt-1 mb-1">30 XP | 20 G</span>
+                            <div className="w-full bg-slate-900 h-1.5 border border-slate-700">
+                               <div className="bg-amber-400 h-full transition-all" style={{ width: `${Math.min(100, (dp.tasksCompleted / 3) * 100)}%` }}></div>
+                            </div>
                           </div>
+                          {dp.taskClaimed ? (
+                            <span className="text-[10px] text-emerald-500 font-bold bg-emerald-500/10 px-2 py-1 border border-emerald-500/20 shrink-0">SELESAI</span>
+                          ) : dp.tasksCompleted >= 3 ? (
+                            <button onClick={() => handleClaimReward('task')} className="px-3 py-1.5 bg-amber-500 text-amber-950 text-[10px] font-bold uppercase hover:bg-amber-400 transition-all shadow-[2px_2px_0_#000] active:translate-y-[2px] active:shadow-none shrink-0">Klaim</button>
+                          ) : (
+                            <span className="text-[10px] text-slate-500 font-bold shrink-0">{dp.tasksCompleted}/3</span>
+                          )}
                         </div>
-                      ) : (
-                        <div className="flex items-start gap-3 p-3 bg-emerald-500/10 border-l-2 border-emerald-500 opacity-60">
-                          <Check size={14} className="text-emerald-500 shrink-0 mt-0.5" />
-                          <div className="flex flex-col">
-                            <span className="text-xs font-bold text-emerald-400 line-through">Selesaikan Misi</span>
-                            <span className="text-[10px] text-slate-500">Selesai</span>
+                      </div>
+
+                      {/* Quest 3: Kalahkan 1 Boss */}
+                      <div className={`flex flex-col gap-2 p-3 border-2 ${dp.bossClaimed ? 'bg-emerald-950/20 border-emerald-900/50' : 'bg-[#24283b] border-slate-600'}`}>
+                        <div className="flex items-center justify-between">
+                          <div className="flex flex-col gap-0.5">
+                            <span className={`text-xs font-bold ${dp.bossClaimed ? 'text-emerald-500/70 line-through' : 'text-slate-200'}`}>Kalahkan 1 Boss Area</span>
+                            <span className="text-[9px] text-amber-400 font-pixel mt-1">50 XP | 30 G</span>
                           </div>
+                          {dp.bossClaimed ? (
+                            <span className="text-[10px] text-emerald-500 font-bold bg-emerald-500/10 px-2 py-1 border border-emerald-500/20 shrink-0">SELESAI</span>
+                          ) : dp.bossesDefeated >= 1 ? (
+                            <button onClick={() => handleClaimReward('boss')} className="px-3 py-1.5 bg-amber-500 text-amber-950 text-[10px] font-bold uppercase hover:bg-amber-400 transition-all shadow-[2px_2px_0_#000] active:translate-y-[2px] active:shadow-none shrink-0">Klaim</button>
+                          ) : (
+                            <span className="text-[10px] text-slate-500 font-bold shrink-0">{dp.bossesDefeated}/1</span>
+                          )}
                         </div>
-                      )}
+                      </div>
                     </div>
+
+                    {(!isTaskCreated || !isTaskCompleted) && (
+                      <div className="mt-2 pt-4 border-t-2 border-slate-700 border-dashed">
+                        <h4 className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-3">Onboarding</h4>
+                        <div className="mt-1 mb-3">
+                          <div className="flex justify-between text-[10px] font-bold mb-1.5 text-slate-300 uppercase">
+                            <span>Progres Petualangan</span>
+                            <span>{onboardingProgress}%</span>
+                          </div>
+                          <div className="h-2 bg-slate-900 border border-slate-700 rounded-none overflow-hidden">
+                            <div className="h-full bg-amber-400 transition-all duration-500" style={{ width: `${onboardingProgress}%` }}></div>
+                          </div>
+                        </div>
+
+                        <div className="flex flex-col gap-3">
+                          {!isTaskCreated ? (
+                            <div className="flex items-start gap-3 p-3 bg-pink-500/10 border-l-2 border-pink-500">
+                              <CheckSquare size={14} className="text-pink-500 shrink-0 mt-0.5" />
+                              <div className="flex flex-col">
+                                <span className="text-xs font-bold text-pink-400">Buat Misi Pertama</span>
+                                <span className="text-[10px] text-slate-400">Gunakan tombol + Misi Baru</span>
+                              </div>
+                            </div>
+                          ) : (
+                            <div className="flex items-start gap-3 p-3 bg-emerald-500/10 border-l-2 border-emerald-500 opacity-60">
+                              <Check size={14} className="text-emerald-500 shrink-0 mt-0.5" />
+                              <div className="flex flex-col">
+                                <span className="text-xs font-bold text-emerald-400 line-through">Buat Misi Pertama</span>
+                                <span className="text-[10px] text-slate-500">Selesai</span>
+                              </div>
+                            </div>
+                          )}
+
+                          {!isTaskCompleted ? (
+                            <div className="flex items-start gap-3 p-3 bg-pink-500/10 border-l-2 border-pink-500">
+                              <CheckSquare size={14} className="text-pink-500 shrink-0 mt-0.5" />
+                              <div className="flex flex-col">
+                                <span className="text-xs font-bold text-pink-400">Selesaikan Misi</span>
+                                <span className="text-[10px] text-slate-400">Centang misi pertamamu</span>
+                              </div>
+                            </div>
+                          ) : (
+                            <div className="flex items-start gap-3 p-3 bg-emerald-500/10 border-l-2 border-emerald-500 opacity-60">
+                              <Check size={14} className="text-emerald-500 shrink-0 mt-0.5" />
+                              <div className="flex flex-col">
+                                <span className="text-xs font-bold text-emerald-400 line-through">Selesaikan Misi</span>
+                                <span className="text-[10px] text-slate-500">Selesai</span>
+                              </div>
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
+            </div>
+
+            <div className="relative">
+              <button
+                onClick={() => { setIsSettingsOpen(!isSettingsOpen); setIsNotifOpen(false); }}
+                className={`text-slate-400 hover:text-white transition-colors ${isSettingsOpen ? "text-white" : ""}`}
+              >
+                <Settings size={20} />
+              </button>
+              
+              {isSettingsOpen && (
+                <div className="absolute right-0 mt-4 w-48 bg-[#1a1b26] border-4 border-slate-700 rounded-none shadow-[8px_8px_0_#000] z-[100] animate-in fade-in slide-in-from-top-2 overflow-hidden text-left">
+                  <div className="flex flex-col">
+                    <button className="px-4 py-3 text-xs font-bold text-slate-300 hover:bg-[#24283b] hover:text-white text-left border-b border-slate-800 transition-colors flex items-center gap-2"><Trophy size={14} /> Pencapaian</button>
+                    <button className="px-4 py-3 text-xs font-bold text-slate-300 hover:bg-[#24283b] hover:text-white text-left border-b border-slate-800 transition-colors flex items-center gap-2"><Settings size={14} /> Pengaturan</button>
+                    <button className="px-4 py-3 text-xs font-bold text-slate-300 hover:bg-[#24283b] hover:text-white text-left border-b border-slate-800 transition-colors flex items-center gap-2"><Diamond size={14} /> Langganan</button>
+                    <button onClick={handleLogout} className="px-4 py-3 text-xs font-bold text-pink-500 hover:bg-pink-500/10 text-left transition-colors flex items-center gap-2"><LogOut size={14} /> Keluar</button>
                   </div>
                 </div>
               )}

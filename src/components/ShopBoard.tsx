@@ -918,72 +918,72 @@ const StarFragmentIcon = () => (
 // ITEM DATA
 // ============================================================
 export const ITEMS: ShopItem[] = [
-  { id: 1, name: "Shadow Monarch's Cloak", price: 1, rarity: 'legendary', slot: 'cloak',     stat: 'SHADOW ATK +50 / MAGIC DEF +30', icon: <ShadowCloakIcon /> },
-  { id: 2, name: "Demon's Edge",           price: 1, rarity: 'epic',      slot: 'weapon',    stat: 'ATK +80 / LIFESTEAL 5%',         icon: <DemonEdgeIcon /> },
-  { id: 3, name: "Arcane Mage Robe",       price: 1, rarity: 'rare',      slot: 'armor',     stat: 'MAGIC ATK +60 / MP +20',         icon: <ArcaneMageRobeIcon /> },
-  { id: 4, name: "Knight's Aegis",         price: 1, rarity: 'rare',      slot: 'armor',     stat: 'DEF +100 / HP +30',              icon: <KnightAegisIcon /> },
-  { id: 5, name: "Dragon's Eye Amulet",    price: 1, rarity: 'legendary', slot: 'accessory', stat: 'ALL STATS +40 / FIRE IMMUNE',    icon: <DragonEyeAmuletIcon /> },
-  { id: 6, name: "Soul Crystal",           price: 1, rarity: 'uncommon',  slot: 'material',  stat: 'XP +15 / CRAFTING MAT',          icon: <SoulCrystalIcon /> },
-  { id: 7, name: "Void Archer's Bow",      price: 1, rarity: 'epic',      slot: 'weapon',    stat: 'AGI +70 / RANGE ATK +50',        icon: <VoidBowIcon /> },
-  { id: 8, name: "Phoenix Helm",           price: 1, rarity: 'rare',      slot: 'helmet',    stat: 'DEF +40 / REVIVE 1x/BATTLE',     icon: <PhoenixHelmIcon /> },
+  { id: 1, name: "Shadow Monarch's Cloak", price: 300, rarity: 'legendary', slot: 'cloak',     stat: 'SHADOW ATK +50 / MAGIC DEF +30', icon: <ShadowCloakIcon /> },
+  { id: 2, name: "Demon's Edge",           price: 150, rarity: 'epic',      slot: 'weapon',    stat: 'ATK +80 / LIFESTEAL 5%',         icon: <DemonEdgeIcon /> },
+  { id: 3, name: "Arcane Mage Robe",       price: 80,  rarity: 'rare',      slot: 'armor',     stat: 'MAGIC ATK +60 / MP +20',         icon: <ArcaneMageRobeIcon /> },
+  { id: 4, name: "Knight's Aegis",         price: 75,  rarity: 'rare',      slot: 'armor',     stat: 'DEF +100 / HP +30',              icon: <KnightAegisIcon /> },
+  { id: 5, name: "Dragon's Eye Amulet",    price: 300, rarity: 'legendary', slot: 'accessory', stat: 'ALL STATS +40 / FIRE IMMUNE',    icon: <DragonEyeAmuletIcon /> },
+  { id: 6, name: "Soul Crystal",           price: 15,  rarity: 'uncommon',  slot: 'potion',    stat: 'CONSUMABLE: 15 HP',              icon: <SoulCrystalIcon /> },
+  { id: 7, name: "Void Archer's Bow",      price: 150, rarity: 'epic',      slot: 'weapon',    stat: 'AGI +70 / RANGE ATK +50',        icon: <VoidBowIcon /> },
+  { id: 8, name: "Phoenix Helm",           price: 75,  rarity: 'rare',      slot: 'helmet',    stat: 'DEF +40 / REVIVE 1x/BATTLE',     icon: <PhoenixHelmIcon /> },
   // klo nyari senjata disini
-  { id: 9,  name: "Cursed Katana 'Enma'",  price: 1, rarity: 'legendary', slot: 'weapon', stat: 'ATK +120 / HAKI DRAIN',  icon: <EnmaKatanaIcon /> },
-  { id: 10, name: "Kasaka's Venom Fang",   price: 1, rarity: 'epic',      slot: 'weapon', stat: 'AGI +60 / POISON 10%',   icon: <KasakaFangIcon /> },
-  { id: 11, name: "The Elucidator",        price: 1, rarity: 'legendary', slot: 'weapon', stat: 'STR +90 / DUAL WIELD',   icon: <ElucidatorIcon /> },
-  { id: 12, name: "Buster Sword",          price: 1, rarity: 'epic',      slot: 'weapon', stat: 'STR +100 / HEAVY',       icon: <BusterSwordIcon /> },
-  { id: 13, name: "Zangetsu (Shikai)",     price: 1, rarity: 'legendary', slot: 'weapon', stat: 'ATK +150 / GETSUGA',     icon: <ZangetsuIcon /> },
-  { id: 14, name: "Holy Sword Excalibur",  price: 1, rarity: 'legendary', slot: 'weapon', stat: 'MAGIC ATK +120 / HOLY',  icon: <ExcaliburIcon /> },
-  { id: 15, name: "Death Scythe",          price: 1, rarity: 'epic',      slot: 'weapon', stat: 'ATK +90 / SOUL STEAL',      icon: <DeathScytheIcon /> },
-  { id: 16, name: "Leviathan Axe",         price: 1, rarity: 'legendary', slot: 'weapon', stat: 'STR +130 / FROSTBITE',      icon: <LeviathanAxeIcon /> },
+  { id: 9,  name: "Cursed Katana 'Enma'",  price: 320, rarity: 'legendary', slot: 'weapon', stat: 'ATK +120 / HAKI DRAIN',  icon: <EnmaKatanaIcon /> },
+  { id: 10, name: "Kasaka's Venom Fang",   price: 160, rarity: 'epic',      slot: 'weapon', stat: 'AGI +60 / POISON 10%',   icon: <KasakaFangIcon /> },
+  { id: 11, name: "The Elucidator",        price: 300, rarity: 'legendary', slot: 'weapon', stat: 'STR +90 / DUAL WIELD',   icon: <ElucidatorIcon /> },
+  { id: 12, name: "Buster Sword",          price: 175, rarity: 'epic',      slot: 'weapon', stat: 'STR +100 / HEAVY',       icon: <BusterSwordIcon /> },
+  { id: 13, name: "Zangetsu (Shikai)",     price: 350, rarity: 'legendary', slot: 'weapon', stat: 'ATK +150 / GETSUGA',     icon: <ZangetsuIcon /> },
+  { id: 14, name: "Holy Sword Excalibur",  price: 340, rarity: 'legendary', slot: 'weapon', stat: 'MAGIC ATK +120 / HOLY',  icon: <ExcaliburIcon /> },
+  { id: 15, name: "Death Scythe",          price: 170, rarity: 'epic',      slot: 'weapon', stat: 'ATK +90 / SOUL STEAL',      icon: <DeathScytheIcon /> },
+  { id: 16, name: "Leviathan Axe",         price: 325, rarity: 'legendary', slot: 'weapon', stat: 'STR +130 / FROSTBITE',      icon: <LeviathanAxeIcon /> },
   // klo nyari armor disini
-  { id: 17, name: "Turtle School Gi",      price: 1, rarity: 'uncommon',  slot: 'armor', stat: 'STR +30 / DEF +20',       icon: <TurtleGiIcon /> },
-  { id: 18, name: "Survey Corps Jacket",   price: 1, rarity: 'rare',      slot: 'armor', stat: 'AGI +40 / DEF +25',       icon: <SurveyCorpsIcon /> },
-  { id: 19, name: "Akatsuki Robe",         price: 1, rarity: 'epic',      slot: 'armor', stat: 'MAGIC ATK +60 / DEF +30', icon: <AkatsukiIcon /> },
-  { id: 20, name: "Iron Powered Suit",     price: 1, rarity: 'legendary', slot: 'armor', stat: 'DEF +120 / FLIGHT',       icon: <IronArmorIcon /> },
-  { id: 21, name: "N7 Space Armor",        price: 1, rarity: 'epic',      slot: 'armor', stat: 'DEF +80 / SHIELD +50',    icon: <N7SuitIcon /> },
-  { id: 22, name: "Demon Slayer Haori",    price: 1, rarity: 'rare',      slot: 'armor', stat: 'ATK +50 / DEF +40',       icon: <DemonSlayerIcon /> },
-  { id: 23, name: "Jedi Master Tunic",     price: 1, rarity: 'epic',      slot: 'armor', stat: 'INT +70 / EVASION +30',   icon: <JediRobeIcon /> },
-  { id: 24, name: "HEV Hazard Suit",       price: 1, rarity: 'legendary', slot: 'armor', stat: 'DEF +100 / RAD RESIST',   icon: <HevSuitIcon /> },
+  { id: 17, name: "Turtle School Gi",      price: 40,  rarity: 'uncommon',  slot: 'armor', stat: 'STR +30 / DEF +20',       icon: <TurtleGiIcon /> },
+  { id: 18, name: "Survey Corps Jacket",   price: 80,  rarity: 'rare',      slot: 'armor', stat: 'AGI +40 / DEF +25',       icon: <SurveyCorpsIcon /> },
+  { id: 19, name: "Akatsuki Robe",         price: 155, rarity: 'epic',      slot: 'armor', stat: 'MAGIC ATK +60 / DEF +30', icon: <AkatsukiIcon /> },
+  { id: 20, name: "Iron Powered Suit",     price: 375, rarity: 'legendary', slot: 'armor', stat: 'DEF +120 / FLIGHT',       icon: <IronArmorIcon /> },
+  { id: 21, name: "N7 Space Armor",        price: 165, rarity: 'epic',      slot: 'armor', stat: 'DEF +80 / SHIELD +50',    icon: <N7SuitIcon /> },
+  { id: 22, name: "Demon Slayer Haori",    price: 75,  rarity: 'rare',      slot: 'armor', stat: 'ATK +50 / DEF +40',       icon: <DemonSlayerIcon /> },
+  { id: 23, name: "Jedi Master Tunic",     price: 160, rarity: 'epic',      slot: 'armor', stat: 'INT +70 / EVASION +30',   icon: <JediRobeIcon /> },
+  { id: 24, name: "HEV Hazard Suit",       price: 310, rarity: 'legendary', slot: 'armor', stat: 'DEF +100 / RAD RESIST',   icon: <HevSuitIcon /> },
   // klo nyari helmet disini
-  { id: 25, name: "Mark 85 Helmet",        price: 1, rarity: 'legendary', slot: 'helmet', stat: 'DEF +40 / HUD SCAN',      icon: <IronHelmIcon /> },
-  { id: 26, name: "Straw Hat",             price: 1, rarity: 'uncommon',  slot: 'helmet', stat: 'LUCK +50 / WILLPOWER',    icon: <StrawHatIcon /> },
-  { id: 27, name: "Hidden Leaf Headband",  price: 1, rarity: 'rare',      slot: 'helmet', stat: 'AGI +20 / CHAKRA +10',    icon: <HiddenLeafIcon /> },
-  { id: 28, name: "Boar Head Mask",        price: 1, rarity: 'rare',      slot: 'helmet', stat: 'STR +30 / PERCEPTION',    icon: <InosukeHelmIcon /> },
-  { id: 29, name: "Dark Lord Mask",        price: 1, rarity: 'epic',      slot: 'helmet', stat: 'DEF +60 / FEAR AURA',     icon: <VaderHelmIcon /> },
-  { id: 30, name: "Spartan-117 Helmet",    price: 1, rarity: 'epic',      slot: 'helmet', stat: 'DEF +80 / SHIELD +20',    icon: <SpartanHelmIcon /> },
-  { id: 31, name: "Hero's Baldness",       price: 1, rarity: 'legendary', slot: 'helmet', stat: 'ALL STATS +100',          icon: <SaitamaBaldIcon /> },
-  { id: 32, name: "Vixard's Hollow Mask",  price: 1, rarity: 'legendary', slot: 'helmet', stat: 'DEF +100 / IMMUTABLE',    icon: <HollowMaskIcon /> },
-  { id: 33, name: "Scientist Glasses",     price: 1, rarity: 'rare',      slot: 'helmet', stat: 'INT +50 / HAZARD SENSE',  icon: <GordonGlassesIcon /> },
+  { id: 25, name: "Mark 85 Helmet",        price: 300, rarity: 'legendary', slot: 'helmet', stat: 'DEF +40 / HUD SCAN',      icon: <IronHelmIcon /> },
+  { id: 26, name: "Straw Hat",             price: 35,  rarity: 'uncommon',  slot: 'helmet', stat: 'LUCK +50 / WILLPOWER',    icon: <StrawHatIcon /> },
+  { id: 27, name: "Hidden Leaf Headband",  price: 70,  rarity: 'rare',      slot: 'helmet', stat: 'AGI +20 / CHAKRA +10',    icon: <HiddenLeafIcon /> },
+  { id: 28, name: "Boar Head Mask",        price: 80,  rarity: 'rare',      slot: 'helmet', stat: 'STR +30 / PERCEPTION',    icon: <InosukeHelmIcon /> },
+  { id: 29, name: "Dark Lord Mask",        price: 175, rarity: 'epic',      slot: 'helmet', stat: 'DEF +60 / FEAR AURA',     icon: <VaderHelmIcon /> },
+  { id: 30, name: "Spartan-117 Helmet",    price: 170, rarity: 'epic',      slot: 'helmet', stat: 'DEF +80 / SHIELD +20',    icon: <SpartanHelmIcon /> },
+  { id: 31, name: "Hero's Baldness",       price: 400, rarity: 'legendary', slot: 'helmet', stat: 'ALL STATS +100',          icon: <SaitamaBaldIcon /> },
+  { id: 32, name: "Vixard's Hollow Mask",  price: 325, rarity: 'legendary', slot: 'helmet', stat: 'DEF +100 / IMMUTABLE',    icon: <HollowMaskIcon /> },
+  { id: 33, name: "Scientist Glasses",     price: 75,  rarity: 'rare',      slot: 'helmet', stat: 'INT +50 / HAZARD SENSE',  icon: <GordonGlassesIcon /> },
   // klo nyari cloak disini
-  { id: 34, name: "Wings of Freedom Cape", price: 1, rarity: 'rare',      slot: 'cloak', stat: 'AGI +40 / DODGE +10%',     icon: <SurveyCapeIcon /> },
-  { id: 35, name: "Seventh Fire Cloak",    price: 1, rarity: 'epic',      slot: 'cloak', stat: 'MAGIC ATK +60 / WILL',     icon: <HokageCloakIcon /> },
-  { id: 36, name: "Cloak of Levitation",   price: 1, rarity: 'legendary', slot: 'cloak', stat: 'AGI +100 / FLIGHT',        icon: <LevitationCloakIcon /> },
-  { id: 37, name: "The Dark Cape",         price: 1, rarity: 'epic',      slot: 'cloak', stat: 'DEF +70 / STEALTH',        icon: <DarkCapeIcon /> },
-  { id: 38, name: "Caped Baldy's Cape",    price: 1, rarity: 'legendary', slot: 'cloak', stat: 'ALL STATS +100',           icon: <SaitamaCapeIcon /> },
-  { id: 39, name: "Black Swordsman Cape",  price: 1, rarity: 'epic',      slot: 'cloak', stat: 'STR +50 / GUTS',           icon: <GutsCapeIcon /> },
-  { id: 40, name: "Crimson Lotus Cape",    price: 1, rarity: 'rare',      slot: 'cloak', stat: 'STR +40 / SPIRIT +20',     icon: <CrimsonCapeIcon /> },
-  { id: 41, name: "Vampire Lord Mantle",   price: 1, rarity: 'legendary', slot: 'cloak', stat: 'MAGIC DEF +90 / LIFESTEAL',icon: <VampireMantleIcon /> },
-  { id: 42, name: "Winter Wolf Cloak",     price: 1, rarity: 'uncommon',  slot: 'cloak', stat: 'DEF +40 / ICE RESIST',     icon: <WinterWolfIcon /> },
+  { id: 34, name: "Wings of Freedom Cape", price: 85,  rarity: 'rare',      slot: 'cloak', stat: 'AGI +40 / DODGE +10%',     icon: <SurveyCapeIcon /> },
+  { id: 35, name: "Seventh Fire Cloak",    price: 170, rarity: 'epic',      slot: 'cloak', stat: 'MAGIC ATK +60 / WILL',     icon: <HokageCloakIcon /> },
+  { id: 36, name: "Cloak of Levitation",   price: 300, rarity: 'legendary', slot: 'cloak', stat: 'AGI +100 / FLIGHT',        icon: <LevitationCloakIcon /> },
+  { id: 37, name: "The Dark Cape",         price: 160, rarity: 'epic',      slot: 'cloak', stat: 'DEF +70 / STEALTH',        icon: <DarkCapeIcon /> },
+  { id: 38, name: "Caped Baldy's Cape",    price: 400, rarity: 'legendary', slot: 'cloak', stat: 'ALL STATS +100',           icon: <SaitamaCapeIcon /> },
+  { id: 39, name: "Black Swordsman Cape",  price: 165, rarity: 'epic',      slot: 'cloak', stat: 'STR +50 / GUTS',           icon: <GutsCapeIcon /> },
+  { id: 40, name: "Crimson Lotus Cape",    price: 80,  rarity: 'rare',      slot: 'cloak', stat: 'STR +40 / SPIRIT +20',     icon: <CrimsonCapeIcon /> },
+  { id: 41, name: "Vampire Lord Mantle",   price: 320, rarity: 'legendary', slot: 'cloak', stat: 'MAGIC DEF +90 / LIFESTEAL',icon: <VampireMantleIcon /> },
+  { id: 42, name: "Winter Wolf Cloak",     price: 40,  rarity: 'uncommon',  slot: 'cloak', stat: 'DEF +40 / ICE RESIST',     icon: <WinterWolfIcon /> },
   // klo nyari amulet disini
-  { id: 43, name: "The One Ring",          price: 1, rarity: 'legendary', slot: 'accessory', stat: 'ALL STATS +50 / INVISIBILITY', icon: <OneRingIcon /> },
-  { id: 44, name: "Millennium Puzzle",     price: 1, rarity: 'epic',      slot: 'accessory', stat: 'INT +80 / DESTINY DRAW',       icon: <MillenniumPuzzleIcon /> },
-  { id: 45, name: "Eye of Agamotto",       price: 1, rarity: 'legendary', slot: 'accessory', stat: 'MAGIC ATK +100 / TIME REWIND', icon: <EyeAgamottoIcon /> },
-  { id: 46, name: "Philosopher's Stone",   price: 1, rarity: 'legendary', slot: 'accessory', stat: 'HP +500 / ALCHEMY',            icon: <PhilosopherStoneIcon /> },
-  { id: 47, name: "Wolf Medallion",        price: 1, rarity: 'rare',      slot: 'accessory', stat: 'PERCEPTION +50 / MAGIC SENSE', icon: <WolfMedallionIcon /> },
-  { id: 48, name: "Amulet of Mara",        price: 1, rarity: 'uncommon',  slot: 'accessory', stat: 'CHARISMA +50 / RESTORATION',   icon: <MaraAmuletIcon /> },
-  { id: 49, name: "The Behelit",           price: 1, rarity: 'epic',      slot: 'accessory', stat: 'ATK +150 / CURSED',            icon: <BehelitIcon /> },
-  { id: 50, name: "Core Drill",            price: 1, rarity: 'epic',      slot: 'accessory', stat: 'STR +80 / SPIRAL POWER',       icon: <CoreDrillIcon /> },
-  { id: 51, name: "Triforce Relic",        price: 1, rarity: 'legendary', slot: 'accessory', stat: 'COURAGE / WISDOM / POWER',     icon: <TriforceIcon /> },
-  // klo nyari material disini
-  { id: 52, name: "Mithril Ingot",         price: 1, rarity: 'rare',      slot: 'material', stat: 'CRAFTING: WEAPON',   icon: <MithrilIngotIcon /> },
-  { id: 53, name: "Beskar Ingot",          price: 1, rarity: 'epic',      slot: 'material', stat: 'CRAFTING: ARMOR',    icon: <BeskarIngotIcon /> },
-  { id: 54, name: "Vibranium Ore",         price: 1, rarity: 'legendary', slot: 'material', stat: 'CRAFTING: SHIELD',   icon: <VibraniumOreIcon /> },
-  { id: 55, name: "Senzu Bean",            price: 1, rarity: 'uncommon',  slot: 'material', stat: 'CONSUMABLE: FULL HP',icon: <SenzuBeanIcon /> },
-  { id: 56, name: "Slime Jelly",           price: 1, rarity: 'common',    slot: 'material', stat: 'CRAFTING: POTION',   icon: <SlimeJellyIcon /> },
-  { id: 57, name: "Dragon Scale",          price: 1, rarity: 'epic',      slot: 'material', stat: 'CRAFTING: FIRE RES', icon: <DragonScaleIcon /> },
-  { id: 58, name: "Demon Horn",            price: 1, rarity: 'rare',      slot: 'material', stat: 'CRAFTING: DARK ATK', icon: <DemonHornIcon /> },
-  { id: 59, name: "Kryptonite Shard",      price: 1, rarity: 'legendary', slot: 'material', stat: 'WEAKNESS EXPLOIT',   icon: <KryptoniteIcon /> },
-  { id: 60, name: "Star Fragment",         price: 1, rarity: 'legendary', slot: 'material', stat: 'UPGRADE MATERIAL',   icon: <StarFragmentIcon /> },
+  { id: 43, name: "The One Ring",          price: 380, rarity: 'legendary', slot: 'accessory', stat: 'ALL STATS +50 / INVISIBILITY', icon: <OneRingIcon /> },
+  { id: 44, name: "Millennium Puzzle",     price: 180, rarity: 'epic',      slot: 'accessory', stat: 'INT +80 / DESTINY DRAW',       icon: <MillenniumPuzzleIcon /> },
+  { id: 45, name: "Eye of Agamotto",       price: 375, rarity: 'legendary', slot: 'accessory', stat: 'MAGIC ATK +100 / TIME REWIND', icon: <EyeAgamottoIcon /> },
+  { id: 46, name: "Philosopher's Stone",   price: 350, rarity: 'legendary', slot: 'accessory', stat: 'HP +500 / ALCHEMY',            icon: <PhilosopherStoneIcon /> },
+  { id: 47, name: "Wolf Medallion",        price: 75,  rarity: 'rare',      slot: 'accessory', stat: 'PERCEPTION +50 / MAGIC SENSE', icon: <WolfMedallionIcon /> },
+  { id: 48, name: "Amulet of Mara",        price: 45,  rarity: 'uncommon',  slot: 'accessory', stat: 'CHARISMA +50 / RESTORATION',   icon: <MaraAmuletIcon /> },
+  { id: 49, name: "The Behelit",           price: 200, rarity: 'epic',      slot: 'accessory', stat: 'ATK +150 / CURSED',            icon: <BehelitIcon /> },
+  { id: 50, name: "Core Drill",            price: 165, rarity: 'epic',      slot: 'accessory', stat: 'STR +80 / SPIRAL POWER',       icon: <CoreDrillIcon /> },
+  { id: 51, name: "Triforce Relic",        price: 380, rarity: 'legendary', slot: 'accessory', stat: 'COURAGE / WISDOM / POWER',     icon: <TriforceIcon /> },
+  // klo nyari potion disini
+  { id: 52, name: "Mithril Ingot",         price: 25,  rarity: 'rare',      slot: 'potion', stat: 'CONSUMABLE: 30 HP',   icon: <MithrilIngotIcon /> },
+  { id: 53, name: "Beskar Ingot",          price: 40,  rarity: 'epic',      slot: 'potion', stat: 'CONSUMABLE: 40 HP',   icon: <BeskarIngotIcon /> },
+  { id: 54, name: "Vibranium Ore",         price: 60,  rarity: 'legendary', slot: 'potion', stat: 'CONSUMABLE: 60 HP',   icon: <VibraniumOreIcon /> },
+  { id: 55, name: "Senzu Bean",            price: 100, rarity: 'uncommon',  slot: 'potion', stat: 'CONSUMABLE: FULL HP', icon: <SenzuBeanIcon /> },
+  { id: 56, name: "Slime Jelly",           price: 10,  rarity: 'common',    slot: 'potion', stat: 'CONSUMABLE: 20 HP',   icon: <SlimeJellyIcon /> },
+  { id: 57, name: "Dragon Scale",          price: 35,  rarity: 'epic',      slot: 'potion', stat: 'CONSUMABLE: 35 HP',   icon: <DragonScaleIcon /> },
+  { id: 58, name: "Demon Horn",            price: 20,  rarity: 'rare',      slot: 'potion', stat: 'CONSUMABLE: 25 HP',   icon: <DemonHornIcon /> },
+  { id: 59, name: "Kryptonite Shard",      price: 50,  rarity: 'legendary', slot: 'potion', stat: 'CONSUMABLE: 45 HP',   icon: <KryptoniteIcon /> },
+  { id: 60, name: "Star Fragment",         price: 70,  rarity: 'legendary', slot: 'potion', stat: 'CONSUMABLE: 50 HP',   icon: <StarFragmentIcon /> },
 ];
 
 // ============================================================
@@ -1001,7 +1001,7 @@ const RARITY_STYLE: Record<Rarity, {
 
 const SLOT_LABELS: Record<EquipSlot, string> = {
   helmet: '[ HEAD ]', cloak: '[ BACK ]', armor: '[ BODY ]',
-  weapon: '[ WEAPON ]', accessory: '[ NECK ]', material: '[ BAG ]',
+  weapon: '[ WEAPON ]', accessory: '[ NECK ]', potion: '[ POTION ]',
 };
 
 // ============================================================
@@ -1103,7 +1103,7 @@ export default function ShopBoard({ searchQuery = "" }: ShopBoardProps) {
       unequipItem(item.slot);
       showToast(`Unequipped: ${item.name}`);
     } else if (ownedCount > 0) {
-      if (item.slot === 'material') {
+      if (item.slot === 'potion') {
         showToast(`You have ${ownedCount}x ${item.name}`);
       } else {
         equipItem(item.slot, item.id);
@@ -1147,7 +1147,7 @@ export default function ShopBoard({ searchQuery = "" }: ShopBoardProps) {
       {/* CATEGORY FILTER */}
       <div className="flex flex-wrap gap-2 mb-6">
         <button onClick={() => setActiveFilter('all')} className={`px-3 py-1.5 text-[10px] font-bold border-2 transition-colors uppercase tracking-widest ${activeFilter === 'all' ? 'border-amber-400 text-amber-400 bg-slate-800 shadow-[2px_2px_0_#fbbf24]' : 'border-slate-700 text-slate-500 hover:border-slate-500 bg-slate-900'}`}>ALL</button>
-        {['weapon', 'armor', 'helmet', 'cloak', 'accessory', 'material'].map(slot => (
+        {['weapon', 'armor', 'helmet', 'cloak', 'accessory', 'potion'].map(slot => (
           <button key={slot} onClick={() => setActiveFilter(slot as EquipSlot)} className={`px-3 py-1.5 text-[10px] font-bold border-2 transition-colors uppercase tracking-widest ${activeFilter === slot ? 'border-amber-400 text-amber-400 bg-slate-800 shadow-[2px_2px_0_#fbbf24]' : 'border-slate-700 text-slate-500 hover:border-slate-500 bg-slate-900'}`}>{slot}</button>
         ))}
       </div>
@@ -1242,7 +1242,7 @@ export default function ShopBoard({ searchQuery = "" }: ShopBoardProps) {
                   </div>
                   <p className="text-[9px] text-slate-400 font-mono mt-2 uppercase">SLOT: {item.slot}</p>
                   <p className="text-[11px] font-bold mt-3 text-amber-400">
-                    {isEquipped ? '▸ UNEQUIP' : ownedCount > 0 ? (item.slot === 'material' ? `▸ OWNED: ${ownedCount}` : '▸ EQUIP') : `▸ BUY (${item.price} G)`}
+                    {isEquipped ? '▸ UNEQUIP' : ownedCount > 0 ? (item.slot === 'potion' ? `▸ OWNED: ${ownedCount}` : '▸ EQUIP') : `▸ BUY (${item.price} G)`}
                   </p>
                 </div>
               )}

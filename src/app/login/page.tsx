@@ -81,7 +81,7 @@ export default function LoginPage() {
       <div className="relative z-10 w-full max-w-4xl p-1 mx-4">
          <div className="bg-[#1a1b26]/90 backdrop-blur-xl border-2 border-slate-700 p-8 md:p-12 grid grid-cols-1 md:grid-cols-2 gap-12 relative shadow-[0_0_50px_rgba(0,0,0,0.5)]">
             
-            <div className={`absolute top-0 left-0 w-8 h-8 border-t-4 border-l-4 ${isRegisterMode ? 'border-emerald-500' : 'border-cyan-500'}`} />
+            <div className={`absolute top-0 left-0 w-8 h-8 border-t-4 border-l-4 ${isRegisterMode ? 'border-emerald-500' : 'border-amber-500'}`} />
             <div className="absolute bottom-0 right-0 w-8 h-8 border-b-4 border-r-4 border-pink-500" />
 
             {/* KOLOM KIRI: FORM */}
@@ -90,7 +90,7 @@ export default function LoginPage() {
                 <h2 className="text-4xl font-bold text-white tracking-tighter uppercase italic drop-shadow-[0_0_10px_rgba(255,255,255,0.3)]">
                   {isRegisterMode ? "Create Account" : "Welcome Back!"}
                 </h2>
-                <p className="text-slate-400 text-[10px] mt-2 uppercase tracking-[0.2em] font-pixel text-cyan-400">
+                <p className="text-[10px] mt-2 uppercase tracking-[0.2em] font-pixel text-amber-400 drop-shadow-[0_0_8px_rgba(251,191,36,0.6)]">
                   {isRegisterMode ? "Join the daily dungeon hunt" : "Secure your account to start hunting"}
                 </p>
               </div>
@@ -103,7 +103,7 @@ export default function LoginPage() {
                     required
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className="w-full bg-slate-900/80 border-2 border-slate-700 p-3 text-white outline-none focus:border-cyan-500 transition-all text-sm shadow-[inset_0_2px_4px_rgba(0,0,0,0.5)]"
+                    className="w-full bg-slate-900/80 border-2 border-slate-700 p-3 text-white outline-none focus:border-amber-500 transition-all text-sm shadow-[inset_0_2px_4px_rgba(0,0,0,0.5)]"
                     placeholder="Enter username..."
                   />
                 </div>
@@ -132,7 +132,7 @@ export default function LoginPage() {
                     <button
                       type="button"
                       onClick={() => setShowPassword(!showPassword)}
-                      className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 hover:text-cyan-400 transition-colors"
+                              className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 hover:text-amber-400 transition-colors"
                     >
                       {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
                     </button>
@@ -142,7 +142,7 @@ export default function LoginPage() {
                 
                 <button 
                   type="submit"
-                  className={`w-full ${isRegisterMode ? 'bg-emerald-600 shadow-[0_4px_0_#065f46]' : 'bg-cyan-600 shadow-[0_4px_0_#0369a1]'} text-white font-bold py-4 uppercase tracking-[0.3em] active:translate-y-1 active:shadow-none transition-all text-xs mt-4 flex items-center justify-center gap-2`}
+                          className={`w-full ${isRegisterMode ? 'bg-emerald-600 shadow-[0_4px_0_#065f46] text-white' : 'bg-amber-500 shadow-[0_4px_0_#b45309] text-amber-950'} font-bold py-4 uppercase tracking-[0.3em] active:translate-y-1 active:shadow-none transition-all text-xs mt-4 flex items-center justify-center gap-2`}
                 >
                   {isRegisterMode ? <UserPlus size={16}/> : <LogIn size={16}/>}
                   {isRegisterMode ? "Register Account" : "Sign In"}

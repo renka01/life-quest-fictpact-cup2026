@@ -69,8 +69,10 @@ export default function StatusPanel({ isOpen, onClose }: { isOpen: boolean, onCl
     >
       {/* ── Header ────────────────────────────────────────── */}
       <div className="flex justify-between items-center">
-        <h3 className="font-pixel text-[10px] text-cyan-400 tracking-widest">STATUS LOG</h3>
-        <button className="text-slate-500 hover:text-white"><RefreshCw size={14}/></button>
+        <h3 className="font-pixel text-[10px] text-amber-400 tracking-widest">STATUS LOG</h3>
+        <button onClick={() => window.location.reload()} className="text-slate-500 hover:text-white active:rotate-180 transition-transform duration-300">
+          <RefreshCw size={14}/>
+        </button>
       </div>
 
       {/* ── Avatar card ───────────────────────────────────── */}
@@ -98,7 +100,7 @@ export default function StatusPanel({ isOpen, onClose }: { isOpen: boolean, onCl
           {/* Floor glow */}
           <div className="absolute bottom-0 w-full h-1/2 bg-gradient-to-t from-cyan-900/40 to-transparent"/>
 
-          <div className="transform scale-[1.2] relative z-10 mt-10 flex items-center justify-center">
+          <div className="transform scale-[0.75] relative z-10 mt-6 flex items-center justify-center [&_svg]:overflow-visible animate-[pulse_4s_ease-in-out_infinite]">
 
 
             {/* ── LAYER 1: Character sprite ──

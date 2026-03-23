@@ -86,7 +86,7 @@ export default function DashboardBoard({
         <div className="grid grid-cols-1 xl:grid-cols-[1.5fr_0.9fr] gap-6 items-start">
           <div className="space-y-4">
             <div>
-              <p className="text-[10px] uppercase tracking-[0.2em] text-cyan-400 font-bold mb-2">
+              <p className="text-[10px] uppercase tracking-[0.2em] text-amber-400 font-bold mb-2">
                 Command Center
               </p>
               <h1 className="text-2xl lg:text-3xl font-bold text-white mb-2">
@@ -98,9 +98,9 @@ export default function DashboardBoard({
             </div>
 
             <div className="flex flex-wrap gap-3">
-              <div className="bg-[#1a1b26] border-2 border-cyan-500 px-4 py-2 shadow-[3px_3px_0_#000] min-w-[150px]">
+              <div className="bg-[#1a1b26] border-2 border-amber-500 px-4 py-2 shadow-[3px_3px_0_#000] min-w-[150px]">
                 <p className="text-[10px] uppercase text-slate-500 mb-1">Role</p>
-                <p className="text-cyan-400 font-bold">Lv. {stats.level} Adventurer</p>
+                <p className="text-amber-400 font-bold">Lv. {stats.level} Adventurer</p>
               </div>
 
               <div className="bg-[#1a1b26] border-2 border-orange-500 px-4 py-2 shadow-[3px_3px_0_#000] min-w-[120px]">
@@ -188,8 +188,8 @@ export default function DashboardBoard({
 
       {/* TOP WIDGETS */}
       <div className="grid grid-cols-1 xl:grid-cols-4 gap-6">
-        <div className="bg-[#24283b] border-4 border-cyan-500 shadow-[6px_6px_0_#000] p-5 flex flex-col gap-4">
-          <div className="flex items-center gap-2 text-cyan-400">
+        <div className="bg-[#24283b] border-4 border-amber-500 shadow-[6px_6px_0_#000] p-5 flex flex-col gap-4">
+          <div className="flex items-center gap-2 text-amber-400">
             <Zap size={18} />
             <h2 className="text-sm font-bold uppercase">Status Karakter</h2>
           </div>
@@ -212,10 +212,10 @@ export default function DashboardBoard({
           <div className="mt-auto pt-4 border-t-2 border-slate-700">
             <div className="flex justify-between text-[10px] text-slate-400 font-bold mb-1.5 uppercase">
               <span>EXP Progress</span>
-              <span className="text-cyan-400">{stats.exp} / {stats.maxExp}</span>
+              <span className="text-amber-400">{stats.exp} / {stats.maxExp}</span>
             </div>
             <div className="h-2 bg-slate-900 border border-slate-700 overflow-hidden">
-              <div className="h-full bg-cyan-400 transition-all duration-500" style={{ width: `${expPercent}%` }} />
+              <div className="h-full bg-amber-400 transition-all duration-500" style={{ width: `${expPercent}%` }} />
             </div>
           </div>
         </div>

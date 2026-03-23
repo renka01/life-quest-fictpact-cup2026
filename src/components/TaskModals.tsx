@@ -41,9 +41,9 @@ export const TaskFormModal = ({ isOpen, onClose, initialType, isFixed }: { isOpe
   const [newTaskDifficulty, setNewTaskDifficulty] = useState(2); 
   const [isBossTask, setIsBossTask] = useState(false);
   const [resetCounter, setResetCounter] = useState("Harian");
-  const [habitCount, setHabitCount] = useState(0);
+  const [habitCount, setHabitCount] = useState<number | string>(0);
   const [startDate, setStartDate] = useState("");
-  const [repeatEvery, setRepeatEvery] = useState(1);
+  const [repeatEvery, setRepeatEvery] = useState<number | string>(1);
   const [repeatUnit, setRepeatUnit] = useState("Hari");
   const [dueDate, setDueDate] = useState("");
 
@@ -68,8 +68,8 @@ export const TaskFormModal = ({ isOpen, onClose, initialType, isFixed }: { isOpe
       category: finalCategory, difficulty: newTaskDifficulty, done: false, isBoss: newTaskType === 'todo' ? isBossTask : false
     };
 
-    if (newTaskType === 'habit') { taskPayload.resetCounter = resetCounter; taskPayload.habitCount = habitCount; } 
-    else if (newTaskType === 'daily') { taskPayload.startDate = startDate; taskPayload.repeatEvery = repeatEvery; taskPayload.repeatUnit = repeatUnit; } 
+    if (newTaskType === 'habit') { taskPayload.resetCounter = resetCounter; taskPayload.habitCount = Number(habitCount) || 0; } 
+    else if (newTaskType === 'daily') { taskPayload.startDate = startDate; taskPayload.repeatEvery = Number(repeatEvery) || 1; taskPayload.repeatUnit = repeatUnit; } 
     else if (newTaskType === 'todo') { taskPayload.dueDate = dueDate; }
 
     addTask(taskPayload);
@@ -129,9 +129,9 @@ export const TaskFormModal = ({ isOpen, onClose, initialType, isFixed }: { isOpe
                   <div className="flex flex-col gap-1.5">
                     <label className="text-[10px] text-amber-500/70 font-bold uppercase tracking-wider flex items-center gap-1"><Hash size={12}/> Atur Hitungan Awal (+ / -)</label>
                     <div className="flex items-center gap-2">
-                      <button onClick={() => setHabitCount(habitCount - 1)} className="w-10 h-10 bg-[#1a1b26] border-2 border-slate-600 hover:border-amber-500 rounded-none flex items-center justify-center text-slate-400 hover:text-amber-500 transition-colors"><Minus size={16}/></button>
-                      <input type="number" value={habitCount} onChange={(e) => setHabitCount(Number(e.target.value))} className="w-16 h-10 bg-[#1a1b26] border-2 border-slate-600 rounded-none text-center text-sm font-bold text-slate-200 outline-none focus:border-amber-400" />
-                      <button onClick={() => setHabitCount(habitCount + 1)} className="w-10 h-10 bg-[#1a1b26] border-2 border-slate-600 hover:border-amber-500 rounded-none flex items-center justify-center text-slate-400 hover:text-amber-500 transition-colors"><Plus size={16}/></button>
+                      <button onClick={() => setHabitCount((Number(habitCount) || 0) - 1)} className="w-10 h-10 bg-[#1a1b26] border-2 border-slate-600 hover:border-amber-500 rounded-none flex items-center justify-center text-slate-400 hover:text-amber-500 transition-colors"><Minus size={16}/></button>
+                      <input type="number" value={habitCount} onChange={(e) => setHabitCount(e.target.value === '' ? '' : Number(e.target.value))} className="w-16 h-10 bg-[#1a1b26] border-2 border-slate-600 rounded-none text-center text-sm font-bold text-slate-200 outline-none focus:border-amber-400" />
+                      <button onClick={() => setHabitCount((Number(habitCount) || 0) + 1)} className="w-10 h-10 bg-[#1a1b26] border-2 border-slate-600 hover:border-amber-500 rounded-none flex items-center justify-center text-slate-400 hover:text-amber-500 transition-colors"><Plus size={16}/></button>
                     </div>
                   </div>
                 </>
@@ -140,12 +140,12 @@ export const TaskFormModal = ({ isOpen, onClose, initialType, isFixed }: { isOpe
                 <>
                   <div className="flex flex-col gap-1.5">
                     <label className="text-[10px] text-cyan-500/70 font-bold uppercase tracking-wider flex items-center gap-1"><CalendarDays size={12}/> Tanggal Mulai Pengulangan</label>
-                    <input type="date" value={startDate} onChange={(e) => setStartDate(e.target.value)} className="bg-[#1a1b26] border-2 border-slate-600 rounded-none p-2 text-sm text-slate-200 outline-none focus:border-cyan-400 transition-colors w-full [color-scheme:dark]" />
+                    <input type="date" value={startDate} onChange={(e) => setStartDate(e.target.value)} className="bg-[#1a1b26] border-2 border-slate-600 rounded-none p-2 text-sm text-slate-200 outline-none focus:border-cyan-400 transition-colors w-full [color-scheme:dark] cursor-pointer" />
                   </div>
                   <div className="flex flex-col gap-1.5">
                     <label className="text-[10px] text-cyan-500/70 font-bold uppercase tracking-wider flex items-center gap-1"><Repeat size={12}/> Ulangi Setiap...</label>
                     <div className="flex gap-2">
-                      <input type="number" min="1" value={repeatEvery} onChange={(e) => setRepeatEvery(Number(e.target.value))} className="w-20 bg-[#1a1b26] border-2 border-slate-600 rounded-none p-2 text-center text-sm text-slate-200 outline-none focus:border-cyan-400" />
+                      <input type="number" min="1" value={repeatEvery} onChange={(e) => setRepeatEvery(e.target.value === '' ? '' : Number(e.target.value))} className="w-20 bg-[#1a1b26] border-2 border-slate-600 rounded-none p-2 text-center text-sm text-slate-200 outline-none focus:border-cyan-400" />
                       <select value={repeatUnit} onChange={(e) => setRepeatUnit(e.target.value)} className="flex-1 bg-[#1a1b26] border-2 border-slate-600 rounded-none p-2 text-sm text-slate-200 outline-none focus:border-cyan-400 cursor-pointer appearance-none">
                         <option value="Hari">Hari</option><option value="Minggu">Minggu</option><option value="Bulan">Bulan</option>
                       </select>
@@ -157,7 +157,7 @@ export const TaskFormModal = ({ isOpen, onClose, initialType, isFixed }: { isOpe
                 <>
                   <div className="flex flex-col gap-1.5">
                     <label className="text-[10px] text-pink-500/70 font-bold uppercase tracking-wider flex items-center gap-1"><CalendarDays size={12}/> Tenggat Waktu (Due Date)</label>
-                    <input type="date" value={dueDate} onChange={(e) => setDueDate(e.target.value)} className="bg-[#1a1b26] border-2 border-slate-600 rounded-none p-2 text-sm text-slate-200 outline-none focus:border-pink-400 transition-colors w-full [color-scheme:dark]" />
+                    <input type="date" value={dueDate} onChange={(e) => setDueDate(e.target.value)} className="bg-[#1a1b26] border-2 border-slate-600 rounded-none p-2 text-sm text-slate-200 outline-none focus:border-pink-400 transition-colors w-full [color-scheme:dark] cursor-pointer" />
                   </div>
                   <div className="flex items-center gap-3 pt-2">
                     <input type="checkbox" id="bossMode" checked={isBossTask} onChange={() => setIsBossTask(!isBossTask)} className="w-4 h-4 accent-pink-500 cursor-pointer" />
