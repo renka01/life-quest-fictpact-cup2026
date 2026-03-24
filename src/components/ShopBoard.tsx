@@ -933,8 +933,8 @@ export const ITEMS: ShopItem[] = [
   { id: 12, name: "Buster Sword",          price: 175, rarity: 'epic',      slot: 'weapon', stat: 'STR +100 / HEAVY',       icon: <BusterSwordIcon /> },
   { id: 13, name: "Zangetsu (Shikai)",     price: 350, rarity: 'legendary', slot: 'weapon', stat: 'ATK +150 / GETSUGA',     icon: <ZangetsuIcon /> },
   { id: 14, name: "Holy Sword Excalibur",  price: 340, rarity: 'legendary', slot: 'weapon', stat: 'MAGIC ATK +120 / HOLY',  icon: <ExcaliburIcon /> },
-  { id: 15, name: "Death Scythe",          price: 170, rarity: 'epic',      slot: 'weapon', stat: 'ATK +90 / SOUL STEAL',      icon: <DeathScytheIcon /> },
-  { id: 16, name: "Leviathan Axe",         price: 325, rarity: 'legendary', slot: 'weapon', stat: 'STR +130 / FROSTBITE',      icon: <LeviathanAxeIcon /> },
+  { id: 15, name: "Death Scythe",          price: 170, rarity: 'epic',      slot: 'weapon', stat: 'ATK +90 / SOUL STEAL',   icon: <DeathScytheIcon /> },
+  { id: 16, name: "Leviathan Axe",         price: 325, rarity: 'legendary', slot: 'weapon', stat: 'STR +130 / FROSTBITE',   icon: <LeviathanAxeIcon /> },
   // klo nyari armor disini
   { id: 17, name: "Turtle School Gi",      price: 40,  rarity: 'uncommon',  slot: 'armor', stat: 'STR +30 / DEF +20',       icon: <TurtleGiIcon /> },
   { id: 18, name: "Survey Corps Jacket",   price: 80,  rarity: 'rare',      slot: 'armor', stat: 'AGI +40 / DEF +25',       icon: <SurveyCorpsIcon /> },
@@ -1000,8 +1000,8 @@ const RARITY_STYLE: Record<Rarity, {
 };
 
 const SLOT_LABELS: Record<EquipSlot, string> = {
-  helmet: '[ HEAD ]', cloak: '[ BACK ]', armor: '[ BODY ]',
-  weapon: '[ WEAPON ]', accessory: '[ NECK ]', potion: '[ POTION ]',
+  helmet: '[ HELM ]', cloak: '[ JUBAH ]', armor: '[ ARMOR ]',
+  weapon: '[ SENJATA ]', accessory: '[ AKSESORIS ]', potion: '[ RAMUAN ]',
 };
 
 // ============================================================
@@ -1019,7 +1019,7 @@ const EquipmentPanel: React.FC<EquipmentPanelProps> = ({ equippedItems, onUnequi
   return (
     <div className="mt-8 border-t-2 border-slate-700 pt-6" style={{ fontFamily: "'Courier New', monospace" }}>
       <h3 className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4">
-        ▸ EQUIPPED ITEMS
+        ▸ ITEM DIGUNAKAN
       </h3>
 
       {/* Slot grid */}
@@ -1037,7 +1037,7 @@ const EquipmentPanel: React.FC<EquipmentPanelProps> = ({ equippedItems, onUnequi
                 transition-all duration-100 group
               `}
               onClick={() => item && onUnequip(slot)}
-              title={item ? `Click to unequip ${item.name}` : 'Empty slot'}
+              title={item ? `Klik untuk melepas ${item.name}` : 'Slot kosong'}
               style={{ imageRendering: 'pixelated' }}
             >
               {item ? (
@@ -1065,7 +1065,7 @@ const EquipmentPanel: React.FC<EquipmentPanelProps> = ({ equippedItems, onUnequi
       {/* Active stat bonuses */}
       {equippedList.length > 0 && (
         <div className="p-3 bg-slate-900 border-2 border-slate-700">
-          <p className="text-[9px] text-slate-500 uppercase tracking-widest mb-2">▸ ACTIVE BONUSES</p>
+          <p className="text-[9px] text-slate-500 uppercase tracking-widest mb-2">▸ BONUS AKTIF</p>
           {equippedList.map((item) => (
             <p key={item.id} className="text-[9px] text-emerald-400 leading-loose">
               + {item.stat}
@@ -1101,13 +1101,13 @@ export default function ShopBoard({ searchQuery = "" }: ShopBoardProps) {
 
     if (isEquipped) {
       unequipItem(item.slot);
-      showToast(`Unequipped: ${item.name}`);
+      showToast(`Dilepas: ${item.name}`);
     } else if (ownedCount > 0) {
       if (item.slot === 'potion') {
-        showToast(`You have ${ownedCount}x ${item.name}`);
+        showToast(`Kamu memiliki ${ownedCount}x ${item.name}`);
       } else {
         equipItem(item.slot, item.id);
-        showToast(`Equipped: ${item.name}!`);
+        showToast(`Digunakan: ${item.name}!`);
       }
     } else {
       // Buy
@@ -1119,6 +1119,15 @@ export default function ShopBoard({ searchQuery = "" }: ShopBoardProps) {
       });
     }
   };
+
+  const categories = [
+    { id: 'weapon', label: 'SENJATA' },
+    { id: 'armor', label: 'ARMOR' },
+    { id: 'helmet', label: 'HELM' },
+    { id: 'cloak', label: 'JUBAH' },
+    { id: 'accessory', label: 'AKSESORIS' },
+    { id: 'potion', label: 'RAMUAN' }
+  ];
 
   return (
     <div className="p-6" style={{ fontFamily: "'Courier New', monospace" }}>
@@ -1132,23 +1141,32 @@ export default function ShopBoard({ searchQuery = "" }: ShopBoardProps) {
         </div>
       )}
 
-      {/* HEADER */}
-      <div className="flex justify-between items-center mb-8 border-b-2 border-slate-700 pb-4">
-        <h2 className="text-sm font-bold text-white flex items-center gap-3 tracking-widest uppercase">
-          <ShoppingBag className="text-cyan-400" size={16} />
-          [ TOKO &amp; LOOT ]
-        </h2>
-        <div className="bg-slate-800 px-4 py-2 border-2 border-amber-500 flex items-center gap-2">
-          <Coins size={12} className="text-amber-400" />
-          <span className="text-xs text-amber-400 font-bold tracking-widest">{stats.gold} G</span>
+      {/* --- HEADER TOKO & LOOT STYLE FOCUS ARENA --- */}
+      <div className="flex flex-col md:flex-row md:justify-between md:items-end gap-4 mb-8 shrink-0 border-b border-slate-700/50 pb-6">
+        <div className="flex flex-col gap-3 text-left">
+          <h1 className="font-pixel text-sm md:text-base text-white flex items-center gap-3 drop-shadow-[2px_2px_0_#000]">
+            <span className="text-amber-500"><ShoppingBag size={18} /></span>
+            TOKO & LOOT
+          </h1>
+          <p className="font-pixel text-[7px] md:text-[8px] text-slate-400 uppercase tracking-widest leading-relaxed">
+            BELI PERLENGKAPAN DAN TINGKATKAN KEKUATAN KARAKTERMU.
+          </p>
+        </div>
+
+        <div className="bg-[#24283b] border-2 border-amber-500 px-6 py-3 flex items-center justify-center gap-3 shadow-[4px_4px_0_#000] shrink-0 w-full md:w-auto">
+          <Coins size={16} className="text-amber-400 animate-bounce" />
+          <span className="text-sm text-amber-400 font-pixel tracking-widest">{stats.gold} G</span>
         </div>
       </div>
+      {/* ------------------------------------------- */}
 
       {/* CATEGORY FILTER */}
       <div className="flex flex-wrap gap-2 mb-6">
-        <button onClick={() => setActiveFilter('all')} className={`px-3 py-1.5 text-[10px] font-bold border-2 transition-colors uppercase tracking-widest ${activeFilter === 'all' ? 'border-amber-400 text-amber-400 bg-slate-800 shadow-[2px_2px_0_#fbbf24]' : 'border-slate-700 text-slate-500 hover:border-slate-500 bg-slate-900'}`}>ALL</button>
-        {['weapon', 'armor', 'helmet', 'cloak', 'accessory', 'potion'].map(slot => (
-          <button key={slot} onClick={() => setActiveFilter(slot as EquipSlot)} className={`px-3 py-1.5 text-[10px] font-bold border-2 transition-colors uppercase tracking-widest ${activeFilter === slot ? 'border-amber-400 text-amber-400 bg-slate-800 shadow-[2px_2px_0_#fbbf24]' : 'border-slate-700 text-slate-500 hover:border-slate-500 bg-slate-900'}`}>{slot}</button>
+        <button onClick={() => setActiveFilter('all')} className={`px-3 py-1.5 text-[10px] font-bold border-2 transition-colors uppercase tracking-widest ${activeFilter === 'all' ? 'border-amber-400 text-amber-400 bg-slate-800 shadow-[2px_2px_0_#fbbf24]' : 'border-slate-700 text-slate-500 hover:border-slate-500 bg-slate-900'}`}>SEMUA</button>
+        {categories.map(slot => (
+          <button key={slot.id} onClick={() => setActiveFilter(slot.id as EquipSlot)} className={`px-3 py-1.5 text-[10px] font-bold border-2 transition-colors uppercase tracking-widest ${activeFilter === slot.id ? 'border-amber-400 text-amber-400 bg-slate-800 shadow-[2px_2px_0_#fbbf24]' : 'border-slate-700 text-slate-500 hover:border-slate-500 bg-slate-900'}`}>
+            {slot.label}
+          </button>
         ))}
       </div>
 
@@ -1179,28 +1197,52 @@ export default function ShopBoard({ searchQuery = "" }: ShopBoardProps) {
               `}
             >
               {/* Top bar */}
-              <div className="flex justify-between items-center px-2 py-1 border-b border-slate-800">
+              <div className="flex justify-between items-center px-2 py-1 border-b border-slate-800 shrink-0">
                 <span className={`text-[7px] font-bold tracking-widest ${rs.labelClass}`}>{rs.label}</span>
                 <div className={`w-2 h-2 ${rs.dot}`} />
               </div>
 
-              {/* EQUIPPED badge */}
-              {isEquipped && (
-                <div className="absolute top-2 right-2 z-10 pointer-events-none">
-                  <div className="bg-amber-400 text-amber-950 text-[8px] font-pixel px-2 py-1 tracking-widest border-2 border-amber-950 shadow-[2px_2px_0_rgba(0,0,0,1)]">
-                    EQUIPPED
+              {/* Icon + name */}
+              <div
+                className="flex-1 flex flex-col items-center justify-center gap-2 px-2 relative"
+                style={{
+                  backgroundImage:
+                    'linear-gradient(rgba(255,255,255,0.02) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.02) 1px,transparent 1px)',
+                  backgroundSize: '4px 4px',
+                }}
+              >
+                {/* BADGE DIGUNAKAN */}
+                {isEquipped && (
+                  <div className="absolute top-2 right-2 z-10 pointer-events-none">
+                    <div className="bg-amber-400 text-amber-950 text-[6px] font-pixel px-1.5 py-0.5 tracking-wider border border-amber-900 shadow-[1px_1px_0_#000]">
+                      DIGUNAKAN
+                    </div>
                   </div>
-                </div>
-              )}
+                )}
 
-              {/* OWNED BADGE (Muncul jika punya tapi sedang tidak dipakai) */}
-              {!isEquipped && ownedCount > 0 && (
-                <div className="absolute top-2 right-2 z-10 pointer-events-none">
-                  <div className="bg-emerald-500 text-emerald-950 text-[8px] font-pixel px-2 py-1 tracking-widest border-2 border-emerald-950 shadow-[2px_2px_0_rgba(0,0,0,1)]">
-                    OWNED: {ownedCount}
+                {/* BADGE DIMILIKI */}
+                {!isEquipped && ownedCount > 0 && (
+                  <div className="absolute top-2 right-2 z-10 pointer-events-none">
+                    <div className="bg-emerald-500 text-emerald-950 text-[6px] font-pixel px-1.5 py-0.5 tracking-wider border border-emerald-900 shadow-[1px_1px_0_#000]">
+                      DIMILIKI
+                    </div>
                   </div>
+                )}
+
+                <div
+                  className="mt-5"
+                  style={{
+                    imageRendering: 'pixelated',
+                    transform: isHovered ? 'scale(1.1)' : 'scale(1)',
+                    transition: 'transform 0.1s',
+                  }}
+                >
+                  {item.icon}
                 </div>
-              )}
+                <span className="text-xs font-bold text-white uppercase tracking-tight text-center leading-tight drop-shadow-md px-2">
+                  {item.name}
+                </span>
+              </div>
 
               {/* Icon + name */}
               <div
@@ -1240,9 +1282,11 @@ export default function ShopBoard({ searchQuery = "" }: ShopBoardProps) {
                       <p key={i} className="text-[10px] font-bold text-emerald-400 font-mono leading-loose">{s.trim()}</p>
                     ))}
                   </div>
-                  <p className="text-[9px] text-slate-400 font-mono mt-2 uppercase">SLOT: {item.slot}</p>
+                  <p className="text-[9px] text-slate-400 font-mono mt-2 uppercase">
+                    SLOT: {categories.find(c => c.id === item.slot)?.label || item.slot}
+                  </p>
                   <p className="text-[11px] font-bold mt-3 text-amber-400">
-                    {isEquipped ? '▸ UNEQUIP' : ownedCount > 0 ? (item.slot === 'potion' ? `▸ OWNED: ${ownedCount}` : '▸ EQUIP') : `▸ BUY (${item.price} G)`}
+                    {isEquipped ? '▸ LEPAS' : ownedCount > 0 ? (item.slot === 'potion' ? `▸ DIMILIKI: ${ownedCount}` : '▸ GUNAKAN') : `▸ BELI (${item.price} G)`}
                   </p>
                 </div>
               )}

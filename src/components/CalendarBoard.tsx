@@ -78,17 +78,28 @@ export default function CalendarBoard() {
 
   return (
     <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 h-full flex flex-col relative">
-      <div className="flex justify-between items-end mb-6 shrink-0">
-        <div>
-          <h1 className="text-2xl font-bold text-white tracking-wide mb-1">Peta Ekspedisi</h1>
-          <p className="text-sm text-slate-400">Jadwal Target Utama dan Operasi Harianmu.</p>
+      <div className="flex flex-col md:flex-row md:justify-between md:items-end gap-4 mb-6 shrink-0 border-b border-slate-700/50 pb-6">
+        <div className="flex flex-col gap-3 text-left">
+          <h1 className="font-pixel text-sm md:text-base text-white flex items-center gap-3 drop-shadow-[2px_2px_0_#000]">
+            <span className="text-emerald-500"><CalIcon size={18} /></span>
+            ARSIP WAKTU
+          </h1>
+          <p className="font-pixel text-[7px] md:text-[8px] text-slate-400 uppercase leading-relaxed tracking-widest">
+            JADWAL TARGET UTAMA DAN OPERASI HARIANMU.
+          </p>
         </div>
-        <div className="flex items-center gap-4 bg-[#24283b] border-2 border-slate-600 px-4 py-2 shadow-[4px_4px_0_#000]">
-          <button onClick={prevMonth} className="text-slate-400 hover:text-cyan-400 transition-colors"><ChevronLeft size={20} /></button>
-          <span className="font-pixel text-sm text-white w-32 text-center">
+
+        {/* Navigator Bulan */}
+        <div className="flex items-center gap-4 bg-[#24283b] border-2 border-emerald-500 px-4 py-2 shadow-[4px_4px_0_#000] shrink-0 w-full md:w-auto justify-between md:justify-center">
+          <button onClick={prevMonth} className="text-emerald-500 hover:text-white transition-colors active:scale-90">
+            <ChevronLeft size={20} />
+          </button>
+          <span className="font-pixel text-[10px] md:text-xs text-emerald-400 w-32 text-center drop-shadow-[1px_1px_0_#000]">
             {monthNames[month]} {year}
           </span>
-          <button onClick={nextMonth} className="text-slate-400 hover:text-cyan-400 transition-colors"><ChevronRight size={20} /></button>
+          <button onClick={nextMonth} className="text-emerald-500 hover:text-white transition-colors active:scale-90">
+            <ChevronRight size={20} />
+          </button>
         </div>
       </div>
 

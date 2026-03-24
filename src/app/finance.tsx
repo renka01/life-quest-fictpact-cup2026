@@ -152,24 +152,26 @@ export default function Finance({
 
   return (
     <div className="flex flex-col h-full animate-in fade-in duration-500 gap-6 text-left p-4">
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-end shrink-0 border-b-4 border-slate-700 pb-6 gap-4">
-        <div className="text-left">
-          <h1 className="font-pixel text-sm text-cyan-400 tracking-wide mb-2 uppercase flex items-center gap-2">
-            <Wallet size={20} />
-            Financial Command Center
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-end shrink-0 border-b border-slate-700/50 pb-6 gap-4">
+        <div className="flex flex-col gap-3 text-left">
+          <h1 className="font-pixel text-sm md:text-base text-white flex items-center gap-3 drop-shadow-[2px_2px_0_#000]">
+            <span className="text-cyan-500"><Wallet size={18} /></span>
+            FINANCIAL CENTER
           </h1>
-          <p className="text-sm text-slate-400 font-bold uppercase tracking-widest mb-1">
-            Total Kekayaan Bersih
-          </p>
-          <p className="text-4xl font-bold text-white font-mono italic bg-clip-text text-transparent bg-gradient-to-r from-white to-slate-500">
-            Rp {netWorth.toLocaleString()}
-          </p>
+          <div>
+            <p className="font-pixel text-[7px] md:text-[8px] text-slate-400 uppercase tracking-widest mb-2">
+              TOTAL KEKAYAAN BERSIH
+            </p>
+            <p className="text-4xl font-bold text-white font-mono italic bg-clip-text text-transparent bg-gradient-to-r from-white to-slate-500">
+              Rp {netWorth.toLocaleString()}
+            </p>
+          </div>
         </div>
 
         <div className="flex gap-4 font-mono italic w-full md:w-auto">
           <div className="flex-1 md:flex-none bg-[#24283b] border-2 border-slate-600 border-b-4 border-b-emerald-500 px-6 py-3 rounded-none shadow-[4px_4px_0_#000]">
-            <p className="text-xs text-slate-500 font-bold mb-1 uppercase">
-              Uang Tunai / Rekening
+            <p className="text-[10px] font-pixel not-italic text-slate-500 mb-2 uppercase">
+              UANG TUNAI / REKENING
             </p>
             <p className="text-xl font-bold text-emerald-400">
               Rp {totalRekening.toLocaleString()}
@@ -177,8 +179,8 @@ export default function Finance({
           </div>
 
           <div className="flex-1 md:flex-none bg-[#24283b] border-2 border-slate-600 border-b-4 border-b-cyan-500 px-6 py-3 rounded-none shadow-[4px_4px_0_#000]">
-            <p className="text-xs text-slate-500 font-bold mb-1 uppercase">
-              Tabungan & Aset
+            <p className="text-[10px] font-pixel not-italic text-slate-500 mb-2 uppercase">
+              TABUNGAN & ASET
             </p>
             <p className="text-xl font-bold text-cyan-400">
               Rp {totalTabungan.toLocaleString()}

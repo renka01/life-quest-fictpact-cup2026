@@ -501,13 +501,16 @@ export default function FocusArena() {
   // ════════════════════════════════════════════════════════════
   if (phase === 'select') return (
     <div className="p-6 min-h-full" style={{ fontFamily: "'Courier New', monospace" }}>
-      <div className="mb-6 pb-4 border-b-2 border-slate-700">
-        <h2 className="text-sm font-bold text-white flex items-center gap-2 tracking-widest uppercase">
-          <Swords size={16} className="text-red-400"/> [ FOCUS ARENA ]
-        </h2>
-        <p className="text-[10px] text-slate-500 mt-1 uppercase tracking-widest">
-          ATK dan DEF kamu dari equipment akan berpengaruh di sini. Pilih boss dan bertarung!
-        </p>
+      <div className="flex flex-col md:flex-row md:justify-between md:items-end gap-4 mb-6 shrink-0 border-b border-slate-700/50 pb-6">
+        <div className="flex flex-col gap-3 text-left">
+          <h1 className="font-pixel text-sm md:text-base text-white flex items-center gap-3 drop-shadow-[2px_2px_0_#000]">
+            <span className="text-red-500"><Swords size={18} /></span>
+            FOCUS ARENA
+          </h1>
+          <p className="font-pixel text-[7px] md:text-[8px] text-slate-400 uppercase tracking-widest leading-relaxed">
+            ATK DAN DEF KAMU DARI EQUIPMENT AKAN BERPENGARUH DI SINI. PILIH BOSS DAN BERTARUNG!
+          </p>
+        </div>
       </div>
 
       {/* Stats preview */}

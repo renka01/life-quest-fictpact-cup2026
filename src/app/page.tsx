@@ -198,20 +198,25 @@ export default function Home() {
           </div>
         );
 
-      case "Misi":
+case "Misi":
         return (
           <div className="animate-in fade-in slide-in-from-left-4 duration-500 flex flex-col h-full">
-            <div className="flex justify-between items-end mb-6 shrink-0">
-              <div>
-                <h1 className="text-2xl font-bold text-white tracking-wide mb-1">Log Misi</h1>
-                <p className="text-sm text-slate-400">Status misi dan operasi harian.</p>
+            <div className="flex flex-col md:flex-row md:justify-between md:items-end gap-4 mb-6 shrink-0 border-b border-slate-700/50 pb-6">
+              <div className="flex flex-col gap-3 text-left">
+                <h1 className="font-pixel text-sm md:text-base text-white flex items-center gap-3 drop-shadow-[2px_2px_0_#000]">
+                  <span className="text-amber-500"><CheckSquare size={18} /></span>
+                  LOG MISI
+                </h1>
+                <p className="font-pixel text-[7px] md:text-[8px] text-slate-400 uppercase leading-relaxed tracking-widest">
+                STATUS MISI DAN OPERASI HARIAN.
+                </p>
               </div>
 
               <button
                 onClick={() => openAddModal(null, false)}
-                className="bg-[#24283b] border-2 border-amber-500 text-amber-400 hover:bg-amber-500 hover:text-slate-900 px-6 py-2.5 rounded-none flex items-center gap-2 text-xs font-bold transition-all shadow-[4px_4px_0_#000] active:translate-y-[2px] active:shadow-[2px_2px_0_#000]"
+                className="bg-[#24283b] border-2 border-amber-500 text-amber-400 hover:bg-amber-500 hover:text-slate-900 px-6 py-2.5 rounded-none flex items-center justify-center gap-2 text-[10px] font-pixel transition-all shadow-[4px_4px_0_#000] active:translate-y-[2px] active:shadow-[2px_2px_0_#000] shrink-0 uppercase"
               >
-                <Plus size={18} /> Misi Baru
+                <Plus size={14} /> MISI BARU
               </button>
             </div>
 
@@ -223,7 +228,6 @@ export default function Home() {
             />
           </div>
         );
-
       case "Toko & Loot":
         return (
           <div className="animate-in fade-in slide-in-from-left-4 duration-500 h-full">

@@ -116,14 +116,15 @@ export default function StatisticsBoard() {
       <div className="bg-[#24283b] border-4 border-slate-700 shadow-[6px_6px_0_#000] p-5 lg:p-6">
         <div className="flex flex-col gap-4">
           <div>
-            <p className="text-[10px] uppercase tracking-[0.2em] text-cyan-400 font-bold mb-2">
+            <p className="text-[10px] uppercase tracking-[0.2em] text-cyan-400 font-bold mb-3">
               Data Center
             </p>
-            <h1 className="text-2xl lg:text-3xl font-bold text-white mb-2">
-              Statistik
+            <h1 className="font-pixel text-sm md:text-base text-white flex items-center gap-3 drop-shadow-[2px_2px_0_#000] mb-3">
+              <span className="text-cyan-500"><BarChart3 size={18} /></span>
+              STATISTIK
             </h1>
-            <p className="text-sm text-slate-400 max-w-2xl">
-              Ringkasan performa misi, karakter, dan kondisi keuanganmu.
+            <p className="font-pixel text-[7px] md:text-[8px] text-slate-400 uppercase tracking-widest leading-relaxed max-w-2xl">
+              RINGKASAN PERFORMA MISI, KARAKTER, DAN KONDISI KEUANGANMU.
             </p>
           </div>
 

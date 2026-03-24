@@ -86,14 +86,17 @@ export default function DashboardBoard({
         <div className="grid grid-cols-1 xl:grid-cols-[1.5fr_0.9fr] gap-6 items-start">
           <div className="space-y-4">
             <div>
-              <p className="text-[10px] uppercase tracking-[0.2em] text-amber-400 font-bold mb-2">
+              <p className="text-[10px] uppercase tracking-[0.2em] text-amber-400 font-bold mb-3">
                 Command Center
               </p>
-              <h1 className="text-2xl lg:text-3xl font-bold text-white mb-2">
-                Dashboard Utama
+
+              <h1 className="font-pixel text-sm md:text-base text-white flex items-center gap-3 drop-shadow-[2px_2px_0_#000] mb-3">
+                <span className="text-amber-500"><LayoutDashboard size={18} /></span>
+                DASHBOARD UTAMA
               </h1>
-              <p className="text-sm text-slate-400 max-w-2xl">
-                Ringkasan progres karakter, misi, dan keuanganmu dalam satu layar.
+              
+              <p className="font-pixel text-[7px] md:text-[8px] text-slate-400 uppercase tracking-widest leading-relaxed max-w-2xl">
+                RINGKASAN PROGRES KARAKTER, MISI, DAN KEUANGANMU DALAM SATU LAYAR.
               </p>
             </div>
 
