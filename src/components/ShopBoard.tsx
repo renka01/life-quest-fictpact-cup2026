@@ -1244,29 +1244,6 @@ export default function ShopBoard({ searchQuery = "" }: ShopBoardProps) {
                 </span>
               </div>
 
-              {/* Icon + name */}
-              <div
-                className="flex-1 flex flex-col items-center justify-center gap-2 px-2 relative"
-                style={{
-                  backgroundImage:
-                    'linear-gradient(rgba(255,255,255,0.02) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.02) 1px,transparent 1px)',
-                  backgroundSize: '4px 4px',
-                }}
-              >
-                <div
-                  style={{
-                    imageRendering: 'pixelated',
-                    transform: isHovered ? 'scale(1.1)' : 'scale(1)',
-                    transition: 'transform 0.1s',
-                  }}
-                >
-                  {item.icon}
-                </div>
-                <span className="text-xs font-bold text-white uppercase tracking-tight text-center leading-tight drop-shadow-md px-2">
-                  {item.name}
-                </span>
-              </div>
-
               {/* Hover tooltip (scanline overlay) */}
               {isHovered && (
                 <div
