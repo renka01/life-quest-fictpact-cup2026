@@ -1,7 +1,6 @@
 "use client";
 import React from 'react';
 import Technomancer from '@/components/art/Technomancer';
-import TechnomancerGirl from '@/components/art/TechnomancerGirl'; // <-- Tambahan path import
 import { useStore } from '@/store/useStore'; // <-- Tambahan import store
 import { 
   LayoutDashboard, 
@@ -14,18 +13,11 @@ import {
   ListTodo,
   User 
 } from 'lucide-react';
+import { translations } from '@/utils/translations';
 
-// 1. Terima props dari page.tsx
 export default function Navbar({ activeMenu, setActiveMenu }: { activeMenu: string, setActiveMenu: (name: string) => void }) {
-  // Ambil data profil dan stats dari Zustand
-  const { userProfile, stats } = useStore();
-
-  // Fungsi untuk merender avatar dinamis berdasarkan gender
-  const renderNavAvatar = () => {
-    if (userProfile?.gender === 'Wanita') return <TechnomancerGirl />;
-    if (userProfile?.gender === 'Pria') return <Technomancer />;
-    return <User size={20} className="text-slate-500" />; // Fallback jika data kosong
-  };
+  const { userProfile, stats, settings } = useStore();
+  const t = translations[settings?.language || 'id']?.nav || translations['id'].nav;
 
   return (
     <aside className="fixed bottom-0 left-0 w-full h-16 bg-[#1a1b26] border-t-4 border-slate-700 flex flex-row z-50 shadow-[0_-4px_0_rgba(0,0,0,0.5)] md:static md:h-screen md:w-20 lg:w-64 md:flex-col md:border-t-0 md:border-r-4 md:shadow-[4px_0_0_rgba(0,0,0,0.5)]">
@@ -42,20 +34,20 @@ export default function Navbar({ activeMenu, setActiveMenu }: { activeMenu: stri
       {/* Navigation Links */}
       <nav className="flex-1 flex flex-row items-center justify-around w-full px-1 overflow-x-auto md:flex-col md:justify-start md:items-stretch md:py-6 md:gap-3 md:px-3 md:overflow-y-auto no-scrollbar">
         {[
-          { name: "Dashboard", icon: LayoutDashboard },
-          { name: "Misi", icon: ListTodo },
-          { name: "Keuangan", icon: Wallet },
-          { name: "Kalender", icon: Calendar },
-          { name: "Focus Arena", icon: Timer },
-          { name: "Statistik", icon: BarChart2 },
-          { name: "Toko & Loot", icon: ShoppingCart },
+          { id: "Dashboard", name: t.Dashboard, icon: LayoutDashboard },
+          { id: "Misi", name: t.Misi, icon: ListTodo },
+          { id: "Keuangan", name: t.Keuangan, icon: Wallet },
+          { id: "Kalender", name: t.Kalender, icon: Calendar },
+          { id: "Focus Arena", name: t.FocusArena, icon: Timer },
+          { id: "Statistik", name: t.Statistik, icon: BarChart2 },
+          { id: "Toko & Loot", name: t.TokoLoot, icon: ShoppingCart },
         ].map((item, idx) => {
-          const isActive = activeMenu === item.name;
+          const isActive = activeMenu === item.id;
 
           return (
             <button 
               key={idx} 
-              onClick={() => setActiveMenu(item.name)}
+              onClick={() => setActiveMenu(item.id)}
               className={`flex flex-col md:flex-row items-center justify-center md:justify-start gap-1 md:gap-4 px-1 py-1 md:px-4 md:py-3 border-0 md:border-2 transition-all group rounded-none flex-1 md:flex-none w-full ${
                 isActive 
                   ? 'text-amber-400 md:bg-[#24283b] md:border-amber-500 md:shadow-[4px_4px_0_#000] md:translate-x-[-2px] md:translate-y-[-2px]' 
@@ -69,27 +61,6 @@ export default function Navbar({ activeMenu, setActiveMenu }: { activeMenu: stri
           );
         })}
       </nav>
-
-      {/* Profil Section (Pojok Kiri Bawah) */}
-      <div className="hidden md:flex p-4 border-t-4 border-slate-700 items-center justify-center lg:justify-start gap-3 cursor-pointer hover:bg-slate-800 transition-colors shrink-0 bg-[#24283b]">
-        <div className="w-10 h-10 bg-slate-800 rounded-none border-2 border-slate-600 flex items-center justify-center overflow-hidden shadow-[2px_2px_0_#000]">
-          {/* Render Avatar Dinamis */}
-          <div className="transform scale-[0.3] mt-2">
-            {renderNavAvatar()}
-          </div>
-        </div>
-        
-        <div className="hidden lg:flex flex-col">
-          {/* Nama Player (Identitas Akun) */}
-          <span className="text-xs font-bold text-white truncate max-w-[120px]">
-            {userProfile?.accountName || "Guest User"}
-          </span>
-          {/* Level Dinamis */}
-          <span className="text-[10px] text-amber-400">
-            Lv. {stats.level} Adventurer
-          </span>
-        </div>
-      </div>
     </aside>
   );
 }

@@ -88,6 +88,7 @@ export interface UserProfile {
   nickname: string;    // Tambahkan ini
   gender: 'Pria' | 'Wanita' | null;
   avatarId: string | null;
+  bio?: string;
 }
 
 export interface DailyProgress {
@@ -96,6 +97,14 @@ export interface DailyProgress {
   taskClaimed: boolean;
   bossesDefeated: number;
   bossClaimed: boolean;
+}
+
+export interface AppSettings {
+  language: string;
+  dateFormat: string;
+  startOfDay: string;
+  audioTheme: string;
+  holidayMode: boolean;
 }
 
 export type EquipSlot = 'weapon' | 'armor' | 'helmet' | 'cloak' | 'accessory' | 'potion';
@@ -119,6 +128,11 @@ interface LifeQuestStore {
   stats: Stats;
   recurringTransactions: RecurringTransaction[];
   coinPopup: CoinPopup;
+
+  // <-- PENGATURAN & AUDIO -->
+  settings: AppSettings;
+  updateSetting: <K extends keyof AppSettings>(key: K, value: AppSettings[K]) => void;
+  playSound: (soundName: string) => void;
 
   // <-- TAMBAHAN: State & Action untuk Profile
   userProfile: UserProfile;
@@ -203,8 +217,16 @@ userProfile: {
   accountName: "", // Atau biarkan "" jika ingin kosong dulu
   nickname: "",             // Gunakan nickname, jangan name
   gender: null,
-  avatarId: null
+  avatarId: null,
+  bio: ""
 },
+      settings: {
+        language: "id",
+        dateFormat: "DD/MM/YYYY",
+        startOfDay: "00:00",
+        audioTheme: "retro",
+        holidayMode: false,
+      },
       dailyProgress: {
         loginClaimed: false,
         tasksCompleted: 0,
@@ -239,6 +261,66 @@ setUserProfile: (profile) => set((state) => ({
     ...profile 
   }
 })),
+
+      // --- ACTIONS SETTINGS & AUDIO ---
+      updateSetting: (key, value) => set((state) => ({ 
+        settings: { ...state.settings, [key]: value } 
+      })),
+      playSound: (soundName) => {
+        const { settings } = get();
+        if (settings.audioTheme === 'mute') return; // Jangan putar jika di-mute
+        if (typeof window !== 'undefined') {
+          try {
+            const AudioCtx = window.AudioContext || (window as any).webkitAudioContext;
+            if (!AudioCtx) return;
+            const ctx = new AudioCtx();
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            osc.connect(gain);
+            gain.connect(ctx.destination);
+            const now = ctx.currentTime;
+            
+            if (soundName === 'click') {
+              osc.type = 'square';
+              osc.frequency.setValueAtTime(400, now);
+              osc.frequency.exponentialRampToValueAtTime(100, now + 0.1);
+              gain.gain.setValueAtTime(0.05, now);
+              gain.gain.exponentialRampToValueAtTime(0.01, now + 0.1);
+              osc.start(now); osc.stop(now + 0.1);
+            } else if (soundName === 'success') {
+              osc.type = 'square';
+              osc.frequency.setValueAtTime(400, now);
+              osc.frequency.setValueAtTime(600, now + 0.1);
+              gain.gain.setValueAtTime(0.05, now);
+              gain.gain.linearRampToValueAtTime(0, now + 0.3);
+              osc.start(now); osc.stop(now + 0.3);
+            } else if (soundName === 'error') {
+              osc.type = 'sawtooth';
+              osc.frequency.setValueAtTime(150, now);
+              osc.frequency.linearRampToValueAtTime(100, now + 0.2);
+              gain.gain.setValueAtTime(0.05, now);
+              gain.gain.linearRampToValueAtTime(0, now + 0.2);
+              osc.start(now); osc.stop(now + 0.2);
+            } else if (soundName === 'glitch') {
+              osc.type = 'square';
+              osc.frequency.setValueAtTime(150, now);
+              osc.frequency.setValueAtTime(300, now + 0.05);
+              osc.frequency.setValueAtTime(150, now + 0.1);
+              gain.gain.setValueAtTime(0.05, now);
+              gain.gain.linearRampToValueAtTime(0, now + 0.15);
+              osc.start(now); osc.stop(now + 0.15);
+            } else if (soundName === 'coin') {
+              osc.type = 'square';
+              osc.frequency.setValueAtTime(987.77, now); // Nada B5
+              osc.frequency.setValueAtTime(1318.51, now + 0.1); // Nada E6
+              gain.gain.setValueAtTime(0.05, now);
+              gain.gain.setValueAtTime(0.05, now + 0.1);
+              gain.gain.exponentialRampToValueAtTime(0.01, now + 0.4);
+              osc.start(now); osc.stop(now + 0.4);
+            }
+          } catch(e) {}
+        }
+      },
 
       // --- ACTIONS INVENTORY & SHOP ---
       buyItem: (itemId, price) => {
@@ -686,6 +768,9 @@ setUserProfile: (profile) => set((state) => ({
     }),
     {
       name: 'lifequest-storage',
+      partialize: (state) => Object.fromEntries(
+        Object.entries(state).filter(([key]) => !['coinPopup', 'alertDialog', 'confirmDialog'].includes(key))
+      ),
     }
   )
 );

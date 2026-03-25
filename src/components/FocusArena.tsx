@@ -5,6 +5,7 @@ import { ITEMS } from '@/components/ShopBoard';
 import Technomancer from '@/components/art/Technomancer';
 import TechnomancerGirl from '@/components/art/TechnomancerGirl';
 import { Swords, Heart, Star, Shield, Trophy, SkipForward, RefreshCw, FlaskConical, Zap, Timer, Play, Square, Skull, Coins } from 'lucide-react';
+import { translations } from '@/utils/translations';
 
 // ═══════════════════════════════════════════════════════════════════════
 // BOSS SPRITES (pixel art)
@@ -293,6 +294,8 @@ export default function FocusArena() {
   const [battleLog,   setBattleLog]   = useState<string[]>([]);
   const [dmgNums,     setDmgNums]     = useState<DmgNum[]>([]);
   const [combo,       setCombo]       = useState(0);
+  const { settings } = useStore();
+  const tFocus = translations[settings?.language || 'id']?.focus || translations['id'].focus;
 
   // Pomodoro States
   const [focusMinutes, setFocusMinutes] = useState<number | string>(25);
@@ -505,10 +508,10 @@ export default function FocusArena() {
         <div className="flex flex-col gap-3 text-left">
           <h1 className="font-pixel text-sm md:text-base text-white flex items-center gap-3 drop-shadow-[2px_2px_0_#000]">
             <span className="text-red-500"><Swords size={18} /></span>
-            FOCUS ARENA
+            {tFocus.title}
           </h1>
           <p className="font-pixel text-[7px] md:text-[8px] text-slate-400 uppercase tracking-widest leading-relaxed">
-            ATK DAN DEF KAMU DARI EQUIPMENT AKAN BERPENGARUH DI SINI. PILIH BOSS DAN BERTARUNG!
+            {tFocus.desc}
           </p>
         </div>
       </div>
@@ -575,18 +578,18 @@ export default function FocusArena() {
         <div className="flex justify-center mb-3">
           <Trophy size={48} className="text-amber-400 drop-shadow-[0_0_15px_rgba(251,191,36,0.5)]" />
         </div>
-        <h2 className="text-2xl font-bold text-amber-400 uppercase tracking-widest">VICTORY!</h2>
+        <h2 className="text-2xl font-bold text-amber-400 uppercase tracking-widest">{tFocus.victory}</h2>
         <p className="text-slate-400 text-[11px] uppercase tracking-widest mt-1">{boss.name} has been defeated</p>
       </div>
       <div className="flex gap-8 text-center">
         <div><p className="text-amber-400 text-2xl font-bold">+{boss.gold}</p><p className="text-[9px] text-slate-500 uppercase">Gold</p></div>
         <div><p className="text-cyan-400 text-2xl font-bold">+{boss.exp}</p><p className="text-[9px] text-slate-500 uppercase">EXP</p></div>
-        <div><p className="text-pink-400 text-2xl font-bold">x{combo}</p><p className="text-[9px] text-slate-500 uppercase">Combo</p></div>
+        <div><p className="text-pink-400 text-2xl font-bold">x{combo}</p><p className="text-[9px] text-slate-500 uppercase">{tFocus.combo}</p></div>
       </div>
       <div className="flex gap-3">
         <button onClick={() => setPhase('select')}
           className="px-6 py-2 bg-amber-400 text-amber-900 text-[11px] font-bold uppercase tracking-widest border-2 border-amber-600 hover:bg-amber-300">
-          ▸ CHOOSE NEXT BOSS
+          {tFocus.chooseNext}
         </button>
       </div>
     </div>
@@ -602,7 +605,7 @@ export default function FocusArena() {
         <div className="flex justify-center mb-3">
           <Skull size={48} className="text-slate-400 drop-shadow-[0_0_15px_rgba(148,163,184,0.5)]" />
         </div>
-        <h2 className="text-2xl font-bold text-red-400 uppercase tracking-widest">DEFEATED</h2>
+        <h2 className="text-2xl font-bold text-red-400 uppercase tracking-widest">{tFocus.defeated}</h2>
         <p className="text-slate-400 text-[11px] uppercase tracking-widest mt-1">{boss.name} was too powerful</p>
       </div>
       <p className="text-[10px] text-slate-500 text-center max-w-xs">
@@ -612,11 +615,11 @@ export default function FocusArena() {
       <div className="flex gap-3">
         <button onClick={() => startBattle(boss)}
           className="px-5 py-2 bg-red-500 text-white text-[11px] font-bold uppercase tracking-widest border-2 border-red-700 hover:bg-red-400 flex items-center gap-1">
-          <RefreshCw size={12}/> RETRY
+          <RefreshCw size={12}/> {tFocus.retry}
         </button>
         <button onClick={() => setPhase('select')}
           className="px-5 py-2 bg-slate-800 text-slate-300 text-[11px] font-bold uppercase tracking-widest border-2 border-slate-600 hover:bg-slate-700">
-          SELECT BOSS
+          {tFocus.selectBoss}
         </button>
       </div>
     </div>
@@ -633,17 +636,17 @@ export default function FocusArena() {
       {/* ── Header ── */}
       <div className="flex justify-between items-center border-b-2 border-slate-700 pb-3">
         <span className="text-[10px] font-bold text-white uppercase tracking-widest flex items-center gap-2">
-          <Swords size={14} className="text-red-400"/> [ DUNGEON BATTLE ]
+          <Swords size={14} className="text-red-400"/> [ {tFocus.title} ]
         </span>
         <div className="flex items-center gap-3">
           {combo > 0 && (
             <span className={`text-[9px] font-bold px-2 py-0.5 border border-slate-600 ${combo >= 9 ? 'bg-amber-400 text-amber-900' : 'bg-slate-800 text-slate-300'}`}>
-              COMBO x{combo}
+              {tFocus.combo} x{combo}
             </span>
           )}
           <button onClick={flee}
             className="px-3 py-1 bg-slate-900 text-slate-500 text-[9px] font-bold uppercase border border-slate-700 hover:border-red-500 hover:text-red-400 flex items-center gap-1">
-            <SkipForward size={10}/> Kembali
+            <SkipForward size={10}/> {tFocus.back}
           </button>
         </div>
       </div>
@@ -656,7 +659,7 @@ export default function FocusArena() {
           {/* Player HP */}
           <div className="bg-slate-900 border-2 border-slate-700 p-3">
             <div className="flex justify-between mb-1">
-              <span className="text-[9px] text-pink-400 flex items-center gap-1"><Heart size={10}/> YOUR HP</span>
+              <span className="text-[9px] text-pink-400 flex items-center gap-1"><Heart size={10}/> {tFocus.yourHp}</span>
               <span className="text-[9px] text-slate-400">{localHp}/{stats.maxHp}</span>
             </div>
             <div className="h-3 bg-slate-800 border border-slate-700 overflow-hidden">
@@ -703,17 +706,17 @@ export default function FocusArena() {
           {/* ATTACK BUTTON */}
           <div className="bg-slate-900 border-2 border-slate-700 p-4 flex flex-col gap-3">
             <p className="text-[10px] text-slate-400 font-bold uppercase text-center flex items-center justify-center gap-2">
-              <Timer size={14} className="text-cyan-400"/> POMODORO FOCUS
+              <Timer size={14} className="text-cyan-400"/> {tFocus.pomodoro}
             </p>
             
             {!isFocusing && !canAttack && (
               <div className="flex flex-col gap-2">
-                <label className="text-[9px] text-slate-500 uppercase">Set Waktu Fokus (Menit)</label>
+                <label className="text-[9px] text-slate-500 uppercase">{tFocus.setMins}</label>
                 <input type="number" min="1" max="120" value={focusMinutes} onChange={e => setFocusMinutes(e.target.value === '' ? '' : Number(e.target.value))} 
                   className="bg-slate-950 border border-slate-700 p-2 text-white font-mono text-center outline-none focus:border-cyan-500"/>
                 <button onClick={() => { const mins = Number(focusMinutes) || 1; setTimeLeft(mins * 60); setIsFocusing(true); addLog(`[TIME] Memulai sesi fokus ${mins} menit. JANGAN MENYERAH!`); }}
                   className="mt-2 py-3 bg-cyan-600 hover:bg-cyan-500 text-white text-xs font-bold uppercase tracking-widest border-2 border-cyan-400 shadow-[0_4px_0_#0891b2] active:translate-y-[4px] active:shadow-none transition-all flex items-center justify-center gap-2">
-                  <Play size={14}/> START FOCUS
+                  <Play size={14}/> {tFocus.start}
                 </button>
               </div>
             )}
@@ -725,7 +728,7 @@ export default function FocusArena() {
                 </div>
                 <button onClick={() => { setIsFocusing(false); setTimeLeft(0); doBossAttack(true); }}
                   className="w-full py-2 bg-slate-800 text-slate-400 hover:bg-red-950 hover:text-red-400 border border-slate-700 hover:border-red-500 text-[10px] font-bold uppercase transition-all flex items-center justify-center gap-2">
-                  <Square size={12}/> GIVE UP
+                  <Square size={12}/> {tFocus.giveUp}
                 </button>
               </div>
             )}
@@ -735,7 +738,7 @@ export default function FocusArena() {
                 className={`py-4 text-sm font-bold uppercase tracking-widest border-2 transition-all flex items-center justify-center gap-2
                   ${bossHp <= 0 ? 'bg-slate-800 border-slate-700 text-slate-600 cursor-not-allowed'
                     : 'bg-red-600 border-red-400 text-white hover:bg-red-500 shadow-[0_4px_0_#7f1d1d] active:translate-y-[4px] active:shadow-none animate-bounce'}`}>
-                <Swords size={18}/> SERANG SEKARANG!
+                <Swords size={18}/> {tFocus.attack}
               </button>
             )}
           </div>
@@ -744,7 +747,7 @@ export default function FocusArena() {
           {potions.length > 0 && (
             <div className="bg-slate-900 border-2 border-slate-700 p-3">
               <p className="text-[8px] text-slate-500 uppercase tracking-widest mb-2 flex items-center gap-1">
-                <FlaskConical size={10}/> POTIONS
+                <FlaskConical size={10}/> {tFocus.potions}
               </p>
               <div className="flex flex-wrap gap-2">
                 {potions.map((pot: any) => (
@@ -762,7 +765,7 @@ export default function FocusArena() {
           {/* Battle log */}
           <div className="flex-1 bg-slate-950 border-2 border-slate-700 flex flex-col overflow-hidden">
             <div className="px-3 py-1.5 border-b border-slate-800">
-              <span className="text-[8px] text-slate-500 uppercase tracking-widest">Battle Log</span>
+              <span className="text-[8px] text-slate-500 uppercase tracking-widest">{tFocus.battleLog}</span>
             </div>
             <div className="flex-1 overflow-y-auto p-2 flex flex-col gap-0.5" style={{ maxHeight:200 }}>
               {battleLog.map((log, i) => (
@@ -818,7 +821,7 @@ export default function FocusArena() {
             <p className="text-[10px] text-white font-bold uppercase mt-0.5">{boss.name}</p>
             <p className="text-[8px] text-slate-500 italic mt-0.5">"{boss.title}"</p>
             <div className="flex gap-3 mt-2 text-[8px]">
-              <span className="text-amber-400">REWARD: {boss.gold}G / {boss.exp}XP</span>
+              <span className="text-amber-400">{tFocus.reward}: {boss.gold}G / {boss.exp}XP</span>
             </div>
             <div className="flex gap-3 text-[8px] mt-1">
               <span className="text-red-400">ATK: {boss.atk} → ~{Math.max(1, boss.atk - Math.floor(pStats.def * 0.4))} after DEF</span>

@@ -6,6 +6,7 @@ import {
   Plus, Minus, Star, Flame, X, FileText, Trash2, 
   CalendarDays, RotateCcw, Hash, AlertTriangle, Trophy, Skull, Repeat, Menu
 } from "lucide-react";
+import { translations } from "@/utils/translations";
 
 export interface ExtendedTask extends StoreTask {
   resetCounter?: string;
@@ -31,7 +32,9 @@ const renderStars = (difficulty: number, type: TaskType | null) => {
 // 1. KOMPONEN MODAL: FORM TAMBAH TUGAS
 // ==========================================
 export const TaskFormModal = ({ isOpen, onClose, initialType, isFixed }: { isOpen: boolean, onClose: () => void, initialType: TaskType | null, isFixed: boolean }) => {
-  const { addTask, showAlert } = useStore();
+  const { addTask, showAlert, settings } = useStore();
+  const t = translations[useStore().settings?.language || 'id']?.ui || translations['id'].ui;
+  const tForm = translations[settings?.language || 'id']?.taskForm || translations['id'].taskForm;
   
   const [newTaskTitle, setNewTaskTitle] = useState("");
   const [newTaskNotes, setNewTaskNotes] = useState("");
@@ -78,10 +81,10 @@ export const TaskFormModal = ({ isOpen, onClose, initialType, isFixed }: { isOpe
 
   // PERBAIKAN NAMA TEMA MODAL
   const themeColors = {
-    habit: { border: "border-amber-500", shadow: "shadow-[8px_8px_0_#000]", headerBg: "bg-[#24283b]", headerBorder: "border-amber-500", text: "text-amber-400", hover: "hover:text-amber-300", focus: "focus:border-amber-400", button: "bg-amber-500 hover:bg-amber-400 text-slate-950", title: "Buat Siklus Misi" },
-    daily: { border: "border-cyan-500", shadow: "shadow-[8px_8px_0_#000]", headerBg: "bg-[#24283b]", headerBorder: "border-cyan-500", text: "text-cyan-400", hover: "hover:text-cyan-300", focus: "focus:border-cyan-400", button: "bg-cyan-500 hover:bg-cyan-400 text-slate-950", title: "Buat Operasi Harian" },
-    todo:  { border: "border-pink-500", shadow: "shadow-[8px_8px_0_#000]", headerBg: "bg-[#24283b]", headerBorder: "border-pink-500", text: "text-pink-400", hover: "hover:text-pink-300", focus: "focus:border-pink-400", button: "bg-pink-500 hover:bg-pink-400 text-white", title: "Buat Target Utama" },
-    neutral: { border: "border-slate-600", shadow: "shadow-[8px_8px_0_#000]", headerBg: "bg-[#24283b]", headerBorder: "border-slate-600", text: "text-slate-300", hover: "hover:text-white", focus: "focus:border-slate-400", button: "bg-slate-700 text-slate-400 cursor-not-allowed", title: "Buat Misi Baru" }
+    habit: { border: "border-amber-500", shadow: "shadow-[8px_8px_0_#000]", headerBg: "bg-[#24283b]", headerBorder: "border-amber-500", text: "text-amber-400", hover: "hover:text-amber-300", focus: "focus:border-amber-400", button: "bg-amber-500 hover:bg-amber-400 text-slate-950", title: tForm.habitTitle },
+    daily: { border: "border-cyan-500", shadow: "shadow-[8px_8px_0_#000]", headerBg: "bg-[#24283b]", headerBorder: "border-cyan-500", text: "text-cyan-400", hover: "hover:text-cyan-300", focus: "focus:border-cyan-400", button: "bg-cyan-500 hover:bg-cyan-400 text-slate-950", title: tForm.dailyTitle },
+    todo:  { border: "border-pink-500", shadow: "shadow-[8px_8px_0_#000]", headerBg: "bg-[#24283b]", headerBorder: "border-pink-500", text: "text-pink-400", hover: "hover:text-pink-300", focus: "focus:border-pink-400", button: "bg-pink-500 hover:bg-pink-400 text-white", title: tForm.todoTitle },
+    neutral: { border: "border-slate-600", shadow: "shadow-[8px_8px_0_#000]", headerBg: "bg-[#24283b]", headerBorder: "border-slate-600", text: "text-slate-300", hover: "hover:text-white", focus: "focus:border-slate-400", button: "bg-slate-700 text-slate-400 cursor-not-allowed", title: tForm.newTitle }
   };
   const mTheme = newTaskType ? themeColors[newTaskType] : themeColors.neutral;
 
@@ -89,19 +92,19 @@ export const TaskFormModal = ({ isOpen, onClose, initialType, isFixed }: { isOpe
     <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-[100] flex justify-center items-center p-4">
       <div className={`w-full max-w-md bg-[#1a1b26] border-4 rounded-none flex flex-col overflow-hidden transition-all duration-300 ${mTheme.border} ${mTheme.shadow}`}>
         <div className={`${mTheme.headerBg} border-b-4 ${mTheme.headerBorder} p-4 flex justify-between items-center`}>
-          <h3 className={`font-pixel text-[10px] uppercase tracking-widest ${mTheme.text}`}>{isFixed ? mTheme.title : "Buat Misi Baru"}</h3>
+          <h3 className={`font-pixel text-[10px] uppercase tracking-widest ${mTheme.text}`}>{isFixed ? mTheme.title : tForm.newTitle}</h3>
           <button onClick={onClose} className={`${mTheme.text} ${mTheme.hover} transition-colors`}><X size={18} /></button>
         </div>
         
         <div className="p-6 flex flex-col gap-5 overflow-y-auto max-h-[70vh]">
           <div className="flex flex-col gap-1.5">
-            <label className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Judul Misi*</label>
-            <input type="text" value={newTaskTitle} onChange={(e) => setNewTaskTitle(e.target.value)} placeholder="Contoh: Olahraga, Belajar Koding..." className={`bg-[#24283b] border-2 border-slate-600 rounded-none p-3 text-sm text-slate-200 outline-none transition-colors w-full ${mTheme.focus}`} autoFocus/>
+            <label className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">{tForm.taskName}</label>
+            <input type="text" value={newTaskTitle} onChange={(e) => setNewTaskTitle(e.target.value)} placeholder={tForm.taskNamePh} className={`bg-[#24283b] border-2 border-slate-600 rounded-none p-3 text-sm text-slate-200 outline-none transition-colors w-full ${mTheme.focus}`} autoFocus/>
           </div>
 
           <div className="flex flex-col gap-1.5">
-            <label className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Detail / Catatan</label>
-            <textarea value={newTaskNotes} onChange={(e) => setNewTaskNotes(e.target.value)} placeholder="Tambahkan penjelasan, link, atau instruksi..." className={`bg-[#24283b] border-2 border-slate-600 rounded-none p-3 text-sm text-slate-200 outline-none transition-colors w-full min-h-[80px] resize-none ${mTheme.focus}`}/>
+            <label className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">{tForm.notes}</label>
+            <textarea value={newTaskNotes} onChange={(e) => setNewTaskNotes(e.target.value)} placeholder={tForm.notesPh} className={`bg-[#24283b] border-2 border-slate-600 rounded-none p-3 text-sm text-slate-200 outline-none transition-colors w-full min-h-[80px] resize-none ${mTheme.focus}`}/>
           </div>
 
           {!isFixed && (
@@ -121,13 +124,13 @@ export const TaskFormModal = ({ isOpen, onClose, initialType, isFixed }: { isOpe
               {newTaskType === 'habit' && (
                 <>
                   <div className="flex flex-col gap-1.5">
-                    <label className="text-[10px] text-amber-500/70 font-bold uppercase tracking-wider flex items-center gap-1"><RotateCcw size={12}/> Ulang Hitungan</label>
+                    <label className="text-[10px] text-amber-500/70 font-bold uppercase tracking-wider flex items-center gap-1"><RotateCcw size={12}/> {tForm.resetCounter}</label>
                     <select value={resetCounter} onChange={(e) => setResetCounter(e.target.value)} className="bg-[#1a1b26] border-2 border-slate-600 rounded-none p-2 text-sm text-slate-200 outline-none focus:border-amber-400 transition-colors w-full cursor-pointer appearance-none">
-                      <option value="Harian">Harian (Reset tiap hari)</option><option value="Mingguan">Mingguan (Reset tiap minggu)</option><option value="Bulanan">Bulanan (Reset tiap bulan)</option>
+                      <option value="Harian">{tForm.dailyReset}</option><option value="Mingguan">{tForm.weeklyReset}</option><option value="Bulanan">{tForm.monthlyReset}</option>
                     </select>
                   </div>
                   <div className="flex flex-col gap-1.5">
-                    <label className="text-[10px] text-amber-500/70 font-bold uppercase tracking-wider flex items-center gap-1"><Hash size={12}/> Atur Hitungan Awal (+ / -)</label>
+                    <label className="text-[10px] text-amber-500/70 font-bold uppercase tracking-wider flex items-center gap-1"><Hash size={12}/> {tForm.setInitial}</label>
                     <div className="flex items-center gap-2">
                       <button onClick={() => setHabitCount((Number(habitCount) || 0) - 1)} className="w-10 h-10 bg-[#1a1b26] border-2 border-slate-600 hover:border-amber-500 rounded-none flex items-center justify-center text-slate-400 hover:text-amber-500 transition-colors"><Minus size={16}/></button>
                       <input type="number" value={habitCount} onChange={(e) => setHabitCount(e.target.value === '' ? '' : Number(e.target.value))} className="w-16 h-10 bg-[#1a1b26] border-2 border-slate-600 rounded-none text-center text-sm font-bold text-slate-200 outline-none focus:border-amber-400" />
@@ -139,15 +142,15 @@ export const TaskFormModal = ({ isOpen, onClose, initialType, isFixed }: { isOpe
               {newTaskType === 'daily' && (
                 <>
                   <div className="flex flex-col gap-1.5">
-                    <label className="text-[10px] text-cyan-500/70 font-bold uppercase tracking-wider flex items-center gap-1"><CalendarDays size={12}/> Tanggal Mulai Pengulangan</label>
+                    <label className="text-[10px] text-cyan-500/70 font-bold uppercase tracking-wider flex items-center gap-1"><CalendarDays size={12}/> {tForm.startDate}</label>
                     <input type="date" value={startDate} onChange={(e) => setStartDate(e.target.value)} className="bg-[#1a1b26] border-2 border-slate-600 rounded-none p-2 text-sm text-slate-200 outline-none focus:border-cyan-400 transition-colors w-full [color-scheme:dark] cursor-pointer" />
                   </div>
                   <div className="flex flex-col gap-1.5">
-                    <label className="text-[10px] text-cyan-500/70 font-bold uppercase tracking-wider flex items-center gap-1"><Repeat size={12}/> Ulangi Setiap...</label>
+                    <label className="text-[10px] text-cyan-500/70 font-bold uppercase tracking-wider flex items-center gap-1"><Repeat size={12}/> {tForm.repeatEvery}</label>
                     <div className="flex gap-2">
                       <input type="number" min="1" value={repeatEvery} onChange={(e) => setRepeatEvery(e.target.value === '' ? '' : Number(e.target.value))} className="w-20 bg-[#1a1b26] border-2 border-slate-600 rounded-none p-2 text-center text-sm text-slate-200 outline-none focus:border-cyan-400" />
                       <select value={repeatUnit} onChange={(e) => setRepeatUnit(e.target.value)} className="flex-1 bg-[#1a1b26] border-2 border-slate-600 rounded-none p-2 text-sm text-slate-200 outline-none focus:border-cyan-400 cursor-pointer appearance-none">
-                        <option value="Hari">Hari</option><option value="Minggu">Minggu</option><option value="Bulan">Bulan</option>
+                        <option value="Hari">{tForm.day}</option><option value="Minggu">{tForm.week}</option><option value="Bulan">{tForm.month}</option>
                       </select>
                     </div>
                   </div>
@@ -156,12 +159,12 @@ export const TaskFormModal = ({ isOpen, onClose, initialType, isFixed }: { isOpe
               {newTaskType === 'todo' && (
                 <>
                   <div className="flex flex-col gap-1.5">
-                    <label className="text-[10px] text-pink-500/70 font-bold uppercase tracking-wider flex items-center gap-1"><CalendarDays size={12}/> Tenggat Waktu (Due Date)</label>
+                    <label className="text-[10px] text-pink-500/70 font-bold uppercase tracking-wider flex items-center gap-1"><CalendarDays size={12}/> {tForm.dueDate}</label>
                     <input type="date" value={dueDate} onChange={(e) => setDueDate(e.target.value)} className="bg-[#1a1b26] border-2 border-slate-600 rounded-none p-2 text-sm text-slate-200 outline-none focus:border-pink-400 transition-colors w-full [color-scheme:dark] cursor-pointer" />
                   </div>
                   <div className="flex items-center gap-3 pt-2">
                     <input type="checkbox" id="bossMode" checked={isBossTask} onChange={() => setIsBossTask(!isBossTask)} className="w-4 h-4 accent-pink-500 cursor-pointer" />
-                    <label htmlFor="bossMode" className="text-xs text-slate-300 font-bold cursor-pointer flex items-center gap-1">Jadikan ini <span title="Boss Task"><Flame size={14} className="text-pink-500"/></span> Boss Task</label>
+                    <label htmlFor="bossMode" className="text-xs text-slate-300 font-bold cursor-pointer flex items-center gap-1">{tForm.makeBoss} <span title="Boss Task"><Flame size={14} className="text-pink-500"/></span> Boss Task</label>
                   </div>
                 </>
               )}
@@ -170,11 +173,11 @@ export const TaskFormModal = ({ isOpen, onClose, initialType, isFixed }: { isOpe
 
           <div className="flex flex-col gap-1.5 mt-2">
             <div className="flex justify-between items-center">
-              <label className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Tingkat Kesulitan</label>
-              <span className="text-[8px] text-emerald-400/80 italic">*Kesulitan tinggi = EXP & Gold lebih besar!</span>
+              <label className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">{tForm.difficulty}</label>
+              <span className="text-[8px] text-emerald-400/80 italic">{tForm.diffNote}</span>
             </div>
             <div className="grid grid-cols-4 gap-2">
-              {[{ level: 1, label: "Remeh" }, { level: 2, label: "Mudah" }, { level: 3, label: "Sedang" }, { level: 4, label: "Susah" }].map(diff => (
+              {[{ level: 1, label: tForm.trivial }, { level: 2, label: tForm.easy }, { level: 3, label: tForm.medium }, { level: 4, label: tForm.hard }].map(diff => (
                 <button key={diff.level} onClick={() => setNewTaskDifficulty(diff.level)} className={`flex flex-col items-center gap-1.5 p-2 rounded-none border-2 transition-all ${newTaskDifficulty === diff.level ? `${mTheme.headerBg} ${mTheme.border} ${mTheme.text}` : 'bg-[#1a1b26] border-slate-600 text-slate-500 hover:bg-slate-700 hover:text-slate-300'}`}>
                   {renderStars(diff.level, newTaskType)}
                   <span className="text-[10px] font-bold">{diff.label}</span>
@@ -184,22 +187,22 @@ export const TaskFormModal = ({ isOpen, onClose, initialType, isFixed }: { isOpe
           </div>
 
           <div className="flex flex-col gap-1.5 mt-2">
-            <label className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Kategori / Label</label>
+            <label className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">{tForm.category}</label>
             <select value={newTaskCategory} onChange={(e) => setNewTaskCategory(e.target.value)} className={`bg-[#24283b] border-2 border-slate-600 rounded-none p-3 text-sm text-slate-200 outline-none transition-colors w-full cursor-pointer appearance-none ${mTheme.focus}`}>
-              <option value="" disabled hidden>Tambahkan tanda...</option>
+              <option value="" disabled hidden>{tForm.catPh}</option>
               <option value="Kesehatan">Kesehatan</option><option value="Pendidikan">Pendidikan</option>
               <option value="Pekerjaan">Pekerjaan</option><option value="Proyek">Proyek</option>
-              <option value="Lainnya">Lainnya... (Ketik Sendiri)</option>
+              <option value="Lainnya">{tForm.catCustom}</option>
             </select>
             {newTaskCategory === "Lainnya" && (
-              <input type="text" value={customCategory} onChange={(e) => setCustomCategory(e.target.value)} placeholder="Masukkan nama kategori baru..." className={`bg-[#1a1b26] border-b-2 p-2 text-sm outline-none w-full mt-2 ${mTheme.border} ${mTheme.text}`} autoFocus/>
+              <input type="text" value={customCategory} onChange={(e) => setCustomCategory(e.target.value)} placeholder={tForm.catCustomPh} className={`bg-[#1a1b26] border-b-2 p-2 text-sm outline-none w-full mt-2 ${mTheme.border} ${mTheme.text}`} autoFocus/>
             )}
           </div>
         </div>
         
         <div className="p-4 bg-[#24283b] border-t-4 border-slate-700 flex justify-end gap-3 shrink-0">
-          <button onClick={onClose} className="px-6 py-2 text-xs font-bold text-slate-400 hover:text-white transition-colors">Batal</button>
-          <button onClick={submitNewTask} disabled={!newTaskType} className={`px-8 py-2 rounded-none text-xs font-bold shadow-[4px_4px_0_#000] active:translate-y-[2px] active:shadow-[2px_2px_0_#000] transition-all ${newTaskType ? mTheme.button : 'bg-slate-800 text-slate-500 cursor-not-allowed'}`}>Tambah</button>
+          <button onClick={onClose} className="px-6 py-2 text-xs font-bold text-slate-400 hover:text-white transition-colors uppercase">{t.cancel}</button>
+          <button onClick={submitNewTask} disabled={!newTaskType} className={`px-8 py-2 rounded-none text-xs font-bold shadow-[4px_4px_0_#000] active:translate-y-[2px] active:shadow-[2px_2px_0_#000] transition-all uppercase ${newTaskType ? mTheme.button : 'bg-slate-800 text-slate-500 cursor-not-allowed'}`}>{t.add}</button>
         </div>
       </div>
     </div>
@@ -211,7 +214,10 @@ export const TaskFormModal = ({ isOpen, onClose, initialType, isFixed }: { isOpe
 // 2. KOMPONEN MODAL: DETAIL TUGAS
 // ==========================================
 export const TaskDetailModal = ({ task, onClose }: { task: ExtendedTask | null, onClose: () => void }) => {
-  const { deleteTask } = useStore();
+  const { deleteTask, settings } = useStore();
+  const t = translations[useStore().settings?.language || 'id']?.ui || translations['id'].ui;
+  const tForm = translations[settings?.language || 'id']?.taskForm || translations['id'].taskForm;
+
   if (!task) return null;
 
   const triggerDelete = () => {
@@ -240,12 +246,12 @@ export const TaskDetailModal = ({ task, onClose }: { task: ExtendedTask | null, 
           <button onClick={onClose} className="text-slate-500 hover:text-white bg-slate-800 p-1.5 rounded-full"><X size={16} /></button>
         </div>
         <div className="p-6 min-h-[150px]">
-          <h4 className="text-xs font-bold text-slate-400 flex items-center gap-2 mb-3"><FileText size={14}/> Detail & Catatan:</h4>
-          <p className="text-sm text-slate-300 whitespace-pre-wrap leading-relaxed">{task.notes ? task.notes : <span className="italic text-slate-600">Tidak ada catatan untuk misi ini.</span>}</p>
+          <h4 className="text-xs font-bold text-slate-400 flex items-center gap-2 mb-3"><FileText size={14}/> {tForm.details}</h4>
+          <p className="text-sm text-slate-300 whitespace-pre-wrap leading-relaxed">{task.notes ? task.notes : <span className="italic text-slate-600">{tForm.noNotes}</span>}</p>
         </div>
         <div className="p-4 bg-slate-950 border-t border-slate-800 flex justify-between items-center">
-          <button onClick={triggerDelete} className="flex items-center gap-2 text-xs font-bold text-pink-500 hover:text-white hover:bg-pink-500 px-4 py-2 rounded transition-colors"><Trash2 size={14}/> Hapus Misi</button>
-          <button onClick={onClose} className="text-xs text-slate-400 hover:text-white px-4 py-2 border border-slate-700 rounded transition-colors">Tutup</button>
+          <button onClick={triggerDelete} className="flex items-center gap-2 text-xs font-bold text-pink-500 hover:text-white hover:bg-pink-500 px-4 py-2 rounded transition-colors"><Trash2 size={14}/> {tForm.delete}</button>
+          <button onClick={onClose} className="text-xs text-slate-400 hover:text-white px-4 py-2 border border-slate-700 rounded transition-colors uppercase">{t.close}</button>
         </div>
       </div>
     </div>
@@ -257,6 +263,7 @@ export const TaskDetailModal = ({ task, onClose }: { task: ExtendedTask | null, 
 // ==========================================
 export const GlobalAlerts = () => {
   const { alertDialog, confirmDialog, closeAlert, closeConfirm } = useStore();
+  const t = translations[useStore().settings?.language || 'id']?.ui || translations['id'].ui;
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
@@ -276,7 +283,7 @@ export const GlobalAlerts = () => {
             </div>
             <h2 className="font-pixel text-xl text-yellow-400 tracking-[0.1em] mt-8 mb-3 drop-shadow-[3px_3px_0_#000] animate-bounce">LEVEL UP!</h2>
             <p className="text-sm text-slate-200 mb-8 font-mono leading-relaxed">{alertDialog.message}</p>
-            <button onClick={closeAlert} className="px-8 py-3 bg-yellow-400 text-yellow-950 font-pixel text-[10px] uppercase shadow-[4px_4px_0_#000] hover:bg-yellow-300 active:translate-y-[2px] active:shadow-[2px_2px_0_#000] transition-all w-full">Lanjutkan</button>
+            <button onClick={closeAlert} className="px-8 py-3 bg-yellow-400 text-yellow-950 font-pixel text-[10px] uppercase shadow-[4px_4px_0_#000] hover:bg-yellow-300 active:translate-y-[2px] active:shadow-[2px_2px_0_#000] transition-all w-full">{t.continue}</button>
           </div>
         </div>
       )}
@@ -292,7 +299,7 @@ export const GlobalAlerts = () => {
             </div>
             <h2 className={`font-pixel text-[10px] tracking-widest mb-3 uppercase ${alertDialog.type === 'success' ? 'text-amber-400' : alertDialog.type === 'danger' ? 'text-pink-500' : alertDialog.type === 'warning' ? 'text-orange-500' : 'text-cyan-400'}`}>{alertDialog.title}</h2>
             <p className="text-xs text-slate-300 mb-6 leading-relaxed font-mono px-4">{alertDialog.message}</p>
-            <button onClick={closeAlert} className={`px-8 py-3 rounded-none text-[10px] font-pixel transition-all uppercase w-full shadow-[4px_4px_0_#000] active:translate-y-[2px] active:shadow-[2px_2px_0_#000] ${alertDialog.type === 'success' ? 'bg-amber-400 text-amber-950 hover:bg-amber-300' : alertDialog.type === 'danger' ? 'bg-pink-500 text-white hover:bg-pink-400' : alertDialog.type === 'warning' ? 'bg-orange-500 text-white hover:bg-orange-400' : 'bg-cyan-500 text-cyan-950 hover:bg-cyan-400'}`}>Tutup / Lanjutkan</button>
+            <button onClick={closeAlert} className={`px-8 py-3 rounded-none text-[10px] font-pixel transition-all uppercase w-full shadow-[4px_4px_0_#000] active:translate-y-[2px] active:shadow-[2px_2px_0_#000] ${alertDialog.type === 'success' ? 'bg-amber-400 text-amber-950 hover:bg-amber-300' : alertDialog.type === 'danger' ? 'bg-pink-500 text-white hover:bg-pink-400' : alertDialog.type === 'warning' ? 'bg-orange-500 text-white hover:bg-orange-400' : 'bg-cyan-500 text-cyan-950 hover:bg-cyan-400'}`}>{t.closeContinue}</button>
           </div>
         </div>
       )}
@@ -306,8 +313,8 @@ export const GlobalAlerts = () => {
             <h2 className="font-pixel text-[10px] text-cyan-400 tracking-widest mb-3 uppercase">Sistem Konfirmasi</h2>
             <p className="text-xs text-slate-300 mb-6 font-mono leading-relaxed">{confirmDialog.message}</p>
             <div className="flex gap-3 justify-center w-full">
-              <button onClick={closeConfirm} className="flex-1 bg-[#24283b] border-2 border-slate-600 hover:border-slate-400 text-slate-300 px-4 py-3 text-[10px] font-pixel transition-all uppercase shadow-[4px_4px_0_#000] active:translate-y-[2px] active:shadow-[2px_2px_0_#000]">Batal</button>
-              <button onClick={() => { confirmDialog.onConfirm(); closeConfirm(); }} className="flex-1 bg-cyan-500 border-2 border-cyan-400 text-cyan-950 hover:bg-cyan-400 px-4 py-3 text-[10px] font-pixel transition-all uppercase shadow-[4px_4px_0_#000] active:translate-y-[2px] active:shadow-[2px_2px_0_#000]">Lanjutkan</button>
+              <button onClick={closeConfirm} className="flex-1 bg-[#24283b] border-2 border-slate-600 hover:border-slate-400 text-slate-300 px-4 py-3 text-[10px] font-pixel transition-all uppercase shadow-[4px_4px_0_#000] active:translate-y-[2px] active:shadow-[2px_2px_0_#000]">{t.cancel}</button>
+              <button onClick={() => { confirmDialog.onConfirm(); closeConfirm(); }} className="flex-1 bg-cyan-500 border-2 border-cyan-400 text-cyan-950 hover:bg-cyan-400 px-4 py-3 text-[10px] font-pixel transition-all uppercase shadow-[4px_4px_0_#000] active:translate-y-[2px] active:shadow-[2px_2px_0_#000]">{t.continue}</button>
             </div>
           </div>
         </div>

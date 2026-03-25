@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import { useStore, EquipSlot } from '@/store/useStore';
 import { Coins, ShoppingBag } from 'lucide-react';
+import { translations } from '@/utils/translations';
 
 // ============================================================
 // TYPES
@@ -999,11 +1000,6 @@ const RARITY_STYLE: Record<Rarity, {
   legendary: { label: 'LEGENDARY', labelClass: 'text-amber-400',   border: 'border-amber-400',   dot: 'bg-amber-400',   hoverShadow: 'hover:shadow-amber-400/40' },
 };
 
-const SLOT_LABELS: Record<EquipSlot, string> = {
-  helmet: '[ HELM ]', cloak: '[ JUBAH ]', armor: '[ ARMOR ]',
-  weapon: '[ SENJATA ]', accessory: '[ AKSESORIS ]', potion: '[ RAMUAN ]',
-};
-
 // ============================================================
 // EQUIPMENT PANEL — shows what's currently worn
 // ============================================================
@@ -1015,11 +1011,18 @@ interface EquipmentPanelProps {
 const EquipmentPanel: React.FC<EquipmentPanelProps> = ({ equippedItems, onUnequip }) => {
   const slots: EquipSlot[] = ['helmet', 'cloak', 'armor', 'weapon', 'accessory'];
   const equippedList = slots.map(slot => ITEMS.find(i => i.id === equippedItems[slot])).filter(Boolean) as ShopItem[];
+  const { settings } = useStore();
+  const t = translations[settings?.language || 'id']?.shop || translations['id'].shop;
+  const tPage = translations[settings?.language || 'id']?.page || translations['id'].page;
+  const SLOT_LABELS: Record<EquipSlot, string> = {
+    helmet: `[ ${tPage.helmet} ]`, cloak: `[ ${tPage.cloak} ]`, armor: `[ ${tPage.armor} ]`,
+    weapon: `[ ${tPage.weapon} ]`, accessory: `[ ${tPage.acc} ]`, potion: `[ ${tPage.potion} ]`,
+  };
 
   return (
     <div className="mt-8 border-t-2 border-slate-700 pt-6" style={{ fontFamily: "'Courier New', monospace" }}>
       <h3 className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4">
-        ▸ ITEM DIGUNAKAN
+        {t.equipped}
       </h3>
 
       {/* Slot grid */}
@@ -1065,7 +1068,7 @@ const EquipmentPanel: React.FC<EquipmentPanelProps> = ({ equippedItems, onUnequi
       {/* Active stat bonuses */}
       {equippedList.length > 0 && (
         <div className="p-3 bg-slate-900 border-2 border-slate-700">
-          <p className="text-[9px] text-slate-500 uppercase tracking-widest mb-2">▸ BONUS AKTIF</p>
+          <p className="text-[9px] text-slate-500 uppercase tracking-widest mb-2">{t.activeBonus}</p>
           {equippedList.map((item) => (
             <p key={item.id} className="text-[9px] text-emerald-400 leading-loose">
               + {item.stat}
@@ -1082,13 +1085,28 @@ const EquipmentPanel: React.FC<EquipmentPanelProps> = ({ equippedItems, onUnequi
 // ============================================================
 interface ShopBoardProps {
   searchQuery?: string;
+  activeCategory?: string;
 }
 
-export default function ShopBoard({ searchQuery = "" }: ShopBoardProps) {
+export default function ShopBoard({ searchQuery = "", activeCategory = "all" }: ShopBoardProps) {
   const { stats, inventory, equippedItems, buyItem, equipItem, unequipItem, showConfirm } = useStore();
+  const { settings } = useStore();
+  const t = translations[settings?.language || 'id']?.shop || translations['id'].shop;
+  const tPage = translations[settings?.language || 'id']?.page || translations['id'].page;
+
   const [hoveredId, setHoveredId] = useState<number | null>(null);
   const [toast, setToast] = useState<string | null>(null);
   const [activeFilter, setActiveFilter] = useState<EquipSlot | 'all'>('all');
+  const [ownershipFilter, setOwnershipFilter] = useState<'all' | 'owned' | 'notOwned'>('all');
+
+  const categories = [
+    { id: 'weapon', label: tPage.weapon },
+    { id: 'armor', label: tPage.armor },
+    { id: 'helmet', label: tPage.helmet },
+    { id: 'cloak', label: tPage.cloak },
+    { id: 'accessory', label: tPage.acc },
+    { id: 'potion', label: tPage.potion }
+  ];
 
   const showToast = (msg: string) => {
     setToast(msg);
@@ -1120,15 +1138,6 @@ export default function ShopBoard({ searchQuery = "" }: ShopBoardProps) {
     }
   };
 
-  const categories = [
-    { id: 'weapon', label: 'SENJATA' },
-    { id: 'armor', label: 'ARMOR' },
-    { id: 'helmet', label: 'HELM' },
-    { id: 'cloak', label: 'JUBAH' },
-    { id: 'accessory', label: 'AKSESORIS' },
-    { id: 'potion', label: 'RAMUAN' }
-  ];
-
   return (
     <div className="p-6" style={{ fontFamily: "'Courier New', monospace" }}>
 
@@ -1146,10 +1155,10 @@ export default function ShopBoard({ searchQuery = "" }: ShopBoardProps) {
         <div className="flex flex-col gap-3 text-left">
           <h1 className="font-pixel text-sm md:text-base text-white flex items-center gap-3 drop-shadow-[2px_2px_0_#000]">
             <span className="text-amber-500"><ShoppingBag size={18} /></span>
-            TOKO & LOOT
+            {t.title}
           </h1>
           <p className="font-pixel text-[7px] md:text-[8px] text-slate-400 uppercase tracking-widest leading-relaxed">
-            BELI PERLENGKAPAN DAN TINGKATKAN KEKUATAN KARAKTERMU.
+            {t.desc}
           </p>
         </div>
 
@@ -1161,21 +1170,41 @@ export default function ShopBoard({ searchQuery = "" }: ShopBoardProps) {
       {/* ------------------------------------------- */}
 
       {/* CATEGORY FILTER */}
-      <div className="flex flex-wrap gap-2 mb-6">
-        <button onClick={() => setActiveFilter('all')} className={`px-3 py-1.5 text-[10px] font-bold border-2 transition-colors uppercase tracking-widest ${activeFilter === 'all' ? 'border-amber-400 text-amber-400 bg-slate-800 shadow-[2px_2px_0_#fbbf24]' : 'border-slate-700 text-slate-500 hover:border-slate-500 bg-slate-900'}`}>SEMUA</button>
-        {categories.map(slot => (
-          <button key={slot.id} onClick={() => setActiveFilter(slot.id as EquipSlot)} className={`px-3 py-1.5 text-[10px] font-bold border-2 transition-colors uppercase tracking-widest ${activeFilter === slot.id ? 'border-amber-400 text-amber-400 bg-slate-800 shadow-[2px_2px_0_#fbbf24]' : 'border-slate-700 text-slate-500 hover:border-slate-500 bg-slate-900'}`}>
-            {slot.label}
-          </button>
-        ))}
+      <div className="flex flex-col lg:flex-row gap-4 lg:items-center mb-6">
+        <div className="flex flex-wrap gap-2">
+          <button onClick={() => setActiveFilter('all')} className={`px-3 py-1.5 text-[10px] font-bold border-2 transition-colors uppercase tracking-widest ${activeFilter === 'all' ? 'border-amber-400 text-amber-400 bg-slate-800 shadow-[2px_2px_0_#fbbf24]' : 'border-slate-700 text-slate-500 hover:border-slate-500 bg-slate-900'}`}>{t.all}</button>
+          {categories.map(slot => (
+            <button key={slot.id} onClick={() => setActiveFilter(slot.id as EquipSlot)} className={`px-3 py-1.5 text-[10px] font-bold border-2 transition-colors uppercase tracking-widest ${activeFilter === slot.id ? 'border-amber-400 text-amber-400 bg-slate-800 shadow-[2px_2px_0_#fbbf24]' : 'border-slate-700 text-slate-500 hover:border-slate-500 bg-slate-900'}`}>
+              {slot.label}
+            </button>
+          ))}
+        </div>
+
+        <div className="w-px h-8 bg-slate-700 hidden lg:block"></div>
+
+        {/* OWNERSHIP FILTER */}
+        <div className="flex flex-wrap gap-2">
+          <button onClick={() => setOwnershipFilter('all')} className={`px-3 py-1.5 text-[10px] font-bold border-2 transition-colors uppercase tracking-widest ${ownershipFilter === 'all' ? 'border-purple-400 text-purple-400 bg-slate-800 shadow-[2px_2px_0_#c084fc]' : 'border-slate-700 text-slate-500 hover:border-slate-500 bg-slate-900'}`}>{t.all}</button>
+          <button onClick={() => setOwnershipFilter('owned')} className={`px-3 py-1.5 text-[10px] font-bold border-2 transition-colors uppercase tracking-widest ${ownershipFilter === 'owned' ? 'border-emerald-400 text-emerald-400 bg-slate-800 shadow-[2px_2px_0_#34d399]' : 'border-slate-700 text-slate-500 hover:border-slate-500 bg-slate-900'}`}>{t.owned}</button>
+          <button onClick={() => setOwnershipFilter('notOwned')} className={`px-3 py-1.5 text-[10px] font-bold border-2 transition-colors uppercase tracking-widest ${ownershipFilter === 'notOwned' ? 'border-pink-400 text-pink-400 bg-slate-800 shadow-[2px_2px_0_#f472b6]' : 'border-slate-700 text-slate-500 hover:border-slate-500 bg-slate-900'}`}>{t.notOwned}</button>
+        </div>
       </div>
 
       {/* ITEM GRID */}
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
-        {ITEMS.filter(item => 
-          (activeFilter === 'all' || item.slot === activeFilter) && 
-          item.name.toLowerCase().includes(searchQuery.toLowerCase())
-        ).map((item) => {
+        {ITEMS.filter(item => {
+          const matchCatPage = activeCategory === 'all' || item.slot === activeCategory;
+          const matchCatLocal = activeFilter === 'all' || item.slot === activeFilter;
+          const matchSearch = item.name.toLowerCase().includes(searchQuery.toLowerCase());
+          
+          const isEq = equippedItems[item.slot] === item.id;
+          const isOwn = inventory.find(i => i.id === item.id)?.quantity || 0;
+          const hasItem = isEq || isOwn > 0;
+          
+          const matchOwn = ownershipFilter === 'all' || (ownershipFilter === 'owned' && hasItem) || (ownershipFilter === 'notOwned' && !hasItem);
+          
+          return matchCatPage && matchCatLocal && matchSearch && matchOwn;
+        }).map((item) => {
           const rs = RARITY_STYLE[item.rarity];
           const isEquipped = equippedItems[item.slot] === item.id;
           const ownedCount = inventory.find(i => i.id === item.id)?.quantity || 0;
@@ -1215,7 +1244,7 @@ export default function ShopBoard({ searchQuery = "" }: ShopBoardProps) {
                 {isEquipped && (
                   <div className="absolute top-2 right-2 z-10 pointer-events-none">
                     <div className="bg-amber-400 text-amber-950 text-[6px] font-pixel px-1.5 py-0.5 tracking-wider border border-amber-900 shadow-[1px_1px_0_#000]">
-                      DIGUNAKAN
+                      {t.equippedBadge}
                     </div>
                   </div>
                 )}
@@ -1224,36 +1253,13 @@ export default function ShopBoard({ searchQuery = "" }: ShopBoardProps) {
                 {!isEquipped && ownedCount > 0 && (
                   <div className="absolute top-2 right-2 z-10 pointer-events-none">
                     <div className="bg-emerald-500 text-emerald-950 text-[6px] font-pixel px-1.5 py-0.5 tracking-wider border border-emerald-900 shadow-[1px_1px_0_#000]">
-                      DIMILIKI
+                      {t.ownedBadge}
                     </div>
                   </div>
                 )}
 
                 <div
                   className="mt-5"
-                  style={{
-                    imageRendering: 'pixelated',
-                    transform: isHovered ? 'scale(1.1)' : 'scale(1)',
-                    transition: 'transform 0.1s',
-                  }}
-                >
-                  {item.icon}
-                </div>
-                <span className="text-xs font-bold text-white uppercase tracking-tight text-center leading-tight drop-shadow-md px-2">
-                  {item.name}
-                </span>
-              </div>
-
-              {/* Icon + name */}
-              <div
-                className="flex-1 flex flex-col items-center justify-center gap-2 px-2 relative"
-                style={{
-                  backgroundImage:
-                    'linear-gradient(rgba(255,255,255,0.02) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.02) 1px,transparent 1px)',
-                  backgroundSize: '4px 4px',
-                }}
-              >
-                <div
                   style={{
                     imageRendering: 'pixelated',
                     transform: isHovered ? 'scale(1.1)' : 'scale(1)',
@@ -1283,10 +1289,10 @@ export default function ShopBoard({ searchQuery = "" }: ShopBoardProps) {
                     ))}
                   </div>
                   <p className="text-[9px] text-slate-400 font-mono mt-2 uppercase">
-                    SLOT: {categories.find(c => c.id === item.slot)?.label || item.slot}
+                    {t.slot}: {categories.find(c => c.id === item.slot)?.label || item.slot}
                   </p>
                   <p className="text-[11px] font-bold mt-3 text-amber-400">
-                    {isEquipped ? '▸ LEPAS' : ownedCount > 0 ? (item.slot === 'potion' ? `▸ DIMILIKI: ${ownedCount}` : '▸ GUNAKAN') : `▸ BELI (${item.price} G)`}
+                    {isEquipped ? t.unequip : ownedCount > 0 ? (item.slot === 'potion' ? `${t.ownedBadge}: ${ownedCount}` : t.use) : `${t.buy} (${item.price} G)`}
                   </p>
                 </div>
               )}

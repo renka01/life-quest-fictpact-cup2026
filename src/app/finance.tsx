@@ -17,8 +17,10 @@ import {
   Smartphone,
   CalendarClock,
   Trash2,
+  Search,
   Clock,
 } from "lucide-react";
+import { translations } from "@/utils/translations";
 
 // ==========================================
 // 0. HELPER COMPONENTS
@@ -75,9 +77,11 @@ const CircularProgress = ({
 export default function Finance({
   initialOpenType,
   searchQuery = "",
+  activeCategory = "all",
 }: {
   initialOpenType?: "rekening" | "tabungan" | null;
   searchQuery?: string;
+  activeCategory?: string;
 }) {
   const {
     accounts,
@@ -87,7 +91,10 @@ export default function Finance({
     processRecurringTransactions,
     confirmRecurringPayment,
     snoozeRecurringTransaction,
+    settings
   } = useStore();
+  
+  const tFin = translations[settings?.language || 'id']?.finance || translations['id'].finance;
 
   const [isAddOpen, setIsAddOpen] = useState(false);
   const [addType, setAddType] = useState<"rekening" | "tabungan">("rekening");
@@ -126,9 +133,20 @@ export default function Finance({
     setIsTransModalOpen(true);
   };
 
+  // Fungsi Pembantu untuk Format Tanggal Dinamis
+  const formatDate = (timestamp: number) => {
+    const d = new Date(timestamp);
+    const day = d.getDate().toString().padStart(2, '0');
+    const month = (d.getMonth() + 1).toString().padStart(2, '0');
+    const year = d.getFullYear();
+    if (settings.dateFormat === 'MM/DD/YYYY') return `${month}/${day}/${year}`;
+    if (settings.dateFormat === 'YYYY-MM-DD') return `${year}-${month}-${day}`;
+    return `${day}/${month}/${year}`; // DD/MM/YYYY
+  };
+
   const q = searchQuery.toLowerCase();
-  const rekeningList = accounts?.filter((acc) => acc.type === "rekening") || [];
-  const tabunganList = accounts?.filter((acc) => acc.type === "tabungan") || [];
+  const rekeningList = accounts?.filter((acc) => acc.type === "rekening" && (activeCategory === 'all' || activeCategory === 'rekening')) || [];
+  const tabunganList = accounts?.filter((acc) => acc.type === "tabungan" && (activeCategory === 'all' || activeCategory === 'tabungan')) || [];
 
   const totalRekening = rekeningList.reduce(
     (acc: number, curr: any) => acc + curr.balance,
@@ -156,11 +174,11 @@ export default function Finance({
         <div className="flex flex-col gap-3 text-left">
           <h1 className="font-pixel text-sm md:text-base text-white flex items-center gap-3 drop-shadow-[2px_2px_0_#000]">
             <span className="text-cyan-500"><Wallet size={18} /></span>
-            FINANCIAL CENTER
+            {tFin.center}
           </h1>
           <div>
             <p className="font-pixel text-[7px] md:text-[8px] text-slate-400 uppercase tracking-widest mb-2">
-              TOTAL KEKAYAAN BERSIH
+              {tFin.netWorth}
             </p>
             <p className="text-4xl font-bold text-white font-mono italic bg-clip-text text-transparent bg-gradient-to-r from-white to-slate-500">
               Rp {netWorth.toLocaleString()}
@@ -171,7 +189,7 @@ export default function Finance({
         <div className="flex gap-4 font-mono italic w-full md:w-auto">
           <div className="flex-1 md:flex-none bg-[#24283b] border-2 border-slate-600 border-b-4 border-b-emerald-500 px-6 py-3 rounded-none shadow-[4px_4px_0_#000]">
             <p className="text-[10px] font-pixel not-italic text-slate-500 mb-2 uppercase">
-              UANG TUNAI / REKENING
+              {tFin.cash}
             </p>
             <p className="text-xl font-bold text-emerald-400">
               Rp {totalRekening.toLocaleString()}
@@ -180,7 +198,7 @@ export default function Finance({
 
           <div className="flex-1 md:flex-none bg-[#24283b] border-2 border-slate-600 border-b-4 border-b-cyan-500 px-6 py-3 rounded-none shadow-[4px_4px_0_#000]">
             <p className="text-[10px] font-pixel not-italic text-slate-500 mb-2 uppercase">
-              TABUNGAN & ASET
+              {tFin.asset}
             </p>
             <p className="text-xl font-bold text-cyan-400">
               Rp {totalTabungan.toLocaleString()}
@@ -191,11 +209,12 @@ export default function Finance({
 
       <div className="grid grid-cols-1 xl:grid-cols-3 gap-6 flex-1 items-start">
         {/* KOLOM 1 */}
+        {(activeCategory === 'all' || activeCategory === 'rekening') && (
         <div className="bg-[#1a1b26] border-4 border-emerald-600 rounded-none flex flex-col min-h-[450px] overflow-hidden shadow-[8px_8px_0_rgba(0,0,0,0.5)]">
           <div className="p-5 border-b-4 border-emerald-600 flex items-center gap-3 text-emerald-400 bg-[#24283b]">
             <CreditCard size={20} />
             <h2 className="text-base font-bold uppercase tracking-wider">
-              Dompet & Rekening
+              {tFin.walletTitle}
             </h2>
           </div>
 
@@ -204,11 +223,11 @@ export default function Finance({
               onClick={() => openAddModal("rekening")}
               className="w-full bg-[#24283b] border-2 border-dashed border-slate-600 hover:border-emerald-500 text-slate-400 hover:text-emerald-400 p-5 rounded-none flex items-center justify-center gap-2 text-sm font-bold transition-all uppercase hover:bg-emerald-500/10"
             >
-              <Plus size={18} /> Tambah Dompet Baru
+              <Plus size={18} /> {tFin.addWallet}
             </button>
 
           {filteredRekening.length === 0 && q && (
-            <p className="text-sm text-slate-500 italic text-center py-4">Tidak ada rekening ditemukan.</p>
+            <p className="text-sm text-slate-500 italic text-center py-4">{tFin.noWallet}</p>
           )}
           {filteredRekening.map((acc) => (
               <div
@@ -250,13 +269,15 @@ export default function Finance({
             ))}
           </div>
         </div>
+        )}
 
         {/* KOLOM 2 */}
+        {(activeCategory === 'all' || activeCategory === 'tabungan') && (
         <div className="bg-[#1a1b26] border-4 border-cyan-600 rounded-none flex flex-col min-h-[450px] overflow-hidden shadow-[8px_8px_0_rgba(0,0,0,0.5)]">
           <div className="p-5 border-b-4 border-cyan-600 flex items-center gap-3 text-cyan-400 bg-[#24283b]">
             <PiggyBank size={20} />
             <h2 className="text-base font-bold uppercase tracking-wider">
-              Tabungan & Aset
+              {tFin.savingsTitle}
             </h2>
           </div>
 
@@ -265,11 +286,11 @@ export default function Finance({
               onClick={() => openAddModal("tabungan")}
               className="w-full bg-[#24283b] border-2 border-dashed border-slate-600 hover:border-cyan-500 text-slate-400 hover:text-cyan-400 p-5 rounded-none flex items-center justify-center gap-2 text-sm font-bold transition-all uppercase hover:bg-cyan-500/10"
             >
-              <Plus size={18} /> Tambah Target Baru
+              <Plus size={18} /> {tFin.addSaving}
             </button>
 
           {filteredTabungan.length === 0 && q && (
-            <p className="text-sm text-slate-500 italic text-center py-4">Tidak ada tabungan/aset ditemukan.</p>
+            <p className="text-sm text-slate-500 italic text-center py-4">{tFin.noSaving}</p>
           )}
           {filteredTabungan.map((acc) => {
               const isGold =
@@ -316,7 +337,7 @@ export default function Finance({
                         Rp {(acc.balance || 0).toLocaleString()}
                       </div>
                       <div className="text-[10px] text-slate-500 mt-0.5">
-                        Target: Rp {(acc.target || 0).toLocaleString()}
+                        {tFin.target} Rp {(acc.target || 0).toLocaleString()}
                       </div>
                     </div>
 
@@ -351,7 +372,7 @@ export default function Finance({
                             : "bg-cyan-500/10 text-cyan-400 border-cyan-500 hover:bg-cyan-500 hover:text-slate-900"
                         }`}
                       >
-                        + ISI
+                        {tFin.fill}
                       </button>
                     </div>
                   </div>
@@ -360,13 +381,14 @@ export default function Finance({
             })}
           </div>
         </div>
+        )}
 
         {/* KOLOM 3 */}
         <div className="bg-[#1a1b26] border-4 border-pink-600 rounded-none flex flex-col h-[450px] overflow-hidden shadow-[8px_8px_0_rgba(0,0,0,0.5)]">
           <div className="p-5 border-b-4 border-pink-600 flex justify-between items-center text-pink-400 bg-[#24283b]">
             <div className="flex items-center gap-3">
               <History size={20} />
-              <h2 className="text-base font-bold uppercase tracking-wider">Riwayat</h2>
+              <h2 className="text-base font-bold uppercase tracking-wider">{tFin.history}</h2>
             </div>
 
             <button
@@ -374,7 +396,7 @@ export default function Finance({
               className="text-[10px] bg-pink-500/10 hover:bg-pink-500 text-pink-400 hover:text-slate-900 border border-pink-500 px-2 py-1 rounded-none flex items-center gap-1 transition-colors"
               title="Kelola Tagihan Rutin"
             >
-              <CalendarClock size={14} /> Tagihan Rutin
+              <CalendarClock size={14} /> {tFin.billsBtn}
             </button>
           </div>
 
@@ -382,7 +404,7 @@ export default function Finance({
             {dueTodayBills.length > 0 && (
               <div className="bg-[#24283b] border-b-2 border-slate-700">
                 <div className="px-4 py-2 text-[10px] font-bold text-pink-400 uppercase tracking-wider bg-[#1a1b26]">
-                  Perlu Konfirmasi Hari Ini
+                  {tFin.reqConfirm}
                 </div>
 
                 {dueTodayBills.map((tx: any) => (
@@ -397,7 +419,7 @@ export default function Finance({
                           {tx.name}
                         </span>
                         <span className="text-xs text-pink-300/80 font-mono">
-                          Jatuh Tempo: {new Date(tx.nextDueDate).toLocaleDateString()}
+                          {tFin.due} {formatDate(tx.nextDueDate)}
                         </span>
                       </div>
 
@@ -411,13 +433,13 @@ export default function Finance({
                         onClick={() => snoozeRecurringTransaction(tx.id)}
                         className="px-3 py-1 text-[10px] font-bold uppercase border border-yellow-500 text-yellow-400 hover:bg-yellow-500 hover:text-slate-950 transition-all"
                       >
-                        Tunda
+                        {tFin.delay}
                       </button>
                       <button
                         onClick={() => confirmRecurringPayment(tx.id)}
                         className="px-3 py-1 text-[10px] font-bold uppercase border border-emerald-500 text-emerald-400 hover:bg-emerald-500 hover:text-slate-950 transition-all"
                       >
-                        Bayar Sekarang
+                        {tFin.payNow}
                       </button>
                     </div>
                   </div>
@@ -428,7 +450,7 @@ export default function Finance({
             {overdueBills.length > 0 && (
               <div className="bg-[#24283b] border-b-2 border-slate-700">
                 <div className="px-4 py-2 text-[10px] font-bold text-yellow-400 uppercase tracking-wider bg-[#1a1b26]">
-                  Tagihan Tertunda
+                  {tFin.delayedBills}
                 </div>
 
                 {overdueBills.map((tx: any) => (
@@ -443,7 +465,7 @@ export default function Finance({
                           {tx.name}
                         </span>
                         <span className="text-xs text-yellow-300/80 font-mono">
-                          Lewat jatuh tempo: {new Date(tx.nextDueDate).toLocaleDateString()}
+                          {tFin.overdue} {formatDate(tx.nextDueDate)}
                         </span>
                       </div>
 
@@ -457,7 +479,7 @@ export default function Finance({
                         onClick={() => confirmRecurringPayment(tx.id)}
                         className="px-3 py-1 text-[10px] font-bold uppercase border border-emerald-500 text-emerald-400 hover:bg-emerald-500 hover:text-slate-950 transition-all"
                       >
-                        Bayar
+                        {tFin.pay}
                       </button>
                     </div>
                   </div>
@@ -468,7 +490,7 @@ export default function Finance({
             {upcomingBills.length > 0 && (
               <div className="bg-[#24283b] border-b-2 border-slate-700">
                 <div className="px-4 py-2 text-[10px] font-bold text-slate-500 uppercase tracking-wider bg-[#1a1b26]">
-                  Tagihan Akan Datang
+                  {tFin.upcomingBills}
                 </div>
 
                 {upcomingBills.map((tx: any) => (
@@ -482,7 +504,7 @@ export default function Finance({
                         {tx.name}
                       </span>
                       <span className="text-xs text-amber-500/80 font-mono">
-                        Jatuh Tempo: {new Date(tx.nextDueDate).toLocaleDateString()}
+                        {tFin.due} {formatDate(tx.nextDueDate)}
                       </span>
                     </div>
 
@@ -495,7 +517,7 @@ export default function Finance({
             )}
 
             <div className="px-4 py-2 text-[10px] font-bold text-slate-500 uppercase tracking-wider bg-[#1a1b26] sticky top-0 border-b border-slate-700">
-              Riwayat Selesai
+              {tFin.historyDone}
             </div>
 
           {filteredTransactions.length > 0 ? (
@@ -509,7 +531,7 @@ export default function Finance({
                       {log.accountName}
                     </span>
                     <span className="text-xs text-slate-500 font-mono">
-                      {new Date(log.timestamp).toLocaleDateString()} •{" "}
+                      {formatDate(log.timestamp)} •{" "}
                       {new Date(log.timestamp).toLocaleTimeString()}
                     </span>
                   </div>
@@ -544,7 +566,7 @@ export default function Finance({
               ))
             ) : (
               <div className="p-10 text-center text-sm text-slate-500 italic">
-              {q ? "Transaksi tidak ditemukan." : "Belum ada riwayat transaksi."}
+              {q ? tFin.noTrans : tFin.noHistory}
               </div>
             )}
           </div>
@@ -584,8 +606,8 @@ function RecurringModal({
   isOpen: boolean;
   onClose: () => void;
 }) {
-  const { recurringTransactions, addRecurringTransaction, deleteRecurringTransaction, accounts } =
-    useStore();
+  const { recurringTransactions, addRecurringTransaction, deleteRecurringTransaction, accounts, settings } = useStore();
+  const tFin = translations[settings?.language || 'id']?.finance || translations['id'].finance;
 
   const [name, setName] = useState("");
   const [amount, setAmount] = useState(0);
@@ -626,7 +648,7 @@ function RecurringModal({
       <div className="bg-[#1a1b26] border-4 border-pink-600 rounded-none w-full max-w-md overflow-hidden shadow-[8px_8px_0_#000] animate-in zoom-in duration-200">
         <div className="p-5 border-b-4 border-slate-700 flex justify-between items-center bg-[#24283b]">
           <h2 className="font-bold text-base uppercase tracking-wider text-pink-400 flex items-center gap-2">
-            <CalendarClock size={20} /> Tagihan Rutin (Auto-Pay)
+            <CalendarClock size={20} /> {tFin.autoPay}
           </h2>
           <button onClick={onClose} className="text-slate-500 hover:text-white transition-colors">
             <X size={24} />
@@ -637,7 +659,7 @@ function RecurringModal({
           <div className="flex flex-col gap-2 max-h-48 overflow-y-auto mb-2">
             {recurringTransactions.length === 0 && (
               <p className="text-xs text-slate-500 text-center italic py-4">
-                Belum ada tagihan rutin.
+                {tFin.noBills}
               </p>
             )}
 
@@ -649,7 +671,7 @@ function RecurringModal({
                 <div>
                   <p className="text-sm font-bold text-white">{tx.name}</p>
                   <p className="text-[10px] text-slate-500">
-                    Next: {new Date(tx.nextDueDate).toLocaleDateString()} •{" "}
+                    {tFin.next} {new Date(tx.nextDueDate).toLocaleDateString()} •{" "}
                     {accounts.find((a) => a.id === tx.accountId)?.name}
                   </p>
                 </div>
@@ -671,14 +693,14 @@ function RecurringModal({
 
           <div className="border-t-4 border-slate-700 pt-4 flex flex-col gap-3">
             <p className="text-xs font-bold text-slate-400 uppercase">
-              Tambah Tagihan Baru
+              {tFin.newBill}
             </p>
 
             <input
               type="text"
               value={name}
               onChange={(e) => setName(e.target.value)}
-              placeholder="Nama Tagihan (mis: Netflix, Listrik)"
+              placeholder={tFin.billName}
               className="bg-[#24283b] border-2 border-slate-600 rounded-none p-3 text-sm text-white outline-none focus:border-pink-500"
             />
 
@@ -710,7 +732,7 @@ function RecurringModal({
                 type="text"
                 value={amount === 0 ? "" : amount.toLocaleString("id-ID")}
                 onChange={handleAmountChange}
-                placeholder={`Nominal (${currency})`}
+                placeholder={`${tFin.amount} (${currency})`}
                 className="bg-[#24283b] border-2 border-slate-600 rounded-none p-3 text-sm text-white outline-none focus:border-pink-500 w-full"
               />
               {currency === "USD" && amount > 0 && (
@@ -735,7 +757,7 @@ function RecurringModal({
               className="bg-[#24283b] border-2 border-slate-600 rounded-none p-3 text-sm text-slate-300 outline-none focus:border-pink-500"
             >
               <option value="" disabled hidden>
-                Pilih Sumber Dana...
+                {tFin.source}
               </option>
               {accounts
                 .filter((a) => a.type === "rekening")
@@ -751,7 +773,7 @@ function RecurringModal({
               disabled={!name || amount <= 0 || !accountId || !date}
               className="bg-pink-600 hover:bg-pink-500 disabled:bg-slate-800 disabled:text-slate-500 text-white py-3 rounded-none font-bold text-sm transition-colors mt-2 shadow-[4px_4px_0_#000] active:translate-y-[2px] active:shadow-[2px_2px_0_#000]"
             >
-              Simpan Jadwal
+              {tFin.saveSchedule}
             </button>
           </div>
         </div>
@@ -772,7 +794,8 @@ function AddAccountModal({
   onClose: () => void;
   type: "rekening" | "tabungan";
 }) {
-  const { addAccount, _applySimpleReward } = useStore();
+  const { addAccount, _applySimpleReward, settings } = useStore();
+  const tFin = translations[settings?.language || 'id']?.finance || translations['id'].finance;
 
   const [name, setName] = useState("");
   const [balance, setBalance] = useState(0);
@@ -864,7 +887,7 @@ function AddAccountModal({
             }`}
           >
             {type === "rekening" ? <CreditCard size={20} /> : <PiggyBank size={20} />}
-            {type === "rekening" ? "Tambah Dompet / Rekening" : "Buat Target Tabungan"}
+            {type === "rekening" ? tFin.addAccWallet : tFin.addAccTarget}
           </h2>
           <button onClick={onClose} className="text-slate-500 hover:text-white transition-colors">
             <X size={24} />
@@ -875,7 +898,7 @@ function AddAccountModal({
           {type === "rekening" && (
             <div>
               <label className="text-sm font-bold text-slate-400 mb-3 block uppercase">
-                Pilih Cepat (Opsional)
+                {tFin.quickSelect}
               </label>
               <div className="grid grid-cols-3 sm:grid-cols-4 gap-3">
                 {providers.map((p) => (
@@ -904,7 +927,7 @@ function AddAccountModal({
                     : "text-slate-500 hover:text-slate-300"
                 }`}
               >
-                Tabungan Uang
+                {tFin.tabMoney}
               </button>
               <button
                 onClick={() => setIsGold(true)}
@@ -914,14 +937,14 @@ function AddAccountModal({
                     : "text-slate-500 hover:text-slate-300"
                 }`}
               >
-                Investasi Emas
+                {tFin.tabGold}
               </button>
             </div>
           )}
 
           <div>
             <label className="text-sm font-bold text-slate-400 mb-2 block uppercase">
-              Nama Akun / Target
+              {tFin.accName}
             </label>
             <input
               type="text"
@@ -929,10 +952,10 @@ function AddAccountModal({
               onChange={(e) => setName(e.target.value)}
               placeholder={
                 type === "rekening"
-                  ? "Contoh: BCA Utama, Dompet Saku"
+                  ? tFin.phWallet
                   : isGold
-                  ? "Contoh: Tabungan Emas Antam"
-                  : "Contoh: Beli Laptop, Dana Darurat"
+                  ? tFin.phGold
+                  : tFin.phTarget
               }
               className="w-full bg-[#24283b] border-2 border-slate-600 rounded-none p-4 text-base text-white outline-none focus:border-white transition-all"
               autoFocus
@@ -970,7 +993,7 @@ function AddAccountModal({
             {isGold ? (
               <div>
                 <label className="text-sm font-bold text-yellow-500 mb-2 block uppercase">
-                  Berat Awal (Gram)
+                  {tFin.startWeight}
                 </label>
                 <input
                   type="number"
@@ -986,7 +1009,7 @@ function AddAccountModal({
             ) : (
               <div>
                 <label className="text-sm font-bold text-slate-400 mb-2 block uppercase">
-                  Saldo Awal ({currency})
+                  {tFin.startBal} ({currency})
                 </label>
                 <input
                   type="text"
@@ -1006,7 +1029,7 @@ function AddAccountModal({
             {type === "tabungan" && (
               <div>
                 <label className="text-sm font-bold text-slate-400 mb-2 block uppercase">
-                  Target Akhir ({currency})
+                  {tFin.targetBal} ({currency})
                 </label>
                 <input
                   type="text"
@@ -1033,7 +1056,7 @@ function AddAccountModal({
                 : "bg-cyan-500 hover:bg-cyan-400"
             } disabled:opacity-50 disabled:cursor-not-allowed`}
           >
-            Simpan Akun
+            {tFin.saveAcc}
           </button>
         </div>
       </div>
@@ -1052,7 +1075,8 @@ function TransactionModal({
   currentBalance,
   isAdding,
 }: any) {
-  const { updateBalance, showAlert, accounts } = useStore();
+  const { updateBalance, showAlert, accounts, settings } = useStore();
+  const tFin = translations[settings?.language || 'id']?.finance || translations['id'].finance;
 
   const [money, setMoney] = useState<number>(0);
   const [gramInput, setGramInput] = useState<string>("");
@@ -1168,7 +1192,7 @@ function TransactionModal({
               isAdding ? "text-emerald-400" : "text-pink-400"
             }`}
           >
-            {isAdding ? "Pemasukan / Deposit" : "Pengeluaran / Tarik"}
+            {isAdding ? tFin.incomeOp : tFin.expenseOp}
           </h2>
           <button onClick={onClose} className="text-slate-500 hover:text-white transition-colors">
             <X size={24} />
@@ -1178,14 +1202,14 @@ function TransactionModal({
         <div className="p-6 flex flex-col gap-4 text-left">
           <div className="text-center bg-[#24283b] p-3 rounded-none border-2 border-slate-600">
             <p className="text-sm text-slate-400 uppercase font-bold">
-              Akun: <span className="text-white">{accountName}</span>
+              {tFin.account} <span className="text-white">{accountName}</span>
             </p>
           </div>
 
           <div className="relative">
             <div className="flex justify-between items-center mb-2">
               <label className="text-sm font-bold text-slate-400 uppercase">
-                Nominal ({currency})
+                {tFin.amount} ({currency})
               </label>
 
               <div className="bg-[#24283b] p-0.5 rounded-none flex text-[10px] font-bold border-2 border-slate-600">
@@ -1231,7 +1255,7 @@ function TransactionModal({
           {isGold && (
             <div className="relative">
               <label className="text-sm font-bold text-yellow-500 mb-2 block uppercase">
-                Berat Emas (Gram)
+                {tFin.goldWeight}
               </label>
               <input
                 type="text"
@@ -1242,7 +1266,7 @@ function TransactionModal({
                 placeholder="0.0000"
               />
               <p className="text-xs text-slate-500 mt-1 italic text-right">
-                Rate: Rp 2.800.000 / Gram
+                {tFin.rate}
               </p>
             </div>
           )}
@@ -1252,7 +1276,7 @@ function TransactionModal({
               onClick={() => setMoney(currentBalance)}
               className="text-sm font-bold text-pink-500 border-2 border-pink-500 py-3 rounded-none hover:bg-pink-500 hover:text-white transition-all uppercase"
             >
-              Gunakan Semua Saldo
+              {tFin.useAll}
             </button>
           )}
         </div>
@@ -1262,7 +1286,7 @@ function TransactionModal({
             onClick={onClose}
             className="flex-1 py-3 text-sm font-bold text-slate-400 hover:text-white transition-colors uppercase"
           >
-            Batal
+            {tFin.cancel}
           </button>
           <button
             onClick={handleConfirm}
@@ -1270,7 +1294,7 @@ function TransactionModal({
               isAdding ? "bg-emerald-500 hover:bg-emerald-400" : "bg-pink-500 hover:bg-pink-400"
             }`}
           >
-            Konfirmasi
+            {tFin.confirm}
           </button>
         </div>
       </div>

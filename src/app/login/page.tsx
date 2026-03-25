@@ -1,205 +1,434 @@
 "use client";
-import React, { useState, useEffect } from 'react';
-import { useStore } from '@/store/useStore';
+import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { Eye, EyeOff, ShieldCheck, ShieldAlert, UserPlus, LogIn } from 'lucide-react';
+import { Instagram, Facebook, Twitter, Github } from 'lucide-react'; 
+import { useStore } from '@/store/useStore';
+
+// ═══════════════════════════════════════════════════════════
+// PIXEL ART CHARACTER SPRITES (Karakter Diperbesar: 200x200)
+// ═══════════════════════════════════════════════════════════
+
+/** Shadow Knight */
+const ShadowKnight = () => (
+  <svg viewBox="-4 0 40 32" width="200" height="200" style={{ imageRendering: 'pixelated' }}>
+    <style>{`@keyframes sk{0%,100%{transform:translateY(0)}50%{transform:translateY(1px)}}.skc{animation:sk 0.9s steps(2) infinite}`}</style>
+    <g className="skc">
+      <path d="M11 5 H21 V10 H22 V12 H24 V20 H25 V23 H23 V20 H22 V28 H18 V24 H14 V28 H10 V20 H9 V23 H7 V20 H8 V12 H10 V10 H11 V5 Z M8 20 H11 V24 H8 V20 Z" fill="black"/>
+      <rect x="12" y="10" width="8" height="10" fill="#1e293b"/>
+      <rect x="12" y="10" width="4" height="10" fill="#334155"/>
+      <rect x="12" y="10" width="8" height="1" fill="#7c3aed"/>
+      <rect x="12" y="19" width="8" height="1" fill="#7c3aed"/>
+      <rect x="15" y="11" width="2" height="7" fill="#7c3aed" opacity="0.6"/>
+      <rect x="13" y="14" width="6" height="1" fill="#7c3aed" opacity="0.4"/>
+      <rect x="9" y="10" width="4" height="3" fill="#334155"/>
+      <rect x="9" y="10" width="4" height="1" fill="#7c3aed"/>
+      <rect x="19" y="10" width="4" height="3" fill="#334155"/>
+      <rect x="19" y="10" width="4" height="1" fill="#7c3aed"/>
+      <rect x="11" y="5" width="10" height="5" fill="#1e293b"/>
+      <rect x="11" y="5" width="10" height="1" fill="#7c3aed"/>
+      <rect x="12" y="6" width="8" height="4" fill="#334155"/>
+      <rect x="13" y="8" width="3" height="1" fill="#a855f7"/>
+      <rect x="16" y="8" width="3" height="1" fill="#a855f7"/>
+      <rect x="12" y="6" width="8" height="5" fill="#ffdbac"/>
+      <rect x="11" y="5" width="10" height="5" fill="#1e293b"/>
+      <rect x="12" y="6" width="8" height="4" fill="#334155"/>
+      <rect x="13" y="8" width="2" height="1" fill="#a855f7"/>
+      <rect x="17" y="8" width="2" height="1" fill="#a855f7"/>
+      <rect x="9" y="13" width="3" height="7" fill="#334155"/>
+      <rect x="20" y="13" width="3" height="7" fill="#334155"/>
+      <rect x="8" y="20" width="3" height="3" fill="#1e293b"/>
+      <rect x="21" y="20" width="3" height="3" fill="#1e293b"/>
+      <g transform="rotate(135 22.5 22.5)">
+        <rect x="22" y="11" width="1" height="11" fill="#1e293b"/>
+        <rect x="22" y="11" width="1" height="10" fill="#be123c" opacity="0.7"/>
+        <rect x="19" y="22" width="7" height="1" fill="#334155"/>
+        <rect x="22" y="23" width="1" height="4" fill="#292524"/>
+        <rect x="21" y="27" width="3" height="1" fill="#1e293b"/>
+        <rect x="22" y="11" width="1" height="1" fill="#f8fafc"/>
+        <rect x="21" y="15" width="1" height="1" fill="#e11d48">
+          <animate attributeName="opacity" values="1;0;1" dur="0.4s" repeatCount="indefinite" calcMode="discrete"/>
+        </rect>
+      </g>
+      <rect x="18" y="20" width="3" height="4" fill="#1e293b"/>
+      <rect x="11" y="20" width="3" height="4" fill="#334155"/>
+    </g>
+  </svg>
+);
+
+/** Arcane Mage */
+const ArcaneMage = () => (
+  <svg viewBox="-4 0 40 32" width="200" height="200" style={{ imageRendering: 'pixelated' }}>
+    <style>{`@keyframes am{0%,100%{transform:translateY(0)}50%{transform:translateY(1px)}}.amc{animation:am 1s steps(2) infinite}`}</style>
+    <g className="amc">
+      <path d="M11 5 H21 V10 H22 V12 H24 V20 H25 V23 H23 V20 H22 V28 H18 V24 H14 V28 H10 V20 H9 V23 H7 V20 H8 V12 H10 V10 H11 V5 Z M8 20 H11 V24 H8 V20 Z" fill="black"/>
+      <rect x="11" y="10" width="10" height="10" fill="#1e3a5f"/>
+      <rect x="16" y="10" width="4" height="10" fill="#0c1a2e"/>
+      <rect x="11" y="10" width="10" height="1" fill="#fbbf24"/>
+      <rect x="11" y="19" width="10" height="1" fill="#fbbf24"/>
+      <rect x="15" y="11" width="2" height="1" fill="#fbbf24"/>
+      <rect x="15" y="13" width="2" height="1" fill="#7dd3fc"/>
+      <rect x="14" y="14" width="4" height="1" fill="#7dd3fc" opacity="0.6"/>
+      <rect x="8" y="12" width="4" height="8" fill="#1e3a5f"/>
+      <rect x="8" y="19" width="4" height="1" fill="#fbbf24" opacity="0.6"/>
+      <rect x="20" y="12" width="4" height="8" fill="#0c1a2e"/>
+      <rect x="20" y="19" width="4" height="1" fill="#fbbf24" opacity="0.6"/>
+      <rect x="8" y="20" width="4" height="3" fill="#1e3a5f"/>
+      <rect x="9" y="21" width="2" height="1" fill="#38bdf8"/>
+      <rect x="20" y="20" width="4" height="3" fill="#0c1a2e"/>
+      <rect x="21" y="21" width="2" height="1" fill="#38bdf8"/>
+      <rect x="12" y="6" width="8" height="5" fill="#ffdbac"/>
+      <rect x="13" y="8" width="2" height="1" fill="black"/>
+      <rect x="17" y="8" width="2" height="1" fill="black"/>
+      <rect x="10" y="3" width="12" height="3" fill="#1e3a5f"/>
+      <rect x="11" y="2" width="10" height="2" fill="#164e63"/>
+      <rect x="13" y="1" width="6" height="2" fill="#0c4a6e"/>
+      <rect x="15" y="0" width="2" height="2" fill="#fbbf24"/>
+      <rect x="10" y="3" width="12" height="1" fill="#fbbf24"/>
+      <rect x="9" y="4" width="2" height="16" fill="#92400e"/>
+      <rect x="9" y="4" width="1" height="16" fill="#b45309" opacity="0.5"/>
+      <rect x="8" y="11" width="4" height="1" fill="#fbbf24"/>
+      <rect x="7" y="1" width="6" height="5" fill="#4c1d95"/>
+      <rect x="8" y="2" width="4" height="3" fill="#7c3aed"/>
+      <rect x="9" y="2" width="2" height="3" fill="#a78bfa"/>
+      <rect x="8" y="2" width="4" height="3" fill="#a78bfa" opacity="0.4">
+        <animate attributeName="opacity" values="0.4;0.8;0.4" dur="0.8s" repeatCount="indefinite" calcMode="discrete"/>
+      </rect>
+      <rect x="18" y="20" width="3" height="4" fill="#1e3a5f"/>
+      <rect x="11" y="20" width="3" height="4" fill="#0c1a2e"/>
+    </g>
+  </svg>
+);
+
+/** Void Ranger */
+const VoidRanger = () => (
+  <svg viewBox="-4 0 40 32" width="200" height="200" style={{ imageRendering: 'pixelated' }}>
+    <style>{`@keyframes vr{0%,100%{transform:translateY(0)}50%{transform:translateY(1px)}}.vrc{animation:vr 0.8s steps(2) infinite}`}</style>
+    <g className="vrc">
+      <path d="M11 5 H21 V10 H22 V12 H24 V20 H25 V23 H23 V20 H22 V28 H18 V24 H14 V28 H10 V20 H9 V23 H7 V20 H8 V12 H10 V10 H11 V5 Z M8 20 H11 V24 H8 V20 Z" fill="black"/>
+      <rect x="12" y="10" width="8" height="10" fill="#065f46"/>
+      <rect x="13" y="11" width="6" height="8" fill="#047857"/>
+      <rect x="14" y="12" width="4" height="6" fill="#059669" opacity="0.5"/>
+      <rect x="12" y="10" width="8" height="1" fill="#34d399" opacity="0.4"/>
+      <rect x="9" y="10" width="4" height="3" fill="#065f46"/>
+      <rect x="19" y="10" width="4" height="3" fill="#065f46"/>
+      <rect x="9" y="13" width="3" height="7" fill="#065f46"/>
+      <rect x="20" y="13" width="3" height="7" fill="#047857"/>
+      <rect x="8" y="20" width="3" height="3" fill="#ffdbac"/>
+      <rect x="21" y="20" width="3" height="3" fill="#ffdbac"/>
+      <rect x="12" y="6" width="8" height="5" fill="#ffdbac"/>
+      <rect x="13" y="8" width="2" height="1" fill="black"/>
+      <rect x="17" y="8" width="2" height="1" fill="black"/>
+      <rect x="11" y="5" width="10" height="2" fill="#065f46"/>
+      <rect x="10" y="6" width="2" height="3" fill="#065f46"/>
+      <rect x="20" y="6" width="2" height="3" fill="#065f46"/>
+      <rect x="8"  y="9"  width="2" height="2" fill="#1e1b4b"/>
+      <rect x="7"  y="11" width="2" height="4" fill="#312e81"/>
+      <rect x="6"  y="15" width="2" height="2" fill="#4338ca"/>
+      <rect x="6"  y="17" width="4" height="4" fill="#312e81"/>
+      <rect x="7"  y="18" width="2" height="2" fill="#818cf8"/>
+      <rect x="6"  y="21" width="2" height="2" fill="#4338ca"/>
+      <rect x="7"  y="23" width="2" height="4" fill="#312e81"/>
+      <rect x="10" y="10" width="1" height="2" fill="#818cf8" opacity="0.8"/>
+      <rect x="11" y="12" width="1" height="2" fill="#a5b4fc"/>
+      <rect x="12" y="14" width="1" height="3" fill="#e0e7ff"/>
+      <rect x="12" y="17" width="1" height="3" fill="#e0e7ff"/>
+      <rect x="11" y="20" width="1" height="2" fill="#a5b4fc"/>
+      <rect x="10" y="22" width="1" height="2" fill="#818cf8" opacity="0.8"/>
+      <rect x="18" y="20" width="3" height="4" fill="#065f46"/>
+      <rect x="11" y="20" width="3" height="4" fill="#047857"/>
+    </g>
+  </svg>
+);
+
+// ═══════════════════════════════════════════════════════════
+// NEW PIXEL LANDSCAPE: GRAND SPARTAN EMPIRE
+// ═══════════════════════════════════════════════════════════
+const GrandSpartanLandscape = () => (
+  <svg viewBox="0 0 800 150" width="100%" preserveAspectRatio="xMidYMax slice" style={{ display: 'block', height: '180px' }}>
+    
+    {/* Siluet Pegunungan Jauh */}
+    <path d="M0,150 L0,80 L80,50 L150,90 L250,40 L380,100 L500,60 L650,110 L800,30 L800,150 Z" fill="#27272a" opacity="0.5"/>
+    <path d="M0,150 L0,100 L120,60 L280,110 L450,70 L600,100 L800,60 L800,150 Z" fill="#3f3f46" opacity="0.3"/>
+
+    {/* KIRI: KUIL AGUNG SPARTA (Parthenon Style) */}
+    {/* Fondasi Bertingkat */}
+    <rect x="30" y="130" width="240" height="5" fill="#78350f" />
+    <rect x="40" y="125" width="220" height="5" fill="#92400e" />
+    <rect x="50" y="120" width="200" height="5" fill="#b45309" />
+    {/* Pilar-Pilar Megah */}
+    {[...Array(7)].map((_, i) => (
+      <g key={`col-${i}`}>
+        <rect x={60 + i * 30} y="60" width="10" height="60" fill="#fcd34d" />
+        <rect x={66 + i * 30} y="60" width="4" height="60" fill="#f59e0b" />
+      </g>
+    ))}
+    {/* Atap Segitiga (Pediment) */}
+    <rect x="45" y="50" width="210" height="10" fill="#f59e0b" />
+    <polygon points="40,50 150,15 260,50" fill="#991b1b" />
+    <polygon points="40,50 150,15 150,50" fill="#b91c1c" opacity="0.6"/>
+
+    {/* KANAN: ARENA GLADIATOR / COLOSSEUM */}
+    {/* Tembok Utama */}
+    <rect x="500" y="75" width="260" height="60" fill="#92400e" />
+    <rect x="520" y="55" width="220" height="20" fill="#78350f" />
+    <rect x="500" y="75" width="260" height="4" fill="#f59e0b" />
+    {/* Lorong-lorong Arena (Arches) */}
+    {[...Array(6)].map((_, i) => (
+      <path key={`arch1-${i}`} d={`M${520 + i*40},135 L${520 + i*40},100 A10,10 0 0,1 ${540 + i*40},100 L${540 + i*40},135 Z`} fill="#18181b" />
+    ))}
+    {[...Array(5)].map((_, i) => (
+      <path key={`arch2-${i}`} d={`M${540 + i*40},75 L${540 + i*40},62 A8,8 0 0,1 ${556 + i*40},62 L${556 + i*40},75 Z`} fill="#18181b" />
+    ))}
+    {/* Spanduk Merah Spartan */}
+    <rect x="510" y="75" width="8" height="35" fill="#dc2626" />
+    <polygon points="510,110 514,118 518,110" fill="#dc2626" />
+    <rect x="740" y="75" width="8" height="35" fill="#dc2626" />
+    <polygon points="740,110 744,118 748,110" fill="#dc2626" />
+
+    {/* TENGAH: RERUNTUHAN PILAR & SENJATA */}
+    <rect x="350" y="95" width="16" height="40" fill="#d97706" />
+    <rect x="345" y="130" width="26" height="5" fill="#92400e" />
+    <polygon points="350,95 366,95 366,85" fill="#d97706" />
+    
+    <rect x="420" y="115" width="14" height="20" fill="#b45309" />
+    <rect x="415" y="130" width="24" height="5" fill="#78350f" />
+    
+    <rect x="380" y="125" width="3" height="10" fill="#fcd34d" transform="rotate(15 380 125)"/> {/* Pedang tertancap */}
+
+    {/* Lantai Tanah Bawah (Menyatu Sempurna dengan Background zinc-900) */}
+    <rect x="0" y="135" width="800" height="15" fill="#18181b" />
+  </svg>
+);
+
+// ═══════════════════════════════════════════════════════════
+// FLOATING GOLD COINS
+// ═══════════════════════════════════════════════════════════
+const FloatingCoin = ({ x, y, delay }: { x: number | string; y: number | string; delay: number }) => {
+  return (
+    <div style={{
+      position: 'absolute', left: x, top: y,
+      animation: `float ${3 + delay}s ease-in-out ${delay}s infinite alternate`,
+      opacity: 0.5, pointerEvents: 'none',
+    }}>
+      <svg viewBox="0 0 12 12" width="24" height="24" style={{ imageRendering: 'pixelated' }}>
+        <rect x="4" y="1" width="4" height="1" fill="#f59e0b"/>
+        <rect x="3" y="2" width="6" height="8" fill="#fbbf24"/>
+        <rect x="2" y="3" width="8" height="6" fill="#fcd34d"/>
+        <rect x="5" y="3" width="2" height="6" fill="#f59e0b" opacity="0.4"/>
+        <rect x="4" y="10" width="4" height="1" fill="#d97706"/>
+      </svg>
+    </div>
+  );
+};
+
+// ═══════════════════════════════════════════════════════════
+// MAIN PAGE
+// ═══════════════════════════════════════════════════════════
+
+type Tab = 'login' | 'register';
 
 export default function LoginPage() {
-  const { setUserProfile, userProfile } = useStore();
-  const router = useRouter();
-  
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
-  const [showPassword, setShowPassword] = useState(false);
-  const [isMounted, setIsMounted] = useState(false);
-  
-  // State baru untuk membedakan Mode Login atau Register
-  const [isRegisterMode, setIsRegisterMode] = useState(false);
-
-  useEffect(() => {
-    setIsMounted(true);
-  }, []);
-
-  const validatePassword = (pass: string) => {
-    const hasCapital = /[A-Z]/.test(pass);
-    const isLongEnough = pass.length >= 8;
-    if (!isLongEnough) return "Password minimal 8 karakter!";
-    if (!hasCapital) return "Password harus punya minimal 1 huruf kapital!";
-    return null;
-  };
+  const router   = useRouter();
+  const { setUserProfile } = useStore();
+  const [tab,    setTab]    = useState<Tab>('register');
+  const [email,  setEmail]  = useState('');
+  const [pass,   setPass]   = useState('');
+  const [pass2,  setPass2]  = useState('');
+  const [error,  setError]  = useState('');
+  const [loading,setLoading]= useState(false);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    setError("");
-
-    if (isRegisterMode) {
-      // --- LOGIKA REGISTER ---
-      const validationError = validatePassword(password);
-      if (validationError) {
-        setError(validationError);
-        return;
-      }
-      
-      // Simpan data pendaftaran (Username & Password disimpan di store)
-      // Kita asumsikan store punya field untuk password atau kita simpan ke profile sementara
-      setUserProfile({ 
-        accountName: email,
-        // Kita simpan password ke store agar bisa dicheck saat login nanti
-        // Catatan: Ini cara sederhana untuk local-app
-        avatarId: password 
-      });
-
-      alert("Akun berhasil dibuat! Silakan login.");
-      setIsRegisterMode(false); // Balik ke mode login
-      setPassword(""); // Kosongkan password demi keamanan
-    } else {
-      // --- LOGIKA LOGIN ---
-      // Cek apakah username cocok DAN password (yang kita simpan di avatarId tadi) cocok
-      if (email === userProfile?.accountName && password === userProfile?.avatarId) {
-        router.push('/');
-      } else {
-        setError("Username atau Password salah!");
-        new Audio('/sounds/error.mp3').play().catch(() => {});
-      }
-    }
+    setError('');
+    if (!email || !pass) { setError('Email dan kata sandi wajib diisi.'); return; }
+    if (tab === 'register' && pass !== pass2) { setError('Kata sandi tidak cocok!'); return; }
+    setLoading(true);
+    setTimeout(() => { 
+      setUserProfile({ accountName: email.split('@')[0], nickname: email.split('@')[0] });
+      router.push('/'); 
+    }, 800);
   };
 
-  if (!isMounted) return null;
-
   return (
-    <main className="relative h-screen w-full flex items-center justify-center overflow-hidden font-mono">
-      
-      {/* BACKGROUND */}
-      <div 
-        className="absolute inset-0 bg-cover bg-center transition-transform duration-[10000ms] hover:scale-110"
-        style={{ backgroundImage: "url('https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=2070')" }}
-      >
-        <div className="absolute inset-0 bg-black/50 backdrop-blur-[2px]" />
-      </div>
-
-      <div className="relative z-10 w-full max-w-4xl p-1 mx-4">
-         <div className="bg-[#1a1b26]/90 backdrop-blur-xl border-2 border-slate-700 p-8 md:p-12 grid grid-cols-1 md:grid-cols-2 gap-12 relative shadow-[0_0_50px_rgba(0,0,0,0.5)]">
-            
-            <div className={`absolute top-0 left-0 w-8 h-8 border-t-4 border-l-4 ${isRegisterMode ? 'border-emerald-500' : 'border-amber-500'}`} />
-            <div className="absolute bottom-0 right-0 w-8 h-8 border-b-4 border-r-4 border-pink-500" />
-
-            {/* KOLOM KIRI: FORM */}
-            <div className="animate-in fade-in slide-in-from-left-8 duration-700">
-              <div className="mb-8 text-left">
-                <h2 className="text-4xl font-bold text-white tracking-tighter uppercase italic drop-shadow-[0_0_10px_rgba(255,255,255,0.3)]">
-                  {isRegisterMode ? "Create Account" : "Welcome Back!"}
-                </h2>
-                <p className="text-[10px] mt-2 uppercase tracking-[0.2em] font-pixel text-amber-400 drop-shadow-[0_0_8px_rgba(251,191,36,0.6)]">
-                  {isRegisterMode ? "Join the daily dungeon hunt" : "Secure your account to start hunting"}
-                </p>
-              </div>
-
-              <form onSubmit={handleSubmit} className="space-y-5 text-left">
-                <div>
-                  <label className="block text-[10px] font-bold text-slate-500 uppercase mb-2 tracking-widest text-left">Username</label>
-                  <input 
-                    type="text" 
-                    required
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    className="w-full bg-slate-900/80 border-2 border-slate-700 p-3 text-white outline-none focus:border-amber-500 transition-all text-sm shadow-[inset_0_2px_4px_rgba(0,0,0,0.5)]"
-                    placeholder="Enter username..."
-                  />
-                </div>
-
-                <div>
-                  <div className="flex justify-between items-end mb-2">
-                    <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-widest text-left">Password</label>
-                    {isRegisterMode && (
-                      <span className={`text-[8px] uppercase font-bold flex items-center gap-1 ${password.length >= 8 && /[A-Z]/.test(password) ? 'text-emerald-400' : 'text-slate-500'}`}>
-                        {password.length >= 8 && /[A-Z]/.test(password) ? <ShieldCheck size={10}/> : <ShieldAlert size={10}/>}
-                        Strength Check
-                      </span>
-                    )}
-                  </div>
-                  <div className="relative">
-                    <input 
-                      type={showPassword ? "text" : "password"}
-                      required
-                      value={password}
-                      onChange={(e) => setPassword(e.target.value)}
-                      className={`w-full bg-slate-900/80 border-2 p-3 pr-12 text-white outline-none transition-all text-sm shadow-[inset_0_2px_4px_rgba(0,0,0,0.5)] ${
-                        error ? 'border-pink-600 animate-shake' : 'border-slate-700 focus:border-cyan-500'
-                      }`}
-                      placeholder={isRegisterMode ? "Min. 8 char + Capital" : "Enter password..."}
-                    />
-                    <button
-                      type="button"
-                      onClick={() => setShowPassword(!showPassword)}
-                              className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 hover:text-amber-400 transition-colors"
-                    >
-                      {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
-                    </button>
-                  </div>
-                  {error && <p className="text-[10px] text-pink-500 mt-2 font-bold uppercase animate-pulse">{error}</p>}
-                </div>
-                
-                <button 
-                  type="submit"
-                          className={`w-full ${isRegisterMode ? 'bg-emerald-600 shadow-[0_4px_0_#065f46] text-white' : 'bg-amber-500 shadow-[0_4px_0_#b45309] text-amber-950'} font-bold py-4 uppercase tracking-[0.3em] active:translate-y-1 active:shadow-none transition-all text-xs mt-4 flex items-center justify-center gap-2`}
-                >
-                  {isRegisterMode ? <UserPlus size={16}/> : <LogIn size={16}/>}
-                  {isRegisterMode ? "Register Account" : "Sign In"}
-                </button>
-              </form>
-
-              {/* TOMBOL TOGGLE LOGIN/REGISTER */}
-              <div className="mt-6 text-center">
-                <button 
-                  onClick={() => { setIsRegisterMode(!isRegisterMode); setError(""); }}
-                  className="text-[10px] text-slate-500 hover:text-white uppercase tracking-widest transition-colors"
-                >
-                  {isRegisterMode ? "Already have an account? Login here" : "Don't have an account? Register here"}
-                </button>
-              </div>
-            </div>
-
-            {/* KOLOM KANAN: SOCIAL LOGIN */}
-            <div className="flex flex-col justify-center border-l-0 md:border-l-2 border-slate-800 md:pl-12 space-y-4 animate-in fade-in slide-in-from-right-8 duration-700">
-               <p className="text-center text-slate-500 text-[10px] font-bold uppercase mb-4 tracking-widest italic tracking-widest">
-                 {isRegisterMode ? "Register Rules" : "Fast Access"}
-               </p>
-               
-               {isRegisterMode ? (
-                 <div className="p-4 bg-slate-900/50 border border-slate-800 space-y-3">
-                    <p className="text-[9px] text-slate-400 leading-relaxed uppercase">
-                      1. Password must be 8+ characters.<br/>
-                      2. Include at least 1 Capital letter.<br/>
-                      3. Remember your username!
-                    </p>
-                 </div>
-               ) : (
-                 <>
-                   <button type="button" className="flex items-center gap-4 bg-slate-900/40 border-2 border-slate-700 p-3 hover:bg-slate-800 transition-all group hover:border-cyan-500">
-                      <div className="w-8 h-8 bg-white/5 border border-slate-600 flex items-center justify-center text-cyan-400 font-bold text-xs uppercase">G</div>
-                      <span className="text-[10px] font-bold uppercase tracking-widest text-slate-300">Google Auth</span>
-                   </button>
-                   <button type="button" className="flex items-center gap-4 bg-slate-900/40 border-2 border-slate-700 p-3 hover:bg-slate-800 transition-all group hover:border-blue-500">
-                      <div className="w-8 h-8 bg-white/5 border border-slate-600 flex items-center justify-center text-blue-400 font-bold italic text-xs uppercase">S</div>
-                      <span className="text-[10px] font-bold uppercase tracking-widest text-slate-300">Steam Auth</span>
-                   </button>
-                 </>
-               )}
-            </div>
-         </div>
-      </div>
+    <div className="min-h-screen bg-zinc-900 flex flex-col relative overflow-hidden"
+      style={{ fontFamily: "'Inter', 'Segoe UI', sans-serif" }}>
 
       <style>{`
-        @keyframes shake {
-          0%, 100% { transform: translateX(0); }
-          25% { transform: translateX(-5px); }
-          75% { transform: translateX(5px); }
+        @keyframes float { 0% { transform: translateY(0px) rotate(0deg); } 100%{ transform: translateY(-12px) rotate(5deg); } }
+        .input-habitica {
+          background: rgba(255,255,255,0.05);
+          color: #ffffff;
+          border: 1px solid rgba(251, 191, 36, 0.2);
+          transition: all 0.2s;
         }
-        .animate-shake {
-          animation: shake 0.2s ease-in-out 0s 2;
-        }
+        .input-habitica:focus { background: rgba(255,255,255,0.1); outline: none; border-color: rgba(251, 191, 36, 0.8); }
+        .input-habitica::placeholder { color: rgba(255,255,255,0.3); }
       `}</style>
-    </main>
+
+      {/* Bintang/Debu Latar Belakang */}
+      <div className="absolute inset-0 pointer-events-none opacity-20">
+        {[...Array(30)].map((_, i) => (
+          <div key={i} className="absolute bg-amber-200 rounded-full" 
+               style={{ 
+                 width: Math.random() * 3 + 1 + 'px', 
+                 height: Math.random() * 3 + 1 + 'px',
+                 top: Math.random() * 100 + '%', 
+                 left: Math.random() * 100 + '%',
+                 opacity: Math.random() * 0.8 + 0.2
+               }} />
+        ))}
+      </div>
+
+      <FloatingCoin x="10%" y="20%" delay={0}/>
+      <FloatingCoin x="85%" y="15%" delay={1.2}/>
+      <FloatingCoin x="50%" y="10%" delay={0.5}/>
+      <FloatingCoin x="5%"  y="60%" delay={2}/>
+      <FloatingCoin x="90%" y="50%" delay={1.5}/>
+
+      {/* ── Header ── */}
+      <header className="relative z-20 flex items-center justify-between px-8 py-6">
+        <div className="flex items-center">
+          {/* Logo Diperbesar */}
+          <img 
+            src="/logo.png" 
+            alt="Daily Dungeon Logo" 
+            className="h-16 md:h-24" 
+            style={{ imageRendering: 'pixelated' }} 
+          />
+        </div>
+        <nav className="flex items-center gap-6">
+          <button className="hidden md:block text-sm text-amber-200/70 hover:text-amber-400 transition-colors font-semibold">Ayo Mulai</button>
+          
+          {/* Diubah menjadi Bahasa */}
+          <button className="hidden md:block text-sm text-amber-200/70 hover:text-amber-400 transition-colors font-semibold">Bahasa ▾</button>
+          
+          <button className="hidden md:block text-sm text-amber-200/70 hover:text-amber-400 transition-colors font-semibold">Pelajari Lebih Lanjut ▾</button>
+          
+          <button onClick={() => setTab(tab === 'login' ? 'register' : 'login')} 
+            className="bg-amber-500 hover:bg-amber-400 text-zinc-900 px-6 py-2 rounded shadow-md font-bold text-sm transition-colors">
+            {tab === 'login' ? 'Daftar' : 'Masuk'}
+          </button>
+        </nav>
+      </header>
+
+      {/* ── Main Content Area ── */}
+      <main className="flex-1 flex flex-col lg:flex-row items-center justify-center max-w-6xl mx-auto w-full px-6 py-8 lg:py-0 gap-12 lg:gap-24 relative z-20">
+
+        {/* KIRI: Karakter (Diperbesar) & Copywriting */}
+        <div className="flex-1 flex flex-col items-center lg:items-start text-center lg:text-left">
+          
+          <div className="flex items-end justify-center lg:justify-start gap-2 mb-8 h-48">
+             <div className="transform translate-y-4 hover:-translate-y-2 transition-transform duration-500"><ShadowKnight/></div>
+             <div className="transform -translate-y-2 scale-110 z-10 hover:-translate-y-6 transition-transform duration-500"><VoidRanger/></div>
+             <div className="transform translate-y-4 hover:-translate-y-2 transition-transform duration-500"><ArcaneMage/></div>
+          </div>
+
+          <h1 className="text-amber-400 text-4xl lg:text-6xl font-extrabold leading-tight mb-4 max-w-lg tracking-tight">
+            Persiapkan Dirimu Memasuki Dungeon.
+          </h1>
+          <p className="text-zinc-300 text-base md:text-xl max-w-md leading-relaxed font-medium">
+            Selesaikan misi harianmu, kalahkan monster kemalasan, dan jadilah prajurit Spartan sejati di Daily Dungeon.
+          </p>
+        </div>
+
+        {/* KANAN: Form Pendaftaran / Login */}
+        <div className="w-full max-w-md lg:w-[400px]">
+          <div className="text-center mb-6">
+            <h2 className="text-white text-3xl font-bold">
+              {tab === 'login' ? 'Masuk ke Arena' : 'Daftar Sebagai Petarung'}
+            </h2>
+          </div>
+
+          <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+            <input
+              type="email"
+              value={email} onChange={e => setEmail(e.target.value)}
+              placeholder="Email"
+              className="input-habitica w-full px-4 py-3 rounded text-sm"
+            />
+            <input
+              type="password"
+              value={pass} onChange={e => setPass(e.target.value)}
+              placeholder="Kata sandi"
+              className="input-habitica w-full px-4 py-3 rounded text-sm"
+            />
+            {tab === 'register' && (
+              <input
+                type="password"
+                value={pass2} onChange={e => setPass2(e.target.value)}
+                placeholder="Konfirmasi Kata Sandi"
+                className="input-habitica w-full px-4 py-3 rounded text-sm"
+              />
+            )}
+
+            {error && <div className="text-red-400 text-xs text-center">{error}</div>}
+
+            <button type="submit" disabled={loading}
+              className="w-full py-3 bg-amber-500 text-zinc-900 font-bold rounded shadow-lg hover:bg-amber-400 transition-colors mt-2">
+              {loading ? 'Membuka Gerbang...' : tab === 'login' ? 'Masuk' : 'Lanjutkan'}
+            </button>
+
+            <div className="flex items-center gap-3 my-2 opacity-40">
+              <div className="flex-1 h-px bg-amber-200"/>
+              <span className="text-xs text-amber-200 uppercase tracking-widest">ATAU</span>
+              <div className="flex-1 h-px bg-amber-200"/>
+            </div>
+
+            <button type="button" className="w-full py-3 bg-transparent border border-amber-500/30 text-zinc-300 rounded font-medium text-sm hover:bg-amber-500/10 transition-colors flex items-center justify-center gap-3">
+              <svg viewBox="0 0 20 20" width="18" height="18">
+                <path d="M19.6 10.2c0-.6-.1-1.3-.2-1.9H10v3.6h5.4c-.2 1.2-1 2.3-2.1 3v2.5h3.4c2-1.8 3.1-4.5 3.1-7.2z" fill="#4285F4"/>
+                <path d="M10 20c2.7 0 5-.9 6.7-2.4l-3.4-2.5c-.9.6-2 1-3.3 1-2.5 0-4.7-1.7-5.5-4H1v2.6C2.7 17.8 6.2 20 10 20z" fill="#34A853"/>
+                <path d="M4.5 12.1c-.2-.6-.3-1.3-.3-2.1s.1-1.5.3-2.1V5.3H1C.4 6.6 0 8.2 0 10s.4 3.4 1 4.7l3.5-2.6z" fill="#FBBC05"/>
+                <path d="M10 4c1.4 0 2.7.5 3.7 1.4l2.8-2.8C14.9.9 12.7 0 10 0 6.2 0 2.7 2.2 1 5.3l3.5 2.6C5.3 5.7 7.5 4 10 4z" fill="#EA4335"/>
+              </svg>
+              Daftar dengan Google
+            </button>
+            <button type="button" className="w-full py-3 bg-transparent border border-amber-500/30 text-zinc-300 rounded font-medium text-sm hover:bg-amber-500/10 transition-colors flex items-center justify-center gap-3">
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M12 2C6.477 2 2 6.477 2 12c0 4.42 2.865 8.166 6.839 9.489.5.092.682-.217.682-.482 0-.237-.008-.866-.013-1.7-2.782.603-3.369-1.34-3.369-1.34-.454-1.156-1.11-1.462-1.11-1.462-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.831.092-.646.35-1.086.636-1.336-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.025A9.578 9.578 0 0112 6.836c.85.004 1.705.114 2.504.336 1.909-1.294 2.747-1.025 2.747-1.025.546 1.379.203 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.743 0 .267.18.578.688.48C19.138 20.161 22 16.418 22 12c0-5.523-4.477-10-10-10z"/></svg>
+              Daftar dengan Github
+            </button>
+          </form>
+        </div>
+      </main>
+
+      {/* ── FOOTER MINIMALIS ── */}
+      {/* Container landscape diposisikan di absolute Z-0 */}
+      <div className="absolute bottom-0 left-0 right-0 w-full z-0 pointer-events-none opacity-80">
+         <GrandSpartanLandscape />
+      </div>
+
+      {/* Footer Text diberi Z-20 agar PASTI berada di atas gambar gedung */}
+      <footer className="relative z-20 w-full mt-16 pt-12 pb-8 bg-gradient-to-t from-zinc-900 via-zinc-900/90 to-transparent">
+        
+        {/* Link Footer (Disingkat Hanya Dukung & Sosial) */}
+        <div className="max-w-3xl mx-auto px-8 grid grid-cols-1 md:grid-cols-2 gap-12 text-sm pb-12 text-center md:text-left">
+          
+          <div className="flex flex-col gap-4 items-center md:items-start">
+            <h4 className="text-amber-500 font-bold text-lg mb-2">Dukung</h4>
+            <a href="#" className="text-zinc-300 hover:text-amber-400 transition-colors">FAQ / Bantuan</a>
+            <a href="#" className="text-zinc-300 hover:text-amber-400 transition-colors">Laporkan Bug</a>
+            <a href="#" className="text-zinc-300 hover:text-amber-400 transition-colors">Ajukan Fitur Baru</a>
+          </div>
+
+          <div className="flex flex-col gap-4 items-center md:items-start">
+            <h4 className="text-amber-500 font-bold text-lg mb-2">Sosial</h4>
+            <a href="#" className="text-zinc-300 hover:text-amber-400 transition-colors flex items-center gap-3"><Instagram size={18}/> Instagram</a>
+            <a href="#" className="text-zinc-300 hover:text-amber-400 transition-colors flex items-center gap-3"><Twitter size={18}/> Twitter</a>
+            <a href="#" className="text-zinc-300 hover:text-amber-400 transition-colors flex items-center gap-3"><Github size={18}/> GitHub</a>
+          </div>
+
+        </div>
+
+        {/* Garis Batas & Copyright */}
+        <div className="max-w-5xl mx-auto px-8 flex flex-col md:flex-row justify-between items-center text-xs text-zinc-400 pt-6 border-t border-zinc-700/50">
+          <p className="font-medium tracking-wide">© 2026 Daily Dungeon. All rights reserved.</p>
+          <div className="flex gap-6 mt-4 md:mt-0 font-medium">
+            <a href="#" className="hover:text-amber-400 transition-colors">Kebijakan Privasi</a>
+            <a href="#" className="hover:text-amber-400 transition-colors">Syarat dan Ketentuan</a>
+          </div>
+        </div>
+
+      </footer>
+    </div>
   );
 }

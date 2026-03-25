@@ -6,6 +6,7 @@ import {
   Plus, Minus, Star, Circle, Flame, Check, X, 
   ListTodo, Repeat, Activity, CheckSquare, CalendarDays, RotateCcw
 } from "lucide-react";
+import { translations } from "@/utils/translations";
 
 interface TaskBoardProps {
   searchQuery: string;
@@ -15,8 +16,9 @@ interface TaskBoardProps {
 }
 
 export default function TaskBoard({ searchQuery, activeCategory, openAddModal, setSelectedTask }: TaskBoardProps) {
-  const { tasks, toggleTaskDone, handleHabitPlus, handleHabitMinus, deleteTask } = useStore();
+  const { tasks, toggleTaskDone, handleHabitPlus, handleHabitMinus, deleteTask, playSound, settings } = useStore();
   const extendedTasks = tasks as ExtendedTask[];
+  const t = translations[settings?.language || 'id']?.tasks || translations['id'].tasks;
 
   // State Tabs per kolom
   const [habitTab, setHabitTab] = useState<'Semua'|'Lemah'|'Kuat'>('Semua');
@@ -59,27 +61,26 @@ export default function TaskBoard({ searchQuery, activeCategory, openAddModal, s
         <div className="p-4 border-b-4 border-amber-600 flex flex-col gap-3 bg-[#24283b]">
           <div className="flex items-center gap-2">
             <Activity size={18} className="text-amber-500" />
-            <h2 className="font-bold text-amber-400">Siklus Misi</h2>
+            <h2 className="font-bold text-amber-400 uppercase tracking-wider">{t.habit}</h2>
           </div>
           <div className="flex gap-4 text-[10px] font-bold">
-            <button onClick={() => setHabitTab('Semua')} className={`pb-1 ${habitTab === 'Semua' ? 'text-amber-400 border-b-2 border-amber-400' : 'text-slate-500 hover:text-slate-300'}`}>Semua</button>
-            <button onClick={() => setHabitTab('Lemah')} className={`pb-1 ${habitTab === 'Lemah' ? 'text-amber-400 border-b-2 border-amber-400' : 'text-slate-500 hover:text-slate-300'}`}>Lemah</button>
-            <button onClick={() => setHabitTab('Kuat')} className={`pb-1 ${habitTab === 'Kuat' ? 'text-amber-400 border-b-2 border-amber-400' : 'text-slate-500 hover:text-slate-300'}`}>Kuat</button>
+            <button onClick={() => { setHabitTab('Semua'); playSound('click'); }} className={`pb-1 ${habitTab === 'Semua' ? 'text-amber-400 border-b-2 border-amber-400' : 'text-slate-500 hover:text-slate-300'}`}>{t.all}</button>
+            <button onClick={() => { setHabitTab('Lemah'); playSound('click'); }} className={`pb-1 ${habitTab === 'Lemah' ? 'text-amber-400 border-b-2 border-amber-400' : 'text-slate-500 hover:text-slate-300'}`}>{t.weak}</button>
+            <button onClick={() => { setHabitTab('Kuat'); playSound('click'); }} className={`pb-1 ${habitTab === 'Kuat' ? 'text-amber-400 border-b-2 border-amber-400' : 'text-slate-500 hover:text-slate-300'}`}>{t.strong}</button>
           </div>
         </div>
         
         <div className="p-4 flex-1 overflow-y-auto flex flex-col gap-3">
           <button onClick={() => openAddModal('habit', true)} className="w-full bg-[#24283b] border-2 border-dashed border-slate-600 hover:border-amber-500 text-slate-400 hover:text-amber-400 p-3 rounded-none flex items-center justify-center gap-2 transition-all text-xs font-bold mb-2 hover:bg-amber-500/10">
-            <Plus size={16} /> Tambah Siklus
+            <Plus size={16} /> {t.addHabit}
           </button>
           
           {habits.length === 0 && (
             <div className="flex flex-col items-center justify-center h-40 text-center px-4 opacity-50 select-none">
               <Activity size={32} className="mb-3 text-amber-500 opacity-60" />
-              <h3 className="text-xs font-bold text-amber-400 mb-1">Ini adalah Siklus-mu</h3>
+              <h3 className="text-xs font-bold text-amber-400 mb-1 uppercase tracking-wider">{t.noHabit}</h3>
               <p className="text-[10px] text-slate-400 leading-relaxed">
-                Misi yang bisa dilakukan berkali-kali tanpa jadwal ketat.<br/><br/>
-                <span className="italic text-slate-500">Contoh: Minum 8 gelas air, Olahraga 15 menit, atau Makan Sayur.</span>
+                {t.habitDesc}
               </p>
             </div>
           )}
@@ -111,27 +112,26 @@ export default function TaskBoard({ searchQuery, activeCategory, openAddModal, s
         <div className="p-4 border-b-4 border-cyan-600 flex flex-col gap-3 bg-[#24283b]">
           <div className="flex items-center gap-2">
             <Repeat size={18} className="text-cyan-500" />
-            <h2 className="font-bold text-cyan-400">Operasi Harian</h2>
+            <h2 className="font-bold text-cyan-400 uppercase tracking-wider">{t.daily}</h2>
           </div>
           <div className="flex gap-4 text-[10px] font-bold">
-            <button onClick={() => setDailyTab('Semua')} className={`pb-1 ${dailyTab === 'Semua' ? 'text-cyan-400 border-b-2 border-cyan-400' : 'text-slate-500 hover:text-slate-300'}`}>Semua</button>
-            <button onClick={() => setDailyTab('Tenggat Waktu')} className={`pb-1 ${dailyTab === 'Tenggat Waktu' ? 'text-cyan-400 border-b-2 border-cyan-400' : 'text-slate-500 hover:text-slate-300'}`}>Tenggat Waktu</button>
-            <button onClick={() => setDailyTab('Tanpa Tenggat')} className={`pb-1 ${dailyTab === 'Tanpa Tenggat' ? 'text-cyan-400 border-b-2 border-cyan-400' : 'text-slate-500 hover:text-slate-300'}`}>Tanpa Tenggat</button>
+            <button onClick={() => { setDailyTab('Semua'); playSound('click'); }} className={`pb-1 ${dailyTab === 'Semua' ? 'text-cyan-400 border-b-2 border-cyan-400' : 'text-slate-500 hover:text-slate-300'}`}>{t.all}</button>
+            <button onClick={() => { setDailyTab('Tenggat Waktu'); playSound('click'); }} className={`pb-1 ${dailyTab === 'Tenggat Waktu' ? 'text-cyan-400 border-b-2 border-cyan-400' : 'text-slate-500 hover:text-slate-300'}`}>{t.due}</button>
+            <button onClick={() => { setDailyTab('Tanpa Tenggat'); playSound('click'); }} className={`pb-1 ${dailyTab === 'Tanpa Tenggat' ? 'text-cyan-400 border-b-2 border-cyan-400' : 'text-slate-500 hover:text-slate-300'}`}>{t.noDue}</button>
           </div>
         </div>
         
         <div className="p-4 flex-1 overflow-y-auto flex flex-col gap-3">
           <button onClick={() => openAddModal('daily', true)} className="w-full bg-[#24283b] border-2 border-dashed border-slate-600 hover:border-cyan-500 text-slate-400 hover:text-cyan-400 p-3 rounded-none flex items-center justify-center gap-2 transition-all text-xs font-bold mb-2 hover:bg-cyan-500/10">
-            <Plus size={16} /> Tambah Operasi
+            <Plus size={16} /> {t.addDaily}
           </button>
 
           {dailies.length === 0 && (
             <div className="flex flex-col items-center justify-center h-40 text-center px-4 opacity-50 select-none">
               <CalendarDays size={32} className="mb-3 text-cyan-500 opacity-60" />
-              <h3 className="text-xs font-bold text-cyan-400 mb-1">Ini adalah Operasi Harian-mu</h3>
+              <h3 className="text-xs font-bold text-cyan-400 mb-1 uppercase tracking-wider">{t.noDaily}</h3>
               <p className="text-[10px] text-slate-400 leading-relaxed">
-                Misi yang berulang sesuai jadwal untuk menjaga kedisiplinanmu.<br/><br/>
-                <span className="italic text-slate-500">Contoh: Rapikan tempat tidur, Beribadah, atau Minum Vitamin harian.</span>
+                {t.dailyDesc}
               </p>
             </div>
           )}
@@ -160,29 +160,28 @@ export default function TaskBoard({ searchQuery, activeCategory, openAddModal, s
         <div className="p-4 border-b-4 border-pink-600 flex flex-col gap-3 bg-[#24283b]">
           <div className="flex items-center gap-2">
             <ListTodo size={18} className="text-pink-500" />
-            <h2 className="font-bold text-pink-400">Target Utama</h2>
+            <h2 className="font-bold text-pink-400 uppercase tracking-wider">{t.todo}</h2>
           </div>
           <div className="flex gap-4 text-[10px] font-bold">
-            <button onClick={() => setTodoTab('Aktif')} className={`pb-1 ${todoTab === 'Aktif' ? 'text-pink-400 border-b-2 border-pink-400' : 'text-slate-500 hover:text-slate-300'}`}>Aktif</button>
-            <button onClick={() => setTodoTab('Terjadwal')} className={`pb-1 ${todoTab === 'Terjadwal' ? 'text-pink-400 border-b-2 border-pink-400' : 'text-slate-500 hover:text-slate-300'}`}>Terjadwal</button>
-            <button onClick={() => setTodoTab('Selesai')} className={`pb-1 ${todoTab === 'Selesai' ? 'text-pink-400 border-b-2 border-pink-400' : 'text-slate-500 hover:text-slate-300'}`}>Selesai</button>
+            <button onClick={() => { setTodoTab('Aktif'); playSound('click'); }} className={`pb-1 ${todoTab === 'Aktif' ? 'text-pink-400 border-b-2 border-pink-400' : 'text-slate-500 hover:text-slate-300'}`}>{t.active}</button>
+            <button onClick={() => { setTodoTab('Terjadwal'); playSound('click'); }} className={`pb-1 ${todoTab === 'Terjadwal' ? 'text-pink-400 border-b-2 border-pink-400' : 'text-slate-500 hover:text-slate-300'}`}>{t.scheduled}</button>
+            <button onClick={() => { setTodoTab('Selesai'); playSound('click'); }} className={`pb-1 ${todoTab === 'Selesai' ? 'text-pink-400 border-b-2 border-pink-400' : 'text-slate-500 hover:text-slate-300'}`}>{t.done}</button>
           </div>
         </div>
 
         <div className="p-4 flex-1 overflow-y-auto flex flex-col gap-3">
           {todoTab !== 'Selesai' && (
             <button onClick={() => openAddModal('todo', true)} className="w-full bg-[#24283b] border-2 border-dashed border-slate-600 hover:border-pink-500 text-slate-400 hover:text-pink-400 p-3 rounded-none flex items-center justify-center gap-2 transition-all text-xs font-bold mb-2 hover:bg-pink-500/10">
-              <Plus size={16} /> Tambah Target
+              <Plus size={16} /> {t.addTodo}
             </button>
           )}
 
           {todos.length === 0 && (
             <div className="flex flex-col items-center justify-center h-40 text-center px-4 opacity-50 select-none">
               <CheckSquare size={32} className="mb-3 text-pink-500 opacity-60" />
-              <h3 className="text-xs font-bold text-pink-400 mb-1">Ini adalah Target-mu</h3>
+              <h3 className="text-xs font-bold text-pink-400 mb-1 uppercase tracking-wider">{t.noTodo}</h3>
               <p className="text-[10px] text-slate-400 leading-relaxed">
-                Misi yang hanya perlu diselesaikan sekali untuk imbalan besar.<br/><br/>
-                <span className="italic text-slate-500">Contoh: Bayar tagihan listrik, Beli kado ulang tahun, atau Bereskan kamar.</span>
+                {t.todoDesc}
               </p>
             </div>
           )}

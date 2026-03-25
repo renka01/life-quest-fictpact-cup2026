@@ -18,6 +18,7 @@ import {
   CreditCard,
   Sparkles,
 } from "lucide-react";
+import { translations } from "@/utils/translations";
 
 interface DashboardBoardProps {
   onOpenTaskModal: (type?: TaskType | null) => void;
@@ -33,7 +34,8 @@ export default function DashboardBoard({
   onOpenBills,
   onGoToFinance,
 }: DashboardBoardProps) {
-  const { tasks, stats, accounts, transactions, recurringTransactions } = useStore();
+  const { tasks, stats, accounts, transactions, recurringTransactions, settings } = useStore();
+  const t = translations[settings?.language || 'id']?.dash || translations['id'].dash;
 
   const totalTasks = tasks.length;
   const completedTasks = tasks.filter((t) => t.done).length;
@@ -76,8 +78,8 @@ export default function DashboardBoard({
     stats.maxExp > 0 ? Math.min(100, (stats.exp / stats.maxExp) * 100) : 0;
 
   const greeting = focusTasks.length > 0
-      ? `Kamu punya ${focusTasks.length} fokus utama hari ini.`
-      : "Hari ini cukup tenang. Saatnya susun langkah berikutnya.";
+      ? t.greetActive.replace('{n}', focusTasks.length)
+      : t.greetQuiet;
 
   return (
     <div className="animate-in fade-in duration-500 flex flex-col gap-6">
@@ -87,27 +89,27 @@ export default function DashboardBoard({
           <div className="space-y-4">
             <div>
               <p className="text-[10px] uppercase tracking-[0.2em] text-amber-400 font-bold mb-3">
-                Command Center
+                {t.cmd}
               </p>
 
               <h1 className="font-pixel text-sm md:text-base text-white flex items-center gap-3 drop-shadow-[2px_2px_0_#000] mb-3">
                 <span className="text-amber-500"><LayoutDashboard size={18} /></span>
-                DASHBOARD UTAMA
+                {t.title}
               </h1>
               
               <p className="font-pixel text-[7px] md:text-[8px] text-slate-400 uppercase tracking-widest leading-relaxed max-w-2xl">
-                RINGKASAN PROGRES KARAKTER, MISI, DAN KEUANGANMU DALAM SATU LAYAR.
+                {t.desc}
               </p>
             </div>
 
             <div className="flex flex-wrap gap-3">
               <div className="bg-[#1a1b26] border-2 border-amber-500 px-4 py-2 shadow-[3px_3px_0_#000] min-w-[150px]">
-                <p className="text-[10px] uppercase text-slate-500 mb-1">Role</p>
+                <p className="text-[10px] uppercase text-slate-500 mb-1">{t.role}</p>
                 <p className="text-amber-400 font-bold">Lv. {stats.level} Adventurer</p>
               </div>
 
               <div className="bg-[#1a1b26] border-2 border-orange-500 px-4 py-2 shadow-[3px_3px_0_#000] min-w-[120px]">
-                <p className="text-[10px] uppercase text-slate-500 mb-1">Streak</p>
+                <p className="text-[10px] uppercase text-slate-500 mb-1">{t.streak}</p>
                 <p className="text-orange-400 font-bold flex items-center gap-2">
                   <Flame size={14} />
                   {stats.streak} Hari
@@ -115,7 +117,7 @@ export default function DashboardBoard({
               </div>
 
               <div className="bg-[#1a1b26] border-2 border-yellow-500 px-4 py-2 shadow-[3px_3px_0_#000] min-w-[100px]">
-                <p className="text-[10px] uppercase text-slate-500 mb-1">Gold</p>
+                <p className="text-[10px] uppercase text-slate-500 mb-1">{t.gold}</p>
                 <p className="text-yellow-400 font-bold flex items-center gap-2">
                   <Coins size={14} />
                   {stats.gold}
@@ -124,14 +126,14 @@ export default function DashboardBoard({
             </div>
 
             <div className="bg-[#1a1b26] border-2 border-slate-700 p-4">
-              <p className="text-[10px] uppercase text-slate-500 mb-2">System Insight</p>
+              <p className="text-[10px] uppercase text-slate-500 mb-2">{t.sysInsight}</p>
               <p className="text-sm text-slate-200">{greeting}</p>
             </div>
           </div>
 
           {/* QUICK ACTIONS */}
           <div className="bg-[#1a1b26] border-2 border-slate-700 p-4 shadow-[4px_4px_0_#000]">
-            <p className="text-[10px] uppercase text-slate-500 mb-3">Quick Actions</p>
+            <p className="text-[10px] uppercase text-slate-500 mb-3">{t.quick}</p>
             <div className="grid grid-cols-2 gap-3">
               <button
                 onClick={() => onOpenTaskModal(null)}
@@ -141,7 +143,7 @@ export default function DashboardBoard({
               >
                 <span className="flex items-center justify-center gap-2">
                   <Plus size={14} />
-                  Misi Baru
+                  {t.newMission}
                 </span>
               </button>
 
@@ -151,7 +153,7 @@ export default function DashboardBoard({
               >
                 <span className="flex items-center justify-center gap-2">
                   <CreditCard size={14} />
-                  Rekening Baru
+                  {t.newAcc}
                 </span>
               </button>
 
@@ -161,7 +163,7 @@ export default function DashboardBoard({
               >
                 <span className="flex items-center justify-center gap-2">
                   <PiggyBank size={14} />
-                  Tambah Aset
+                  {t.newAsset}
                 </span>
               </button>
 
@@ -171,7 +173,7 @@ export default function DashboardBoard({
               >
                 <span className="flex items-center justify-center gap-2">
                   <CalendarClock size={14} />
-                  Tagihan
+                  {t.bills}
                 </span>
               </button>
             </div>
@@ -182,7 +184,7 @@ export default function DashboardBoard({
             >
               <span className="flex items-center justify-center gap-2">
                 <Sparkles size={14} />
-                Buka Financial Command Center
+                {t.openFin}
               </span>
             </button>
           </div>
@@ -194,27 +196,27 @@ export default function DashboardBoard({
         <div className="bg-[#24283b] border-4 border-amber-500 shadow-[6px_6px_0_#000] p-5 flex flex-col gap-4">
           <div className="flex items-center gap-2 text-amber-400">
             <Zap size={18} />
-            <h2 className="text-sm font-bold uppercase">Status Karakter</h2>
+            <h2 className="text-sm font-bold uppercase">{t.charStat}</h2>
           </div>
 
           <div className="grid grid-cols-3 gap-4">
             <div className="min-w-0">
-              <p className="text-slate-500 text-[10px] uppercase mb-1 truncate">Level</p>
+              <p className="text-slate-500 text-[10px] uppercase mb-1 truncate">{t.level}</p>
               <p className="text-white font-bold text-xl truncate">{stats.level}</p>
             </div>
             <div className="min-w-0">
-              <p className="text-slate-500 text-[10px] uppercase mb-1 truncate">Streak</p>
+              <p className="text-slate-500 text-[10px] uppercase mb-1 truncate">{t.streak}</p>
               <p className="text-orange-400 font-bold text-xl truncate">{stats.streak}</p>
             </div>
             <div className="min-w-0">
-              <p className="text-slate-500 text-[10px] uppercase mb-1 truncate">Gold</p>
+              <p className="text-slate-500 text-[10px] uppercase mb-1 truncate">{t.gold}</p>
               <p className="text-yellow-400 font-bold text-xl truncate">{stats.gold}</p>
             </div>
           </div>
 
           <div className="mt-auto pt-4 border-t-2 border-slate-700">
             <div className="flex justify-between text-[10px] text-slate-400 font-bold mb-1.5 uppercase">
-              <span>EXP Progress</span>
+              <span>{t.expProg}</span>
               <span className="text-amber-400">{stats.exp} / {stats.maxExp}</span>
             </div>
             <div className="h-2 bg-slate-900 border border-slate-700 overflow-hidden">
@@ -226,18 +228,18 @@ export default function DashboardBoard({
         <div className="bg-[#24283b] border-4 border-emerald-500 shadow-[6px_6px_0_#000] p-5 flex flex-col gap-4">
           <div className="flex items-center gap-2 text-emerald-400">
             <Wallet size={18} />
-            <h2 className="text-sm font-bold uppercase">Balance Overview</h2>
+            <h2 className="text-sm font-bold uppercase">{t.balOver}</h2>
           </div>
 
           <div className="space-y-4 flex-1">
             <div className="min-w-0">
-              <p className="text-slate-500 text-[10px] uppercase mb-1 truncate">Tunai / Rekening</p>
+              <p className="text-slate-500 text-[10px] uppercase mb-1 truncate">{t.cash}</p>
               <p className="text-white font-bold text-lg truncate" title={`Rp ${totalRekening.toLocaleString()}`}>
                 Rp {totalRekening.toLocaleString()}
               </p>
             </div>
             <div className="min-w-0">
-              <p className="text-slate-500 text-[10px] uppercase mb-1 truncate">Aset / Tabungan</p>
+              <p className="text-slate-500 text-[10px] uppercase mb-1 truncate">{t.asset}</p>
               <p className="text-white font-bold text-lg truncate" title={`Rp ${totalTabungan.toLocaleString()}`}>
                 Rp {totalTabungan.toLocaleString()}
               </p>
@@ -245,7 +247,7 @@ export default function DashboardBoard({
           </div>
 
           <div className="pt-4 border-t-2 border-slate-700 min-w-0 mt-auto">
-            <p className="text-slate-500 text-[10px] uppercase mb-1 truncate">Total Net Worth</p>
+            <p className="text-slate-500 text-[10px] uppercase mb-1 truncate">{t.net}</p>
             <p className="text-emerald-400 font-bold text-2xl truncate" title={`Rp ${netWorth.toLocaleString()}`}>
               Rp {netWorth.toLocaleString()}
             </p>
@@ -255,11 +257,11 @@ export default function DashboardBoard({
         <div className="bg-[#24283b] border-4 border-yellow-500 shadow-[6px_6px_0_#000] p-5 flex flex-col gap-4">
           <div className="flex items-center gap-2 text-yellow-400">
             <Coins size={18} />
-            <h2 className="text-sm font-bold uppercase">Pemasukan</h2>
+            <h2 className="text-sm font-bold uppercase">{t.incSec}</h2>
           </div>
 
           <div className="min-w-0 mb-2">
-            <p className="text-slate-500 text-[10px] uppercase mb-1 truncate">Total Pemasukan</p>
+              <p className="text-slate-500 text-[10px] uppercase mb-1 truncate">{t.totInc}</p>
             <p className="text-yellow-400 font-bold text-2xl truncate" title={`Rp ${totalIncome.toLocaleString()}`}>
               Rp {totalIncome.toLocaleString()}
             </p>
@@ -267,11 +269,11 @@ export default function DashboardBoard({
 
           <div className="grid grid-cols-2 gap-4 mt-auto pt-4 border-t-2 border-slate-700">
             <div className="min-w-0">
-              <p className="text-slate-500 text-[10px] uppercase mb-1 truncate">Transaksi</p>
+                <p className="text-slate-500 text-[10px] uppercase mb-1 truncate">{t.trans}</p>
               <p className="text-white font-bold text-lg truncate">{incomeTransactions.length}x</p>
             </div>
             <div className="min-w-0">
-              <p className="text-slate-500 text-[10px] uppercase mb-1 truncate">Rata-rata</p>
+                <p className="text-slate-500 text-[10px] uppercase mb-1 truncate">{t.avg}</p>
               <p className="text-white font-bold text-lg truncate" title={`Rp ${avgIncome.toLocaleString()}`}>
                 Rp {avgIncome.toLocaleString()}
               </p>
@@ -282,27 +284,27 @@ export default function DashboardBoard({
         <div className="bg-[#24283b] border-4 border-pink-500 shadow-[6px_6px_0_#000] p-5 flex flex-col gap-4">
           <div className="flex items-center gap-2 text-pink-400">
             <ScrollText size={18} />
-            <h2 className="text-sm font-bold uppercase">Progress Misi</h2>
+            <h2 className="text-sm font-bold uppercase">{t.prog}</h2>
           </div>
 
           <div className="grid grid-cols-3 gap-4">
             <div className="min-w-0">
-              <p className="text-slate-500 text-[10px] uppercase mb-1 truncate">Total</p>
+              <p className="text-slate-500 text-[10px] uppercase mb-1 truncate">{t.tot}</p>
               <p className="text-white font-bold text-xl truncate">{totalTasks}</p>
             </div>
             <div className="min-w-0">
-              <p className="text-slate-500 text-[10px] uppercase mb-1 truncate">Selesai</p>
+              <p className="text-slate-500 text-[10px] uppercase mb-1 truncate">{t.done}</p>
               <p className="text-emerald-400 font-bold text-xl truncate">{completedTasks}</p>
             </div>
             <div className="min-w-0">
-              <p className="text-slate-500 text-[10px] uppercase mb-1 truncate">Pending</p>
+              <p className="text-slate-500 text-[10px] uppercase mb-1 truncate">{t.pend}</p>
               <p className="text-pink-400 font-bold text-xl truncate">{pendingTasks}</p>
             </div>
           </div>
 
           <div className="mt-auto pt-4 border-t-2 border-slate-700">
             <div className="flex justify-between text-[10px] text-slate-400 font-bold mb-1.5 uppercase">
-              <span>Completion Rate</span>
+              <span>{t.compRate}</span>
               <span className="text-pink-400">{progress}%</span>
             </div>
             <div className="h-2 bg-slate-900 border border-slate-700 overflow-hidden">
@@ -316,9 +318,9 @@ export default function DashboardBoard({
       <div className="grid grid-cols-1 xl:grid-cols-[1.2fr_1fr] gap-6">
         <div className="bg-[#24283b] border-4 border-slate-700 shadow-[6px_6px_0_#000] p-5">
           <div className="flex items-center justify-between mb-4">
-            <h2 className="text-sm font-bold text-white uppercase">Fokus Hari Ini</h2>
+              <h2 className="text-sm font-bold text-white uppercase">{t.focus}</h2>
             <span className="text-[10px] uppercase text-slate-500">
-              {focusTasks.length} Task
+              {focusTasks.length} {t.taskCount}
             </span>
           </div>
 
@@ -346,12 +348,12 @@ export default function DashboardBoard({
                       {task.done ? (
                         <span className="text-[10px] text-emerald-400 uppercase flex items-center gap-1">
                           <CheckCircle2 size={12} />
-                          Done
+                          {t.done}
                         </span>
                       ) : (
                         <span className="text-[10px] text-yellow-400 uppercase flex items-center gap-1">
                           <Target size={12} />
-                          Active
+                          {t.active}
                         </span>
                       )}
                     </div>
@@ -363,7 +365,7 @@ export default function DashboardBoard({
                 <div className="w-16 h-16 bg-[#1a1b26] border-4 border-slate-700 border-dashed flex items-center justify-center mb-4">
                   <LayoutDashboard size={24} className="opacity-50" />
                 </div>
-                <p className="text-sm italic">Belum ada misi aktif.</p>
+                <p className="text-sm italic">{t.noFocus}</p>
               </div>
             )}
           </div>
@@ -372,9 +374,9 @@ export default function DashboardBoard({
         <div className="flex flex-col gap-6">
           <div className="bg-[#24283b] border-4 border-slate-700 shadow-[6px_6px_0_#000] p-5">
             <div className="flex items-center justify-between mb-4">
-              <h2 className="text-sm font-bold text-white uppercase">Aktivitas Terbaru</h2>
+                <h2 className="text-sm font-bold text-white uppercase">{t.recent}</h2>
               <span className="text-[10px] uppercase text-slate-500">
-                {recentTransactions.length} Logs
+                {recentTransactions.length} {t.logCount}
               </span>
             </div>
 
@@ -414,16 +416,16 @@ export default function DashboardBoard({
                   </div>
                 ))
               ) : (
-                <p className="text-sm text-slate-500 italic">Belum ada aktivitas terbaru.</p>
+                <p className="text-sm text-slate-500 italic">{t.noRecent}</p>
               )}
             </div>
           </div>
 
           <div className="bg-[#24283b] border-4 border-slate-700 shadow-[6px_6px_0_#000] p-5">
             <div className="flex items-center justify-between mb-4">
-              <h2 className="text-sm font-bold text-white uppercase">Upcoming Bills</h2>
+                <h2 className="text-sm font-bold text-white uppercase">{t.upcoming}</h2>
               <span className="text-[10px] uppercase text-slate-500">
-                {upcomingBills.length} Item
+                {upcomingBills.length} {t.itemCount}
               </span>
             </div>
 
@@ -437,7 +439,7 @@ export default function DashboardBoard({
                     <div>
                       <p className="text-white font-bold">{bill.name}</p>
                       <p className="text-xs text-slate-500">
-                        Due: {new Date(bill.nextDueDate).toLocaleDateString()}
+                        {t.due}: {new Date(bill.nextDueDate).toLocaleDateString()}
                       </p>
                     </div>
                     <div className="text-pink-400 font-bold">
@@ -446,7 +448,7 @@ export default function DashboardBoard({
                   </div>
                 ))
               ) : (
-                <p className="text-sm text-slate-500 italic">Belum ada tagihan rutin.</p>
+                <p className="text-sm text-slate-500 italic">{t.noBills}</p>
               )}
             </div>
           </div>

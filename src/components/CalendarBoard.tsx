@@ -2,16 +2,19 @@
 import React, { useState } from 'react';
 import { ChevronLeft, ChevronRight, Swords, Flame, Calendar as CalIcon, X, CheckCircle2, CircleDashed } from 'lucide-react';
 import { useStore } from '@/store/useStore'; 
+import { translations } from '@/utils/translations';
 
 export default function CalendarBoard() {
-  const { tasks } = useStore(); 
+  const { tasks, playSound, settings } = useStore(); 
+  const t = translations[settings?.language || 'id']?.calendar || translations['id'].calendar;
+  
   const [currentDate, setCurrentDate] = useState(new Date());
   
   // State untuk menyimpan data hari yang sedang di-klik
   const [selectedDayTasks, setSelectedDayTasks] = useState<{ date: number, month: number, year: number, tasks: any[] } | null>(null);
 
-  const prevMonth = () => setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() - 1, 1));
-  const nextMonth = () => setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 1));
+  const prevMonth = () => { setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() - 1, 1)); playSound('click'); };
+  const nextMonth = () => { setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 1)); playSound('click'); };
 
   const year = currentDate.getFullYear();
   const month = currentDate.getMonth();
@@ -20,8 +23,8 @@ export default function CalendarBoard() {
   const firstDay = new Date(year, month, 1).getDay();
   const startDayIndex = firstDay === 0 ? 6 : firstDay - 1;
 
-  const monthNames = ["JANUARI", "FEBRUARI", "MARET", "APRIL", "MEI", "JUNI", "JULI", "AGUSTUS", "SEPTEMBER", "OKTOBER", "NOVEMBER", "DESEMBER"];
-  const daysInWeek = ['Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab', 'Min'];
+  const monthNames = t.months;
+  const daysInWeek = t.days;
 
   const calendarGrid = Array.from({ length: 42 }, (_, i) => {
     const dayNumber = i - startDayIndex + 1;
@@ -82,10 +85,10 @@ export default function CalendarBoard() {
         <div className="flex flex-col gap-3 text-left">
           <h1 className="font-pixel text-sm md:text-base text-white flex items-center gap-3 drop-shadow-[2px_2px_0_#000]">
             <span className="text-emerald-500"><CalIcon size={18} /></span>
-            ARSIP WAKTU
+            {t.title}
           </h1>
           <p className="font-pixel text-[7px] md:text-[8px] text-slate-400 uppercase leading-relaxed tracking-widest">
-            JADWAL TARGET UTAMA DAN OPERASI HARIANMU.
+            {t.desc}
           </p>
         </div>
 
@@ -135,7 +138,7 @@ export default function CalendarBoard() {
                   </span>
                   {dayNum && (
                     <span className="text-[7px] text-purple-400 opacity-0 group-hover:opacity-100 transition-opacity font-bold uppercase tracking-tighter mt-0.5">
-                      Detail {'>'}
+                      {t.detail} {'>'}
                     </span>
                   )}
                 </div>
@@ -169,7 +172,7 @@ export default function CalendarBoard() {
                   {/* Indikator Jika Lebih dari 2 */}
                   {dayTasks.length > 2 && (
                     <div className="text-[8px] font-bold text-slate-400 text-center mt-0.5 bg-[#1a1b26] border border-slate-700 py-0.5">
-                      +{dayTasks.length - 2} LAINNYA
+                      +{dayTasks.length - 2} {t.others}
                     </div>
                   )}
                 </div>
@@ -207,7 +210,7 @@ export default function CalendarBoard() {
                             {task.title}
                           </span>
                           <span className={`text-[9px] uppercase font-bold tracking-wider ${isTodo ? 'text-pink-400' : 'text-cyan-400'}`}>
-                            {isTodo ? 'TARGET UTAMA' : 'OPERASI HARIAN'}
+                            {isTodo ? t.todo : t.daily}
                           </span>
                         </div>
                       </div>
@@ -215,9 +218,9 @@ export default function CalendarBoard() {
                       {/* Status Badge */}
                       <div className="shrink-0 ml-2">
                         {task.done ? (
-                          <span className="text-[9px] font-bold bg-emerald-500/20 text-emerald-400 px-2 py-1 border border-emerald-500/50">SELESAI</span>
+                          <span className="text-[9px] font-bold bg-emerald-500/20 text-emerald-400 px-2 py-1 border border-emerald-500/50">{t.done}</span>
                         ) : (
-                          <span className="text-[9px] font-bold bg-amber-500/20 text-amber-400 px-2 py-1 border border-amber-500/50">TERTUNDA</span>
+                          <span className="text-[9px] font-bold bg-amber-500/20 text-amber-400 px-2 py-1 border border-amber-500/50">{t.pending}</span>
                         )}
                       </div>
                     </div>
@@ -226,8 +229,8 @@ export default function CalendarBoard() {
               ) : (
                 <div className="py-8 flex flex-col items-center justify-center text-slate-500 gap-2">
                   <Swords size={32} className="opacity-20" />
-                  <p className="text-xs font-bold uppercase tracking-wider">Tidak Ada Misi</p>
-                  <p className="text-[10px] text-center">Waktu kosong. Saatnya bersantai dan mengevaluasi strategimu!</p>
+                  <p className="text-xs font-bold uppercase tracking-wider">{t.empty}</p>
+                  <p className="text-[10px] text-center">{t.emptyDesc}</p>
                 </div>
               )}
             </div>

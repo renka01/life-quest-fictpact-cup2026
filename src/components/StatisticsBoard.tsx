@@ -15,9 +15,11 @@ import {
   Flame,
   Trophy,
 } from "lucide-react";
+import { translations } from "@/utils/translations";
 
 export default function StatisticsBoard() {
-  const { tasks, transactions, accounts, stats } = useStore();
+  const { tasks, transactions, accounts, stats, settings } = useStore();
+  const t = translations[settings?.language || 'id']?.stats || translations['id'].stats;
 
   // =========================
   // TASK STATS
@@ -117,32 +119,32 @@ export default function StatisticsBoard() {
         <div className="flex flex-col gap-4">
           <div>
             <p className="text-[10px] uppercase tracking-[0.2em] text-cyan-400 font-bold mb-3">
-              Data Center
+              {t.dc}
             </p>
             <h1 className="font-pixel text-sm md:text-base text-white flex items-center gap-3 drop-shadow-[2px_2px_0_#000] mb-3">
               <span className="text-cyan-500"><BarChart3 size={18} /></span>
-              STATISTIK
+              {t.title}
             </h1>
             <p className="font-pixel text-[7px] md:text-[8px] text-slate-400 uppercase tracking-widest leading-relaxed max-w-2xl">
-              RINGKASAN PERFORMA MISI, KARAKTER, DAN KONDISI KEUANGANMU.
+              {t.desc}
             </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div className="bg-[#1a1b26] border-2 border-cyan-500 p-4 shadow-[3px_3px_0_#000]">
-              <p className="text-[10px] uppercase text-slate-500 mb-1">Completion Rate</p>
+              <p className="text-[10px] uppercase text-slate-500 mb-1">{t.compRate}</p>
               <p className="text-cyan-400 text-3xl font-bold">{completionRate}%</p>
             </div>
 
             <div className="bg-[#1a1b26] border-2 border-emerald-500 p-4 shadow-[3px_3px_0_#000]">
-              <p className="text-[10px] uppercase text-slate-500 mb-1">Net Worth</p>
+              <p className="text-[10px] uppercase text-slate-500 mb-1">{t.netWorth}</p>
               <p className="text-emerald-400 text-3xl font-bold">
                 Rp {netWorth.toLocaleString()}
               </p>
             </div>
 
             <div className="bg-[#1a1b26] border-2 border-yellow-500 p-4 shadow-[3px_3px_0_#000]">
-              <p className="text-[10px] uppercase text-slate-500 mb-1">Player Title</p>
+              <p className="text-[10px] uppercase text-slate-500 mb-1">{t.titleLabel}</p>
               <p className="text-yellow-400 text-xl font-bold">{playerTitle}</p>
             </div>
           </div>
@@ -152,14 +154,14 @@ export default function StatisticsBoard() {
       {/* TOP CARDS */}
       <div className="grid grid-cols-1 xl:grid-cols-4 gap-6">
         <StatCard
-          title="Statistik Misi"
+          title={t.taskStats}
           icon={<CheckCircle2 size={16} />}
           color="cyan"
           lines={[
-            ["Total", totalTasks.toString()],
-            ["Selesai", completedTasks.toString()],
-            ["Pending", pendingTasks.toString()],
-            ["Habit / Daily / Todo", `${habitTasks} / ${dailyTasks} / ${todoTasks}`],
+            [t.total, totalTasks.toString()],
+            [t.done, completedTasks.toString()],
+            [t.pending, pendingTasks.toString()],
+            [t.types, `${habitTasks} / ${dailyTasks} / ${todoTasks}`],
           ]}
           progress={completionRate}
           progressLabel="Completion"
@@ -167,26 +169,26 @@ export default function StatisticsBoard() {
         />
 
         <StatCard
-          title="Statistik Keuangan"
+          title={t.finStats}
           icon={<Wallet size={16} />}
           color="emerald"
           lines={[
-            ["Pemasukan", `Rp ${totalIncome.toLocaleString()}`],
-            ["Pengeluaran", `Rp ${totalExpense.toLocaleString()}`],
+            [t.income, `Rp ${totalIncome.toLocaleString()}`],
+            [t.expense, `Rp ${totalExpense.toLocaleString()}`],
             ["Net Flow", `Rp ${netFlow.toLocaleString()}`],
-            ["Transaksi", transactions.length.toString()],
+            [t.trans, transactions.length.toString()],
           ]}
         />
 
         <StatCard
-          title="Statistik Karakter"
+          title={t.charStats}
           icon={<Zap size={16} />}
           color="yellow"
           lines={[
-            ["Level", stats.level.toString()],
-            ["Gold", stats.gold.toString()],
-            ["Streak", `${stats.streak} Hari`],
-            ["EXP ke level berikutnya", expRemaining.toString()],
+            [t.level, stats.level.toString()],
+            [t.gold, stats.gold.toString()],
+            [t.streak, `${stats.streak}`],
+            [t.expNext, expRemaining.toString()],
           ]}
           progress={expPercent}
           progressLabel="EXP"
@@ -194,14 +196,14 @@ export default function StatisticsBoard() {
         />
 
         <StatCard
-          title="Aset & Cadangan"
+          title={t.assets}
           icon={<Coins size={16} />}
           color="pink"
           lines={[
-            ["Rekening", `Rp ${totalRekening.toLocaleString()}`],
-            ["Tabungan", `Rp ${totalTabungan.toLocaleString()}`],
-            ["Akun Terbesar", largestAccount ? largestAccount.name : "-"],
-            ["Emas", `${totalGoldGram.toFixed(4)} GR`],
+            [t.acc1, `Rp ${totalRekening.toLocaleString()}`],
+            [t.acc2, `Rp ${totalTabungan.toLocaleString()}`],
+            [t.largest, largestAccount ? largestAccount.name : "-"],
+            [t.goldVal, `${totalGoldGram.toFixed(4)} GR`],
           ]}
         />
       </div>
@@ -212,17 +214,18 @@ export default function StatisticsBoard() {
         <div className="bg-[#24283b] border-4 border-cyan-500 shadow-[6px_6px_0_#000] p-5">
           <div className="flex items-center gap-2 text-cyan-400 mb-4">
             <Layers3 size={16} />
-            <h2 className="text-sm font-bold uppercase">Breakdown Misi</h2>
+            <h2 className="text-sm font-bold uppercase">{t.breakdown}</h2>
           </div>
 
           <div className="space-y-4">
-            <SimpleBar label="Habit" value={habitTasks} max={Math.max(totalTasks, 1)} color="bg-cyan-400" />
-            <SimpleBar label="Daily" value={dailyTasks} max={Math.max(totalTasks, 1)} color="bg-emerald-400" />
-            <SimpleBar label="Todo" value={todoTasks} max={Math.max(totalTasks, 1)} color="bg-pink-400" />
+            {/* MENGGANTI NAMA HABIT / DAILY / TODO SESUAI PERMINTAAN */}
+            <SimpleBar label={translations[settings?.language || 'id']?.tasks?.habit || "Siklus Misi"} value={habitTasks} max={Math.max(totalTasks, 1)} color="bg-cyan-400" />
+            <SimpleBar label={translations[settings?.language || 'id']?.tasks?.daily || "Operasi Harian"} value={dailyTasks} max={Math.max(totalTasks, 1)} color="bg-emerald-400" />
+            <SimpleBar label={translations[settings?.language || 'id']?.tasks?.todo || "Target Utama"} value={todoTasks} max={Math.max(totalTasks, 1)} color="bg-pink-400" />
           </div>
 
           <div className="mt-6 border-t-2 border-slate-700 pt-4">
-            <p className="text-[10px] uppercase text-slate-500 mb-3">Kesulitan Misi</p>
+            <p className="text-[10px] uppercase text-slate-500 mb-3">{t.diff}</p>
             <div className="space-y-3">
               {difficultyStats.length > 0 ? (
                 difficultyStats.map(([level, count]) => (
@@ -235,7 +238,7 @@ export default function StatisticsBoard() {
                   />
                 ))
               ) : (
-                <p className="text-sm text-slate-500 italic">Belum ada data kesulitan.</p>
+                <p className="text-sm text-slate-500 italic">{t.noDiff}</p>
               )}
             </div>
           </div>
@@ -245,7 +248,7 @@ export default function StatisticsBoard() {
         <div className="bg-[#24283b] border-4 border-pink-500 shadow-[6px_6px_0_#000] p-5">
           <div className="flex items-center gap-2 text-pink-400 mb-4">
             <Target size={16} />
-            <h2 className="text-sm font-bold uppercase">Kategori Teraktif</h2>
+            <h2 className="text-sm font-bold uppercase">{t.topCat}</h2>
           </div>
 
           <div className="space-y-3">
@@ -261,14 +264,14 @@ export default function StatisticsBoard() {
                     </div>
                     <div>
                       <p className="text-white font-bold">{category}</p>
-                      <p className="text-xs text-slate-500">Jumlah misi di kategori ini</p>
+                      <p className="text-xs text-slate-500">{t.catCount}</p>
                     </div>
                   </div>
                   <div className="text-pink-400 font-bold text-xl">{count}</div>
                 </div>
               ))
             ) : (
-              <p className="text-sm text-slate-500 italic">Belum ada kategori yang tercatat.</p>
+              <p className="text-sm text-slate-500 italic">{t.noCat}</p>
             )}
           </div>
         </div>
@@ -277,18 +280,18 @@ export default function StatisticsBoard() {
         <div className="bg-[#24283b] border-4 border-emerald-500 shadow-[6px_6px_0_#000] p-5">
           <div className="flex items-center gap-2 text-emerald-400 mb-4">
             <BarChart3 size={16} />
-            <h2 className="text-sm font-bold uppercase">Arus Keuangan</h2>
+            <h2 className="text-sm font-bold uppercase">{t.flow}</h2>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
             <MiniBox
-              label="Income"
+              label={t.income}
               value={`Rp ${totalIncome.toLocaleString()}`}
               color="text-emerald-400"
               icon={<TrendingUp size={14} />}
             />
             <MiniBox
-              label="Expense"
+              label={t.expense}
               value={`Rp ${totalExpense.toLocaleString()}`}
               color="text-pink-400"
               icon={<TrendingDown size={14} />}
@@ -303,14 +306,14 @@ export default function StatisticsBoard() {
 
           <div className="mt-6 space-y-4">
             <SimpleBar
-              label="Pemasukan"
+              label={t.income}
               value={totalIncome}
               max={Math.max(totalIncome, totalExpense, 1)}
               color="bg-emerald-400"
               isCurrency
             />
             <SimpleBar
-              label="Pengeluaran"
+              label={t.expense}
               value={totalExpense}
               max={Math.max(totalIncome, totalExpense, 1)}
               color="bg-pink-400"
@@ -323,13 +326,13 @@ export default function StatisticsBoard() {
         <div className="bg-[#24283b] border-4 border-yellow-500 shadow-[6px_6px_0_#000] p-5">
           <div className="flex items-center gap-2 text-yellow-400 mb-4">
             <Trophy size={16} />
-            <h2 className="text-sm font-bold uppercase">Progres Karakter</h2>
+            <h2 className="text-sm font-bold uppercase">{t.charProg}</h2>
           </div>
 
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 mb-5">
-            <MiniBox label="Level" value={stats.level.toString()} color="text-white" />
-            <MiniBox label="Gold" value={stats.gold.toString()} color="text-yellow-400" />
-            <MiniBox label="Streak" value={`${stats.streak} Hari`} color="text-orange-400" icon={<Flame size={14} />} />
+            <MiniBox label={t.level} value={stats.level.toString()} color="text-white" />
+            <MiniBox label={t.gold} value={stats.gold.toString()} color="text-yellow-400" />
+            <MiniBox label={t.streak} value={`${stats.streak}`} color="text-orange-400" icon={<Flame size={14} />} />
           </div>
 
           <div className="space-y-4">
@@ -338,11 +341,9 @@ export default function StatisticsBoard() {
           </div>
 
           <div className="mt-5 border-t-2 border-slate-700 pt-4">
-            <p className="text-[10px] uppercase text-slate-500 mb-1">Insight</p>
+            <p className="text-[10px] uppercase text-slate-500 mb-1">{t.insight}</p>
             <p className="text-sm text-slate-200">
-              {stats.exp >= stats.maxExp * 0.8
-                ? "Kamu hampir naik level. Sedikit lagi!"
-                : "Progress karakter stabil. Lanjut pertahankan ritme."}
+              {stats.exp >= stats.maxExp * 0.8 ? t.insight1 : t.insight2}
             </p>
           </div>
         </div>
