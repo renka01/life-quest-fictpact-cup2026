@@ -19,7 +19,11 @@ import {
   ChevronRight,
   MonitorPlay,
   X,
-  MessageSquare
+  MessageSquare,
+  Info,
+  Users,
+  Github,
+  Instagram
 } from "lucide-react";
 import { translations } from "@/utils/translations";
 
@@ -29,6 +33,9 @@ export default function SettingsBoard() {
   const tUi = translations[settings?.language || 'id']?.ui || translations['id'].ui;
 
   const [editModal, setEditModal] = useState<{isOpen: boolean, field: 'accountName' | 'nickname' | 'bio', title: string, value: string}>({ isOpen: false, field: 'accountName', title: '', value: '' });
+  
+  // State baru untuk Modal Info (Sosial & Developer)
+  const [infoModal, setInfoModal] = useState<{isOpen: boolean, type: 'social' | 'team'}>({ isOpen: false, type: 'team' });
 
   // Komponen Baris Tombol Aksi (Untuk Ubah Nama, dll)
   const SettingAction = ({
@@ -257,7 +264,30 @@ export default function SettingsBoard() {
         </div>
       </section>
 
-      {/* EDIT MODAL */}
+      {/* SECTION BARU: TENTANG LIFEQUEST */}
+      <section className="flex flex-col gap-3 mt-4 pt-8 border-t-2 border-slate-700/50">
+        <h2 className="text-[10px] font-bold text-amber-400 uppercase tracking-widest flex items-center gap-2 mb-2">
+          <Info size={14} /> Tentang Daily Dungeon
+        </h2>
+        <div className="flex flex-col gap-2">
+          <SettingAction
+            icon={Globe}
+            label="Sosial"
+            value="Instagram & GitHub"
+            actionText="Lihat"
+            onClick={() => { setInfoModal({ isOpen: true, type: 'social' }); playSound('click'); }}
+          />
+          <SettingAction
+            icon={Users}
+            label="Tim Developer"
+            value="Kenali pembuat di balik layar"
+            actionText="Lihat"
+            onClick={() => { setInfoModal({ isOpen: true, type: 'team' }); playSound('click'); }}
+          />
+        </div>
+      </section>
+
+      {/* EDIT MODAL (NAMA, EMAIL, BIO) */}
       {editModal.isOpen && (
         <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-[100] flex justify-center items-center p-4">
           <div className="w-full max-w-md bg-[#1a1b26] border-4 border-amber-500 shadow-[8px_8px_0_#000] flex flex-col animate-in zoom-in duration-200">
@@ -279,6 +309,91 @@ export default function SettingsBoard() {
           </div>
         </div>
       )}
+
+      {/* INFO MODAL (SOSIAL & TIM DEVELOPER) */}
+      {infoModal.isOpen && (
+        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-[100] flex justify-center items-center p-4">
+          <div className="w-full max-w-md bg-[#1a1b26] border-4 border-amber-500 shadow-[8px_8px_0_#000] flex flex-col animate-in zoom-in duration-200">
+            <div className="bg-[#24283b] border-b-4 border-amber-500 p-4 flex justify-between items-center">
+              <h3 className="font-pixel text-[10px] text-amber-400 uppercase tracking-widest flex items-center gap-2">
+                {infoModal.type === 'team' ? <><Users size={14} /> Tim Developer</> : <><Globe size={14} /> Sosial</>}
+              </h3>
+              <button onClick={() => setInfoModal({ ...infoModal, isOpen: false })} className="text-slate-400 hover:text-white"><X size={18} /></button>
+            </div>
+            
+            <div className="p-6 text-slate-300">
+              {infoModal.type === 'team' ? (
+                <div className="flex flex-col gap-4">
+                  <p className="text-xs text-slate-400 mb-2 text-center uppercase tracking-widest">Tim Di Balik Daily Dungeon</p>
+                  
+                  <div className="grid grid-cols-3 gap-3">
+                    <a 
+                      href="https://instagram.com/renhapiz" 
+                      target="_blank" 
+                      rel="noreferrer" 
+                      className="bg-[#24283b] border-2 border-slate-700 p-3 text-center shadow-[4px_4px_0_#0f172a] hover:border-emerald-500 hover:-translate-y-1 transition-all active:translate-y-[2px] active:shadow-none block group"
+                    >
+                      <p className="font-bold text-emerald-400 text-sm group-hover:text-emerald-300">Faren Hafiza Afanda</p>
+                      <p className="text-[8px] text-slate-500 font-pixel uppercase mt-2">@renhapiz</p>
+                    </a>
+
+                    <a 
+                      href="https://instagram.com/wldnxd" 
+                      target="_blank" 
+                      rel="noreferrer" 
+                      className="bg-[#24283b] border-2 border-slate-700 p-3 text-center shadow-[4px_4px_0_#0f172a] hover:border-cyan-500 hover:-translate-y-1 transition-all active:translate-y-[2px] active:shadow-none block group"
+                    >
+                      <p className="font-bold text-cyan-400 text-sm group-hover:text-cyan-300">Wildan Ramadhani Akbar</p>
+                      <p className="text-[8px] text-slate-500 font-pixel uppercase mt-2">@wldnxd</p>
+                    </a>
+
+                    <a 
+                      href="https://www.instagram.com/rappizr" 
+                      target="_blank" 
+                      rel="noreferrer" 
+                      className="bg-[#24283b] border-2 border-slate-700 p-3 text-center shadow-[4px_4px_0_#0f172a] hover:border-pink-500 hover:-translate-y-1 transition-all active:translate-y-[2px] active:shadow-none block group"
+                    >
+                      <p className="font-bold text-pink-400 text-sm group-hover:text-pink-300">Mukhammad Raffi Zabra</p>
+                      <p className="text-[8px] text-slate-500 font-pixel uppercase mt-2">@rappizr</p>
+                    </a>
+                  </div>
+
+                  <p className="text-[10px] text-slate-500 mt-4 text-center italic border-t border-slate-700 pt-4">Dikembangkan untuk FICPACT CUP 2026</p>
+                </div>
+              ) : (
+                <div className="flex flex-col gap-4">
+                  <p className="text-xs text-slate-400 mb-2 text-center uppercase tracking-widest">Ikuti Petualangan Kami</p>
+                  
+                  <a href="https://www.instagram.com/renhapiz" target="_blank" rel="noreferrer" className="flex items-center gap-4 bg-[#24283b] border-2 border-pink-600 hover:bg-pink-600/20 transition-colors p-4 shadow-[4px_4px_0_#000] active:translate-y-[2px] active:shadow-none group">
+                    <div className="p-2 bg-pink-500/10 rounded-full group-hover:scale-110 transition-transform">
+                      <Instagram className="text-pink-500" size={24} />
+                    </div>
+                    <div className="flex flex-col">
+                      <span className="font-bold text-white text-sm tracking-wide">Instagram</span>
+                      <span className="text-[10px] text-slate-400">@renhapiz</span>
+                    </div>
+                  </a>
+
+                  <a href="https://github.com/renka01/life-quest-fictpact-cup2026" target="_blank" rel="noreferrer" className="flex items-center gap-4 bg-[#24283b] border-2 border-slate-500 hover:bg-slate-500/20 transition-colors p-4 shadow-[4px_4px_0_#000] active:translate-y-[2px] active:shadow-none group">
+                    <div className="p-2 bg-slate-500/10 rounded-full group-hover:scale-110 transition-transform">
+                      <Github className="text-slate-300" size={24} />
+                    </div>
+                    <div className="flex flex-col">
+                      <span className="font-bold text-white text-sm tracking-wide">GitHub Repository</span>
+                      <span className="text-[10px] text-slate-400">Bjorbun Team</span>
+                    </div>
+                  </a>
+                </div>
+              )}
+            </div>
+            
+            <div className="p-4 border-t-2 border-slate-700 bg-[#24283b] flex justify-center">
+              <button onClick={() => setInfoModal({ ...infoModal, isOpen: false })} className="px-8 py-2 bg-slate-700 text-white text-xs font-bold uppercase shadow-[4px_4px_0_#000] active:translate-y-[2px] active:shadow-none hover:bg-slate-600 transition-colors">Tutup</button>
+            </div>
+          </div>
+        </div>
+      )}
+
     </div>
   );
 }

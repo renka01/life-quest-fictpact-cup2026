@@ -22,7 +22,7 @@ import { translations } from "@/utils/translations";
 
 interface DashboardBoardProps {
   onOpenTaskModal: (type?: TaskType | null) => void;
-  onOpenFinanceAction: (type: "rekening" | "tabungan") => void;
+  onOpenFinanceAction: (type: "rekening" | "tabungan" | "tagihan") => void;
   onOpenBills: () => void;
   onGoToFinance: () => void;
 }
@@ -168,9 +168,8 @@ export default function DashboardBoard({
               </button>
 
               <button
-                onClick={onOpenBills}
-                className="bg-[#24283b] border-2 border-pink-500 text-pink-400 px-3 py-3 text-xs font-bold hover:bg-pink-500 hover:text-slate-950 transition-all shadow-[3px_3px_0_#000]"
-              >
+                onClick={() => onOpenFinanceAction("tagihan")} 
+                className="bg-[#24283b] border-2 border-pink-500 text-pink-400 px-3 py-3 text-xs font-bold hover:bg-pink-500 hover:text-slate-950 transition-all shadow-[3px_3px_0_#000]"              >
                 <span className="flex items-center justify-center gap-2">
                   <CalendarClock size={14} />
                   {t.bills}

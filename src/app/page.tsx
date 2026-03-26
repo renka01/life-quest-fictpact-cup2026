@@ -81,7 +81,7 @@ export default function Home() {
   const [showCoinAnim, setShowCoinAnim] = useState(false);
   const [isTransitioning, setIsTransitioning] = useState(false);
 
-  const [dashboardFinanceAction, setDashboardFinanceAction] = useState<"rekening" | "tabungan" | null>(null);
+  const [dashboardFinanceAction, setDashboardFinanceAction] = useState<"rekening" | "tabungan" | "tagihan" | null>(null);
   const { settings } = useStore();
   const tPage = translations[settings?.language || 'id']?.page || translations['id'].page;
   const tDropdown = translations[settings?.language || 'id']?.dropdown || translations['id'].dropdown;
@@ -128,7 +128,7 @@ export default function Home() {
     setIsFormOpen(true);
   };
 
-  const handleDashboardFinanceAction = (type: "rekening" | "tabungan") => {
+  const handleDashboardFinanceAction = (type: "rekening" | "tabungan" | "tagihan") => {
     setDashboardFinanceAction(type);
     setActiveMenu("Keuangan");
   };
