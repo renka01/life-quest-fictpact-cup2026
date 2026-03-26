@@ -7,6 +7,7 @@ import { useStore } from '@/store/useStore';
 
 // ═══════════════════════════════════════════════════════════
 // PIXEL ART CHARACTER SPRITES (Karakter Diperbesar: 200x200)
+// PIXEL ART REUSABLES
 // ═══════════════════════════════════════════════════════════
 
 /** Shadow Knight */
@@ -216,11 +217,14 @@ const FeatureCard = ({ emoji, title, desc }: { emoji: string; title: string; des
 );
 
 // ═══════════════════════════════════════════════════════════
-// MAIN PAGE
+// KOMPONEN ACCORDION FAQ
 // ═══════════════════════════════════════════════════════════
 
 type Tab = 'login' | 'register';
 
+// ═══════════════════════════════════════════════════════════
+// MAIN PAGE
+// ═══════════════════════════════════════════════════════════
 export default function LoginPage() {
   const router = useRouter();
   const { setUserProfile } = useStore();
@@ -432,11 +436,10 @@ const SangarDragonIcon = () => (
 );
 
   return (
-    <div className="min-h-screen bg-zinc-900 flex flex-col relative overflow-hidden"
-      style={{ fontFamily: "'Inter', 'Segoe UI', sans-serif" }}>
-
+    <div className="min-h-screen bg-zinc-900 flex flex-col relative overflow-hidden" style={{ fontFamily: "'Inter', 'Segoe UI', sans-serif" }}>
       <style>{`
         @keyframes float { 0% { transform: translateY(0px) rotate(0deg); } 100%{ transform: translateY(-12px) rotate(5deg); } }
+        @keyframes twinkle { 0%, 100% { opacity: 0.1; } 50% { opacity: 1; } }
         .input-habitica {
           background: rgba(255,255,255,0.05);
           color: #ffffff;
@@ -449,9 +452,9 @@ const SangarDragonIcon = () => (
         .scroll-left { -ms-overflow-style: none; scrollbar-width: none; }
       `}</style>
 
-      {/* Bintang/Debu Latar Belakang */}
+      {/* Latar Belakang Bintang */}
       {isMounted && (
-        <div className="absolute inset-0 pointer-events-none opacity-20">
+        <div className="absolute inset-0 pointer-events-none opacity-20 z-0">
           {[...Array(30)].map((_, i) => (
             <div key={i} className="absolute bg-amber-200 rounded-full"
               style={{
@@ -459,19 +462,20 @@ const SangarDragonIcon = () => (
                 height: Math.random() * 3 + 1 + 'px',
                 top:    Math.random() * 100 + '%',
                 left:   Math.random() * 100 + '%',
-                opacity: Math.random() * 0.8 + 0.2,
+                animation: `twinkle ${Math.random() * 3 + 2}s infinite ease-in-out ${Math.random() * 2}s`,
               }} />
           ))}
         </div>
       )}
 
-      <FloatingCoin x="10%" y="20%" delay={0}/>
-      <FloatingCoin x="85%" y="15%" delay={1.2}/>
-      <FloatingCoin x="50%" y="10%" delay={0.5}/>
-      <FloatingCoin x="5%"  y="60%" delay={2}/>
-      <FloatingCoin x="90%" y="50%" delay={1.5}/>
+      {/* Koin Melayang */}
+      <div className="z-0"><FloatingCoin x="15%" y="15%" delay={0}/></div>
+      <div className="z-0"><FloatingCoin x="85%" y="30%" delay={1.5}/></div>
+      <div className="z-0"><FloatingCoin x="10%" y="70%" delay={2}/></div>
+      <div className="z-0"><FloatingCoin x="50%" y="10%" delay={0.5}/></div>
+      <div className="z-0"><FloatingCoin x="90%" y="50%" delay={1.5}/></div>
 
-      {/* ── Header ── */}
+      {/* HEADER */}
       <header className="relative z-20 flex items-center justify-between px-8 py-6 flex-shrink-0">
         <div className="flex items-center">
           <img
@@ -482,9 +486,13 @@ const SangarDragonIcon = () => (
           />
         </div>
         <nav className="flex items-center gap-6">
-          <button className="hidden md:block text-sm text-amber-200/70 hover:text-amber-400 transition-colors font-semibold">Ayo Mulai</button>
+          <button onClick={() => router.push('/start')} className="hidden md:block text-sm text-amber-200/70 hover:text-amber-400 transition-colors font-semibold">
+            Ayo Mulai
+          </button>
           <button className="hidden md:block text-sm text-amber-200/70 hover:text-amber-400 transition-colors font-semibold">Bahasa ▾</button>
-          <button className="hidden md:block text-sm text-amber-200/70 hover:text-amber-400 transition-colors font-semibold">Pelajari Lebih Lanjut ▾</button>
+          <button onClick={() => router.push('/faq')} className="hidden md:block text-sm text-amber-200/70 hover:text-amber-400 transition-colors font-semibold">
+            Pelajari Lebih Lanjut
+          </button>
           <button
             onClick={() => setTab(tab === 'login' ? 'register' : 'login')}
             className="bg-amber-500 hover:bg-amber-400 text-zinc-900 px-6 py-2 rounded shadow-md font-bold text-sm transition-colors">
@@ -493,12 +501,9 @@ const SangarDragonIcon = () => (
         </nav>
       </header>
 
-      {/* ── Main Content Area ── */}
-      <main
-        className="relative z-20 flex flex-col lg:flex-row items-start justify-center max-w-6xl mx-auto w-full px-6 gap-12 lg:gap-24"
-        style={{ height: 'calc(100vh - 120px)', overflow: 'hidden' }}>
-
-        {/* KIRI: Scrollable (Dirombak rata tengah seperti referensi Habitica) */}
+      {/* MAIN CONTENT */}
+      <main className="relative z-20 flex flex-col lg:flex-row items-start justify-center max-w-6xl mx-auto w-full px-6 gap-12 lg:gap-24" style={{ height: 'calc(100vh - 120px)', overflow: 'hidden' }}>
+        {/* KIRI: Scrollable Area */}
         <div className="scroll-left flex-1 overflow-y-auto h-full pb-32">
           <div className="flex flex-col items-center text-center pt-8 lg:pt-12 px-2 lg:px-8">
             
@@ -516,7 +521,7 @@ const SangarDragonIcon = () => (
               Daily Dungeon adalah aplikasi untuk membangun produktivitas dan kebiasaan baik dengan mengubah kehidupan nyata menjadi permainan. Dengan sistem imbalan dan leveling layaknya game RPG, aplikasi ini memotivasimu untuk mencapai target, bekerja keras, dan melawan kemalasan.
             </p>
 
-          {/* === FITUR DESKRIPSI (Tanpa box pelindung, Gambar Melayang) === */}
+          {/* === FITUR DESKRIPSI === */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 w-full max-w-4xl shrink-0 mt-8">
             
             <div className="flex flex-col items-center text-center px-2 group">
@@ -548,13 +553,11 @@ const SangarDragonIcon = () => (
                 Gunakan Focus Arena untuk bekerja fokus dan menyerang monster kemalasan.
               </p>
             </div>
-
           </div>
 
-            {/* Spacer bawah */}
-            <div className="h-24"/>
-          </div>
+          <div className="h-24"/>
         </div>
+      </div>
 
         {/* KANAN: Form (Sticky) */}
         <div className="w-full max-w-md lg:w-[400px] flex-shrink-0 lg:sticky lg:top-0 pt-8 lg:pt-12 pb-16 lg:pb-0">
@@ -647,14 +650,12 @@ const SangarDragonIcon = () => (
         </div>
       </main>
 
-      {/* ── Landscape ── */}
+      {/* FOOTER & LANDSCAPE */}
       <div className="absolute bottom-0 left-0 right-0 w-full z-0 pointer-events-none opacity-80">
         <GrandSpartanLandscape />
       </div>
 
-{/* ═══════════════════════════════════════════════════════════ */}
       {/* FULLSCREEN LOADING TRANSITION (Muncul saat tombol Masuk diklik) */}
-      {/* ═══════════════════════════════════════════════════════════ */}
       {showTransition && (
         <div className="fixed inset-0 z-[9999] bg-zinc-950 flex flex-col items-center justify-center animate-in fade-in duration-500">
           
@@ -674,7 +675,6 @@ const SangarDragonIcon = () => (
               style={{ imageRendering: 'pixelated' }} 
             />
           </div>
-
 
           {/* Pixelated Progress Bar */}
           <div className="w-64 md:w-80 h-6 bg-zinc-900 border-4 border-zinc-700 p-0.5 relative overflow-hidden shadow-[0_0_15px_rgba(251,191,36,0.2)]">
@@ -696,7 +696,6 @@ const SangarDragonIcon = () => (
           `}</style>
         </div>
       )}
-{/* ── Footer ── */}
       <footer className="relative z-20 w-full mt-16 pt-12 pb-8 bg-gradient-to-t from-zinc-900 via-zinc-900/90 to-transparent">
         <div className="max-w-3xl mx-auto px-8 grid grid-cols-1 md:grid-cols-2 gap-12 text-sm pb-12 text-center md:text-left">
           <div className="flex flex-col gap-4 items-center md:items-start">
@@ -719,6 +718,7 @@ const SangarDragonIcon = () => (
           </div>
         </div>
       </footer>
+
     </div>
   );
 }
