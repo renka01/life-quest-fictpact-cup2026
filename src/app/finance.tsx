@@ -79,7 +79,7 @@ export default function Finance({
   searchQuery = "",
   activeCategory = "all",
 }: {
-  initialOpenType?: "rekening" | "tabungan" | null;
+  initialOpenType?: "rekening" | "tabungan" | "tagihan" | null;
   searchQuery?: string;
   activeCategory?: string;
 }) {
@@ -112,12 +112,14 @@ export default function Finance({
   }, [processRecurringTransactions]);
 
   useEffect(() => {
-    if (initialOpenType) {
-      setAddType(initialOpenType);
-      setIsAddOpen(true);
-    }
-  }, [initialOpenType]);
-
+      if (initialOpenType === "tagihan") {
+        setIsRecurringOpen(true);
+      } else if (initialOpenType === "rekening" || initialOpenType === "tabungan") {
+        setAddType(initialOpenType);
+        setIsAddOpen(true);
+      }
+    }, [initialOpenType]);
+  
   const openAddModal = (type: "rekening" | "tabungan") => {
     setAddType(type);
     setIsAddOpen(true);

@@ -198,6 +198,134 @@ const ShadowMonarchSprite = () => (
   </svg>
 );
 
+// --- 5 MONSTER BARU ---
+
+const SkeletonSprite = () => (
+  <svg viewBox="0 0 32 32" width="100" height="100" style={{ imageRendering: 'pixelated' }}>
+    <style>{`@keyframes skel-idle{0%,100%{transform:translateY(0)}50%{transform:translateY(1px)}}.skeli{animation:skel-idle 0.8s steps(2) infinite}`}</style>
+    <g className="skeli">
+      <rect x="12" y="4" width="8" height="7" fill="#f8fafc"/>
+      <rect x="13" y="7" width="2" height="2" fill="#0f172a"/>
+      <rect x="17" y="7" width="2" height="2" fill="#0f172a"/>
+      <rect x="14" y="8" width="1" height="1" fill="#38bdf8"/>
+      <rect x="18" y="8" width="1" height="1" fill="#38bdf8"/>
+      <rect x="15" y="11" width="2" height="8" fill="#e2e8f0"/>
+      <rect x="12" y="13" width="8" height="1" fill="#cbd5e1"/>
+      <rect x="13" y="15" width="6" height="1" fill="#cbd5e1"/>
+      <rect x="14" y="17" width="4" height="1" fill="#cbd5e1"/>
+      <rect x="10" y="13" width="2" height="7" fill="#e2e8f0"/>
+      <rect x="20" y="13" width="2" height="7" fill="#e2e8f0"/>
+      <rect x="8" y="18" width="2" height="4" fill="#94a3b8"/>
+      <rect x="13" y="19" width="2" height="7" fill="#e2e8f0"/>
+      <rect x="17" y="19" width="2" height="7" fill="#e2e8f0"/>
+      <rect x="12" y="26" width="3" height="2" fill="#94a3b8"/>
+      <rect x="17" y="26" width="3" height="2" fill="#94a3b8"/>
+    </g>
+  </svg>
+);
+
+const DireWolfSprite = () => (
+  <svg viewBox="0 0 32 32" width="100" height="100" style={{ imageRendering: 'pixelated' }}>
+    <style>{`@keyframes wolf-idle{0%,100%{transform:translateY(0)}50%{transform:translateY(1px)}}.wolfi{animation:wolf-idle 0.6s steps(2) infinite}`}</style>
+    <g className="wolfi">
+      <rect x="10" y="12" width="16" height="10" fill="#334155"/>
+      <rect x="12" y="14" width="12" height="8" fill="#1e293b"/>
+      <rect x="4" y="8" width="8" height="8" fill="#475569"/>
+      <rect x="5" y="5" width="2" height="3" fill="#334155"/>
+      <rect x="9" y="5" width="2" height="3" fill="#334155"/>
+      <rect x="2" y="12" width="4" height="4" fill="#1e293b"/>
+      <rect x="7" y="11" width="1" height="1" fill="#ef4444"/>
+      <rect x="10" y="11" width="1" height="1" fill="#ef4444"/>
+      <rect x="26" y="13" width="4" height="3" fill="#334155"/>
+      <rect x="28" y="16" width="2" height="3" fill="#1e293b"/>
+      <rect x="10" y="22" width="3" height="6" fill="#0f172a"/>
+      <rect x="21" y="22" width="3" height="6" fill="#0f172a"/>
+      <rect x="6" y="22" width="2" height="4" fill="#1e293b"/>
+      <rect x="17" y="22" width="2" height="4" fill="#1e293b"/>
+    </g>
+  </svg>
+);
+
+const MinotaurSprite = () => (
+  <svg viewBox="0 0 32 32" width="100" height="100" style={{ imageRendering: 'pixelated' }}>
+    <style>{`@keyframes mino-idle{0%,100%{transform:translateY(0)}50%{transform:translateY(1px)}}.minoi{animation:mino-idle 0.8s steps(2) infinite}`}</style>
+    <g className="minoi">
+      <rect x="10" y="10" width="12" height="12" fill="#78350f"/>
+      <rect x="12" y="4" width="8" height="6" fill="#451a03"/>
+      <rect x="6" y="2" width="6" height="2" fill="#fef08a"/>
+      <rect x="20" y="2" width="6" height="2" fill="#fef08a"/>
+      <rect x="6" y="0" width="2" height="2" fill="#fde047"/>
+      <rect x="24" y="0" width="2" height="2" fill="#fde047"/>
+      <rect x="14" y="8" width="4" height="2" fill="#9ca3af"/>
+      <rect x="13" y="6" width="2" height="1" fill="#ef4444"/>
+      <rect x="17" y="6" width="2" height="1" fill="#ef4444"/>
+      <rect x="7" y="10" width="3" height="8" fill="#92400e"/>
+      <rect x="22" y="10" width="3" height="8" fill="#92400e"/>
+      <rect x="11" y="22" width="4" height="6" fill="#451a03"/>
+      <rect x="17" y="22" width="4" height="6" fill="#451a03"/>
+      <rect x="25" y="8" width="2" height="20" fill="#292524"/>
+      <rect x="26" y="6" width="6" height="8" fill="#94a3b8"/>
+      <rect x="28" y="4" width="2" height="12" fill="#cbd5e1"/>
+    </g>
+  </svg>
+);
+
+const VampireLordSprite = () => (
+  <svg viewBox="0 0 32 32" width="100" height="100" style={{ imageRendering: 'pixelated' }}>
+    <style>{`@keyframes vamp-idle{0%,100%{transform:translateY(0)}50%{transform:translateY(1px)}}.vampi{animation:vamp-idle 1s steps(2) infinite}`}</style>
+    <g className="vampi">
+      <rect x="6" y="6" width="20" height="22" fill="#0f172a"/>
+      <rect x="8" y="8" width="16" height="20" fill="#9f1239"/>
+      <rect x="14" y="4" width="4" height="4" fill="#f8fafc"/>
+      <rect x="13" y="2" width="6" height="2" fill="#0f172a"/>
+      <rect x="14" y="6" width="1" height="1" fill="#dc2626"/>
+      <rect x="17" y="6" width="1" height="1" fill="#dc2626"/>
+      <rect x="14" y="8" width="1" height="1" fill="#f8fafc"/>
+      <rect x="17" y="8" width="1" height="1" fill="#f8fafc"/>
+      <rect x="12" y="10" width="8" height="10" fill="#1e293b"/>
+      <rect x="14" y="10" width="4" height="4" fill="#f8fafc"/>
+      <rect x="15" y="10" width="2" height="8" fill="#dc2626"/>
+      <rect x="8" y="20" width="4" height="2" fill="#0f172a"/>
+      <rect x="20" y="20" width="4" height="2" fill="#0f172a"/>
+      <rect x="4" y="4" width="4" height="8" fill="#1e293b"/>
+      <rect x="24" y="4" width="4" height="8" fill="#1e293b"/>
+      <rect x="4" y="2" width="2" height="2" fill="#0f172a"/>
+      <rect x="26" y="2" width="2" height="2" fill="#0f172a"/>
+    </g>
+  </svg>
+);
+
+const CosmicBehemothSprite = () => (
+  <svg viewBox="0 0 32 32" width="100" height="100" style={{ imageRendering: 'pixelated' }}>
+    <style>{`
+      @keyframes cos-idle{0%,100%{transform:translateY(0)}50%{transform:translateY(2px)}}
+      @keyframes cos-glow{0%,100%{opacity:0.6}50%{opacity:1}}
+      .cosi{animation:cos-idle 1.5s steps(2) infinite}
+      .cosg{animation:cos-glow 0.8s steps(2) infinite}
+    `}</style>
+    <g className="cosi">
+      <rect x="4" y="6" width="24" height="20" fill="#0f172a"/>
+      <rect x="6" y="8" width="20" height="16" fill="#1e1b4b"/>
+      <rect x="8" y="10" width="16" height="12" fill="#312e81"/>
+      <rect x="12" y="12" width="8" height="8" fill="#86198f"/>
+      <rect x="14" y="14" width="4" height="4" fill="#22d3ee" className="cosg"/>
+      <rect x="15" y="15" width="2" height="2" fill="#cffafe"/>
+      <rect x="8" y="8" width="2" height="2" fill="#22d3ee" className="cosg"/>
+      <rect x="22" y="8" width="2" height="2" fill="#22d3ee" className="cosg"/>
+      <rect x="2" y="12" width="4" height="8" fill="#312e81"/>
+      <rect x="26" y="12" width="4" height="8" fill="#312e81"/>
+      <rect x="0" y="14" width="2" height="4" fill="#22d3ee" className="cosg"/>
+      <rect x="30" y="14" width="2" height="4" fill="#22d3ee" className="cosg"/>
+      <rect x="10" y="26" width="4" height="4" fill="#1e1b4b"/>
+      <rect x="18" y="26" width="4" height="4" fill="#1e1b4b"/>
+      <rect x="11" y="28" width="2" height="2" fill="#22d3ee" className="cosg"/>
+      <rect x="19" y="28" width="2" height="2" fill="#22d3ee" className="cosg"/>
+      <rect x="6" y="2" width="2" height="4" fill="#86198f"/>
+      <rect x="24" y="2" width="2" height="4" fill="#86198f"/>
+    </g>
+  </svg>
+);
+
 // ═══════════════════════════════════════════════════════════════════════
 // BOSS DATA
 // ═══════════════════════════════════════════════════════════════════════
@@ -212,6 +340,7 @@ interface Boss {
 }
 
 const BOSSES: Boss[] = [
+  // --- EXISTING MONSTERS ---
   {
     id:1, name:'Goblin Scout',      title:'The Weakling',
     maxHp:120,  atk:6,  gold:15,  exp:20,
@@ -241,6 +370,38 @@ const BOSSES: Boss[] = [
     maxHp:1200, atk:50, gold:250, exp:380,
     rarity:'legendary', barColor:'bg-violet-500', aura:'#7c3aed', border:'border-violet-500',
     sprite:<ShadowMonarchSprite/>,
+  },
+
+  // --- NEW MONSTERS ---
+  {
+    id:6, name:'Undead Skeleton',   title:'Restless Bones',
+    maxHp:150,  atk:8,  gold:18,  exp:25,
+    rarity:'common',    barColor:'bg-slate-400',  aura:'#cbd5e1', border:'border-slate-500',
+    sprite:<SkeletonSprite/>,
+  },
+  {
+    id:7, name:'Dire Wolf',         title:'Beast of the Woods',
+    maxHp:320,  atk:15, gold:45,  exp:70,
+    rarity:'uncommon',  barColor:'bg-slate-600',  aura:'#475569', border:'border-slate-700',
+    sprite:<DireWolfSprite/>,
+  },
+  {
+    id:8, name:'Iron Minotaur',     title:'Labyrinth Guard',
+    maxHp:600,  atk:25, gold:90,  exp:140,
+    rarity:'rare',      barColor:'bg-orange-700', aura:'#c2410c', border:'border-orange-800',
+    sprite:<MinotaurSprite/>,
+  },
+  {
+    id:9, name:'Vampire Lord',      title:'Night Stalker',
+    maxHp:950,  atk:40, gold:170, exp:250,
+    rarity:'epic',      barColor:'bg-rose-700',   aura:'#be123c', border:'border-rose-800',
+    sprite:<VampireLordSprite/>,
+  },
+  {
+    id:10, name:'Cosmic Behemoth',  title:'Eater of Stars',
+    maxHp:1500, atk:60, gold:300, exp:450,
+    rarity:'legendary', barColor:'bg-cyan-500',   aura:'#06b6d4', border:'border-cyan-600',
+    sprite:<CosmicBehemothSprite/>,
   },
 ];
 
@@ -536,7 +697,7 @@ export default function FocusArena() {
         </div>
       </div>
 
-      {/* Boss grid */}
+      {/* Boss grid (Sekarang nampilin 10 Monster) */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
         {BOSSES.map(b => (
           <button key={b.id} onClick={() => startBattle(b)}

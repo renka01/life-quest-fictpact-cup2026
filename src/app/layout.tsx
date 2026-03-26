@@ -14,8 +14,11 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "LifeQuest Vault",
+  title: "Daily Dungeon",
   description: "Gamified Finance & Task Manager",
+  icons: {
+    icon: '/favicon.ico',
+  },
 };
 
 export default function RootLayout({
