@@ -1,37 +1,22 @@
 import NextAuth from "next-auth";
-import CredentialsProvider from "next-auth/providers/credentials";
-import bcrypt from "bcryptjs";
-import prisma from "../../progress/prisma";
-
+import GoogleProvider from "next-auth/providers/google";
+import GithubProvider from "next-auth/providers/github";
 
 const handler = NextAuth({
   providers: [
-    CredentialsProvider({
-      name: "Credentials",
-      credentials: {
-        email: { label: "Email", type: "email" },
-        password: { label: "Password", type: "password" }
-      },
-      async authorize(credentials) {
-        if (!credentials?.email || !credentials?.password) {
-          throw new Error("Email dan kata sandi wajib diisi");
-        }
-
-        const user = await prisma.user.findUnique({ where: { email: credentials.email } });
-        if (!user) throw new Error("Email tidak terdaftar");
-
-        const isValid = await bcrypt.compare(credentials.password, user.password);
-        if (!isValid) throw new Error("Kata sandi salah");
-
-        return { id: user.id, email: user.email, name: user.name };
-      }
-    })
+    GoogleProvider({
+      clientId: process.env.GOOGLE_CLIENT_ID as string,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
+    }),
+    GithubProvider({
+      clientId: process.env.GITHUB_ID as string,
+      clientSecret: process.env.GITHUB_SECRET as string,
+    }),
   ],
-  session: { strategy: "jwt" },
-  secret: process.env.NEXTAUTH_SECRET || "rahasia_negara_123",
   pages: {
-    signIn: "/login",
-  }
+    signIn: '/login',
+  },
+  secret: process.env.NEXTAUTH_SECRET,
 });
 
 export { handler as GET, handler as POST };
