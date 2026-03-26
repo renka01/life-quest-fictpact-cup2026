@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import { NextAuthProvider } from "@/components/Providers";
 // Import komponen yang baru saja kita buat
 
 const geistSans = Geist({
@@ -31,8 +32,9 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        {children}
-
+        <NextAuthProvider>
+          {children}
+        </NextAuthProvider>
         {/* --- GLOBAL COMPONENTS LAYER --- */}
         {/* Komponen ini akan stand-by menunggu trigger dari useStore */}
       </body>

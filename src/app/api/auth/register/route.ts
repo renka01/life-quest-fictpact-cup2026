@@ -1,12 +1,11 @@
 import { NextResponse } from "next/server";
-import { PrismaClient } from "@prisma/client";
 import bcrypt from "bcryptjs";
+import prisma from "../../progress/prisma";
 
-const prisma = new PrismaClient();
 
 export async function POST(req: Request) {
   try {
-    const { email, password } = await req.json();
+    const { name, email, password } = await req.json();
 
     if (!email || !password) {
       return NextResponse.json({ message: "Email dan kata sandi wajib diisi" }, { status: 400 });
@@ -23,11 +22,12 @@ export async function POST(req: Request) {
 
     // Simpan ke database
     const user = await prisma.user.create({
-      data: { email, password: hashedPassword },
+      data: { name: name || "Player", email, password: hashedPassword },
     });
 
-    return NextResponse.json({ message: "Pendaftaran berhasil!", user: { email: user.email } }, { status: 201 });
+    return NextResponse.json({ message: "Pendaftaran berhasil!", user: { name: user.name, email: user.email } }, { status: 201 });
   } catch (error) {
+    console.error("Registrasi Error:", error);
     return NextResponse.json({ message: "Terjadi kesalahan pada server" }, { status: 500 });
   }
 }

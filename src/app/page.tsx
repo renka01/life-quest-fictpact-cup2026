@@ -173,8 +173,8 @@ export default function Home() {
   if (!isMounted) {
     return (
       <div className="h-screen w-full bg-[#1a1b26] flex items-center justify-center">
-        <span className="font-pixel text-xl text-amber-400 tracking-[0.2em] animate-pulse">
-          SYSTEM BOOTING...
+        <span className="font-pixel text-2xl text-white tracking-[0.5em] animate-pulse drop-shadow-[0_0_10px_rgba(255,255,255,0.8)]">
+          LOADING
         </span>
       </div>
     );
@@ -425,10 +425,6 @@ case "Misi":
 
           <div className="flex items-center justify-end gap-4 w-full lg:w-auto">
             <div className="flex items-center gap-4 px-4 py-1.5 bg-[#24283b] border-2 border-slate-600 rounded-none shadow-[inset_2px_2px_4px_rgba(0,0,0,0.5)]">
-              <div className="flex items-center gap-1.5 text-emerald-400 font-pixel text-[8px]">
-                <Diamond size={14} /> 0
-              </div>
-              <div className="w-px h-4 bg-slate-700"></div>
               <div className="flex items-center gap-1.5 text-amber-400 font-pixel text-[8px]">
                 <Coins size={14} /> {stats.gold}
               </div>
@@ -599,7 +595,6 @@ case "Misi":
                   <div className="flex flex-col">
                     <button className="px-4 py-3 text-xs font-bold text-slate-300 hover:bg-[#24283b] hover:text-white text-left border-b border-slate-800 transition-colors flex items-center gap-2"><Trophy size={14} /> {tDropdown.achievements}</button>
                     <button onClick={() => { setActiveMenu("Pengaturan"); setIsSettingsOpen(false); }} className="px-4 py-3 text-xs font-bold text-slate-300 hover:bg-[#24283b] hover:text-white text-left border-b border-slate-800 transition-colors flex items-center gap-2"><Settings size={14} /> {tDropdown.settings}</button>
-                    <button className="px-4 py-3 text-xs font-bold text-slate-300 hover:bg-[#24283b] hover:text-white text-left border-b border-slate-800 transition-colors flex items-center gap-2"><Diamond size={14} /> {tDropdown.subscription}</button>
                     <button onClick={handleLogout} className="px-4 py-3 text-xs font-bold text-pink-500 hover:bg-pink-500/10 text-left transition-colors flex items-center gap-2"><LogOut size={14} /> {tDropdown.logout}</button>
                   </div>
                 </div>

@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { persist } from 'zustand/middleware'; // <-- TAMBAHAN: Import persist untuk save data ke local storage
+import { persist, createJSONStorage, StateStorage } from 'zustand/middleware';
 
 // ==========================================
 // 1. TIPE DATA (TYPESCRIPT INTERFACES)
@@ -200,6 +200,55 @@ const getDifficultyMultiplier = (difficulty: number) => {
     case 4: return 2.0; 
     default: return 1.0;
   }
+};
+
+// --- DEBOUNCE & SAVE FUNCTION ---
+function debounce<T extends (...args: any[]) => any>(func: T, delay: number): (...args: Parameters<T>) => void {
+  let timeout: NodeJS.Timeout;
+  return function(this: any, ...args: Parameters<T>) {
+    clearTimeout(timeout);
+    timeout = setTimeout(() => func.apply(this, args), delay);
+  };
+}
+
+const saveGameState = debounce(async (state: any) => {
+  try {
+    const res = await fetch('/api/progress', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ gameState: state }),
+    });
+    if (res.ok) {
+      console.log("✅ Progress saved to database.");
+    } else {
+      // Jika sesi berakhir atau tidak valid, API akan mengembalikan error.
+      // Kita bisa log ini, tapi tidak perlu menampilkan error ke pengguna.
+      console.warn("Could not save progress to database (session might be expired).");
+    }
+  } catch (error) {
+    console.error("Failed to save game state:", error);
+  }
+}, 2500); // Simpan 2.5 detik setelah perubahan terakhir
+
+
+// --- CUSTOM STORAGE UNTUK AUTOSAVE ---
+const customStorage: StateStorage = {
+  getItem: (name) => {
+    // createJSONStorage mengharapkan string, jadi kita teruskan saja.
+    return localStorage.getItem(name);
+  },
+  setItem: (name, value) => {
+    // Fungsi ini menerima state yang sudah di-string-kan dari createJSONStorage.
+    localStorage.setItem(name, value);
+    try {
+      // Kita parse kembali untuk mendapatkan bagian 'state' untuk backup ke database.
+      const { state } = JSON.parse(value);
+      saveGameState(state);
+    } catch (error) {
+      console.error("Gagal mem-parsing state untuk autosave:", error);
+    }
+  },
+  removeItem: (name) => localStorage.removeItem(name),
 };
 
 // ==========================================
@@ -768,6 +817,33 @@ setUserProfile: (profile) => set((state) => ({
     }),
     {
       name: 'lifequest-storage',
+      storage: createJSONStorage(() => customStorage),
+      onRehydrateStorage: () => (state, error) => {
+        if (error) {
+          console.error('An error occurred during hydration:', error);
+        } else {
+          // Setelah memuat dari local storage, ambil state terbaru dari DB.
+          // Ini memastikan data tersinkronisasi jika pengguna login di perangkat lain.
+          const loadGameState = async () => {
+            try {
+              const res = await fetch('/api/progress');
+              if (res.ok) {
+                const data = await res.json();
+                if (data && data.gameState) {
+                  // Gunakan metode statis setState pada hook store
+                  // untuk menimpa state yang terhidrasi dengan yang dari DB.
+                  useStore.setState(data.gameState);
+                  console.log("✅ Game state successfully loaded from database.");
+                }
+              }
+            } catch (e) {
+              console.error("Could not load game state from DB.", e);
+            }
+          }
+          // Hanya coba memuat dari DB jika pengguna sudah login (dicek via sesi API)
+          loadGameState();
+        }
+      },
       partialize: (state) => Object.fromEntries(
         Object.entries(state).filter(([key]) => !['coinPopup', 'alertDialog', 'confirmDialog'].includes(key))
       ),

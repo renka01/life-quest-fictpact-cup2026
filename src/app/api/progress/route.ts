@@ -1,42 +1,50 @@
 import { NextResponse } from "next/server";
-import { PrismaClient } from "@prisma/client";
-import { getServerSession } from "next-auth";
+import bcrypt from "bcryptjs";
+import prisma from "../progress/prisma"; // Sekarang path import ini valid!
 
-const prisma = new PrismaClient();
-
-// Fungsi LOAD: Mengambil progress user dari database
-export async function GET(req: Request) {
-  // Cek siapa yang sedang login
-  const session = await getServerSession();
-  if (!session?.user?.email) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
-
-  try {
-    const user = await prisma.user.findUnique({
-      where: { email: session.user.email },
-    });
-    return NextResponse.json({ gameState: user?.gameState });
-  } catch (error) {
-    return NextResponse.json({ error: "Gagal memuat progress" }, { status: 500 });
-  }
-}
-
-// Fungsi SAVE: Menyimpan progress Zustand ke database
 export async function POST(req: Request) {
-  const session = await getServerSession();
-  if (!session?.user?.email) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
-
   try {
-    const { gameState } = await req.json();
-    await prisma.user.update({
-      where: { email: session.user.email },
-      data: { gameState },
+    const body = await req.json();
+    const { name, email, password } = body;
+
+    // 1. Validasi input
+    if (!name || !email || !password) {
+      return NextResponse.json(
+        { message: "Nama, email, dan password wajib diisi!" },
+        { status: 400 }
+      );
+    }
+
+    // 2. Cek apakah email sudah terdaftar di database
+    const existingUser = await prisma.user.findUnique({
+      where: { email: email },
     });
-    return NextResponse.json({ success: true });
+
+    if (existingUser) {
+      return NextResponse.json(
+        { message: "Email ini sudah terdaftar. Silakan gunakan email lain atau login." },
+        { status: 400 }
+      );
+    }
+
+    // 3. Enkripsi password menggunakan bcrypt
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    // 4. Simpan user baru ke database
+    const newUser = await prisma.user.create({
+      data: {
+        name,
+        email,
+        password: hashedPassword,
+      },
+    });
+
+    return NextResponse.json({ message: "Registrasi berhasil!", user: newUser }, { status: 201 });
   } catch (error) {
-    return NextResponse.json({ error: "Gagal menyimpan progress" }, { status: 500 });
+    console.error("Error saat registrasi:", error);
+    return NextResponse.json(
+      { message: "Terjadi kesalahan pada server saat mendaftar." },
+      { status: 500 }
+    );
   }
 }

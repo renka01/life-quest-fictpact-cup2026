@@ -1,4 +1,5 @@
 "use client";
+import { useSession } from "next-auth/react";
 import { useState } from 'react';
 import { useStore } from "@/store/useStore";
 import {
@@ -31,6 +32,7 @@ export default function SettingsBoard() {
   const { userProfile, setUserProfile, settings, updateSetting, playSound, showAlert } = useStore();
   const t = translations[settings?.language || 'id']?.settings || translations['id'].settings;
   const tUi = translations[settings?.language || 'id']?.ui || translations['id'].ui;
+  const { data: session } = useSession();
 
   const [editModal, setEditModal] = useState<{isOpen: boolean, field: 'accountName' | 'nickname' | 'bio', title: string, value: string}>({ isOpen: false, field: 'accountName', title: '', value: '' });
   
@@ -150,7 +152,7 @@ export default function SettingsBoard() {
           <SettingAction
             icon={Mail}
             label={t.email}
-            value="tuyulbisvy1@gmail.com"
+            value={session?.user?.email || "Email tidak ditemukan"}
             actionText={t.change}
             onClick={() => { showAlert("LOCKED", t.alertEmail, "info"); playSound('error'); }}
           />

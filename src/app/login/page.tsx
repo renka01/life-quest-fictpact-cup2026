@@ -1,6 +1,7 @@
 "use client";
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import { signIn } from 'next-auth/react';
 import { Instagram, Twitter, Github, CheckCircle2, Coins, Flame } from 'lucide-react';
 import { useStore } from '@/store/useStore';
 
@@ -230,20 +231,80 @@ export default function LoginPage() {
   const [error,   setError]   = useState('');
   const [loading, setLoading] = useState(false);
   const [showTransition, setShowTransition] = useState(false);
+  const [isMounted, setIsMounted] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
-    if (!email || !pass) { setError('Email dan kata sandi wajib diisi.'); return; }
-    if (tab === 'register' && pass !== pass2) { setError('Kata sandi tidak cocok!'); return; }
-    
     setLoading(true);
-    setShowTransition(true);
 
-    setTimeout(() => { 
-      setUserProfile({ accountName: email.split('@')[0], nickname: email.split('@')[0] });
-      router.push('/'); 
-    }, 2000); 
+    if (!email || !pass) {
+      setError('Email dan kata sandi wajib diisi.');
+      setLoading(false);
+      return;
+    }
+
+    if (tab === 'register') {
+      if (pass !== pass2) {
+        setError('Kata sandi tidak cocok!');
+        setLoading(false);
+        return;
+      }
+
+      try {
+        const res = await fetch('/api/auth/register', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, password: pass }),
+        });
+
+        const data = await res.json();
+
+        if (!res.ok) {
+          throw new Error(data.message || 'Terjadi kesalahan saat mendaftar.');
+        }
+
+        // Jika registrasi berhasil, langsung coba login
+        const result = await signIn('credentials', {
+          redirect: false,
+          email,
+          password: pass,
+        });
+
+        if (result?.error) {
+          setError(result.error);
+          setLoading(false);
+        } else if (result?.ok) {
+          setShowTransition(true);
+          setUserProfile({ accountName: email, nickname: email.split('@')[0] });
+          router.push('/');
+        }
+      } catch (err: any) {
+        setError(err.message);
+        setLoading(false);
+      }
+    } else { // Logic untuk 'login'
+      const result = await signIn('credentials', {
+        redirect: false,
+        email,
+        password: pass,
+      });
+
+      if (result?.error) {
+        setError(result.error);
+        setLoading(false);
+      } else if (result?.ok) {
+        setShowTransition(true);
+        setUserProfile({ accountName: email, nickname: email.split('@')[0] });
+        router.push('/');
+      } else {
+        setLoading(false);
+      }
+    }
   };
 
 // ═══════════════════════════════════════════════════════════
@@ -387,18 +448,20 @@ const SangarDragonIcon = () => (
       `}</style>
 
       {/* Bintang/Debu Latar Belakang */}
-      <div className="absolute inset-0 pointer-events-none opacity-20">
-        {[...Array(30)].map((_, i) => (
-          <div key={i} className="absolute bg-amber-200 rounded-full"
-            style={{
-              width:  Math.random() * 3 + 1 + 'px',
-              height: Math.random() * 3 + 1 + 'px',
-              top:    Math.random() * 100 + '%',
-              left:   Math.random() * 100 + '%',
-              opacity: Math.random() * 0.8 + 0.2,
-            }} />
-        ))}
-      </div>
+      {isMounted && (
+        <div className="absolute inset-0 pointer-events-none opacity-20">
+          {[...Array(30)].map((_, i) => (
+            <div key={i} className="absolute bg-amber-200 rounded-full"
+              style={{
+                width:  Math.random() * 3 + 1 + 'px',
+                height: Math.random() * 3 + 1 + 'px',
+                top:    Math.random() * 100 + '%',
+                left:   Math.random() * 100 + '%',
+                opacity: Math.random() * 0.8 + 0.2,
+              }} />
+          ))}
+        </div>
+      )}
 
       <FloatingCoin x="10%" y="20%" delay={0}/>
       <FloatingCoin x="85%" y="15%" delay={1.2}/>
