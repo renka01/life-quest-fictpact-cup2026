@@ -10,6 +10,7 @@ import ShopBoard from "@/components/ShopBoard";
 import CharacterSelection from "@/components/CharacterSelection";
 import FocusArena from "@/components/FocusArena";
 import { useStore, TaskType } from "@/store/useStore";
+import AchievementBoard from "@/components/AchievementBoard";
 import {
   TaskFormModal,
   TaskDetailModal,
@@ -290,6 +291,14 @@ case "Misi":
             </p>
           </div>
         );
+
+      case "Pencapaian":
+        return (
+          <div className="animate-in fade-in slide-in-from-left-4 duration-500 h-full">
+            <AchievementBoard />
+          </div>
+        );  
+
     }
   };
 
@@ -593,8 +602,7 @@ case "Misi":
               {isSettingsOpen && (
                 <div className="absolute right-0 mt-4 w-48 bg-[#1a1b26] border-4 border-slate-700 rounded-none shadow-[8px_8px_0_#000] z-[100] animate-in fade-in slide-in-from-top-2 overflow-hidden text-left">
                   <div className="flex flex-col">
-                    <button className="px-4 py-3 text-xs font-bold text-slate-300 hover:bg-[#24283b] hover:text-white text-left border-b border-slate-800 transition-colors flex items-center gap-2"><Trophy size={14} /> {tDropdown.achievements}</button>
-                    <button onClick={() => { setActiveMenu("Pengaturan"); setIsSettingsOpen(false); }} className="px-4 py-3 text-xs font-bold text-slate-300 hover:bg-[#24283b] hover:text-white text-left border-b border-slate-800 transition-colors flex items-center gap-2"><Settings size={14} /> {tDropdown.settings}</button>
+                    <button onClick={() => { setActiveMenu("Pencapaian"); setIsSettingsOpen(false); }} className="px-4 py-3 text-xs font-bold text-slate-300 hover:bg-[#24283b] hover:text-white text-left border-b border-slate-800 transition-colors flex items-center gap-2"><Trophy size={14} /> {tDropdown.achievements}</button>                    <button onClick={() => { setActiveMenu("Pengaturan"); setIsSettingsOpen(false); }} className="px-4 py-3 text-xs font-bold text-slate-300 hover:bg-[#24283b] hover:text-white text-left border-b border-slate-800 transition-colors flex items-center gap-2"><Settings size={14} /> {tDropdown.settings}</button>
                     <button onClick={handleLogout} className="px-4 py-3 text-xs font-bold text-pink-500 hover:bg-pink-500/10 text-left transition-colors flex items-center gap-2"><LogOut size={14} /> {tDropdown.logout}</button>
                   </div>
                 </div>
