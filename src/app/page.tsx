@@ -57,7 +57,6 @@ const RetroTransition = ({ isActive }: { isActive: boolean }) => {
 };
 
 export default function Home() {
-  // Ditambahkan setUserProfile dari kodemu
   const { tasks, stats, checkDailyStreak, coinPopup, userProfile, setUserProfile, dailyProgress, claimDailyReward, playSound } = useStore();
   const router = useRouter(); 
   const extendedTasks = tasks as ExtendedTask[];
@@ -97,33 +96,50 @@ export default function Home() {
   const dp = dailyProgress || { loginClaimed: false, tasksCompleted: 0, taskClaimed: false, bossesDefeated: 0, bossClaimed: false };
   const hasClaimableQuests = (!dp.loginClaimed) || (dp.tasksCompleted >= 3 && !dp.taskClaimed) || (dp.bossesDefeated >= 1 && !dp.bossClaimed);
 
-  // ========================================================
-  // <-- PERBAIKAN LOGIC GATES & SYNC DATABASE DARI KODEMU -->
-  // ========================================================
-
+  // Set isMounted to true on client
   useEffect(() => {
     setIsMounted(true);
   }, []);
 
-  // 1. Pengecekan Login (Push ke /login kalau tidak ada akun)
+  // ========================================================
+  // <-- LOGIC GATES & SYNC DATABASE TERBARU -->
+  // ========================================================
   useEffect(() => {
-    if (isMounted && !userProfile?.accountName) {
-      router.push('/login');
-    }
-  }, [isMounted, userProfile?.accountName, router]);
+    const initializeUser = async () => {
+      if (!isMounted) return;
 
-  // 2. Sinkronisasi Data Profil (Hanya jalan saat butuh / baru refresh)
-  useEffect(() => {
-    const loadDatabaseProfile = async () => {
-      // Hanya lakukan fetch JIKA user sudah login (punya accountName) TAPI gender belum ada
-      if (userProfile?.accountName && !userProfile?.gender) {
+      // 1. Jika di local store belum ada akun (bisa jadi karena baru beres login GitHub/Google)
+      if (!userProfile?.accountName) {
+        try {
+          // Coba fetch profil dari server. Kalau ada sesi NextAuth aktif, server akan membalas dengan data.
+          const res = await fetch('/api/user/profile');
+          if (res.ok) {
+            const dbData = await res.json();
+            // Cek apakah data valid dan memiliki accountName/email/nickname
+            if (dbData && (dbData.accountName || dbData.email || dbData.nickname)) {
+              // Sukses! User ternyata login via OAuth. Masukkan datanya ke store.
+              setUserProfile({
+                ...dbData,
+                accountName: dbData.accountName || dbData.email || 'Petarung',
+                nickname: dbData.nickname || (dbData.email ? dbData.email.split('@')[0] : 'Petarung')
+              });
+              return; // Selesai, JANGAN redirect ke /login
+            }
+          }
+        } catch (err) {
+          console.error("Gagal memverifikasi sesi OAuth:", err);
+        }
+        
+        // Kalau server bilang tidak ada sesi, berarti memang belum login. Tendang ke /login.
+        router.push('/login');
+      } 
+      
+      // 2. Jika SUDAH login tapi belum pilih gender (Data profil belum lengkap)
+      else if (userProfile?.accountName && !userProfile?.gender) {
         try {
           const res = await fetch('/api/user/profile');
           if (res.ok) {
             const dbData = await res.json();
-            
-            // Update Store dengan data asli Database
-            // Cek dbData.gender agar tidak me-nimpa dengan null lagi
             if (dbData.gender) {
               setUserProfile(dbData); 
             }
@@ -134,10 +150,8 @@ export default function Home() {
       }
     };
 
-    if (isMounted) {
-      loadDatabaseProfile();
-    }
-  }, [isMounted, userProfile?.accountName, userProfile?.gender, setUserProfile]);
+    initializeUser();
+  }, [isMounted, userProfile?.accountName, userProfile?.gender, router, setUserProfile]);
 
   useEffect(() => {
     if (isMounted) {
@@ -175,7 +189,7 @@ export default function Home() {
   };
 
   const handleLogout = () => {
-    useStore.getState().setUserProfile({ accountName: "", nickname: "", gender: null, avatarId: null });
+    setUserProfile({ accountName: "", nickname: "", gender: null, avatarId: null });
     router.push('/login');
   };
 
@@ -211,15 +225,15 @@ export default function Home() {
     );
   }
 
-  // 1. JIKA BELUM LOGIN (accountName kosong), kembalikan layar kosong sementara router me-redirect
+  // 1. JIKA BELUM LOGIN (accountName kosong), jangan render apapun biar kena push router
   if (!userProfile?.accountName) {
     return <div className="h-screen w-full bg-zinc-900" />;
   }
 
   // 2. JIKA SUDAH LOGIN TAPI BELUM PILIH KARAKTER (gender kosong)
-  // Tampilkan komponen CharacterSelection
+  // Tampilkan form pemilihan karakter (WAJIB)
   if (!userProfile?.gender) {
-    return <CharacterSelection onComplete={() => console.log("Karakter berhasil dibuat!")} />;
+    return <CharacterSelection onComplete={() => console.log("Karakter siap!")} />;
   }
 
   // 3. JIKA SEMUA LENGKAP, BARU MASUK KE DASHBOARD UTAMA
@@ -465,8 +479,7 @@ export default function Home() {
           <div className="flex items-center justify-end gap-4 w-full lg:w-auto">
             <div className="flex items-center gap-4 px-4 py-1.5 bg-zinc-800 border-2 border-zinc-600 rounded-none shadow-[inset_2px_2px_4px_rgba(0,0,0,0.5)]">
               <div className="flex items-center gap-1.5 text-amber-400 font-pixel text-[8px]">
-                {/* Fallback ke userProfile.gold dari perbaikanmu */}
-                <Coins size={14} /> {stats.gold || userProfile.gold || 0}
+                <Coins size={14} /> {stats?.gold || userProfile?.gold || 0}
               </div>
             </div>
 

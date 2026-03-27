@@ -496,13 +496,14 @@ export default function LoginPage() {
     setIsModalOpen(true);
   };
 
-  const handleOAuthLogin = (provider: 'google' | 'github') => {
-    // Hapus state lama dari local storage untuk memastikan sesi baru dimulai dengan bersih
+  // PERBAIKAN: Memisahkan opsi agar GitHub tidak ikut menerima prompt: 'select_account'
+const handleOAuthLogin = (provider: 'google' | 'github') => {
     localStorage.removeItem('lifequest-storage');
     setLoading(true);
-    const options = provider === 'google' 
-        ? { prompt: 'select_account' } 
-        : { prompt: 'consent' };
+    
+    // PERBAIKAN: Gunakan tipe eksplisit dan undefined untuk selain google
+    const options: Record<string, string> | undefined = 
+      provider === 'google' ? { prompt: 'select_account' } : undefined;
 
     signIn(provider, { callbackUrl: '/' }, options).then(result => {
       if (result?.error) {
@@ -512,7 +513,7 @@ export default function LoginPage() {
       }
     });
   };
-
+  
   return (
     <div className="min-h-screen bg-zinc-900 flex flex-col relative overflow-hidden" style={{ fontFamily: "'Inter', 'Segoe UI', sans-serif" }}>
       
