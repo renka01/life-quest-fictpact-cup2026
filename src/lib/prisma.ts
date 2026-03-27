@@ -1,14 +1,29 @@
-// src/lib/prisma.ts
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient } from '@prisma/client';
+import { PrismaPg } from '@prisma/adapter-pg';
+import { Pool } from 'pg';
 
-const globalForPrisma = global as unknown as { prisma: PrismaClient };
+declare global {
+  // Izinkan deklarasi var global untuk singleton
+  // eslint-disable-next-line no-var
+  var prisma: PrismaClient | undefined;
+}
 
-export const prisma =
-  globalForPrisma.prisma ||
+const connectionString = process.env.DATABASE_URL;
+
+if (!connectionString) {
+  throw new Error("Variabel lingkungan DATABASE_URL belum diatur.");
+}
+
+const pool = new Pool({ connectionString });
+const adapter = new PrismaPg(pool);
+
+const prisma =
+  global.prisma ||
   new PrismaClient({
-    log: ["query"], // Opsional: biar kamu bisa lihat query database di terminal
+    adapter,
   });
 
-if (process.env.NODE_ENV !== "production") globalForPrisma.prisma = prisma;
+if (process.env.NODE_ENV !== 'production') global.prisma = prisma;
 
 export default prisma;
+
