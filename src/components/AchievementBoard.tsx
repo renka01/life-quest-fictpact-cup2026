@@ -28,19 +28,19 @@ const MOCK_ACHIEVEMENTS = [
 export default function AchievementBoard() {
   return (
     <div className="flex flex-col h-full animate-in fade-in slide-in-from-bottom-4 duration-500">
-      <div className="mb-8 flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-slate-700/50 pb-6">
+      <div className="mb-8 flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-zinc-700/50 pb-6">
         <div>
           <h1 className="font-pixel text-xl md:text-2xl text-white flex items-center gap-4 drop-shadow-[2px_2px_0_#000] uppercase mb-2">
             <Trophy className="text-amber-400" size={28} /> HALL OF FAME
           </h1>
-          <p className="font-pixel text-[8px] md:text-[10px] text-slate-400 uppercase tracking-widest">
+          <p className="font-pixel text-[8px] md:text-[10px] text-zinc-400 uppercase tracking-widest">
             Rekam Jejak Kejayaan dan Perjuanganmu.
           </p>
         </div>
         
         {/* Indikator Total Pencapaian */}
-        <div className="bg-[#24283b] border-2 border-slate-600 px-4 py-2 flex items-center gap-3 shadow-[4px_4px_0_#000]">
-          <span className="text-xs text-slate-400 font-bold uppercase">Total Unlocked:</span>
+        <div className="bg-zinc-800 border-2 border-zinc-600 px-4 py-2 flex items-center gap-3 shadow-[4px_4px_0_#000]">
+          <span className="text-xs text-zinc-400 font-bold uppercase">Total Unlocked:</span>
           <span className="text-amber-400 font-pixel text-sm">
             {MOCK_ACHIEVEMENTS.filter(a => a.unlocked || a.progress >= a.max).length} / {MOCK_ACHIEVEMENTS.length}
           </span>
@@ -56,36 +56,36 @@ export default function AchievementBoard() {
             <div 
               key={ach.id} 
               className={`p-4 border-2 shadow-[4px_4px_0_#000] flex items-start gap-4 transition-all duration-300 hover:-translate-y-1 hover:shadow-[6px_6px_0_#000] ${
-                isDone ? `bg-[#24283b] ${ach.border}` : 'bg-[#1a1b26] border-slate-700 opacity-80'
+                isDone ? `bg-zinc-800 ${ach.border}` : 'bg-zinc-900 border-zinc-700 opacity-80'
               }`}
             >
               <div className={`w-12 h-12 shrink-0 border-2 rounded-none flex items-center justify-center transition-colors ${
-                isDone ? `${ach.bg} ${ach.border} ${ach.color}` : 'bg-slate-800 border-slate-600 text-slate-500'
+                isDone ? `${ach.bg} ${ach.border} ${ach.color}` : 'bg-zinc-800 border-zinc-600 text-zinc-500'
               }`}>
                 {isDone ? <Icon size={24} className="animate-in zoom-in duration-300" /> : <Lock size={20} />}
               </div>
               
               <div className="flex flex-col w-full">
                 <div className="flex justify-between items-start mb-1">
-                  <h3 className={`font-bold text-sm uppercase tracking-wide ${isDone ? 'text-white' : 'text-slate-400'}`}>
+                  <h3 className={`font-bold text-sm uppercase tracking-wide ${isDone ? 'text-white' : 'text-zinc-400'}`}>
                     {ach.title}
                   </h3>
                   <span className="font-pixel text-[8px] mt-1 shrink-0 ml-2">
                     {isDone ? (
                       <span className="text-emerald-400">DONE</span>
                     ) : (
-                      <span className="text-slate-500">{ach.progress}/{ach.max}</span>
+                      <span className="text-zinc-500">{ach.progress}/{ach.max}</span>
                     )}
                   </span>
                 </div>
-                <p className={`text-[10px] mb-3 leading-relaxed ${isDone ? 'text-slate-300' : 'text-slate-500'}`}>
+                <p className={`text-[10px] mb-3 leading-relaxed ${isDone ? 'text-zinc-300' : 'text-zinc-500'}`}>
                   {ach.desc}
                 </p>
                 
                 {/* Progress Bar */}
-                <div className="w-full h-2 bg-slate-900 border border-slate-700 rounded-none overflow-hidden mt-auto">
+                <div className="w-full h-2 bg-zinc-950 border border-zinc-700 rounded-none overflow-hidden mt-auto">
                   <div 
-                    className={`h-full transition-all duration-1000 ${isDone ? 'bg-amber-400 shadow-[0_0_10px_rgba(251,191,36,0.5)]' : 'bg-slate-600'}`}
+                    className={`h-full transition-all duration-1000 ${isDone ? 'bg-amber-400 shadow-[0_0_10px_rgba(251,191,36,0.5)]' : 'bg-zinc-600'}`}
                     style={{ width: `${Math.min(100, (ach.progress / ach.max) * 100)}%` }}
                   ></div>
                 </div>

@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
-/* Memastikan background body benar-benar gelap */
+/* Memastikan background body benar-benar gelap selaras dengan tema zinc */
 body {
-  background-color: #020617; /* Sesuai dengan slate-950 */
+  background-color: #09090b; /* Sesuai dengan zinc-950 */
+  /* atau bisa juga pakai #18181b (zinc-900) */
 }
-

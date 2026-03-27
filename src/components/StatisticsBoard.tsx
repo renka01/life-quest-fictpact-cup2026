@@ -115,7 +115,7 @@ export default function StatisticsBoard() {
   return (
     <div className="animate-in fade-in duration-500 flex flex-col gap-6">
       {/* HERO */}
-      <div className="bg-[#24283b] border-4 border-slate-700 shadow-[6px_6px_0_#000] p-5 lg:p-6">
+      <div className="bg-zinc-800 border-4 border-zinc-700 shadow-[6px_6px_0_#000] p-5 lg:p-6">
         <div className="flex flex-col gap-4">
           <div>
             <p className="text-[10px] uppercase tracking-[0.2em] text-cyan-400 font-bold mb-3">
@@ -125,26 +125,26 @@ export default function StatisticsBoard() {
               <span className="text-cyan-500"><BarChart3 size={18} /></span>
               {t.title}
             </h1>
-            <p className="font-pixel text-[7px] md:text-[8px] text-slate-400 uppercase tracking-widest leading-relaxed max-w-2xl">
+            <p className="font-pixel text-[7px] md:text-[8px] text-zinc-400 uppercase tracking-widest leading-relaxed max-w-2xl">
               {t.desc}
             </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div className="bg-[#1a1b26] border-2 border-cyan-500 p-4 shadow-[3px_3px_0_#000]">
-              <p className="text-[10px] uppercase text-slate-500 mb-1">{t.compRate}</p>
+            <div className="bg-zinc-900 border-2 border-cyan-500 p-4 shadow-[3px_3px_0_#000]">
+              <p className="text-[10px] uppercase text-zinc-500 mb-1">{t.compRate}</p>
               <p className="text-cyan-400 text-3xl font-bold">{completionRate}%</p>
             </div>
 
-            <div className="bg-[#1a1b26] border-2 border-emerald-500 p-4 shadow-[3px_3px_0_#000]">
-              <p className="text-[10px] uppercase text-slate-500 mb-1">{t.netWorth}</p>
+            <div className="bg-zinc-900 border-2 border-emerald-500 p-4 shadow-[3px_3px_0_#000]">
+              <p className="text-[10px] uppercase text-zinc-500 mb-1">{t.netWorth}</p>
               <p className="text-emerald-400 text-3xl font-bold">
                 Rp {netWorth.toLocaleString()}
               </p>
             </div>
 
-            <div className="bg-[#1a1b26] border-2 border-yellow-500 p-4 shadow-[3px_3px_0_#000]">
-              <p className="text-[10px] uppercase text-slate-500 mb-1">{t.titleLabel}</p>
+            <div className="bg-zinc-900 border-2 border-yellow-500 p-4 shadow-[3px_3px_0_#000]">
+              <p className="text-[10px] uppercase text-zinc-500 mb-1">{t.titleLabel}</p>
               <p className="text-yellow-400 text-xl font-bold">{playerTitle}</p>
             </div>
           </div>
@@ -211,7 +211,7 @@ export default function StatisticsBoard() {
       {/* MAIN GRID */}
       <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
         {/* TASK BREAKDOWN */}
-        <div className="bg-[#24283b] border-4 border-cyan-500 shadow-[6px_6px_0_#000] p-5">
+        <div className="bg-zinc-800 border-4 border-cyan-500 shadow-[6px_6px_0_#000] p-5">
           <div className="flex items-center gap-2 text-cyan-400 mb-4">
             <Layers3 size={16} />
             <h2 className="text-sm font-bold uppercase">{t.breakdown}</h2>
@@ -224,8 +224,8 @@ export default function StatisticsBoard() {
             <SimpleBar label={translations[settings?.language || 'id']?.tasks?.todo || "Target Utama"} value={todoTasks} max={Math.max(totalTasks, 1)} color="bg-pink-400" />
           </div>
 
-          <div className="mt-6 border-t-2 border-slate-700 pt-4">
-            <p className="text-[10px] uppercase text-slate-500 mb-3">{t.diff}</p>
+          <div className="mt-6 border-t-2 border-zinc-700 pt-4">
+            <p className="text-[10px] uppercase text-zinc-500 mb-3">{t.diff}</p>
             <div className="space-y-3">
               {difficultyStats.length > 0 ? (
                 difficultyStats.map(([level, count]) => (
@@ -238,14 +238,14 @@ export default function StatisticsBoard() {
                   />
                 ))
               ) : (
-                <p className="text-sm text-slate-500 italic">{t.noDiff}</p>
+                <p className="text-sm text-zinc-500 italic">{t.noDiff}</p>
               )}
             </div>
           </div>
         </div>
 
         {/* TOP CATEGORY */}
-        <div className="bg-[#24283b] border-4 border-pink-500 shadow-[6px_6px_0_#000] p-5">
+        <div className="bg-zinc-800 border-4 border-pink-500 shadow-[6px_6px_0_#000] p-5">
           <div className="flex items-center gap-2 text-pink-400 mb-4">
             <Target size={16} />
             <h2 className="text-sm font-bold uppercase">{t.topCat}</h2>
@@ -256,7 +256,7 @@ export default function StatisticsBoard() {
               topCategories.map(([category, count], idx) => (
                 <div
                   key={category}
-                  className="bg-[#1a1b26] border-2 border-slate-700 p-3 flex justify-between items-center"
+                  className="bg-zinc-900 border-2 border-zinc-700 p-3 flex justify-between items-center"
                 >
                   <div className="flex items-center gap-3">
                     <div className="w-8 h-8 border-2 border-pink-500 text-pink-400 flex items-center justify-center font-bold text-xs">
@@ -264,20 +264,20 @@ export default function StatisticsBoard() {
                     </div>
                     <div>
                       <p className="text-white font-bold">{category}</p>
-                      <p className="text-xs text-slate-500">{t.catCount}</p>
+                      <p className="text-xs text-zinc-500">{t.catCount}</p>
                     </div>
                   </div>
                   <div className="text-pink-400 font-bold text-xl">{count}</div>
                 </div>
               ))
             ) : (
-              <p className="text-sm text-slate-500 italic">{t.noCat}</p>
+              <p className="text-sm text-zinc-500 italic">{t.noCat}</p>
             )}
           </div>
         </div>
 
         {/* FINANCE SUMMARY */}
-        <div className="bg-[#24283b] border-4 border-emerald-500 shadow-[6px_6px_0_#000] p-5">
+        <div className="bg-zinc-800 border-4 border-emerald-500 shadow-[6px_6px_0_#000] p-5">
           <div className="flex items-center gap-2 text-emerald-400 mb-4">
             <BarChart3 size={16} />
             <h2 className="text-sm font-bold uppercase">{t.flow}</h2>
@@ -323,7 +323,7 @@ export default function StatisticsBoard() {
         </div>
 
         {/* CHARACTER PANEL */}
-        <div className="bg-[#24283b] border-4 border-yellow-500 shadow-[6px_6px_0_#000] p-5">
+        <div className="bg-zinc-800 border-4 border-yellow-500 shadow-[6px_6px_0_#000] p-5">
           <div className="flex items-center gap-2 text-yellow-400 mb-4">
             <Trophy size={16} />
             <h2 className="text-sm font-bold uppercase">{t.charProg}</h2>
@@ -340,9 +340,9 @@ export default function StatisticsBoard() {
             <SimpleBar label="EXP" value={stats.exp} max={stats.maxExp || 1} color="bg-yellow-400" />
           </div>
 
-          <div className="mt-5 border-t-2 border-slate-700 pt-4">
-            <p className="text-[10px] uppercase text-slate-500 mb-1">{t.insight}</p>
-            <p className="text-sm text-slate-200">
+          <div className="mt-5 border-t-2 border-zinc-700 pt-4">
+            <p className="text-[10px] uppercase text-zinc-500 mb-1">{t.insight}</p>
+            <p className="text-sm text-zinc-200">
               {stats.exp >= stats.maxExp * 0.8 ? t.insight1 : t.insight2}
             </p>
           </div>
@@ -377,7 +377,7 @@ function StatCard({
   };
 
   return (
-    <div className={`bg-[#24283b] border-4 ${styles[color]} shadow-[6px_6px_0_#000] p-5 flex flex-col gap-4`}>
+    <div className={`bg-zinc-800 border-4 ${styles[color]} shadow-[6px_6px_0_#000] p-5 flex flex-col gap-4`}>
       <div className={`flex items-center gap-2 ${styles[color].split(" ")[1]}`}>
         {icon}
         <h2 className="text-sm font-bold uppercase">{title}</h2>
@@ -386,7 +386,7 @@ function StatCard({
       <div className="space-y-3">
         {lines.map(([label, value]) => (
           <div key={label} className="min-w-0">
-            <p className="text-slate-500 text-xs uppercase truncate" title={label}>{label}</p>
+            <p className="text-zinc-500 text-xs uppercase truncate" title={label}>{label}</p>
             <p className="text-white font-bold text-xl truncate" title={value}>{value}</p>
           </div>
         ))}
@@ -394,11 +394,11 @@ function StatCard({
 
       {typeof progress === "number" && (
         <div>
-          <div className="flex justify-between text-[10px] text-slate-400 mb-1">
+          <div className="flex justify-between text-[10px] text-zinc-400 mb-1">
             <span>{progressLabel || "Progress"}</span>
             <span>{Math.round(progress)}%</span>
           </div>
-          <div className="h-3 bg-slate-900 border border-slate-700 overflow-hidden">
+          <div className="h-3 bg-zinc-950 border border-zinc-700 overflow-hidden">
             <div
               className={`h-full transition-all ${progressColor || "bg-white"}`}
               style={{ width: `${Math.min(100, Math.max(0, progress))}%` }}
@@ -422,8 +422,8 @@ function MiniBox({
   icon?: React.ReactNode;
 }) {
   return (
-    <div className="bg-[#1a1b26] border-2 border-slate-700 p-3 min-w-0">
-      <p className="text-[10px] uppercase text-slate-500 mb-2 truncate" title={label}>{label}</p>
+    <div className="bg-zinc-900 border-2 border-zinc-700 p-3 min-w-0">
+      <p className="text-[10px] uppercase text-zinc-500 mb-2 truncate" title={label}>{label}</p>
       <div className={`font-bold text-lg flex items-center gap-2 ${color} min-w-0`} title={value}>
         {icon && <span className="shrink-0">{icon}</span>}
         <span className="truncate">{value}</span>
@@ -449,11 +449,11 @@ function SimpleBar({
 
   return (
     <div>
-      <div className="flex justify-between text-[10px] text-slate-400 mb-1">
+      <div className="flex justify-between text-[10px] text-zinc-400 mb-1">
         <span>{label}</span>
         <span>{isCurrency ? `Rp ${value.toLocaleString()}` : value}</span>
       </div>
-      <div className="h-3 bg-slate-900 border border-slate-700 overflow-hidden">
+      <div className="h-3 bg-zinc-950 border border-zinc-700 overflow-hidden">
         <div
           className={`h-full transition-all ${color}`}
           style={{ width: `${percent}%` }}

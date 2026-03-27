@@ -27,7 +27,6 @@ interface DashboardBoardProps {
   onGoToFinance: () => void;
 }
 
-
 export default function DashboardBoard({
   onOpenTaskModal,
   onOpenFinanceAction,
@@ -78,13 +77,13 @@ export default function DashboardBoard({
     stats.maxExp > 0 ? Math.min(100, (stats.exp / stats.maxExp) * 100) : 0;
 
   const greeting = focusTasks.length > 0
-      ? t.greetActive.replace('{n}', focusTasks.length)
+      ? t.greetActive.replace('{n}', focusTasks.length.toString())
       : t.greetQuiet;
 
   return (
     <div className="animate-in fade-in duration-500 flex flex-col gap-6">
       {/* HERO */}
-      <div className="bg-[#24283b] border-4 border-slate-700 shadow-[6px_6px_0_#000] p-5 lg:p-6">
+      <div className="bg-zinc-800 border-4 border-zinc-700 shadow-[6px_6px_0_#000] p-5 lg:p-6">
         <div className="grid grid-cols-1 xl:grid-cols-[1.5fr_0.9fr] gap-6 items-start">
           <div className="space-y-4">
             <div>
@@ -97,27 +96,27 @@ export default function DashboardBoard({
                 {t.title}
               </h1>
               
-              <p className="font-pixel text-[7px] md:text-[8px] text-slate-400 uppercase tracking-widest leading-relaxed max-w-2xl">
+              <p className="font-pixel text-[7px] md:text-[8px] text-zinc-400 uppercase tracking-widest leading-relaxed max-w-2xl">
                 {t.desc}
               </p>
             </div>
 
             <div className="flex flex-wrap gap-3">
-              <div className="bg-[#1a1b26] border-2 border-amber-500 px-4 py-2 shadow-[3px_3px_0_#000] min-w-[150px]">
-                <p className="text-[10px] uppercase text-slate-500 mb-1">{t.role}</p>
+              <div className="bg-zinc-900 border-2 border-amber-500 px-4 py-2 shadow-[3px_3px_0_#000] min-w-[150px]">
+                <p className="text-[10px] uppercase text-zinc-500 mb-1">{t.role}</p>
                 <p className="text-amber-400 font-bold">Lv. {stats.level} Adventurer</p>
               </div>
 
-              <div className="bg-[#1a1b26] border-2 border-orange-500 px-4 py-2 shadow-[3px_3px_0_#000] min-w-[120px]">
-                <p className="text-[10px] uppercase text-slate-500 mb-1">{t.streak}</p>
+              <div className="bg-zinc-900 border-2 border-orange-500 px-4 py-2 shadow-[3px_3px_0_#000] min-w-[120px]">
+                <p className="text-[10px] uppercase text-zinc-500 mb-1">{t.streak}</p>
                 <p className="text-orange-400 font-bold flex items-center gap-2">
                   <Flame size={14} />
                   {stats.streak} Hari
                 </p>
               </div>
 
-              <div className="bg-[#1a1b26] border-2 border-yellow-500 px-4 py-2 shadow-[3px_3px_0_#000] min-w-[100px]">
-                <p className="text-[10px] uppercase text-slate-500 mb-1">{t.gold}</p>
+              <div className="bg-zinc-900 border-2 border-yellow-500 px-4 py-2 shadow-[3px_3px_0_#000] min-w-[100px]">
+                <p className="text-[10px] uppercase text-zinc-500 mb-1">{t.gold}</p>
                 <p className="text-yellow-400 font-bold flex items-center gap-2">
                   <Coins size={14} />
                   {stats.gold}
@@ -125,20 +124,19 @@ export default function DashboardBoard({
               </div>
             </div>
 
-            <div className="bg-[#1a1b26] border-2 border-slate-700 p-4">
-              <p className="text-[10px] uppercase text-slate-500 mb-2">{t.sysInsight}</p>
-              <p className="text-sm text-slate-200">{greeting}</p>
+            <div className="bg-zinc-900 border-2 border-zinc-700 p-4">
+              <p className="text-[10px] uppercase text-zinc-500 mb-2">{t.sysInsight}</p>
+              <p className="text-sm text-zinc-200">{greeting}</p>
             </div>
           </div>
 
           {/* QUICK ACTIONS */}
-          <div className="bg-[#1a1b26] border-2 border-slate-700 p-4 shadow-[4px_4px_0_#000]">
-            <p className="text-[10px] uppercase text-slate-500 mb-3">{t.quick}</p>
+          <div className="bg-zinc-900 border-2 border-zinc-700 p-4 shadow-[4px_4px_0_#000]">
+            <p className="text-[10px] uppercase text-zinc-500 mb-3">{t.quick}</p>
             <div className="grid grid-cols-2 gap-3">
               <button
                 onClick={() => onOpenTaskModal(null)}
-               // Contoh untuk tombol "Misi Baru"
-              className="bg-[#24283b] border-2 border-cyan-500 text-cyan-400 px-3 py-3 text-xs font-bold transition-all shadow-[3px_3px_0_#000] 
+              className="bg-zinc-800 border-2 border-cyan-500 text-cyan-400 px-3 py-3 text-xs font-bold transition-all shadow-[3px_3px_0_#000] 
               hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[1px_1px_0_#000] active:translate-x-[3px] active:translate-y-[3px] active:shadow-none"
               >
                 <span className="flex items-center justify-center gap-2">
@@ -149,7 +147,7 @@ export default function DashboardBoard({
 
               <button
                 onClick={() => onOpenFinanceAction("rekening")}
-                className="bg-[#24283b] border-2 border-emerald-500 text-emerald-400 px-3 py-3 text-xs font-bold hover:bg-emerald-500 hover:text-slate-950 transition-all shadow-[3px_3px_0_#000]"
+                className="bg-zinc-800 border-2 border-emerald-500 text-emerald-400 px-3 py-3 text-xs font-bold hover:bg-emerald-500 hover:text-zinc-950 transition-all shadow-[3px_3px_0_#000]"
               >
                 <span className="flex items-center justify-center gap-2">
                   <CreditCard size={14} />
@@ -159,7 +157,7 @@ export default function DashboardBoard({
 
               <button
                 onClick={() => onOpenFinanceAction("tabungan")}
-                className="bg-[#24283b] border-2 border-yellow-500 text-yellow-400 px-3 py-3 text-xs font-bold hover:bg-yellow-500 hover:text-slate-950 transition-all shadow-[3px_3px_0_#000]"
+                className="bg-zinc-800 border-2 border-yellow-500 text-yellow-400 px-3 py-3 text-xs font-bold hover:bg-yellow-500 hover:text-zinc-950 transition-all shadow-[3px_3px_0_#000]"
               >
                 <span className="flex items-center justify-center gap-2">
                   <PiggyBank size={14} />
@@ -169,7 +167,7 @@ export default function DashboardBoard({
 
               <button
                 onClick={() => onOpenFinanceAction("tagihan")} 
-                className="bg-[#24283b] border-2 border-pink-500 text-pink-400 px-3 py-3 text-xs font-bold hover:bg-pink-500 hover:text-slate-950 transition-all shadow-[3px_3px_0_#000]"              >
+                className="bg-zinc-800 border-2 border-pink-500 text-pink-400 px-3 py-3 text-xs font-bold hover:bg-pink-500 hover:text-zinc-950 transition-all shadow-[3px_3px_0_#000]"              >
                 <span className="flex items-center justify-center gap-2">
                   <CalendarClock size={14} />
                   {t.bills}
@@ -179,7 +177,7 @@ export default function DashboardBoard({
 
             <button
               onClick={onGoToFinance}
-              className="w-full mt-3 bg-[#24283b] border-2 border-slate-600 text-slate-300 px-3 py-3 text-xs font-bold hover:border-white hover:text-white transition-all shadow-[3px_3px_0_#000]"
+              className="w-full mt-3 bg-zinc-800 border-2 border-zinc-600 text-zinc-300 px-3 py-3 text-xs font-bold hover:border-white hover:text-white transition-all shadow-[3px_3px_0_#000]"
             >
               <span className="flex items-center justify-center gap-2">
                 <Sparkles size={14} />
@@ -192,7 +190,7 @@ export default function DashboardBoard({
 
       {/* TOP WIDGETS */}
       <div className="grid grid-cols-1 xl:grid-cols-4 gap-6">
-        <div className="bg-[#24283b] border-4 border-amber-500 shadow-[6px_6px_0_#000] p-5 flex flex-col gap-4">
+        <div className="bg-zinc-800 border-4 border-amber-500 shadow-[6px_6px_0_#000] p-5 flex flex-col gap-4">
           <div className="flex items-center gap-2 text-amber-400">
             <Zap size={18} />
             <h2 className="text-sm font-bold uppercase">{t.charStat}</h2>
@@ -200,31 +198,31 @@ export default function DashboardBoard({
 
           <div className="grid grid-cols-3 gap-4">
             <div className="min-w-0">
-              <p className="text-slate-500 text-[10px] uppercase mb-1 truncate">{t.level}</p>
+              <p className="text-zinc-500 text-[10px] uppercase mb-1 truncate">{t.level}</p>
               <p className="text-white font-bold text-xl truncate">{stats.level}</p>
             </div>
             <div className="min-w-0">
-              <p className="text-slate-500 text-[10px] uppercase mb-1 truncate">{t.streak}</p>
+              <p className="text-zinc-500 text-[10px] uppercase mb-1 truncate">{t.streak}</p>
               <p className="text-orange-400 font-bold text-xl truncate">{stats.streak}</p>
             </div>
             <div className="min-w-0">
-              <p className="text-slate-500 text-[10px] uppercase mb-1 truncate">{t.gold}</p>
+              <p className="text-zinc-500 text-[10px] uppercase mb-1 truncate">{t.gold}</p>
               <p className="text-yellow-400 font-bold text-xl truncate">{stats.gold}</p>
             </div>
           </div>
 
-          <div className="mt-auto pt-4 border-t-2 border-slate-700">
-            <div className="flex justify-between text-[10px] text-slate-400 font-bold mb-1.5 uppercase">
+          <div className="mt-auto pt-4 border-t-2 border-zinc-700">
+            <div className="flex justify-between text-[10px] text-zinc-400 font-bold mb-1.5 uppercase">
               <span>{t.expProg}</span>
               <span className="text-amber-400">{stats.exp} / {stats.maxExp}</span>
             </div>
-            <div className="h-2 bg-slate-900 border border-slate-700 overflow-hidden">
+            <div className="h-2 bg-zinc-950 border border-zinc-700 overflow-hidden">
               <div className="h-full bg-amber-400 transition-all duration-500" style={{ width: `${expPercent}%` }} />
             </div>
           </div>
         </div>
 
-        <div className="bg-[#24283b] border-4 border-emerald-500 shadow-[6px_6px_0_#000] p-5 flex flex-col gap-4">
+        <div className="bg-zinc-800 border-4 border-emerald-500 shadow-[6px_6px_0_#000] p-5 flex flex-col gap-4">
           <div className="flex items-center gap-2 text-emerald-400">
             <Wallet size={18} />
             <h2 className="text-sm font-bold uppercase">{t.balOver}</h2>
@@ -232,47 +230,47 @@ export default function DashboardBoard({
 
           <div className="space-y-4 flex-1">
             <div className="min-w-0">
-              <p className="text-slate-500 text-[10px] uppercase mb-1 truncate">{t.cash}</p>
+              <p className="text-zinc-500 text-[10px] uppercase mb-1 truncate">{t.cash}</p>
               <p className="text-white font-bold text-lg truncate" title={`Rp ${totalRekening.toLocaleString()}`}>
                 Rp {totalRekening.toLocaleString()}
               </p>
             </div>
             <div className="min-w-0">
-              <p className="text-slate-500 text-[10px] uppercase mb-1 truncate">{t.asset}</p>
+              <p className="text-zinc-500 text-[10px] uppercase mb-1 truncate">{t.asset}</p>
               <p className="text-white font-bold text-lg truncate" title={`Rp ${totalTabungan.toLocaleString()}`}>
                 Rp {totalTabungan.toLocaleString()}
               </p>
             </div>
           </div>
 
-          <div className="pt-4 border-t-2 border-slate-700 min-w-0 mt-auto">
-            <p className="text-slate-500 text-[10px] uppercase mb-1 truncate">{t.net}</p>
+          <div className="pt-4 border-t-2 border-zinc-700 min-w-0 mt-auto">
+            <p className="text-zinc-500 text-[10px] uppercase mb-1 truncate">{t.net}</p>
             <p className="text-emerald-400 font-bold text-2xl truncate" title={`Rp ${netWorth.toLocaleString()}`}>
               Rp {netWorth.toLocaleString()}
             </p>
           </div>
         </div>
 
-        <div className="bg-[#24283b] border-4 border-yellow-500 shadow-[6px_6px_0_#000] p-5 flex flex-col gap-4">
+        <div className="bg-zinc-800 border-4 border-yellow-500 shadow-[6px_6px_0_#000] p-5 flex flex-col gap-4">
           <div className="flex items-center gap-2 text-yellow-400">
             <Coins size={18} />
             <h2 className="text-sm font-bold uppercase">{t.incSec}</h2>
           </div>
 
           <div className="min-w-0 mb-2">
-              <p className="text-slate-500 text-[10px] uppercase mb-1 truncate">{t.totInc}</p>
+              <p className="text-zinc-500 text-[10px] uppercase mb-1 truncate">{t.totInc}</p>
             <p className="text-yellow-400 font-bold text-2xl truncate" title={`Rp ${totalIncome.toLocaleString()}`}>
               Rp {totalIncome.toLocaleString()}
             </p>
           </div>
 
-          <div className="grid grid-cols-2 gap-4 mt-auto pt-4 border-t-2 border-slate-700">
+          <div className="grid grid-cols-2 gap-4 mt-auto pt-4 border-t-2 border-zinc-700">
             <div className="min-w-0">
-                <p className="text-slate-500 text-[10px] uppercase mb-1 truncate">{t.trans}</p>
+                <p className="text-zinc-500 text-[10px] uppercase mb-1 truncate">{t.trans}</p>
               <p className="text-white font-bold text-lg truncate">{incomeTransactions.length}x</p>
             </div>
             <div className="min-w-0">
-                <p className="text-slate-500 text-[10px] uppercase mb-1 truncate">{t.avg}</p>
+                <p className="text-zinc-500 text-[10px] uppercase mb-1 truncate">{t.avg}</p>
               <p className="text-white font-bold text-lg truncate" title={`Rp ${avgIncome.toLocaleString()}`}>
                 Rp {avgIncome.toLocaleString()}
               </p>
@@ -280,7 +278,7 @@ export default function DashboardBoard({
           </div>
         </div>
 
-        <div className="bg-[#24283b] border-4 border-pink-500 shadow-[6px_6px_0_#000] p-5 flex flex-col gap-4">
+        <div className="bg-zinc-800 border-4 border-pink-500 shadow-[6px_6px_0_#000] p-5 flex flex-col gap-4">
           <div className="flex items-center gap-2 text-pink-400">
             <ScrollText size={18} />
             <h2 className="text-sm font-bold uppercase">{t.prog}</h2>
@@ -288,25 +286,25 @@ export default function DashboardBoard({
 
           <div className="grid grid-cols-3 gap-4">
             <div className="min-w-0">
-              <p className="text-slate-500 text-[10px] uppercase mb-1 truncate">{t.tot}</p>
+              <p className="text-zinc-500 text-[10px] uppercase mb-1 truncate">{t.tot}</p>
               <p className="text-white font-bold text-xl truncate">{totalTasks}</p>
             </div>
             <div className="min-w-0">
-              <p className="text-slate-500 text-[10px] uppercase mb-1 truncate">{t.done}</p>
+              <p className="text-zinc-500 text-[10px] uppercase mb-1 truncate">{t.done}</p>
               <p className="text-emerald-400 font-bold text-xl truncate">{completedTasks}</p>
             </div>
             <div className="min-w-0">
-              <p className="text-slate-500 text-[10px] uppercase mb-1 truncate">{t.pend}</p>
+              <p className="text-zinc-500 text-[10px] uppercase mb-1 truncate">{t.pend}</p>
               <p className="text-pink-400 font-bold text-xl truncate">{pendingTasks}</p>
             </div>
           </div>
 
-          <div className="mt-auto pt-4 border-t-2 border-slate-700">
-            <div className="flex justify-between text-[10px] text-slate-400 font-bold mb-1.5 uppercase">
+          <div className="mt-auto pt-4 border-t-2 border-zinc-700">
+            <div className="flex justify-between text-[10px] text-zinc-400 font-bold mb-1.5 uppercase">
               <span>{t.compRate}</span>
               <span className="text-pink-400">{progress}%</span>
             </div>
-            <div className="h-2 bg-slate-900 border border-slate-700 overflow-hidden">
+            <div className="h-2 bg-zinc-950 border border-zinc-700 overflow-hidden">
               <div className="h-full bg-pink-500 transition-all duration-500" style={{ width: `${progress}%` }} />
             </div>
           </div>
@@ -315,10 +313,10 @@ export default function DashboardBoard({
 
       {/* MAIN WIDGETS */}
       <div className="grid grid-cols-1 xl:grid-cols-[1.2fr_1fr] gap-6">
-        <div className="bg-[#24283b] border-4 border-slate-700 shadow-[6px_6px_0_#000] p-5">
+        <div className="bg-zinc-800 border-4 border-zinc-700 shadow-[6px_6px_0_#000] p-5">
           <div className="flex items-center justify-between mb-4">
               <h2 className="text-sm font-bold text-white uppercase">{t.focus}</h2>
-            <span className="text-[10px] uppercase text-slate-500">
+            <span className="text-[10px] uppercase text-zinc-500">
               {focusTasks.length} {t.taskCount}
             </span>
           </div>
@@ -328,12 +326,12 @@ export default function DashboardBoard({
               focusTasks.map((task) => (
                 <div
                   key={task.id}
-                  className="border-2 border-slate-700 bg-[#1a1b26] p-4 hover:border-cyan-500 transition-all"
+                  className="border-2 border-zinc-700 bg-zinc-900 p-4 hover:border-cyan-500 transition-all"
                 >
                   <div className="flex justify-between items-start gap-3">
                     <div>
                       <p className="text-white font-bold text-base">{task.title}</p>
-                      <div className="flex items-center gap-2 mt-1 text-[10px] uppercase text-slate-500">
+                      <div className="flex items-center gap-2 mt-1 text-[10px] uppercase text-zinc-500">
                         <span>{task.type}</span>
                         <span>•</span>
                         <span>{task.category}</span>
@@ -341,7 +339,7 @@ export default function DashboardBoard({
                     </div>
 
                     <div className="flex flex-col items-end gap-2">
-                      <span className="text-[10px] px-2 py-1 border border-slate-600 text-slate-300 uppercase">
+                      <span className="text-[10px] px-2 py-1 border border-zinc-600 text-zinc-300 uppercase">
                         Lv {task.difficulty}
                       </span>
                       {task.done ? (
@@ -360,8 +358,8 @@ export default function DashboardBoard({
                 </div>
               ))
             ) : (
-              <div className="flex flex-col items-center justify-center py-16 text-slate-500">
-                <div className="w-16 h-16 bg-[#1a1b26] border-4 border-slate-700 border-dashed flex items-center justify-center mb-4">
+              <div className="flex flex-col items-center justify-center py-16 text-zinc-500">
+                <div className="w-16 h-16 bg-zinc-900 border-4 border-zinc-700 border-dashed flex items-center justify-center mb-4">
                   <LayoutDashboard size={24} className="opacity-50" />
                 </div>
                 <p className="text-sm italic">{t.noFocus}</p>
@@ -371,10 +369,10 @@ export default function DashboardBoard({
         </div>
 
         <div className="flex flex-col gap-6">
-          <div className="bg-[#24283b] border-4 border-slate-700 shadow-[6px_6px_0_#000] p-5">
+          <div className="bg-zinc-800 border-4 border-zinc-700 shadow-[6px_6px_0_#000] p-5">
             <div className="flex items-center justify-between mb-4">
                 <h2 className="text-sm font-bold text-white uppercase">{t.recent}</h2>
-              <span className="text-[10px] uppercase text-slate-500">
+              <span className="text-[10px] uppercase text-zinc-500">
                 {recentTransactions.length} {t.logCount}
               </span>
             </div>
@@ -384,11 +382,11 @@ export default function DashboardBoard({
                 recentTransactions.map((log) => (
                   <div
                     key={log.id}
-                    className="border-2 border-slate-700 bg-[#1a1b26] p-3 flex justify-between items-start gap-4"
+                    className="border-2 border-zinc-700 bg-zinc-900 p-3 flex justify-between items-start gap-4"
                   >
                     <div>
                       <p className="text-white font-bold">{log.accountName}</p>
-                      <p className="text-xs text-slate-500">
+                      <p className="text-xs text-zinc-500">
                         {new Date(log.timestamp).toLocaleDateString()} •{" "}
                         {new Date(log.timestamp).toLocaleTimeString()}
                       </p>
@@ -415,15 +413,15 @@ export default function DashboardBoard({
                   </div>
                 ))
               ) : (
-                <p className="text-sm text-slate-500 italic">{t.noRecent}</p>
+                <p className="text-sm text-zinc-500 italic">{t.noRecent}</p>
               )}
             </div>
           </div>
 
-          <div className="bg-[#24283b] border-4 border-slate-700 shadow-[6px_6px_0_#000] p-5">
+          <div className="bg-zinc-800 border-4 border-zinc-700 shadow-[6px_6px_0_#000] p-5">
             <div className="flex items-center justify-between mb-4">
                 <h2 className="text-sm font-bold text-white uppercase">{t.upcoming}</h2>
-              <span className="text-[10px] uppercase text-slate-500">
+              <span className="text-[10px] uppercase text-zinc-500">
                 {upcomingBills.length} {t.itemCount}
               </span>
             </div>
@@ -433,11 +431,11 @@ export default function DashboardBoard({
                 upcomingBills.map((bill) => (
                   <div
                     key={bill.id}
-                    className="border-2 border-slate-700 bg-[#1a1b26] p-3 flex justify-between items-start"
+                    className="border-2 border-zinc-700 bg-zinc-900 p-3 flex justify-between items-start"
                   >
                     <div>
                       <p className="text-white font-bold">{bill.name}</p>
-                      <p className="text-xs text-slate-500">
+                      <p className="text-xs text-zinc-500">
                         {t.due}: {new Date(bill.nextDueDate).toLocaleDateString()}
                       </p>
                     </div>
@@ -447,7 +445,7 @@ export default function DashboardBoard({
                   </div>
                 ))
               ) : (
-                <p className="text-sm text-slate-500 italic">{t.noBills}</p>
+                <p className="text-sm text-zinc-500 italic">{t.noBills}</p>
               )}
             </div>
           </div>

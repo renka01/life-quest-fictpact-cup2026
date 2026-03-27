@@ -144,14 +144,14 @@ export default function SettingsBoard() {
 
   // Komponen Baris Tombol Aksi (Untuk Ubah Nama, dll)
   const SettingAction = ({ label, value, actionText, onClick, danger = false, disabled = false, icon: Icon }: any) => (
-    <div className={`flex flex-col sm:flex-row sm:items-center justify-between p-4 bg-[#24283b] border-2 border-slate-700 transition-colors group gap-3 sm:gap-0 ${disabled ? 'opacity-50 pointer-events-none' : 'hover:border-amber-500'}`}>
+    <div className={`flex flex-col sm:flex-row sm:items-center justify-between p-4 bg-zinc-800 border-2 border-zinc-700 transition-colors group gap-3 sm:gap-0 ${disabled ? 'opacity-50 pointer-events-none' : 'hover:border-amber-500'}`}>
       <div className="flex items-center gap-3">
-        <div className="w-8 h-8 bg-[#1a1b26] border border-slate-600 flex items-center justify-center text-slate-400 group-hover:text-amber-400 transition-colors">
+        <div className="w-8 h-8 bg-zinc-900 border border-zinc-600 flex items-center justify-center text-zinc-400 group-hover:text-amber-400 transition-colors">
           {Icon && <Icon size={16} />}
         </div>
         <div className="flex flex-col text-left">
-          <span className="text-sm font-bold text-slate-200">{label}</span>
-          {value && <span className="text-xs text-slate-500 font-mono">{value}</span>}
+          <span className="text-sm font-bold text-zinc-200">{label}</span>
+          {value && <span className="text-xs text-zinc-500 font-mono">{value}</span>}
         </div>
       </div>
       <button
@@ -160,7 +160,7 @@ export default function SettingsBoard() {
         className={`px-4 py-2 text-xs font-bold uppercase tracking-widest border-2 transition-all shadow-[2px_2px_0_#000] flex items-center justify-center gap-2 ${
           danger
             ? "bg-pink-500/10 border-pink-500 text-pink-400 hover:bg-pink-500 hover:text-white active:translate-y-[2px] active:shadow-none"
-            : "bg-slate-900 border-slate-600 text-amber-400 hover:border-amber-400 hover:bg-amber-400 hover:text-slate-900 active:translate-y-[2px] active:shadow-none"
+            : "bg-zinc-900 border-zinc-600 text-amber-400 hover:border-amber-400 hover:bg-amber-400 hover:text-zinc-900 active:translate-y-[2px] active:shadow-none"
         }`}
       >
         {actionText} <ChevronRight size={14} />
@@ -170,37 +170,37 @@ export default function SettingsBoard() {
 
   // Komponen Baris Dropdown (Select)
   const SettingSelect = ({ label, value, options, onChange, icon: Icon }: any) => (
-    <div className="flex flex-col sm:flex-row sm:items-center justify-between p-4 bg-[#24283b] border-2 border-slate-700 hover:border-amber-500 transition-colors group gap-3 sm:gap-0">
+    <div className="flex flex-col sm:flex-row sm:items-center justify-between p-4 bg-zinc-800 border-2 border-zinc-700 hover:border-amber-500 transition-colors group gap-3 sm:gap-0">
       <div className="flex items-center gap-3">
-        <div className="w-8 h-8 bg-[#1a1b26] border border-slate-600 flex items-center justify-center text-slate-400 group-hover:text-amber-400 transition-colors">
+        <div className="w-8 h-8 bg-zinc-900 border border-zinc-600 flex items-center justify-center text-zinc-400 group-hover:text-amber-400 transition-colors">
           {Icon && <Icon size={16} />}
         </div>
-        <span className="text-sm font-bold text-slate-200">{label}</span>
+        <span className="text-sm font-bold text-zinc-200">{label}</span>
       </div>
       <select
         value={value}
         onChange={(e) => { onChange(e.target.value); playSound('click'); }}
-        className="bg-slate-900 border-2 border-slate-600 text-amber-400 text-xs font-bold uppercase tracking-widest p-2 outline-none focus:border-amber-400 cursor-pointer shadow-[2px_2px_0_#000] min-w-[150px]"
+        className="bg-zinc-900 border-2 border-zinc-600 text-amber-400 text-xs font-bold uppercase tracking-widest p-2 outline-none focus:border-amber-400 cursor-pointer shadow-[2px_2px_0_#000] min-w-[150px]"
       >
-        {options.map((opt: any) => <option key={opt.value} value={opt.value} className="bg-slate-900 text-white">{opt.label}</option>)}
+        {options.map((opt: any) => <option key={opt.value} value={opt.value} className="bg-zinc-900 text-white">{opt.label}</option>)}
       </select>
     </div>
   );
 
   // Komponen Baris Toggle (Switch)
   const SettingToggle = ({ label, checked, onChange, icon: Icon, description }: any) => (
-    <div className="flex flex-col sm:flex-row sm:items-center justify-between p-4 bg-[#24283b] border-2 border-slate-700 hover:border-amber-500 transition-colors group gap-3 sm:gap-0">
+    <div className="flex flex-col sm:flex-row sm:items-center justify-between p-4 bg-zinc-800 border-2 border-zinc-700 hover:border-amber-500 transition-colors group gap-3 sm:gap-0">
       <div className="flex items-center gap-3">
-        <div className="w-8 h-8 bg-[#1a1b26] border border-slate-600 flex items-center justify-center text-slate-400 group-hover:text-amber-400 transition-colors">
+        <div className="w-8 h-8 bg-zinc-900 border border-zinc-600 flex items-center justify-center text-zinc-400 group-hover:text-amber-400 transition-colors">
           {Icon && <Icon size={16} />}
         </div>
         <div className="flex flex-col text-left">
-          <span className="text-sm font-bold text-slate-200">{label}</span>
-          {description && <span className="text-xs text-slate-500 font-mono">{description}</span>}
+          <span className="text-sm font-bold text-zinc-200">{label}</span>
+          {description && <span className="text-xs text-zinc-500 font-mono">{description}</span>}
         </div>
       </div>
-      <button onClick={() => { onChange(!checked); playSound('click'); }} className={`relative w-14 h-7 border-2 transition-colors flex items-center shrink-0 shadow-[2px_2px_0_#000] ${checked ? 'bg-emerald-500/20 border-emerald-500' : 'bg-slate-900 border-slate-600'}`}>
-        <div className={`absolute left-1 w-4 h-4 transition-transform duration-200 ${checked ? 'translate-x-7 bg-emerald-400' : 'translate-x-0 bg-slate-500'}`} />
+      <button onClick={() => { onChange(!checked); playSound('click'); }} className={`relative w-14 h-7 border-2 transition-colors flex items-center shrink-0 shadow-[2px_2px_0_#000] ${checked ? 'bg-emerald-500/20 border-emerald-500' : 'bg-zinc-900 border-zinc-600'}`}>
+        <div className={`absolute left-1 w-4 h-4 transition-transform duration-200 ${checked ? 'translate-x-7 bg-emerald-400' : 'translate-x-0 bg-zinc-500'}`} />
       </button>
     </div>
   );
@@ -221,14 +221,14 @@ export default function SettingsBoard() {
   return (
     <div className="flex flex-col gap-8 max-w-4xl mx-auto w-full pb-10">
       {/* HEADER */}
-      <div className="flex flex-col gap-3 text-left border-b border-slate-700/50 pb-6">
+      <div className="flex flex-col gap-3 text-left border-b border-zinc-700/50 pb-6">
         <h1 className="font-pixel text-sm md:text-base text-white flex items-center gap-3 drop-shadow-[2px_2px_0_#000]">
           <span className="text-amber-500">
             <Settings size={18} />
           </span>
           {t.title}
         </h1>
-        <p className="font-pixel text-[7px] md:text-[8px] text-slate-400 uppercase tracking-widest leading-relaxed">
+        <p className="font-pixel text-[7px] md:text-[8px] text-zinc-400 uppercase tracking-widest leading-relaxed">
           {t.subtitle}
         </p>
       </div>
@@ -257,16 +257,16 @@ export default function SettingsBoard() {
           <Smartphone size={14} /> {t.loginMethod}
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div className="bg-[#24283b] border-2 border-slate-700 p-4 flex items-center justify-between">
-            <span className="text-sm font-bold text-slate-200">Apple</span>
-            <button className="text-[10px] font-bold uppercase border-2 border-slate-600 px-3 py-1.5 text-slate-400 hover:text-white hover:border-white transition-colors">
+          <div className="bg-zinc-800 border-2 border-zinc-700 p-4 flex items-center justify-between">
+            <span className="text-sm font-bold text-zinc-200">Apple</span>
+            <button className="text-[10px] font-bold uppercase border-2 border-zinc-600 px-3 py-1.5 text-zinc-400 hover:text-white hover:border-white transition-colors">
               Connect
             </button>
           </div>
-          <div className="bg-[#24283b] border-2 border-emerald-500/50 p-4 flex items-center justify-between relative overflow-hidden">
+          <div className="bg-zinc-800 border-2 border-emerald-500/50 p-4 flex items-center justify-between relative overflow-hidden">
             <div className="absolute top-0 right-0 w-8 h-8 bg-emerald-500/10 rounded-bl-full" />
             <span className="text-sm font-bold text-emerald-400">Google</span>
-            <span className="text-[10px] font-bold uppercase bg-emerald-500 text-slate-900 px-3 py-1.5 shadow-[2px_2px_0_#000]">
+            <span className="text-[10px] font-bold uppercase bg-emerald-500 text-zinc-900 px-3 py-1.5 shadow-[2px_2px_0_#000]">
               Connected
             </span>
           </div>
@@ -298,7 +298,7 @@ export default function SettingsBoard() {
       </section>
 
       {/* SECTION BARU: TENTANG LIFEQUEST */}
-      <section className="flex flex-col gap-3 mt-4 pt-8 border-t-2 border-slate-700/50">
+      <section className="flex flex-col gap-3 mt-4 pt-8 border-t-2 border-zinc-700/50">
         <h2 className="text-[10px] font-bold text-amber-400 uppercase tracking-widest flex items-center gap-2 mb-2">
           <Info size={14} /> Tentang Daily Dungeon
         </h2>
@@ -311,20 +311,20 @@ export default function SettingsBoard() {
       {/* EDIT MODAL */}
       {editModal.isOpen && (
         <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-[100] flex justify-center items-center p-4">
-          <div className="w-full max-w-md bg-[#1a1b26] border-4 border-amber-500 shadow-[8px_8px_0_#000] flex flex-col animate-in zoom-in duration-200">
-            <div className="bg-[#24283b] border-b-4 border-amber-500 p-4 flex justify-between items-center">
+          <div className="w-full max-w-md bg-zinc-900 border-4 border-amber-500 shadow-[8px_8px_0_#000] flex flex-col animate-in zoom-in duration-200">
+            <div className="bg-zinc-800 border-b-4 border-amber-500 p-4 flex justify-between items-center">
               <h3 className="font-pixel text-[10px] text-amber-400 uppercase tracking-widest">{t.change} {editModal.title}</h3>
-              <button onClick={() => setEditModal({...editModal, isOpen: false})} className="text-slate-400 hover:text-white"><X size={18} /></button>
+              <button onClick={() => setEditModal({...editModal, isOpen: false})} className="text-zinc-400 hover:text-white"><X size={18} /></button>
             </div>
             <div className="p-6">
               {editModal.field === 'bio' ? (
-                <textarea value={editModal.value} onChange={e => setEditModal({...editModal, value: e.target.value})} className="w-full bg-slate-900 border-2 border-slate-600 p-3 text-white outline-none focus:border-amber-400 min-h-[100px] resize-none" placeholder="Tuliskan tentang dirimu..." autoFocus />
+                <textarea value={editModal.value} onChange={e => setEditModal({...editModal, value: e.target.value})} className="w-full bg-zinc-950 border-2 border-zinc-600 p-3 text-white outline-none focus:border-amber-400 min-h-[100px] resize-none" placeholder="Tuliskan tentang dirimu..." autoFocus />
               ) : (
-                <input type="text" value={editModal.value} onChange={e => setEditModal({...editModal, value: e.target.value})} className="w-full bg-slate-900 border-2 border-slate-600 p-3 text-white outline-none focus:border-amber-400" autoFocus />
+                <input type="text" value={editModal.value} onChange={e => setEditModal({...editModal, value: e.target.value})} className="w-full bg-zinc-950 border-2 border-zinc-600 p-3 text-white outline-none focus:border-amber-400" autoFocus />
               )}
             </div>
-            <div className="p-4 border-t-2 border-slate-700 bg-[#24283b] flex justify-end gap-3">
-              <button onClick={() => setEditModal({...editModal, isOpen: false})} className="px-4 py-2 text-xs font-bold text-slate-400 hover:text-white uppercase">{tUi.cancel}</button>
+            <div className="p-4 border-t-2 border-zinc-700 bg-zinc-800 flex justify-end gap-3">
+              <button onClick={() => setEditModal({...editModal, isOpen: false})} className="px-4 py-2 text-xs font-bold text-zinc-400 hover:text-white uppercase">{tUi.cancel}</button>
               <button onClick={handleSaveEdit} className="px-6 py-2 bg-amber-500 text-amber-950 text-xs font-bold uppercase shadow-[4px_4px_0_#000] active:translate-y-[2px] active:shadow-none hover:bg-amber-400">{t.save}</button>
             </div>
           </div>
@@ -334,65 +334,64 @@ export default function SettingsBoard() {
       {/* INFO MODAL */}
       {infoModal.isOpen && (
         <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-[100] flex justify-center items-center p-4">
-          {/* ... (Konten modal info tidak diubah, persis seperti sebelumnya) ... */}
-          <div className="w-full max-w-md bg-[#1a1b26] border-4 border-amber-500 shadow-[8px_8px_0_#000] flex flex-col animate-in zoom-in duration-200">
-            <div className="bg-[#24283b] border-b-4 border-amber-500 p-4 flex justify-between items-center">
+          <div className="w-full max-w-md bg-zinc-900 border-4 border-amber-500 shadow-[8px_8px_0_#000] flex flex-col animate-in zoom-in duration-200">
+            <div className="bg-zinc-800 border-b-4 border-amber-500 p-4 flex justify-between items-center">
               <h3 className="font-pixel text-[10px] text-amber-400 uppercase tracking-widest flex items-center gap-2">
                 {infoModal.type === 'team' ? <><Users size={14} /> Tim Developer</> : <><Globe size={14} /> Sosial</>}
               </h3>
-              <button onClick={() => setInfoModal({ ...infoModal, isOpen: false })} className="text-slate-400 hover:text-white"><X size={18} /></button>
+              <button onClick={() => setInfoModal({ ...infoModal, isOpen: false })} className="text-zinc-400 hover:text-white"><X size={18} /></button>
             </div>
             
-            <div className="p-6 text-slate-300">
+            <div className="p-6 text-zinc-300">
               {infoModal.type === 'team' ? (
                 <div className="flex flex-col gap-4">
-                  <p className="text-xs text-slate-400 mb-2 text-center uppercase tracking-widest">Tim Di Balik Daily Dungeon</p>
+                  <p className="text-xs text-zinc-400 mb-2 text-center uppercase tracking-widest">Tim Di Balik Daily Dungeon</p>
                   
                   <div className="grid grid-cols-3 gap-3">
-                    <a href="https://instagram.com/renhapiz" target="_blank" rel="noreferrer" className="bg-[#24283b] border-2 border-slate-700 p-3 text-center shadow-[4px_4px_0_#0f172a] hover:border-emerald-500 hover:-translate-y-1 transition-all active:translate-y-[2px] active:shadow-none block group">
+                    <a href="https://instagram.com/renhapiz" target="_blank" rel="noreferrer" className="bg-zinc-800 border-2 border-zinc-700 p-3 text-center shadow-[4px_4px_0_#0f172a] hover:border-emerald-500 hover:-translate-y-1 transition-all active:translate-y-[2px] active:shadow-none block group">
                       <p className="font-bold text-emerald-400 text-sm group-hover:text-emerald-300">Faren Hafiza Afanda</p>
-                      <p className="text-[8px] text-slate-500 font-pixel uppercase mt-2">@renhapiz</p>
+                      <p className="text-[8px] text-zinc-500 font-pixel uppercase mt-2">@renhapiz</p>
                     </a>
-                    <a href="https://instagram.com/wldnxd" target="_blank" rel="noreferrer" className="bg-[#24283b] border-2 border-slate-700 p-3 text-center shadow-[4px_4px_0_#0f172a] hover:border-cyan-500 hover:-translate-y-1 transition-all active:translate-y-[2px] active:shadow-none block group">
+                    <a href="https://instagram.com/wldnxd" target="_blank" rel="noreferrer" className="bg-zinc-800 border-2 border-zinc-700 p-3 text-center shadow-[4px_4px_0_#0f172a] hover:border-cyan-500 hover:-translate-y-1 transition-all active:translate-y-[2px] active:shadow-none block group">
                       <p className="font-bold text-cyan-400 text-sm group-hover:text-cyan-300">Wildan Ramadhani Akbar</p>
-                      <p className="text-[8px] text-slate-500 font-pixel uppercase mt-2">@wldnxd</p>
+                      <p className="text-[8px] text-zinc-500 font-pixel uppercase mt-2">@wldnxd</p>
                     </a>
-                    <a href="https://www.instagram.com/rappizr" target="_blank" rel="noreferrer" className="bg-[#24283b] border-2 border-slate-700 p-3 text-center shadow-[4px_4px_0_#0f172a] hover:border-pink-500 hover:-translate-y-1 transition-all active:translate-y-[2px] active:shadow-none block group">
+                    <a href="https://www.instagram.com/rappizr" target="_blank" rel="noreferrer" className="bg-zinc-800 border-2 border-zinc-700 p-3 text-center shadow-[4px_4px_0_#0f172a] hover:border-pink-500 hover:-translate-y-1 transition-all active:translate-y-[2px] active:shadow-none block group">
                       <p className="font-bold text-pink-400 text-sm group-hover:text-pink-300">Mukhammad Raffi Zabra</p>
-                      <p className="text-[8px] text-slate-500 font-pixel uppercase mt-2">@rappizr</p>
+                      <p className="text-[8px] text-zinc-500 font-pixel uppercase mt-2">@rappizr</p>
                     </a>
                   </div>
-                  <p className="text-[10px] text-slate-500 mt-4 text-center italic border-t border-slate-700 pt-4">Dikembangkan untuk FICPACT CUP 2026</p>
+                  <p className="text-[10px] text-zinc-500 mt-4 text-center italic border-t border-zinc-700 pt-4">Dikembangkan untuk FICPACT CUP 2026</p>
                 </div>
               ) : (
                 <div className="flex flex-col gap-4">
-                  <p className="text-xs text-slate-400 mb-2 text-center uppercase tracking-widest">Ikuti Petualangan Kami</p>
+                  <p className="text-xs text-zinc-400 mb-2 text-center uppercase tracking-widest">Ikuti Petualangan Kami</p>
                   
-                  <a href="https://www.instagram.com/renhapiz" target="_blank" rel="noreferrer" className="flex items-center gap-4 bg-[#24283b] border-2 border-pink-600 hover:bg-pink-600/20 transition-colors p-4 shadow-[4px_4px_0_#000] active:translate-y-[2px] active:shadow-none group">
+                  <a href="https://www.instagram.com/renhapiz" target="_blank" rel="noreferrer" className="flex items-center gap-4 bg-zinc-800 border-2 border-pink-600 hover:bg-pink-600/20 transition-colors p-4 shadow-[4px_4px_0_#000] active:translate-y-[2px] active:shadow-none group">
                     <div className="p-2 bg-pink-500/10 rounded-full group-hover:scale-110 transition-transform">
                       <Instagram className="text-pink-500" size={24} />
                     </div>
                     <div className="flex flex-col">
                       <span className="font-bold text-white text-sm tracking-wide">Instagram</span>
-                      <span className="text-[10px] text-slate-400">@renhapiz</span>
+                      <span className="text-[10px] text-zinc-400">@renhapiz</span>
                     </div>
                   </a>
 
-                  <a href="https://github.com/renka01/life-quest-fictpact-cup2026" target="_blank" rel="noreferrer" className="flex items-center gap-4 bg-[#24283b] border-2 border-slate-500 hover:bg-slate-500/20 transition-colors p-4 shadow-[4px_4px_0_#000] active:translate-y-[2px] active:shadow-none group">
-                    <div className="p-2 bg-slate-500/10 rounded-full group-hover:scale-110 transition-transform">
-                      <Github className="text-slate-300" size={24} />
+                  <a href="https://github.com/renka01/life-quest-fictpact-cup2026" target="_blank" rel="noreferrer" className="flex items-center gap-4 bg-zinc-800 border-2 border-zinc-500 hover:bg-zinc-500/20 transition-colors p-4 shadow-[4px_4px_0_#000] active:translate-y-[2px] active:shadow-none group">
+                    <div className="p-2 bg-zinc-500/10 rounded-full group-hover:scale-110 transition-transform">
+                      <Github className="text-zinc-300" size={24} />
                     </div>
                     <div className="flex flex-col">
                       <span className="font-bold text-white text-sm tracking-wide">GitHub Repository</span>
-                      <span className="text-[10px] text-slate-400">Bjorbun Team</span>
+                      <span className="text-[10px] text-zinc-400">Bjorbun Team</span>
                     </div>
                   </a>
                 </div>
               )}
             </div>
             
-            <div className="p-4 border-t-2 border-slate-700 bg-[#24283b] flex justify-center">
-              <button onClick={() => setInfoModal({ ...infoModal, isOpen: false })} className="px-8 py-2 bg-slate-700 text-white text-xs font-bold uppercase shadow-[4px_4px_0_#000] active:translate-y-[2px] active:shadow-none hover:bg-slate-600 transition-colors">Tutup</button>
+            <div className="p-4 border-t-2 border-zinc-700 bg-zinc-800 flex justify-center">
+              <button onClick={() => setInfoModal({ ...infoModal, isOpen: false })} className="px-8 py-2 bg-zinc-700 text-white text-xs font-bold uppercase shadow-[4px_4px_0_#000] active:translate-y-[2px] active:shadow-none hover:bg-zinc-600 transition-colors">Tutup</button>
             </div>
           </div>
         </div>
@@ -401,17 +400,17 @@ export default function SettingsBoard() {
       {/* --- MODAL KONFIRMASI DANGER --- */}
       {confirmModal.isOpen && (
         <div className="fixed inset-0 bg-black/90 backdrop-blur-sm z-[200] flex justify-center items-center p-4">
-          <div className={`w-full max-w-sm bg-[#1a1b26] border-4 ${confirmModal.isDangerAction ? 'border-red-500' : 'border-orange-500'} shadow-[8px_8px_0_#000] flex flex-col animate-in zoom-in-95 duration-200`}>
+          <div className={`w-full max-w-sm bg-zinc-900 border-4 ${confirmModal.isDangerAction ? 'border-red-500' : 'border-orange-500'} shadow-[8px_8px_0_#000] flex flex-col animate-in zoom-in-95 duration-200`}>
             
             {/* Header Modal */}
-            <div className={`bg-[#24283b] border-b-4 ${confirmModal.isDangerAction ? 'border-red-500' : 'border-orange-500'} p-4 flex justify-between items-center`}>
+            <div className={`bg-zinc-800 border-b-4 ${confirmModal.isDangerAction ? 'border-red-500' : 'border-orange-500'} p-4 flex justify-between items-center`}>
               <h3 className={`font-pixel text-[10px] ${confirmModal.isDangerAction ? 'text-red-500' : 'text-orange-500'} uppercase tracking-widest flex items-center gap-2`}>
                 <AlertTriangle size={16} /> {confirmModal.title}
               </h3>
               <button 
                 onClick={() => setConfirmModal({ ...confirmModal, isOpen: false })} 
                 disabled={isLoading}
-                className="text-slate-400 hover:text-white disabled:opacity-50"
+                className="text-zinc-400 hover:text-white disabled:opacity-50"
               >
                 <X size={18} />
               </button>
@@ -426,17 +425,17 @@ export default function SettingsBoard() {
               }`}>
                 {confirmModal.isDangerAction ? <Trash2 size={32} /> : <RefreshCw size={32} />}
               </div>
-              <p className="text-sm text-slate-300 leading-relaxed">
+              <p className="text-sm text-zinc-300 leading-relaxed">
                 {confirmModal.message}
               </p>
             </div>
             
             {/* Action Buttons */}
-            <div className="p-4 border-t-2 border-slate-700 bg-[#24283b] flex flex-col sm:flex-row justify-end gap-3">
+            <div className="p-4 border-t-2 border-zinc-700 bg-zinc-800 flex flex-col sm:flex-row justify-end gap-3">
               <button 
                 onClick={() => setConfirmModal({ ...confirmModal, isOpen: false })} 
                 disabled={isLoading}
-                className="px-4 py-2 text-xs font-bold text-slate-400 hover:bg-slate-800 hover:text-white uppercase transition-colors disabled:opacity-50 w-full sm:w-auto"
+                className="px-4 py-2 text-xs font-bold text-zinc-400 hover:bg-zinc-700 hover:text-white uppercase transition-colors disabled:opacity-50 w-full sm:w-auto"
               >
                 BATAL
               </button>
@@ -467,10 +466,10 @@ export default function SettingsBoard() {
       {/* --- MODAL SUKSES (BARU) --- */}
       {successModal.isOpen && (
         <div className="fixed inset-0 bg-black/90 backdrop-blur-sm z-[200] flex justify-center items-center p-4">
-          <div className="w-full max-w-sm bg-[#1a1b26] border-4 border-emerald-500 shadow-[8px_8px_0_#000] flex flex-col animate-in zoom-in-95 duration-300">
+          <div className="w-full max-w-sm bg-zinc-900 border-4 border-emerald-500 shadow-[8px_8px_0_#000] flex flex-col animate-in zoom-in-95 duration-300">
             
             {/* Header Modal */}
-            <div className="bg-[#24283b] border-b-4 border-emerald-500 p-4 flex justify-between items-center">
+            <div className="bg-zinc-800 border-b-4 border-emerald-500 p-4 flex justify-between items-center">
               <h3 className="font-pixel text-[10px] text-emerald-400 uppercase tracking-widest flex items-center gap-2">
                 <CheckCircle size={16} /> {successModal.title}
               </h3>
@@ -481,16 +480,16 @@ export default function SettingsBoard() {
               <div className="w-16 h-16 mx-auto mb-4 border-2 flex items-center justify-center bg-emerald-500/10 border-emerald-500 text-emerald-500 animate-bounce">
                 <CheckCircle size={32} />
               </div>
-              <p className="text-sm text-slate-300 leading-relaxed font-bold">
+              <p className="text-sm text-zinc-300 leading-relaxed font-bold">
                 {successModal.message}
               </p>
             </div>
             
             {/* Action Button */}
-            <div className="p-4 border-t-2 border-slate-700 bg-[#24283b] flex justify-center">
+            <div className="p-4 border-t-2 border-zinc-700 bg-zinc-800 flex justify-center">
               <button 
                 onClick={handleSuccessClose} 
-                className="px-8 py-2 text-xs font-bold uppercase shadow-[4px_4px_0_#000] active:translate-y-[2px] active:shadow-none transition-all w-full bg-emerald-500 text-slate-900 hover:bg-emerald-400"
+                className="px-8 py-2 text-xs font-bold uppercase shadow-[4px_4px_0_#000] active:translate-y-[2px] active:shadow-none transition-all w-full bg-emerald-500 text-zinc-900 hover:bg-emerald-400"
               >
                 LANJUTKAN
               </button>

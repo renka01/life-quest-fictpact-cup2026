@@ -81,19 +81,19 @@ export default function CalendarBoard() {
 
   return (
     <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 h-full flex flex-col relative">
-      <div className="flex flex-col md:flex-row md:justify-between md:items-end gap-4 mb-6 shrink-0 border-b border-slate-700/50 pb-6">
+      <div className="flex flex-col md:flex-row md:justify-between md:items-end gap-4 mb-6 shrink-0 border-b border-zinc-700/50 pb-6">
         <div className="flex flex-col gap-3 text-left">
           <h1 className="font-pixel text-sm md:text-base text-white flex items-center gap-3 drop-shadow-[2px_2px_0_#000]">
             <span className="text-emerald-500"><CalIcon size={18} /></span>
             {t.title}
           </h1>
-          <p className="font-pixel text-[7px] md:text-[8px] text-slate-400 uppercase leading-relaxed tracking-widest">
+          <p className="font-pixel text-[7px] md:text-[8px] text-zinc-400 uppercase leading-relaxed tracking-widest">
             {t.desc}
           </p>
         </div>
 
         {/* Navigator Bulan */}
-        <div className="flex items-center gap-4 bg-[#24283b] border-2 border-emerald-500 px-4 py-2 shadow-[4px_4px_0_#000] shrink-0 w-full md:w-auto justify-between md:justify-center">
+        <div className="flex items-center gap-4 bg-zinc-800 border-2 border-emerald-500 px-4 py-2 shadow-[4px_4px_0_#000] shrink-0 w-full md:w-auto justify-between md:justify-center">
           <button onClick={prevMonth} className="text-emerald-500 hover:text-white transition-colors active:scale-90">
             <ChevronLeft size={20} />
           </button>
@@ -106,10 +106,10 @@ export default function CalendarBoard() {
         </div>
       </div>
 
-      <div className="flex-1 bg-[#24283b] border-4 border-slate-700 p-4 shadow-[8px_8px_0_#000] flex flex-col">
+      <div className="flex-1 bg-zinc-800 border-4 border-zinc-700 p-4 shadow-[8px_8px_0_#000] flex flex-col">
         <div className="grid grid-cols-7 gap-2 mb-2 shrink-0">
           {daysInWeek.map(day => (
-            <div key={day} className="text-center font-bold text-slate-500 text-xs py-2 border-b-2 border-slate-700">
+            <div key={day} className="text-center font-bold text-zinc-500 text-xs py-2 border-b-2 border-zinc-700">
               {day}
             </div>
           ))}
@@ -127,13 +127,13 @@ export default function CalendarBoard() {
                 onClick={() => handleDayClick(dayNum, dayTasks)}
                 className={`border-2 p-2 relative group transition-colors flex flex-col overflow-hidden ${
                   dayNum 
-                    ? `cursor-pointer hover:border-amber-500 hover:bg-[#1a1b26]/80 ${isToday ? 'border-amber-700 bg-[#1a1b26] shadow-[inset_0_0_10px_rgba(6,182,212,0.2)]' : 'border-slate-700 bg-[#1a1b26]'}`
+                    ? `cursor-pointer hover:border-amber-500 hover:bg-zinc-900/80 ${isToday ? 'border-amber-700 bg-zinc-900 shadow-[inset_0_0_10px_rgba(6,182,212,0.2)]' : 'border-zinc-700 bg-zinc-900'}`
                     : 'border-transparent bg-transparent opacity-30 pointer-events-none'
                 }`}
               >
                 {/* Header Tanggal & Info Klik */}
                 <div className="flex justify-between items-start shrink-0">
-                  <span className={`text-sm font-bold ${isToday ? 'text-cyan-400' : hasTasks ? 'text-slate-200' : 'text-slate-500'}`}>
+                  <span className={`text-sm font-bold ${isToday ? 'text-cyan-400' : hasTasks ? 'text-zinc-200' : 'text-zinc-500'}`}>
                     {dayNum || ''}
                   </span>
                   {dayNum && (
@@ -156,12 +156,12 @@ export default function CalendarBoard() {
                         className={`p-1 flex items-center gap-1.5 overflow-hidden border ${
                           task.done 
                             ? 'bg-emerald-900/30 border-emerald-800/50' 
-                            : `bg-slate-800 border-slate-600 border-l-2 border-l-${themeColor}-500`
+                            : `bg-zinc-800 border-zinc-600 border-l-2 border-l-${themeColor}-500`
                         }`}
                       >
                         <Icon size={10} className={task.done ? 'text-emerald-500 shrink-0' : `text-${themeColor}-400 shrink-0`} />
                         <span className={`text-[9px] truncate tracking-wide ${
-                          task.done ? 'text-emerald-500/70 line-through' : 'text-slate-300'
+                          task.done ? 'text-emerald-500/70 line-through' : 'text-zinc-300'
                         }`}>
                           {task.title}
                         </span>
@@ -171,7 +171,7 @@ export default function CalendarBoard() {
 
                   {/* Indikator Jika Lebih dari 2 */}
                   {dayTasks.length > 2 && (
-                    <div className="text-[8px] font-bold text-slate-400 text-center mt-0.5 bg-[#1a1b26] border border-slate-700 py-0.5">
+                    <div className="text-[8px] font-bold text-zinc-400 text-center mt-0.5 bg-zinc-900 border border-zinc-700 py-0.5">
                       +{dayTasks.length - 2} {t.others}
                     </div>
                   )}
@@ -185,15 +185,15 @@ export default function CalendarBoard() {
       {/* MODAL / POP-UP DETAIL HARI */}
       {selectedDayTasks && (
         <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-[100] flex justify-center items-center p-4 animate-in fade-in duration-200" onClick={() => setSelectedDayTasks(null)}>
-          <div className="w-full max-w-md bg-[#1a1b26] border-4 border-slate-600 flex flex-col shadow-[8px_8px_0_#000] animate-in zoom-in-95 duration-200" onClick={e => e.stopPropagation()}>
+          <div className="w-full max-w-md bg-zinc-900 border-4 border-zinc-600 flex flex-col shadow-[8px_8px_0_#000] animate-in zoom-in-95 duration-200" onClick={e => e.stopPropagation()}>
             
             {/* Header Pop-up */}
-            <div className="bg-[#24283b] border-b-4 border-slate-600 p-4 flex justify-between items-center">
+            <div className="bg-zinc-800 border-b-4 border-zinc-600 p-4 flex justify-between items-center">
               <h3 className="font-pixel text-[10px] text-white tracking-widest uppercase flex items-center gap-2">
                 <CalIcon size={14} className="text-cyan-400" />
                 {selectedDayTasks.date} {monthNames[selectedDayTasks.month]} {selectedDayTasks.year}
               </h3>
-              <button onClick={() => setSelectedDayTasks(null)} className="text-slate-400 hover:text-white transition-colors"><X size={18} /></button>
+              <button onClick={() => setSelectedDayTasks(null)} className="text-zinc-400 hover:text-white transition-colors"><X size={18} /></button>
             </div>
 
             {/* List Misi */}
@@ -202,11 +202,11 @@ export default function CalendarBoard() {
                 selectedDayTasks.tasks.map((task: any) => {
                   const isTodo = task.type === 'todo';
                   return (
-                    <div key={task.id} className={`p-3 border-2 flex items-center justify-between transition-colors ${task.done ? 'bg-emerald-950/40 border-emerald-800/50' : 'bg-[#24283b] border-slate-700'}`}>
+                    <div key={task.id} className={`p-3 border-2 flex items-center justify-between transition-colors ${task.done ? 'bg-emerald-950/40 border-emerald-800/50' : 'bg-zinc-800 border-zinc-700'}`}>
                       <div className="flex items-center gap-3">
-                        {task.done ? <CheckCircle2 size={18} className="text-emerald-500 shrink-0" /> : <CircleDashed size={18} className="text-slate-500 shrink-0" />}
+                        {task.done ? <CheckCircle2 size={18} className="text-emerald-500 shrink-0" /> : <CircleDashed size={18} className="text-zinc-500 shrink-0" />}
                         <div className="flex flex-col overflow-hidden">
-                          <span className={`text-sm font-bold truncate ${task.done ? 'text-emerald-500/70 line-through' : 'text-slate-200'}`}>
+                          <span className={`text-sm font-bold truncate ${task.done ? 'text-emerald-500/70 line-through' : 'text-zinc-200'}`}>
                             {task.title}
                           </span>
                           <span className={`text-[9px] uppercase font-bold tracking-wider ${isTodo ? 'text-pink-400' : 'text-cyan-400'}`}>
@@ -227,7 +227,7 @@ export default function CalendarBoard() {
                   );
                 })
               ) : (
-                <div className="py-8 flex flex-col items-center justify-center text-slate-500 gap-2">
+                <div className="py-8 flex flex-col items-center justify-center text-zinc-500 gap-2">
                   <Swords size={32} className="opacity-20" />
                   <p className="text-xs font-bold uppercase tracking-wider">{t.empty}</p>
                   <p className="text-[10px] text-center">{t.emptyDesc}</p>

@@ -43,7 +43,7 @@ const RetroTransition = ({ isActive }: { isActive: boolean }) => {
 
   return (
     <div className="absolute inset-0 z-[9999] pointer-events-none flex flex-col">
-      <div className="bg-[#1a1b26] w-full animate-shutter-top border-b-4 border-amber-500 shadow-[0_0_50px_rgba(251,191,36,0.5)] z-20"></div>
+      <div className="bg-zinc-900 w-full animate-shutter-top border-b-4 border-amber-500 shadow-[0_0_50px_rgba(251,191,36,0.5)] z-20"></div>
 
       <div className="absolute inset-0 flex items-center justify-center z-30">
         <span className="font-pixel text-2xl text-white tracking-[0.5em] animate-text-fade drop-shadow-[0_0_10px_rgba(255,255,255,0.8)]">
@@ -51,7 +51,7 @@ const RetroTransition = ({ isActive }: { isActive: boolean }) => {
         </span>
       </div>
 
-      <div className="bg-[#1a1b26] w-full animate-shutter-bottom border-t-4 border-amber-500 shadow-[0_0_50px_rgba(251,191,36,0.5)] mt-auto z-20"></div>
+      <div className="bg-zinc-900 w-full animate-shutter-bottom border-t-4 border-amber-500 shadow-[0_0_50px_rgba(251,191,36,0.5)] mt-auto z-20"></div>
     </div>
   );
 };
@@ -173,7 +173,7 @@ export default function Home() {
 
   if (!isMounted) {
     return (
-      <div className="h-screen w-full bg-[#1a1b26] flex items-center justify-center">
+      <div className="h-screen w-full bg-zinc-900 flex items-center justify-center">
         <span className="font-pixel text-2xl text-white tracking-[0.5em] animate-pulse drop-shadow-[0_0_10px_rgba(255,255,255,0.8)]">
           LOADING
         </span>
@@ -183,7 +183,7 @@ export default function Home() {
 
   // 1. JIKA BELUM LOGIN (accountName kosong), jangan render apapun biar kena push router
   if (!userProfile?.accountName) {
-    return <div className="h-screen w-full bg-[#1a1b26]" />;
+    return <div className="h-screen w-full bg-zinc-900" />;
   }
 
   // 2. JIKA SUDAH LOGIN TAPI BELUM PILIH KARAKTER (gender kosong)
@@ -210,20 +210,20 @@ export default function Home() {
 case "Misi":
         return (
           <div className="animate-in fade-in slide-in-from-left-4 duration-500 flex flex-col h-full">
-            <div className="flex flex-col md:flex-row md:justify-between md:items-end gap-4 mb-6 shrink-0 border-b border-slate-700/50 pb-6">
+            <div className="flex flex-col md:flex-row md:justify-between md:items-end gap-4 mb-6 shrink-0 border-b border-zinc-700/50 pb-6">
               <div className="flex flex-col gap-3 text-left">
                 <h1 className="font-pixel text-sm md:text-base text-white flex items-center gap-3 drop-shadow-[2px_2px_0_#000] uppercase">
                   <span className="text-amber-500"><CheckSquare size={18} /></span> 
                   {translations[settings?.language || 'id']?.tasks?.log || "LOG MISI"}
                 </h1>
-                <p className="font-pixel text-[7px] md:text-[8px] text-slate-400 uppercase leading-relaxed tracking-widest">
+                <p className="font-pixel text-[7px] md:text-[8px] text-zinc-400 uppercase leading-relaxed tracking-widest">
                   {translations[settings?.language || 'id']?.tasks?.logDesc || "STATUS MISI DAN OPERASI HARIAN."}
                 </p>
               </div>
 
               <button
                 onClick={() => openAddModal(null, false)}
-                className="bg-[#24283b] border-2 border-amber-500 text-amber-400 hover:bg-amber-500 hover:text-slate-900 px-6 py-2.5 rounded-none flex items-center justify-center gap-2 text-[10px] font-pixel transition-all shadow-[4px_4px_0_#000] active:translate-y-[2px] active:shadow-[2px_2px_0_#000] shrink-0 uppercase"
+                className="bg-zinc-800 border-2 border-amber-500 text-amber-400 hover:bg-amber-500 hover:text-zinc-900 px-6 py-2.5 rounded-none flex items-center justify-center gap-2 text-[10px] font-pixel transition-all shadow-[4px_4px_0_#000] active:translate-y-[2px] active:shadow-[2px_2px_0_#000] shrink-0 uppercase"
               >
                 <Plus size={14} /> {translations[settings?.language || 'id']?.tasks?.new || "MISI BARU"}
               </button>
@@ -281,11 +281,11 @@ case "Misi":
 
       default:
         return (
-          <div className="flex flex-col items-center justify-center h-full text-slate-500 animate-in zoom-in duration-300">
-            <div className="w-24 h-24 bg-[#24283b] rounded-none flex items-center justify-center mb-6 border-4 border-slate-700 border-dashed">
+          <div className="flex flex-col items-center justify-center h-full text-zinc-500 animate-in zoom-in duration-300">
+            <div className="w-24 h-24 bg-zinc-800 rounded-none flex items-center justify-center mb-6 border-4 border-zinc-700 border-dashed">
               <Settings size={40} className="animate-spin-slow opacity-50" />
             </div>
-            <h2 className="text-2xl font-bold text-slate-300 mb-2">Fitur Belum Tersedia</h2>
+            <h2 className="text-2xl font-bold text-zinc-300 mb-2">Fitur Belum Tersedia</h2>
             <p className="text-sm max-w-md text-center">
               Modul <span className="text-purple-400 font-bold">{activeMenu}</span> sedang dalam pengembangan.
             </p>
@@ -308,25 +308,25 @@ case "Misi":
         return (
           <>
             <div className="relative flex-1">
-              <Search size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500" />
+              <Search size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-500" />
               <input
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder={`${tPage.search}...`}
-                className="w-full bg-[#24283b] border-2 border-slate-600 rounded-none py-2.5 pl-12 pr-4 text-sm outline-none focus:border-purple-500 transition-all placeholder:text-slate-500 text-slate-200 shadow-[4px_4px_0_#000]"
+                className="w-full bg-zinc-800 border-2 border-zinc-600 rounded-none py-2.5 pl-12 pr-4 text-sm outline-none focus:border-purple-500 transition-all placeholder:text-zinc-500 text-zinc-200 shadow-[4px_4px_0_#000]"
               />
             </div>
 
-            <div className="relative shrink-0 flex items-center bg-[#24283b] border-2 border-slate-600 rounded-none px-4 py-2.5 shadow-[4px_4px_0_#000]">
-              <Filter size={16} className="text-slate-500 mr-2" />
+            <div className="relative shrink-0 flex items-center bg-zinc-800 border-2 border-zinc-600 rounded-none px-4 py-2.5 shadow-[4px_4px_0_#000]">
+              <Filter size={16} className="text-zinc-500 mr-2" />
               <select
                 value={activeCategory}
                 onChange={(e) => setActiveCategory(e.target.value)}
-                className="bg-transparent text-sm text-slate-200 outline-none cursor-pointer appearance-none pr-4"
+                className="bg-transparent text-sm text-zinc-200 outline-none cursor-pointer appearance-none pr-4"
               >
                 {availableCategories.map((cat) => (
-                  <option key={cat} value={cat} className="bg-slate-900">
+                  <option key={cat} value={cat} className="bg-zinc-900">
                     {cat === "Semua" ? tPage.allCat : cat}
                   </option>
                 ))}
@@ -338,19 +338,19 @@ case "Misi":
         return (
           <>
             <div className="relative flex-1">
-              <Search size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500" />
-              <input type="text" value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} placeholder={`${tPage.search} di ${activeMenu}...`} className="w-full bg-[#24283b] border-2 border-slate-600 rounded-none py-2.5 pl-12 pr-4 text-sm outline-none focus:border-amber-500 transition-all placeholder:text-slate-500 text-slate-200 shadow-[4px_4px_0_#000]" />
+              <Search size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-500" />
+              <input type="text" value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} placeholder={`${tPage.search} di ${activeMenu}...`} className="w-full bg-zinc-800 border-2 border-zinc-600 rounded-none py-2.5 pl-12 pr-4 text-sm outline-none focus:border-amber-500 transition-all placeholder:text-zinc-500 text-zinc-200 shadow-[4px_4px_0_#000]" />
             </div>
-            <div className="relative shrink-0 flex items-center bg-[#24283b] border-2 border-slate-600 rounded-none px-4 py-2.5 shadow-[4px_4px_0_#000]">
-              <Filter size={16} className="text-slate-500 mr-2" />
-              <select value={shopCategory} onChange={(e) => setShopCategory(e.target.value)} className="bg-transparent text-sm text-slate-200 outline-none cursor-pointer appearance-none pr-4">
-                <option value="all" className="bg-slate-900">{tPage.allCat}</option>
-                <option value="weapon" className="bg-slate-900">{tPage.weapon}</option>
-                <option value="armor" className="bg-slate-900">{tPage.armor}</option>
-                <option value="helmet" className="bg-slate-900">{tPage.helmet}</option>
-                <option value="cloak" className="bg-slate-900">{tPage.cloak}</option>
-                <option value="accessory" className="bg-slate-900">{tPage.acc}</option>
-                <option value="potion" className="bg-slate-900">{tPage.potion}</option>
+            <div className="relative shrink-0 flex items-center bg-zinc-800 border-2 border-zinc-600 rounded-none px-4 py-2.5 shadow-[4px_4px_0_#000]">
+              <Filter size={16} className="text-zinc-500 mr-2" />
+              <select value={shopCategory} onChange={(e) => setShopCategory(e.target.value)} className="bg-transparent text-sm text-zinc-200 outline-none cursor-pointer appearance-none pr-4">
+                <option value="all" className="bg-zinc-900">{tPage.allCat}</option>
+                <option value="weapon" className="bg-zinc-900">{tPage.weapon}</option>
+                <option value="armor" className="bg-zinc-900">{tPage.armor}</option>
+                <option value="helmet" className="bg-zinc-900">{tPage.helmet}</option>
+                <option value="cloak" className="bg-zinc-900">{tPage.cloak}</option>
+                <option value="accessory" className="bg-zinc-900">{tPage.acc}</option>
+                <option value="potion" className="bg-zinc-900">{tPage.potion}</option>
               </select>
             </div>
           </>
@@ -359,15 +359,15 @@ case "Misi":
         return (
           <>
             <div className="relative flex-1">
-              <Search size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500" />
-              <input type="text" value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} placeholder={`${tPage.search} di ${activeMenu}...`} className="w-full bg-[#24283b] border-2 border-slate-600 rounded-none py-2.5 pl-12 pr-4 text-sm outline-none focus:border-emerald-500 transition-all placeholder:text-slate-500 text-slate-200 shadow-[4px_4px_0_#000]" />
+              <Search size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-500" />
+              <input type="text" value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} placeholder={`${tPage.search} di ${activeMenu}...`} className="w-full bg-zinc-800 border-2 border-zinc-600 rounded-none py-2.5 pl-12 pr-4 text-sm outline-none focus:border-emerald-500 transition-all placeholder:text-zinc-500 text-zinc-200 shadow-[4px_4px_0_#000]" />
             </div>
-            <div className="relative shrink-0 flex items-center bg-[#24283b] border-2 border-slate-600 rounded-none px-4 py-2.5 shadow-[4px_4px_0_#000]">
-              <Filter size={16} className="text-slate-500 mr-2" />
-              <select value={financeCategory} onChange={(e) => setFinanceCategory(e.target.value)} className="bg-transparent text-sm text-slate-200 outline-none cursor-pointer appearance-none pr-4">
-                <option value="all" className="bg-slate-900">{tPage.allAcc}</option>
-                <option value="rekening" className="bg-slate-900">{tPage.wallet}</option>
-                <option value="tabungan" className="bg-slate-900">{tPage.saving}</option>
+            <div className="relative shrink-0 flex items-center bg-zinc-800 border-2 border-zinc-600 rounded-none px-4 py-2.5 shadow-[4px_4px_0_#000]">
+              <Filter size={16} className="text-zinc-500 mr-2" />
+              <select value={financeCategory} onChange={(e) => setFinanceCategory(e.target.value)} className="bg-transparent text-sm text-zinc-200 outline-none cursor-pointer appearance-none pr-4">
+                <option value="all" className="bg-zinc-900">{tPage.allAcc}</option>
+                <option value="rekening" className="bg-zinc-900">{tPage.wallet}</option>
+                <option value="tabungan" className="bg-zinc-900">{tPage.saving}</option>
               </select>
             </div>
           </>
@@ -383,14 +383,14 @@ case "Misi":
 
   // Desain Quote Header Baru
   const HeaderQuote = ({ text }: { text: string }) => (
-    <div className="hidden md:flex items-center gap-3 px-4 py-2.5 bg-[#24283b] border-2 border-slate-600 shadow-[4px_4px_0_#000] w-full max-w-xl">
+    <div className="hidden md:flex items-center gap-3 px-4 py-2.5 bg-zinc-800 border-2 border-zinc-600 shadow-[4px_4px_0_#000] w-full max-w-xl">
       <div className="w-2 h-2 bg-purple-500 rounded-none animate-pulse shrink-0"></div>
-      <p className="text-xs text-slate-300 font-mono italic tracking-wide">&quot;{text}&quot;</p>
+      <p className="text-xs text-zinc-300 font-mono italic tracking-wide">&quot;{text}&quot;</p>
     </div>
   );
 
   return (
-    <div className="h-screen w-full bg-[#1a1b26] text-slate-200 font-mono flex overflow-hidden selection:bg-purple-500 selection:text-white relative">
+    <div className="h-screen w-full bg-zinc-900 text-zinc-200 font-mono flex overflow-hidden selection:bg-purple-500 selection:text-white relative">
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
 
@@ -400,8 +400,8 @@ case "Misi":
         }
 
         ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-track { background: #0f172a; }
-        ::-webkit-scrollbar-thumb { background: #334155; border-radius: 10px; }
+        ::-webkit-scrollbar-track { background: #18181b; }
+        ::-webkit-scrollbar-thumb { background: #3f3f46; border-radius: 10px; }
 
         ::-webkit-calendar-picker-indicator {
           filter: invert(0.8) sepia(1) saturate(5) hue-rotate(350deg);
@@ -427,13 +427,13 @@ case "Misi":
       <Navbar activeMenu={activeMenu} setActiveMenu={handleMenuChange} />
 
       <div className="flex-1 flex flex-col h-full relative z-10 min-w-0">
-        <header className="min-h-20 bg-[#1a1b26] border-b-4 border-slate-700 flex flex-col lg:flex-row justify-between items-center gap-4 p-4 lg:px-8 z-50 shrink-0">
+        <header className="min-h-20 bg-zinc-900 border-b-4 border-zinc-700 flex flex-col lg:flex-row justify-between items-center gap-4 p-4 lg:px-8 z-50 shrink-0">
           <div className="flex items-center gap-4 w-full lg:w-2/3 max-w-2xl relative">
             {renderHeaderContent()}
           </div>
 
           <div className="flex items-center justify-end gap-4 w-full lg:w-auto">
-            <div className="flex items-center gap-4 px-4 py-1.5 bg-[#24283b] border-2 border-slate-600 rounded-none shadow-[inset_2px_2px_4px_rgba(0,0,0,0.5)]">
+            <div className="flex items-center gap-4 px-4 py-1.5 bg-zinc-800 border-2 border-zinc-600 rounded-none shadow-[inset_2px_2px_4px_rgba(0,0,0,0.5)]">
               <div className="flex items-center gap-1.5 text-amber-400 font-pixel text-[8px]">
                 <Coins size={14} /> {stats.gold}
               </div>
@@ -447,29 +447,29 @@ case "Misi":
             <div className="relative">
               <button
                 onClick={() => { setIsNotifOpen(!isNotifOpen); setIsSettingsOpen(false); }}
-                className={`text-slate-400 hover:text-white transition-colors relative ${isNotifOpen ? "text-white" : ""}`}
+                className={`text-zinc-400 hover:text-white transition-colors relative ${isNotifOpen ? "text-white" : ""}`}
               >
                 <Bell size={20} />
                 {hasClaimableQuests && (
-                  <span className="absolute -top-1 -right-1 w-3 h-3 bg-pink-500 rounded-none border-2 border-[#1a1b26] animate-pulse"></span>
+                  <span className="absolute -top-1 -right-1 w-3 h-3 bg-pink-500 rounded-none border-2 border-zinc-900 animate-pulse"></span>
                 )}
               </button>
 
               {showCoinAnim && (
-                <div className="absolute top-full mt-4 right-0 w-max bg-[#24283b] border-2 border-amber-500 px-4 py-2.5 rounded-none shadow-[4px_4px_0_#000] flex items-center gap-3 animate-in slide-in-from-top-2 fade-in duration-300 z-[60] pointer-events-none text-left">
+                <div className="absolute top-full mt-4 right-0 w-max bg-zinc-800 border-2 border-amber-500 px-4 py-2.5 rounded-none shadow-[4px_4px_0_#000] flex items-center gap-3 animate-in slide-in-from-top-2 fade-in duration-300 z-[60] pointer-events-none text-left">
                    <Coins size={16} className="text-amber-400 animate-bounce" />
                    <div className="flex flex-col">
-                     <span className="text-[9px] text-slate-400 font-bold uppercase tracking-wider mb-0.5">{tSyslog.income}</span>
+                     <span className="text-[9px] text-zinc-400 font-bold uppercase tracking-wider mb-0.5">{tSyslog.income}</span>
                      <span className="text-amber-400 font-pixel text-xs drop-shadow-sm">+{coinPopup.amount} Gold</span>
                    </div>
                 </div>
               )}
 
               {isNotifOpen && (
-                <div className="absolute right-0 mt-4 w-80 bg-[#1a1b26] border-4 border-slate-700 rounded-none shadow-[8px_8px_0_#000] z-[100] animate-in fade-in slide-in-from-top-2 overflow-hidden text-left">
-                  <div className="p-4 border-b-4 border-slate-700 flex justify-between items-center bg-[#24283b]">
+                <div className="absolute right-0 mt-4 w-80 bg-zinc-900 border-4 border-zinc-700 rounded-none shadow-[8px_8px_0_#000] z-[100] animate-in fade-in slide-in-from-top-2 overflow-hidden text-left">
+                  <div className="p-4 border-b-4 border-zinc-700 flex justify-between items-center bg-zinc-800">
                     <span className="font-bold text-sm text-white uppercase tracking-widest">{tSyslog.title}</span>
-                    <button onClick={() => setIsNotifOpen(false)} className="text-slate-500 hover:text-white">
+                    <button onClick={() => setIsNotifOpen(false)} className="text-zinc-500 hover:text-white">
                       <X size={16} />
                     </button>
                   </div>
@@ -477,15 +477,15 @@ case "Misi":
                   <div className="p-4 flex flex-col gap-4 max-h-[75vh] overflow-y-auto custom-scrollbar">
                     {/* DAILY QUESTS SECTION */}
                     <div className="flex flex-col gap-3">
-                      <h4 className="text-[10px] font-bold text-amber-400 uppercase tracking-widest border-b-2 border-slate-700 pb-2 mb-1 flex items-center gap-2">
+                      <h4 className="text-[10px] font-bold text-amber-400 uppercase tracking-widest border-b-2 border-zinc-700 pb-2 mb-1 flex items-center gap-2">
                         <CheckSquare size={14}/> {tSyslog.dailyQuests}
                       </h4>
                       
                       {/* Quest 1: Login */}
-                      <div className={`flex flex-col gap-2 p-3 border-2 ${dp.loginClaimed ? 'bg-emerald-950/20 border-emerald-900/50' : 'bg-[#24283b] border-slate-600'}`}>
+                      <div className={`flex flex-col gap-2 p-3 border-2 ${dp.loginClaimed ? 'bg-emerald-950/20 border-emerald-900/50' : 'bg-zinc-800 border-zinc-600'}`}>
                         <div className="flex items-center justify-between">
                           <div className="flex flex-col gap-0.5">
-                            <span className={`text-xs font-bold ${dp.loginClaimed ? 'text-emerald-500/70 line-through' : 'text-slate-200'}`}>{tSyslog.login}</span>
+                            <span className={`text-xs font-bold ${dp.loginClaimed ? 'text-emerald-500/70 line-through' : 'text-zinc-200'}`}>{tSyslog.login}</span>
                             <span className="text-[9px] text-amber-400 font-pixel mt-1">15 XP | 10 G</span>
                           </div>
                           {dp.loginClaimed ? (
@@ -497,12 +497,12 @@ case "Misi":
                       </div>
 
                       {/* Quest 2: Selesaikan 3 Misi */}
-                      <div className={`flex flex-col gap-2 p-3 border-2 ${dp.taskClaimed ? 'bg-emerald-950/20 border-emerald-900/50' : 'bg-[#24283b] border-slate-600'}`}>
+                      <div className={`flex flex-col gap-2 p-3 border-2 ${dp.taskClaimed ? 'bg-emerald-950/20 border-emerald-900/50' : 'bg-zinc-800 border-zinc-600'}`}>
                         <div className="flex items-center justify-between">
                           <div className="flex flex-col gap-0.5 w-full pr-4">
-                            <span className={`text-xs font-bold ${dp.taskClaimed ? 'text-emerald-500/70 line-through' : 'text-slate-200'}`}>{tSyslog.ops3}</span>
+                            <span className={`text-xs font-bold ${dp.taskClaimed ? 'text-emerald-500/70 line-through' : 'text-zinc-200'}`}>{tSyslog.ops3}</span>
                             <span className="text-[9px] text-amber-400 font-pixel mt-1 mb-1">30 XP | 20 G</span>
-                            <div className="w-full bg-slate-900 h-1.5 border border-slate-700">
+                            <div className="w-full bg-zinc-900 h-1.5 border border-zinc-700">
                                <div className="bg-amber-400 h-full transition-all" style={{ width: `${Math.min(100, (dp.tasksCompleted / 3) * 100)}%` }}></div>
                             </div>
                           </div>
@@ -511,16 +511,16 @@ case "Misi":
                           ) : dp.tasksCompleted >= 3 ? (
                             <button onClick={() => handleClaimReward('task')} className="px-3 py-1.5 bg-amber-500 text-amber-950 text-[10px] font-bold uppercase hover:bg-amber-400 transition-all shadow-[2px_2px_0_#000] active:translate-y-[2px] active:shadow-none shrink-0">{tSyslog.claim}</button>
                           ) : (
-                            <span className="text-[10px] text-slate-500 font-bold shrink-0">{dp.tasksCompleted}/3</span>
+                            <span className="text-[10px] text-zinc-500 font-bold shrink-0">{dp.tasksCompleted}/3</span>
                           )}
                         </div>
                       </div>
 
                       {/* Quest 3: Kalahkan 1 Boss */}
-                      <div className={`flex flex-col gap-2 p-3 border-2 ${dp.bossClaimed ? 'bg-emerald-950/20 border-emerald-900/50' : 'bg-[#24283b] border-slate-600'}`}>
+                      <div className={`flex flex-col gap-2 p-3 border-2 ${dp.bossClaimed ? 'bg-emerald-950/20 border-emerald-900/50' : 'bg-zinc-800 border-zinc-600'}`}>
                         <div className="flex items-center justify-between">
                           <div className="flex flex-col gap-0.5">
-                            <span className={`text-xs font-bold ${dp.bossClaimed ? 'text-emerald-500/70 line-through' : 'text-slate-200'}`}>{tSyslog.boss1}</span>
+                            <span className={`text-xs font-bold ${dp.bossClaimed ? 'text-emerald-500/70 line-through' : 'text-zinc-200'}`}>{tSyslog.boss1}</span>
                             <span className="text-[9px] text-amber-400 font-pixel mt-1">50 XP | 30 G</span>
                           </div>
                           {dp.bossClaimed ? (
@@ -528,21 +528,21 @@ case "Misi":
                           ) : dp.bossesDefeated >= 1 ? (
                             <button onClick={() => handleClaimReward('boss')} className="px-3 py-1.5 bg-amber-500 text-amber-950 text-[10px] font-bold uppercase hover:bg-amber-400 transition-all shadow-[2px_2px_0_#000] active:translate-y-[2px] active:shadow-none shrink-0">{tSyslog.claim}</button>
                           ) : (
-                            <span className="text-[10px] text-slate-500 font-bold shrink-0">{dp.bossesDefeated}/1</span>
+                            <span className="text-[10px] text-zinc-500 font-bold shrink-0">{dp.bossesDefeated}/1</span>
                           )}
                         </div>
                       </div>
                     </div>
 
                     {(!isTaskCreated || !isTaskCompleted) && (
-                      <div className="mt-2 pt-4 border-t-2 border-slate-700 border-dashed">
-                        <h4 className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-3">{tSyslog.onboarding}</h4>
+                      <div className="mt-2 pt-4 border-t-2 border-zinc-700 border-dashed">
+                        <h4 className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest mb-3">{tSyslog.onboarding}</h4>
                         <div className="mt-1 mb-3">
-                          <div className="flex justify-between text-[10px] font-bold mb-1.5 text-slate-300 uppercase">
+                          <div className="flex justify-between text-[10px] font-bold mb-1.5 text-zinc-300 uppercase">
                             <span>{tSyslog.advProg}</span>
                             <span>{onboardingProgress}%</span>
                           </div>
-                          <div className="h-2 bg-slate-900 border border-slate-700 rounded-none overflow-hidden">
+                          <div className="h-2 bg-zinc-900 border border-zinc-700 rounded-none overflow-hidden">
                             <div className="h-full bg-amber-400 transition-all duration-500" style={{ width: `${onboardingProgress}%` }}></div>
                           </div>
                         </div>
@@ -553,7 +553,7 @@ case "Misi":
                               <CheckSquare size={14} className="text-pink-500 shrink-0 mt-0.5" />
                               <div className="flex flex-col">
                                 <span className="text-xs font-bold text-pink-400">{tSyslog.createFirst}</span>
-                                <span className="text-[10px] text-slate-400">{tSyslog.usePlus}</span>
+                                <span className="text-[10px] text-zinc-400">{tSyslog.usePlus}</span>
                               </div>
                             </div>
                           ) : (
@@ -561,7 +561,7 @@ case "Misi":
                               <Check size={14} className="text-emerald-500 shrink-0 mt-0.5" />
                               <div className="flex flex-col">
                                 <span className="text-xs font-bold text-emerald-400 line-through">{tSyslog.createFirst}</span>
-                                <span className="text-[10px] text-slate-500">{tSyslog.done}</span>
+                                <span className="text-[10px] text-zinc-500">{tSyslog.done}</span>
                               </div>
                             </div>
                           )}
@@ -571,7 +571,7 @@ case "Misi":
                               <CheckSquare size={14} className="text-pink-500 shrink-0 mt-0.5" />
                               <div className="flex flex-col">
                                 <span className="text-xs font-bold text-pink-400">{tSyslog.finishFirst}</span>
-                                <span className="text-[10px] text-slate-400">{tSyslog.checkFirst}</span>
+                                <span className="text-[10px] text-zinc-400">{tSyslog.checkFirst}</span>
                               </div>
                             </div>
                           ) : (
@@ -579,7 +579,7 @@ case "Misi":
                               <Check size={14} className="text-emerald-500 shrink-0 mt-0.5" />
                               <div className="flex flex-col">
                                 <span className="text-xs font-bold text-emerald-400 line-through">{tSyslog.finishFirst}</span>
-                                <span className="text-[10px] text-slate-500">{tSyslog.done}</span>
+                                <span className="text-[10px] text-zinc-500">{tSyslog.done}</span>
                               </div>
                             </div>
                           )}
@@ -594,15 +594,15 @@ case "Misi":
             <div className="relative">
               <button
                 onClick={() => { setIsSettingsOpen(!isSettingsOpen); setIsNotifOpen(false); }}
-                className={`text-slate-400 hover:text-white transition-colors ${isSettingsOpen ? "text-white" : ""}`}
+                className={`text-zinc-400 hover:text-white transition-colors ${isSettingsOpen ? "text-white" : ""}`}
               >
                 <Settings size={20} />
               </button>
               
               {isSettingsOpen && (
-                <div className="absolute right-0 mt-4 w-48 bg-[#1a1b26] border-4 border-slate-700 rounded-none shadow-[8px_8px_0_#000] z-[100] animate-in fade-in slide-in-from-top-2 overflow-hidden text-left">
+                <div className="absolute right-0 mt-4 w-48 bg-zinc-900 border-4 border-zinc-700 rounded-none shadow-[8px_8px_0_#000] z-[100] animate-in fade-in slide-in-from-top-2 overflow-hidden text-left">
                   <div className="flex flex-col">
-                    <button onClick={() => { setActiveMenu("Pencapaian"); setIsSettingsOpen(false); }} className="px-4 py-3 text-xs font-bold text-slate-300 hover:bg-[#24283b] hover:text-white text-left border-b border-slate-800 transition-colors flex items-center gap-2"><Trophy size={14} /> {tDropdown.achievements}</button>                    <button onClick={() => { setActiveMenu("Pengaturan"); setIsSettingsOpen(false); }} className="px-4 py-3 text-xs font-bold text-slate-300 hover:bg-[#24283b] hover:text-white text-left border-b border-slate-800 transition-colors flex items-center gap-2"><Settings size={14} /> {tDropdown.settings}</button>
+                    <button onClick={() => { setActiveMenu("Pencapaian"); setIsSettingsOpen(false); }} className="px-4 py-3 text-xs font-bold text-zinc-300 hover:bg-zinc-800 hover:text-white text-left border-b border-zinc-800 transition-colors flex items-center gap-2"><Trophy size={14} /> {tDropdown.achievements}</button>                    <button onClick={() => { setActiveMenu("Pengaturan"); setIsSettingsOpen(false); }} className="px-4 py-3 text-xs font-bold text-zinc-300 hover:bg-zinc-800 hover:text-white text-left border-b border-zinc-800 transition-colors flex items-center gap-2"><Settings size={14} /> {tDropdown.settings}</button>
                     <button onClick={handleLogout} className="px-4 py-3 text-xs font-bold text-pink-500 hover:bg-pink-500/10 text-left transition-colors flex items-center gap-2"><LogOut size={14} /> {tDropdown.logout}</button>
                   </div>
                 </div>
@@ -611,7 +611,7 @@ case "Misi":
           </div>
         </header>
 
-        <main className="flex-1 overflow-y-auto overflow-x-hidden bg-[#1a1b26] p-4 lg:p-8 pb-24 md:pb-8 custom-scrollbar">
+        <main className="flex-1 overflow-y-auto overflow-x-hidden bg-zinc-900 p-4 lg:p-8 pb-24 md:pb-8 custom-scrollbar">
           {renderContent()}
         </main>
       </div>

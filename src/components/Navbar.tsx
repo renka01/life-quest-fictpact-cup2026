@@ -20,10 +20,10 @@ export default function Navbar({ activeMenu, setActiveMenu }: { activeMenu: stri
   const t = translations[settings?.language || 'id']?.nav || translations['id'].nav;
 
   return (
-    <aside className="fixed bottom-0 left-0 w-full h-16 bg-[#1a1b26] border-t-4 border-slate-700 flex flex-row z-50 shadow-[0_-4px_0_rgba(0,0,0,0.5)] md:static md:h-screen md:w-20 lg:w-64 md:flex-col md:border-t-0 md:border-r-4 md:shadow-[4px_0_0_rgba(0,0,0,0.5)]">
+    <aside className="fixed bottom-0 left-0 w-full h-16 bg-zinc-900 border-t-4 border-zinc-700 flex flex-row z-50 shadow-[0_-4px_0_rgba(0,0,0,0.5)] md:static md:h-screen md:w-20 lg:w-64 md:flex-col md:border-t-0 md:border-r-4 md:shadow-[4px_0_0_rgba(0,0,0,0.5)]">
       
       {/* Logo Section */}
-      <div className="hidden md:flex h-20 w-full items-center justify-center border-b-4 border-slate-700 shrink-0 bg-[#24283b]">
+      <div className="hidden md:flex h-20 w-full items-center justify-center border-b-4 border-zinc-700 shrink-0 bg-zinc-800">
         <img 
           src="/logo.png"
           alt="Daily Dungeon" 
@@ -50,8 +50,8 @@ export default function Navbar({ activeMenu, setActiveMenu }: { activeMenu: stri
               onClick={() => setActiveMenu(item.id)}
               className={`flex flex-col md:flex-row items-center justify-center md:justify-start gap-1 md:gap-4 px-1 py-1 md:px-4 md:py-3 border-0 md:border-2 transition-all group rounded-none flex-1 md:flex-none w-full ${
                 isActive 
-                  ? 'text-amber-400 md:bg-[#24283b] md:border-amber-500 md:shadow-[4px_4px_0_#000] md:translate-x-[-2px] md:translate-y-[-2px]' 
-                  : 'text-slate-500 hover:text-slate-300 md:border-transparent md:hover:bg-slate-800 md:hover:border-slate-600'
+                  ? 'text-amber-400 md:bg-zinc-800 md:border-amber-500 md:shadow-[4px_4px_0_#000] md:translate-x-[-2px] md:translate-y-[-2px]' 
+                  : 'text-zinc-500 hover:text-zinc-300 md:border-transparent md:hover:bg-zinc-800 md:hover:border-zinc-600'
               }`}
             >
               <item.icon size={20} className={isActive ? 'text-amber-400 drop-shadow-[0_0_5px_rgba(251,191,36,0.8)]' : ''} />

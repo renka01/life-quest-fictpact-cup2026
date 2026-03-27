@@ -121,23 +121,23 @@ export default function FinanceFormModal({ isOpen, onClose, type }: FinanceModal
   };
 
   const isRekening = type === 'rekening';
-  const borderClass = isRekening ? 'border-emerald-500 shadow-emerald-500/20' : 'border-cyan-500 shadow-cyan-500/20';
+  const borderClass = isRekening ? 'border-emerald-500' : 'border-cyan-500';
   const textAccent = isRekening ? 'text-emerald-400' : 'text-cyan-400';
-  const btnAccent = isRekening ? 'bg-emerald-600 hover:bg-emerald-500' : 'bg-cyan-600 hover:bg-cyan-500';
+  const btnAccent = isRekening ? 'bg-emerald-500 hover:bg-emerald-400 text-zinc-950' : 'bg-cyan-500 hover:bg-cyan-400 text-zinc-950';
 
   return (
     <div className="fixed inset-0 bg-black/90 backdrop-blur-sm z-[100] flex items-center justify-center p-4">
-      <div className={`bg-[#020617] border-2 ${borderClass} rounded-lg w-full max-w-md overflow-hidden animate-in zoom-in duration-200 shadow-2xl`}>
+      <div className={`bg-zinc-900 border-4 ${borderClass} rounded-none w-full max-w-md overflow-hidden animate-in zoom-in duration-200 shadow-[8px_8px_0_#000]`}>
         
         {/* HEADER */}
-        <div className="p-4 border-b border-slate-800 flex justify-between items-center bg-slate-950">
+        <div className="p-4 border-b-4 border-zinc-700 flex justify-between items-center bg-zinc-800">
           <div className="flex items-center gap-2">
             {isRekening ? <CreditCard size={16} className="text-emerald-400"/> : <PiggyBank size={16} className="text-cyan-400"/>}
             <h2 className="font-pixel text-[10px] text-white tracking-widest uppercase italic">
-              {isRekening ? 'REGISTRASI_VAULT_AKUN' : 'SET_INVESTMENT_TARGET'}
+              {isRekening ? 'REGISTRASI VAULT AKUN' : 'SET INVESTMENT TARGET'}
             </h2>
           </div>
-          <button onClick={onClose} className="text-slate-500 hover:text-pink-500 transition-colors">
+          <button onClick={onClose} className="text-zinc-500 hover:text-pink-500 transition-colors">
             <X size={20}/>
           </button>
         </div>
@@ -146,7 +146,7 @@ export default function FinanceFormModal({ isOpen, onClose, type }: FinanceModal
           
           {/* 1. PILIH PROVIDER */}
           <div className="flex flex-col gap-2">
-            <label className="text-[10px] font-pixel text-slate-500 uppercase italic tracking-tighter">
+            <label className="text-[10px] font-pixel text-zinc-500 uppercase italic tracking-tighter">
               {isRekening ? 'Pilih Bank / E-Wallet*' : 'Pilih Instrumen Investasi*'}
             </label>
             <div className="grid grid-cols-3 gap-2">
@@ -157,10 +157,10 @@ export default function FinanceFormModal({ isOpen, onClose, type }: FinanceModal
                     key={opt.id}
                     type="button"
                     onClick={() => setProvider(opt.name)}
-                    className={`p-2 border rounded flex flex-col items-center justify-center gap-1 transition-all ${
+                    className={`p-2 border-2 rounded-none flex flex-col items-center justify-center gap-1 transition-all ${
                       isActive 
                       ? (isRekening ? 'border-emerald-500 bg-emerald-500/10 text-emerald-400' : 'border-cyan-500 bg-cyan-500/10 text-cyan-400')
-                      : 'border-slate-800 bg-slate-900/50 text-slate-500 hover:border-slate-600'
+                      : 'border-zinc-700 bg-zinc-800 text-zinc-500 hover:border-zinc-500'
                     }`}
                   >
                     <opt.icon size={14}/>
@@ -173,13 +173,13 @@ export default function FinanceFormModal({ isOpen, onClose, type }: FinanceModal
 
           {/* 2. NAMA ASET */}
           <div className="flex flex-col gap-2">
-            <label className="text-[10px] font-pixel text-slate-500 uppercase italic tracking-tighter">Identitas Aset*</label>
+            <label className="text-[10px] font-pixel text-zinc-500 uppercase italic tracking-tighter">Identitas Aset*</label>
             <input 
               type="text" 
               value={name} 
               onChange={(e) => setName(e.target.value)}
               placeholder={isRekening ? "Contoh: Tabungan Utama" : "Contoh: Dana Haji"}
-              className={`w-full bg-slate-950 border border-slate-700 rounded p-3 text-sm text-slate-200 outline-none transition-all font-mono ${isRekening ? 'focus:border-emerald-500' : 'focus:border-cyan-500'}`}
+              className={`w-full bg-zinc-950 border-2 border-zinc-700 rounded-none p-3 text-sm text-zinc-200 outline-none transition-all font-mono ${isRekening ? 'focus:border-emerald-500' : 'focus:border-cyan-500'}`}
             />
           </div>
 
@@ -193,7 +193,7 @@ export default function FinanceFormModal({ isOpen, onClose, type }: FinanceModal
                   step="0.01"
                   value={weight || ""} 
                   onChange={(e) => handleWeightChange(parseFloat(e.target.value) || 0)}
-                  className="w-full bg-slate-950 border border-yellow-500/30 rounded p-3 text-sm text-yellow-500 outline-none focus:border-yellow-500 font-mono"
+                  className="w-full bg-zinc-950 border-2 border-yellow-500/50 rounded-none p-3 text-sm text-yellow-500 outline-none focus:border-yellow-500 font-mono"
                   placeholder="0.00"
                 />
                 <div className="absolute right-4 top-1/2 -translate-y-1/2 text-yellow-500/50 text-[10px] font-pixel uppercase">GR</div>
@@ -203,7 +203,7 @@ export default function FinanceFormModal({ isOpen, onClose, type }: FinanceModal
 
           {/* 4. SALDO AWAL */}
           <div className="flex flex-col gap-2">
-            <label className="text-[10px] font-pixel text-slate-500 uppercase italic tracking-tighter">Initial Credits (IDR)</label>
+            <label className="text-[10px] font-pixel text-zinc-500 uppercase italic tracking-tighter">Initial Credits (IDR)</label>
             <div className="relative group">
               <div className={`absolute left-4 top-1/2 -translate-y-1/2 font-mono font-bold z-10 ${textAccent}`}>Rp</div>
               <input 
@@ -211,7 +211,7 @@ export default function FinanceFormModal({ isOpen, onClose, type }: FinanceModal
                 value={balance || ""}
                 onChange={(e) => handleBalanceChange(parseInt(e.target.value) || 0)}
                 placeholder="0"
-                className={`w-full bg-slate-950 border border-slate-800 h-14 pl-12 pr-4 font-mono font-bold text-white italic text-xl shadow-inner outline-none transition-all ${isRekening ? 'focus:border-emerald-500' : 'focus:border-cyan-500'}`}
+                className={`w-full bg-zinc-950 border-2 border-zinc-700 h-14 pl-12 pr-4 font-mono font-bold text-white italic text-xl shadow-inner outline-none transition-all rounded-none ${isRekening ? 'focus:border-emerald-500' : 'focus:border-cyan-500'}`}
               />
             </div>
           </div>
@@ -219,26 +219,26 @@ export default function FinanceFormModal({ isOpen, onClose, type }: FinanceModal
           {/* 5. TARGET GOAL */}
           {!isRekening && (
             <div className="flex flex-col gap-2">
-              <label className="text-[10px] font-pixel text-slate-500 uppercase italic tracking-tighter">Target Goal (IDR)</label>
+              <label className="text-[10px] font-pixel text-zinc-500 uppercase italic tracking-tighter">Target Goal (IDR)</label>
               <input 
                 type="number" 
                 value={target} 
                 onChange={(e) => setTarget(parseInt(e.target.value) || 0)}
-                className="w-full bg-slate-950 border border-slate-700 rounded p-3 text-sm text-cyan-400 outline-none focus:border-cyan-500 font-mono italic shadow-inner"
+                className="w-full bg-zinc-950 border-2 border-zinc-700 rounded-none p-3 text-sm text-cyan-400 outline-none focus:border-cyan-500 font-mono italic shadow-inner"
               />
             </div>
           )}
         </div>
 
         {/* FOOTER */}
-        <div className="p-4 bg-slate-950 border-t border-slate-800 flex justify-end gap-3 font-pixel">
-          <button onClick={onClose} className="px-4 py-2 text-[10px] font-bold text-slate-500 hover:text-white uppercase italic transition-colors">Batal</button>
+        <div className="p-4 bg-zinc-800 border-t-2 border-zinc-700 flex justify-end gap-3 font-pixel">
+          <button onClick={onClose} className="px-4 py-2 text-[10px] font-bold text-zinc-400 hover:text-white uppercase italic transition-colors">Batal</button>
           <button 
             type="button"
             onClick={handleSubmit} 
-            className={`px-6 py-2 ${btnAccent} text-white text-[10px] font-bold rounded shadow-lg active:scale-95 transition-all uppercase italic`}
+            className={`px-6 py-2 ${btnAccent} text-[10px] font-bold rounded-none shadow-[4px_4px_0_#000] active:translate-y-[2px] active:shadow-none transition-all uppercase italic`}
           >
-            SINKRONISASI_DATA
+            SINKRONISASI DATA
           </button>
         </div>
       </div>
