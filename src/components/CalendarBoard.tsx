@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import { ChevronLeft, ChevronRight, Swords, Flame, Calendar as CalIcon, X, CheckCircle2, CircleDashed } from 'lucide-react';
 import { useStore } from '@/store/useStore'; 
+import { ExtendedTask } from './TaskModals';
 import { translations } from '@/utils/translations';
 
 export default function CalendarBoard() {
@@ -11,7 +12,7 @@ export default function CalendarBoard() {
   const [currentDate, setCurrentDate] = useState(new Date());
   
   // State untuk menyimpan data hari yang sedang di-klik
-  const [selectedDayTasks, setSelectedDayTasks] = useState<{ date: number, month: number, year: number, tasks: any[] } | null>(null);
+  const [selectedDayTasks, setSelectedDayTasks] = useState<{ date: number, month: number, year: number, tasks: ExtendedTask[] } | null>(null);
 
   const prevMonth = () => { setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() - 1, 1)); playSound('click'); };
   const nextMonth = () => { setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 1)); playSound('click'); };
@@ -38,7 +39,7 @@ export default function CalendarBoard() {
     const currentCalDate = new Date(year, month, dayNum);
     currentCalDate.setHours(0, 0, 0, 0);
 
-    return tasks.filter((task: any) => {
+    return tasks.filter((task: ExtendedTask) => {
       // 1. Logika TARGET UTAMA (type: 'todo')
       if (task.type === 'todo' && task.dueDate) {
         const due = new Date(task.dueDate);
@@ -69,7 +70,7 @@ export default function CalendarBoard() {
     });
   };
 
-  const handleDayClick = (dayNum: number | null, dayTasks: any[]) => {
+  const handleDayClick = (dayNum: number | null, dayTasks: ExtendedTask[]) => {
     if (!dayNum) return;
     setSelectedDayTasks({
       date: dayNum,
@@ -108,7 +109,7 @@ export default function CalendarBoard() {
 
       <div className="flex-1 bg-zinc-800 border-4 border-zinc-700 p-4 shadow-[8px_8px_0_#000] flex flex-col">
         <div className="grid grid-cols-7 gap-2 mb-2 shrink-0">
-          {daysInWeek.map(day => (
+          {daysInWeek.map((day: string, index: number) => (
             <div key={day} className="text-center font-bold text-zinc-500 text-xs py-2 border-b-2 border-zinc-700">
               {day}
             </div>
@@ -145,7 +146,7 @@ export default function CalendarBoard() {
 
                 {/* List Misi Terbatas (Max 2) */}
                 <div className="mt-1 flex flex-col gap-1 overflow-hidden pb-1 pointer-events-none">
-                  {dayTasks.slice(0, 2).map((task: any) => {
+                  {dayTasks.slice(0, 2).map((task: ExtendedTask) => {
                     const isTodo = task.type === 'todo';
                     const themeColor = isTodo ? 'pink' : 'cyan';
                     const Icon = isTodo ? (task.isBoss ? Flame : CalIcon) : Swords;
@@ -199,7 +200,7 @@ export default function CalendarBoard() {
             {/* List Misi */}
             <div className="p-5 flex flex-col gap-3 max-h-[60vh] overflow-y-auto">
               {selectedDayTasks.tasks.length > 0 ? (
-                selectedDayTasks.tasks.map((task: any) => {
+                selectedDayTasks.tasks.map((task: ExtendedTask) => {
                   const isTodo = task.type === 'todo';
                   return (
                     <div key={task.id} className={`p-3 border-2 flex items-center justify-between transition-colors ${task.done ? 'bg-emerald-950/40 border-emerald-800/50' : 'bg-zinc-800 border-zinc-700'}`}>
