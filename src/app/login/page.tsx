@@ -12,7 +12,7 @@ import { useStore } from '@/store/useStore';
 
 /** Shadow Knight */
 const ShadowKnight = () => (
-  <svg viewBox="-4 0 40 32" width="100%" height="100%" style={{ imageRendering: 'pixelated' }}>
+  <svg viewBox="-6 -2 44 36" width="100%" height="100%" preserveAspectRatio="xMidYMax meet" overflow="visible" style={{ imageRendering: 'pixelated', overflow: 'visible' }}>
     <style>{`@keyframes sk{0%,100%{transform:translateY(0)}50%{transform:translateY(1px)}}.skc{animation:sk 0.9s steps(2) infinite}`}</style>
     <g className="skc">
       <path d="M11 5 H21 V10 H22 V12 H24 V20 H25 V23 H23 V20 H22 V28 H18 V24 H14 V28 H10 V20 H9 V23 H7 V20 H8 V12 H10 V10 H11 V5 Z M8 20 H11 V24 H8 V20 Z" fill="black"/>
@@ -59,7 +59,7 @@ const ShadowKnight = () => (
 
 /** Arcane Mage */
 const ArcaneMage = () => (
-  <svg viewBox="-4 0 40 32" width="100%" height="100%" style={{ imageRendering: 'pixelated' }}>
+  <svg viewBox="-6 -2 44 36" width="100%" height="100%" preserveAspectRatio="xMidYMax meet" overflow="visible" style={{ imageRendering: 'pixelated', overflow: 'visible' }}>
     <style>{`@keyframes am{0%,100%{transform:translateY(0)}50%{transform:translateY(1px)}}.amc{animation:am 1s steps(2) infinite}`}</style>
     <g className="amc">
       <path d="M11 5 H21 V10 H22 V12 H24 V20 H25 V23 H23 V20 H22 V28 H18 V24 H14 V28 H10 V20 H9 V23 H7 V20 H8 V12 H10 V10 H11 V5 Z M8 20 H11 V24 H8 V20 Z" fill="black"/>
@@ -103,7 +103,7 @@ const ArcaneMage = () => (
 
 /** Void Ranger */
 const VoidRanger = () => (
-  <svg viewBox="-4 0 40 32" width="100%" height="100%" style={{ imageRendering: 'pixelated' }}>
+  <svg viewBox="-6 -2 44 36" width="100%" height="100%" preserveAspectRatio="xMidYMax meet" overflow="visible" style={{ imageRendering: 'pixelated', overflow: 'visible' }}>
     <style>{`@keyframes vr{0%,100%{transform:translateY(0)}50%{transform:translateY(1px)}}.vrc{animation:vr 0.8s steps(2) infinite}`}</style>
     <g className="vrc">
       <path d="M11 5 H21 V10 H22 V12 H24 V20 H25 V23 H23 V20 H22 V28 H18 V24 H14 V28 H10 V20 H9 V23 H7 V20 H8 V12 H10 V10 H11 V5 Z M8 20 H11 V24 H8 V20 Z" fill="black"/>
@@ -497,7 +497,19 @@ export default function LoginPage() {
       }
 
       if (result?.ok) {
-        localStorage.removeItem('lifequest-storage');
+        useStore.setState({
+          userProfile: { accountName: "", nickname: "", gender: null, avatarId: null, level: 1, gold: 0, exp: 0 },
+          dailyProgress: { loginClaimed: false, tasksCompleted: 0, taskClaimed: false, bossesDefeated: 0, bossClaimed: false },
+          inventory: [],
+          equippedItems: {},
+          tasks: [],
+          accounts: [],
+          transactions: [],
+          recurringTransactions: [],
+          stats: { level: 1, hp: 50, maxHp: 50, exp: 0, maxExp: 300, gold: 0, streak: 0, lastLoginDate: "" },
+          activeFocusSession: { isActive: false, bossId: null, duration: 0, endTime: 0 },
+          hasLoadedFromCloud: false
+        });
         setShowTransition(true);
 
         try {
@@ -543,7 +555,19 @@ export default function LoginPage() {
   };
 
   const handleOAuthLogin = (provider: 'google' | 'github') => {
-    localStorage.removeItem('lifequest-storage');
+    useStore.setState({
+      userProfile: { accountName: "", nickname: "", gender: null, avatarId: null, level: 1, gold: 0, exp: 0 },
+      dailyProgress: { loginClaimed: false, tasksCompleted: 0, taskClaimed: false, bossesDefeated: 0, bossClaimed: false },
+      inventory: [],
+      equippedItems: {},
+      tasks: [],
+      accounts: [],
+      transactions: [],
+      recurringTransactions: [],
+      stats: { level: 1, hp: 50, maxHp: 50, exp: 0, maxExp: 300, gold: 0, streak: 0, lastLoginDate: "" },
+      activeFocusSession: { isActive: false, bossId: null, duration: 0, endTime: 0 },
+      hasLoadedFromCloud: false
+    });
     setLoading(true);
     
     const options: Record<string, string> | undefined = 
@@ -677,14 +701,14 @@ export default function LoginPage() {
           <div className="flex flex-col items-center text-center pt-4 lg:pt-12 px-2 lg:px-8 w-full">
             
             {/* Karakter Berkumpul */}
-            <div className="flex items-end justify-center gap-4 sm:gap-8 md:gap-12 mb-8 md:mb-12 h-32 sm:h-48 md:h-72 w-full">
-              <div className="w-24 h-24 sm:w-36 sm:h-36 md:w-56 md:h-56 shrink-0 transform transition-transform duration-500 hover:-translate-y-4">
+            <div className="flex items-end justify-center gap-2 sm:gap-6 md:gap-10 lg:gap-4 xl:gap-8 mb-8 md:mb-12 h-28 sm:h-40 md:h-56 lg:h-40 xl:h-56 w-full">
+              <div className="w-20 h-20 sm:w-32 sm:h-32 md:w-48 md:h-48 lg:w-32 lg:h-32 xl:w-40 xl:h-40 shrink-0 transform transition-transform duration-500 hover:-translate-y-4">
                 <ShadowKnight/>
               </div>
-              <div className="w-25 h-25 sm:w-40 sm:h-40 md:w-72 md:h-72 shrink-0 transform -translate-y-4 md:-translate-y-8 z-10 transition-transform duration-500 hover:-translate-y-12">
+              <div className="w-24 h-24 sm:w-40 sm:h-40 md:w-64 md:h-64 lg:w-40 lg:h-40 xl:w-56 xl:h-56 shrink-0 transform -translate-y-4 md:-translate-y-8 z-10 transition-transform duration-500 hover:-translate-y-12">
                 <VoidRanger/>
               </div>
-              <div className="w-24 h-24 sm:w-36 sm:h-36 md:w-56 md:h-56 shrink-0 transform transition-transform duration-500 hover:-translate-y-4">
+              <div className="w-20 h-20 sm:w-32 sm:h-32 md:w-48 md:h-48 lg:w-32 lg:h-32 xl:w-40 xl:h-40 shrink-0 transform transition-transform duration-500 hover:-translate-y-4">
                 <ArcaneMage/>
               </div>
             </div>

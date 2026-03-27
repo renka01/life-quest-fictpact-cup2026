@@ -306,6 +306,11 @@ export const useStore = create<LifeQuestStore>()(
         set((state) => ({
           ...state,
           ...cloudState,
+          // PENTING: Jangan timpa pengaturan bahasa lokal dengan data cloud
+                    settings: {
+                        ...(cloudState.settings || state.settings),
+                        language: state.settings?.language || cloudState.settings?.language || 'id',
+                    },
           alertDialog: state.alertDialog,
           confirmDialog: state.confirmDialog,
           coinPopup: state.coinPopup,
