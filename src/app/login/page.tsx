@@ -276,22 +276,123 @@ const PolicyModal = ({ isOpen, onClose, title, children }: { isOpen: boolean; on
 };
 
 // ═══════════════════════════════════════════════════════════
-// KOMPONEN ACCORDION FAQ
+// CUSTOM FEATURE ICONS (Pixel Art Mengikuti Referensi)
+// ═══════════════════════════════════════════════════════════
+
+const HabitTrackerIcon = () => (
+  <svg viewBox="0 0 48 48" width="120" height="120" style={{ imageRendering: 'pixelated' }}>
+    <g className="hover:-translate-y-2 transition-transform duration-500">
+      <rect x="4" y="8" width="40" height="8" fill="#f8fafc" opacity="0.9"/>
+      <rect x="4" y="8" width="8" height="8" fill="#4ade80"/>
+      <rect x="6" y="11" width="4" height="2" fill="#ffffff"/>
+      <rect x="7" y="10" width="2" height="4" fill="#ffffff"/>
+      <rect x="14" y="11" width="12" height="2" fill="#cbd5e1"/>
+      
+      <rect x="10" y="20" width="38" height="8" fill="#f8fafc" opacity="0.9"/>
+      <rect x="10" y="20" width="8" height="8" fill="#2dd4bf"/>
+      <rect x="12" y="23" width="4" height="2" fill="#ffffff"/>
+      <rect x="13" y="22" width="2" height="4" fill="#ffffff"/>
+      <rect x="20" y="23" width="16" height="2" fill="#cbd5e1"/>
+
+      <rect x="2" y="32" width="40" height="8" fill="#f8fafc" opacity="0.9"/>
+      <rect x="2" y="32" width="8" height="8" fill="#38bdf8"/>
+      <rect x="5" y="35" width="2" height="2" fill="#ffffff"/>
+      <rect x="34" y="32" width="8" height="8" fill="#38bdf8"/>
+      <rect x="36" y="35" width="4" height="2" fill="#ffffff"/>
+      <rect x="37" y="34" width="2" height="4" fill="#ffffff"/>
+      <rect x="12" y="35" width="14" height="2" fill="#cbd5e1"/>
+    </g>
+  </svg>
+);
+
+const LootRewardIcon = () => (
+  <svg viewBox="0 0 48 48" width="120" height="120" style={{ imageRendering: 'pixelated' }}>
+    <g className="hover:-translate-y-2 transition-transform duration-500">
+      <rect x="36" y="6" width="4" height="4" fill="#fbbf24"/>
+      <rect x="34" y="8" width="8" height="2" fill="#fde047"/>
+      <rect x="36" y="4" width="2" height="8" fill="#fde047"/>
+
+      <g transform="rotate(45 30 20)">
+        <rect x="28" y="6" width="4" height="20" fill="#4ade80"/>
+        <rect x="26" y="26" width="8" height="2" fill="#fbbf24"/>
+        <rect x="28" y="28" width="4" height="6" fill="#78350f"/>
+      </g>
+
+      <rect x="6" y="14" width="4" height="4" fill="#38bdf8"/>
+      <rect x="4" y="18" width="8" height="8" fill="#0ea5e9"/>
+      <rect x="6" y="20" width="2" height="4" fill="#cffafe"/>
+
+      <rect x="8" y="34" width="8" height="8" fill="#eab308"/>
+      <rect x="10" y="32" width="4" height="12" fill="#facc15"/>
+      <rect x="6" y="36" width="12" height="4" fill="#facc15"/>
+      <rect x="10" y="36" width="4" height="4" fill="#ca8a04"/>
+
+      <rect x="22" y="24" width="14" height="14" fill="#5b21b6"/>
+      <rect x="20" y="28" width="18" height="10" fill="#7c3aed"/>
+      <rect x="24" y="20" width="10" height="6" fill="#5b21b6"/>
+      <rect x="22" y="26" width="14" height="2" fill="#a855f7"/>
+      <rect x="26" y="26" width="2" height="2" fill="#fef08a"/>
+      <rect x="30" y="26" width="2" height="2" fill="#fef08a"/>
+      <rect x="28" y="28" width="2" height="2" fill="#f59e0b"/>
+      <rect x="26" y="16" width="6" height="6" fill="#1e1b4b"/> 
+      <rect x="22" y="22" width="14" height="2" fill="#312e81"/> 
+    </g>
+  </svg>
+);
+
+const SangarDragonIcon = () => (
+  <svg viewBox="0 0 32 32" width="120" height="120" style={{ imageRendering: 'pixelated' }}>
+    <g className="hover:-translate-y-2 transition-transform duration-500">
+      <rect x="22" y="2" width="2" height="6" fill="#e2e8f0"/>
+      <rect x="20" y="4" width="2" height="6" fill="#cbd5e1"/>
+      <rect x="24" y="6" width="2" height="6" fill="#94a3b8"/>
+      <rect x="26" y="10" width="2" height="6" fill="#64748b"/>
+      <rect x="28" y="14" width="2" height="6" fill="#475569"/>
+      <rect x="18" y="10" width="8" height="22" fill="#3f3f46"/>
+      <rect x="16" y="14" width="2" height="18" fill="#27272a"/>
+      <rect x="10" y="8" width="10" height="10" fill="#52525b"/>
+      <rect x="6" y="12" width="4" height="4" fill="#52525b"/>
+      <rect x="4" y="20" width="12" height="4" fill="#3f3f46"/>
+      <rect x="2" y="22" width="2" height="2" fill="#27272a"/>
+      <rect x="8" y="16" width="8" height="4" fill="#18181b"/>
+      <rect x="10" y="16" width="6" height="2" fill="#9f1239"/>
+      <rect x="6" y="16" width="1" height="2" fill="#f8fafc"/>
+      <rect x="8" y="16" width="1" height="2" fill="#f8fafc"/>
+      <rect x="10" y="16" width="1" height="2" fill="#f8fafc"/>
+      <rect x="5" y="19" width="1" height="1" fill="#f8fafc"/>
+      <rect x="7" y="19" width="1" height="1" fill="#f8fafc"/>
+      <rect x="9" y="19" width="1" height="1" fill="#f8fafc"/>
+      <rect x="12" y="10" width="2" height="2" fill="#fef08a"/>
+      <rect x="13" y="10" width="1" height="1" fill="#000000"/>
+      <rect x="8" y="4" width="2" height="4" fill="#cbd5e1"/>
+      <rect x="10" y="2" width="2" height="6" fill="#e2e8f0"/>
+      <rect x="12" y="4" width="2" height="4" fill="#94a3b8"/>
+      <rect x="14" y="0" width="2" height="8" fill="#f8fafc"/>
+      <rect x="16" y="2" width="2" height="6" fill="#e2e8f0"/>
+      <rect x="18" y="16" width="4" height="2" fill="#71717a"/>
+      <rect x="20" y="20" width="4" height="2" fill="#71717a"/>
+      <rect x="18" y="24" width="4" height="2" fill="#71717a"/>
+      <rect x="20" y="28" width="4" height="2" fill="#71717a"/>
+      <rect x="0" y="18" width="4" height="2" fill="#c084fc"/>
+      <rect x="2" y="16" width="2" height="2" fill="#d8b4fe"/>
+    </g>
+  </svg>
+);
+
+// ═══════════════════════════════════════════════════════════
+// MAIN PAGE COMPONENT
 // ═══════════════════════════════════════════════════════════
 
 type Tab = 'login' | 'register';
 
-// ═══════════════════════════════════════════════════════════
-// MAIN PAGE
-// ═══════════════════════════════════════════════════════════
 export default function LoginPage() {
   const router = useRouter();
   const { setUserProfile } = useStore();
-  const [tab,     setTab]     = useState<Tab>('login');
-  const [email,   setEmail]   = useState('');
-  const [pass,    setPass]    = useState('');
-  const [pass2,   setPass2]   = useState('');
-  const [error,   setError]   = useState('');
+  const [tab,     setTab]    = useState<Tab>('login');
+  const [email,   setEmail]  = useState('');
+  const [pass,    setPass]   = useState('');
+  const [pass2,   setPass2]  = useState('');
+  const [error,   setError]  = useState('');
   const [loading, setLoading] = useState(false);
   const [showTransition, setShowTransition] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
@@ -315,14 +416,15 @@ export default function LoginPage() {
       return;
     }
 
-    if (tab === 'register') {
-      if (pass !== pass2) {
-        setError('Kata sandi tidak cocok!');
-        setLoading(false);
-        return;
-      }
+    try {
+      // 1. REGISTRASI
+      if (tab === 'register') {
+        if (pass !== pass2) {
+          setError('Kata sandi tidak cocok!');
+          setLoading(false);
+          return;
+        }
 
-      try {
         const res = await fetch('/api/auth/register', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -330,33 +432,10 @@ export default function LoginPage() {
         });
 
         const data = await res.json();
-
-        if (!res.ok) {
-          throw new Error(data.message || 'Terjadi kesalahan saat mendaftar.');
-        }
-
-        // Jika registrasi berhasil, langsung coba login
-        const result = await signIn('credentials', {
-          redirect: false,
-          email,
-          password: pass,
-        });
-
-        if (result?.error) {
-          setError(result.error);
-          setLoading(false);
-        } else if (result?.ok) {
-          // Hapus state lama dari local storage untuk memastikan sesi baru dimulai dengan bersih.
-          localStorage.removeItem('lifequest-storage');
-          setShowTransition(true);
-          setUserProfile({ accountName: email, nickname: email.split('@')[0] });
-          router.push('/');
-        }
-      } catch (err: any) {
-        setError(err.message);
-        setLoading(false);
+        if (!res.ok) throw new Error(data.message || 'Terjadi kesalahan saat mendaftar.');
       }
-    } else { // Logic untuk 'login'
+
+      // 2. LOGIN (Berlaku untuk tab Login dan setelah Register berhasil)
       const result = await signIn('credentials', {
         redirect: false,
         email,
@@ -365,18 +444,46 @@ export default function LoginPage() {
 
       if (result?.error) {
         setError(result.error);
-          setLoading(false)
-        console.log("NextAuth signIn result:", result); // Tambahkan ini untuk debugging
-        console.error("OAuth Login Error:", result.error);  // Tambahkan ini
         setLoading(false);
-      } else if (result?.ok) {
-        // Hapus state lama dari local storage untuk memastikan sesi baru dimulai dengan bersih.
-        localStorage.removeItem('lifequest-storage');
-        setUserProfile({ accountName: email, nickname: email.split('@')[0] });
-        router.push('/');
-      } else {
-        setLoading(false);
+        return;
       }
+
+      // 3. AMBIL DATA DARI DB SETELAH LOGIN SUKSES
+      if (result?.ok) {
+        // Hapus state lama dari local storage untuk memastikan sesi baru dimulai dengan bersih
+        localStorage.removeItem('lifequest-storage');
+        setShowTransition(true);
+
+        try {
+          const profileRes = await fetch('/api/user/profile');
+          const profileData = await profileRes.json();
+
+          if (profileRes.ok && profileData) {
+            setUserProfile({
+              accountName: profileData.accountName || email,
+              nickname: profileData.nickname || email.split('@')[0],
+              gender: profileData.gender, 
+              avatarId: profileData.avatarId,
+              level: profileData.level,
+              gold: profileData.gold,
+              exp: profileData.exp
+            });
+          } else {
+            setUserProfile({ accountName: email, nickname: email.split('@')[0] });
+          }
+        } catch (err) {
+          console.error("Gagal mengambil profil:", err);
+          setUserProfile({ accountName: email, nickname: email.split('@')[0] });
+        }
+
+        setTimeout(() => {
+          router.push('/');
+        }, 1500); 
+      }
+
+    } catch (err: any) {
+      setError(err.message);
+      setLoading(false);
     }
   };
 
@@ -390,147 +497,21 @@ export default function LoginPage() {
   };
 
   const handleOAuthLogin = (provider: 'google' | 'github') => {
-    // Hapus state lama dari local storage untuk memastikan sesi baru dimulai dengan bersih.
+    // Hapus state lama dari local storage untuk memastikan sesi baru dimulai dengan bersih
     localStorage.removeItem('lifequest-storage');
-    setLoading(true); // Set loading state for OAuth too
+    setLoading(true);
     const options = provider === 'google' 
         ? { prompt: 'select_account' } 
         : { prompt: 'consent' };
 
-    // Panggil signIn setelah menghapus storage
     signIn(provider, { callbackUrl: '/' }, options).then(result => {
       if (result?.error) {
         setError(result.error);
         setLoading(false);
         console.error("OAuth Login Error:", result.error);
-        console.log("NextAuth OAuth signIn result:", result); // Tambahkan ini untuk debugging
-      } else if (result?.ok) {
-        // Redirect akan ditangani oleh NextAuth.js secara otomatis, tidak perlu router.push manual.
       }
     });
   };
-
-// ═══════════════════════════════════════════════════════════
-// CUSTOM FEATURE ICONS (Pixel Art Mengikuti Referensi)
-// ═══════════════════════════════════════════════════════════
-
-const HabitTrackerIcon = () => (
-  <svg viewBox="0 0 48 48" width="120" height="120" style={{ imageRendering: 'pixelated' }}>
-    <g className="hover:-translate-y-2 transition-transform duration-500">
-      {/* Box 1 (Green) */}
-      <rect x="4" y="8" width="40" height="8" fill="#f8fafc" opacity="0.9"/>
-      <rect x="4" y="8" width="8" height="8" fill="#4ade80"/>
-      <rect x="6" y="11" width="4" height="2" fill="#ffffff"/>
-      <rect x="7" y="10" width="2" height="4" fill="#ffffff"/>
-      <rect x="14" y="11" width="12" height="2" fill="#cbd5e1"/>
-      
-      {/* Box 2 (Teal) */}
-      <rect x="10" y="20" width="38" height="8" fill="#f8fafc" opacity="0.9"/>
-      <rect x="10" y="20" width="8" height="8" fill="#2dd4bf"/>
-      <rect x="12" y="23" width="4" height="2" fill="#ffffff"/>
-      <rect x="13" y="22" width="2" height="4" fill="#ffffff"/>
-      <rect x="20" y="23" width="16" height="2" fill="#cbd5e1"/>
-
-      {/* Box 3 (Blue) */}
-      <rect x="2" y="32" width="40" height="8" fill="#f8fafc" opacity="0.9"/>
-      <rect x="2" y="32" width="8" height="8" fill="#38bdf8"/>
-      <rect x="5" y="35" width="2" height="2" fill="#ffffff"/>
-      <rect x="34" y="32" width="8" height="8" fill="#38bdf8"/>
-      <rect x="36" y="35" width="4" height="2" fill="#ffffff"/>
-      <rect x="37" y="34" width="2" height="4" fill="#ffffff"/>
-      <rect x="12" y="35" width="14" height="2" fill="#cbd5e1"/>
-    </g>
-  </svg>
-);
-
-const LootRewardIcon = () => (
-  <svg viewBox="0 0 48 48" width="120" height="120" style={{ imageRendering: 'pixelated' }}>
-    <g className="hover:-translate-y-2 transition-transform duration-500">
-      {/* Star 1 */}
-      <rect x="36" y="6" width="4" height="4" fill="#fbbf24"/>
-      <rect x="34" y="8" width="8" height="2" fill="#fde047"/>
-      <rect x="36" y="4" width="2" height="8" fill="#fde047"/>
-
-      {/* Sword */}
-      <g transform="rotate(45 30 20)">
-        <rect x="28" y="6" width="4" height="20" fill="#4ade80"/>
-        <rect x="26" y="26" width="8" height="2" fill="#fbbf24"/>
-        <rect x="28" y="28" width="4" height="6" fill="#78350f"/>
-      </g>
-
-      {/* Potion */}
-      <rect x="6" y="14" width="4" height="4" fill="#38bdf8"/>
-      <rect x="4" y="18" width="8" height="8" fill="#0ea5e9"/>
-      <rect x="6" y="20" width="2" height="4" fill="#cffafe"/>
-
-      {/* Coin */}
-      <rect x="8" y="34" width="8" height="8" fill="#eab308"/>
-      <rect x="10" y="32" width="4" height="12" fill="#facc15"/>
-      <rect x="6" y="36" width="12" height="4" fill="#facc15"/>
-      <rect x="10" y="36" width="4" height="4" fill="#ca8a04"/>
-
-      {/* Mini Pet Mage Owl */}
-      <rect x="22" y="24" width="14" height="14" fill="#5b21b6"/>
-      <rect x="20" y="28" width="18" height="10" fill="#7c3aed"/>
-      <rect x="24" y="20" width="10" height="6" fill="#5b21b6"/>
-      <rect x="22" y="26" width="14" height="2" fill="#a855f7"/>
-      <rect x="26" y="26" width="2" height="2" fill="#fef08a"/>
-      <rect x="30" y="26" width="2" height="2" fill="#fef08a"/>
-      <rect x="28" y="28" width="2" height="2" fill="#f59e0b"/>
-      <rect x="26" y="16" width="6" height="6" fill="#1e1b4b"/> 
-      <rect x="22" y="22" width="14" height="2" fill="#312e81"/> 
-    </g>
-  </svg>
-);
-
-const SangarDragonIcon = () => (
-  <svg viewBox="0 0 32 32" width="120" height="120" style={{ imageRendering: 'pixelated' }}>
-    <g className="hover:-translate-y-2 transition-transform duration-500">
-      {/* Back Spikes */}
-      <rect x="22" y="2" width="2" height="6" fill="#e2e8f0"/>
-      <rect x="20" y="4" width="2" height="6" fill="#cbd5e1"/>
-      <rect x="24" y="6" width="2" height="6" fill="#94a3b8"/>
-      <rect x="26" y="10" width="2" height="6" fill="#64748b"/>
-      <rect x="28" y="14" width="2" height="6" fill="#475569"/>
-      {/* Neck */}
-      <rect x="18" y="10" width="8" height="22" fill="#3f3f46"/>
-      <rect x="16" y="14" width="2" height="18" fill="#27272a"/>
-      {/* Head Base */}
-      <rect x="10" y="8" width="10" height="10" fill="#52525b"/>
-      <rect x="6" y="12" width="4" height="4" fill="#52525b"/>
-      {/* Jaw */}
-      <rect x="4" y="20" width="12" height="4" fill="#3f3f46"/>
-      <rect x="2" y="22" width="2" height="2" fill="#27272a"/>
-      {/* Inside Mouth */}
-      <rect x="8" y="16" width="8" height="4" fill="#18181b"/>
-      <rect x="10" y="16" width="6" height="2" fill="#9f1239"/>
-      {/* Teeth */}
-      <rect x="6" y="16" width="1" height="2" fill="#f8fafc"/>
-      <rect x="8" y="16" width="1" height="2" fill="#f8fafc"/>
-      <rect x="10" y="16" width="1" height="2" fill="#f8fafc"/>
-      <rect x="5" y="19" width="1" height="1" fill="#f8fafc"/>
-      <rect x="7" y="19" width="1" height="1" fill="#f8fafc"/>
-      <rect x="9" y="19" width="1" height="1" fill="#f8fafc"/>
-      {/* Eye */}
-      <rect x="12" y="10" width="2" height="2" fill="#fef08a"/>
-      <rect x="13" y="10" width="1" height="1" fill="#000000"/>
-      {/* Horns */}
-      <rect x="8" y="4" width="2" height="4" fill="#cbd5e1"/>
-      <rect x="10" y="2" width="2" height="6" fill="#e2e8f0"/>
-      <rect x="12" y="4" width="2" height="4" fill="#94a3b8"/>
-      <rect x="14" y="0" width="2" height="8" fill="#f8fafc"/>
-      <rect x="16" y="2" width="2" height="6" fill="#e2e8f0"/>
-      {/* Scales */}
-      <rect x="18" y="16" width="4" height="2" fill="#71717a"/>
-      <rect x="20" y="20" width="4" height="2" fill="#71717a"/>
-      <rect x="18" y="24" width="4" height="2" fill="#71717a"/>
-      <rect x="20" y="28" width="4" height="2" fill="#71717a"/>
-      {/* Magic Breath */}
-      <rect x="0" y="18" width="4" height="2" fill="#c084fc"/>
-      <rect x="2" y="16" width="2" height="2" fill="#d8b4fe"/>
-    </g>
-  </svg>
-);
 
   return (
     <div className="min-h-screen bg-zinc-900 flex flex-col relative overflow-hidden" style={{ fontFamily: "'Inter', 'Segoe UI', sans-serif" }}>

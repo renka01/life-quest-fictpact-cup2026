@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { useStore } from "@/store/useStore";
 import Technomancer from "@/components/art/Technomancer";
 import TechnomancerGirl from "@/components/art/TechnomancerGirl";
-import { Sparkles, User, ArrowRight } from "lucide-react";
+import { Sparkles, User, ArrowRight, Loader2 } from "lucide-react";
 
 interface CharacterSelectionProps {
   onComplete: () => void;
@@ -25,20 +25,57 @@ const characters = [
 ];
 
 export default function CharacterSelection({ onComplete }: CharacterSelectionProps) {
-  const { setUserProfile } = useStore();
+  const { setUserProfile, userProfile } = useStore();
   const [playerName, setPlayerName] = useState("");
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
+  const [isLoading, setIsLoading] = useState(false); 
 
-  const isReady = selectedIndex !== null && playerName.trim() !== "";
+  const isReady = selectedIndex !== null && playerName.trim() !== "" && !isLoading;
   const selectedChar = selectedIndex !== null ? characters[selectedIndex] : null;
 
-  const handleStartJourney = () => {
+  const handleStartJourney = async () => {
     if (isReady) {
-      setUserProfile({
+      setIsLoading(true);
+
+      const payload = {
         nickname: playerName,
         gender: characters[selectedIndex!].id as "Pria" | "Wanita",
-      });
-      onComplete();
+        avatarId: selectedIndex! + 1, 
+      };
+
+      try {
+        const response = await fetch("/api/user/profile", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        });
+
+        const result = await response.json();
+
+        if (response.ok && result.success) {
+          // Fallback data agar tidak undefined
+          const newData = result.data || {};
+          
+          setUserProfile({
+            nickname: newData.nickname || payload.nickname,
+            gender: newData.gender || payload.gender,
+            avatarId: newData.avatarId || payload.avatarId,
+            level: newData.level || 1,
+            gold: newData.gold || 100,
+            exp: newData.exp || 0,
+            accountName: userProfile?.accountName || "" 
+          });
+
+          onComplete();
+        } else {
+          alert("Gagal menyimpan karakter: " + (result.error || "Terjadi kesalahan server."));
+        }
+      } catch (error: any) {
+        console.error("Submit Error:", error);
+        alert("Koneksi ke server bermasalah: " + error.message);
+      } finally {
+        setIsLoading(false);
+      }
     }
   };
 
@@ -97,8 +134,9 @@ export default function CharacterSelection({ onComplete }: CharacterSelectionPro
             maxLength={15}
             value={playerName}
             onChange={(e) => setPlayerName(e.target.value)}
+            disabled={isLoading}
             placeholder="Masukkan namamu..."
-            className="w-full bg-zinc-900 border-4 p-5 text-white text-xl font-bold outline-none transition-colors shadow-[inset_4px_4px_0_rgba(0,0,0,0.5)] placeholder:text-zinc-600 text-center"
+            className="w-full bg-zinc-900 border-4 p-5 text-white text-xl font-bold outline-none transition-colors shadow-[inset_4px_4px_0_rgba(0,0,0,0.5)] placeholder:text-zinc-600 text-center disabled:opacity-50"
             style={{
               borderColor: playerName.trim()
                 ? (selectedChar?.borderColor ?? "#f59e0b") // amber-500
@@ -117,7 +155,8 @@ export default function CharacterSelection({ onComplete }: CharacterSelectionPro
               <button
                 key={char.id}
                 onClick={() => setSelectedIndex(i)}
-                className="relative cursor-pointer select-none focus:outline-none flex-1 group flex flex-col"
+                disabled={isLoading}
+                className="relative cursor-pointer select-none focus:outline-none flex-1 group flex flex-col disabled:opacity-75 disabled:cursor-not-allowed"
                 style={{
                   maxWidth: "280px",
                   minWidth: "150px",
@@ -243,9 +282,13 @@ export default function CharacterSelection({ onComplete }: CharacterSelectionPro
             className="group relative bg-amber-500 disabled:bg-zinc-800 disabled:text-zinc-500 text-zinc-900 font-bold px-10 py-5 uppercase tracking-widest transition-all border-4 border-transparent disabled:border-zinc-700 shadow-[8px_8px_0_#000] disabled:shadow-none hover:bg-amber-400 active:translate-y-[4px] active:translate-x-[4px] active:shadow-none disabled:active:translate-y-0 disabled:active:translate-x-0"
           >
             <span className="flex items-center justify-center gap-3 font-pixel text-sm">
-              <Sparkles size={18} className={!isReady ? "opacity-50" : "animate-pulse"} />
-              Mulai Petualangan
-              <ArrowRight size={18} className="group-hover:translate-x-1.5 transition-transform" />
+              {isLoading ? (
+                <Loader2 className="animate-spin" size={18} />
+              ) : (
+                <Sparkles size={18} className={!isReady ? "opacity-50" : "animate-pulse"} />
+              )}
+              {isLoading ? "Menyimpan Data..." : "Mulai Petualangan"}
+              {!isLoading && <ArrowRight size={18} className="group-hover:translate-x-1.5 transition-transform" />}
             </span>
           </button>
         </div>

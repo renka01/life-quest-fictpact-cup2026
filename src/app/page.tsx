@@ -57,7 +57,8 @@ const RetroTransition = ({ isActive }: { isActive: boolean }) => {
 };
 
 export default function Home() {
-  const { tasks, stats, checkDailyStreak, coinPopup, userProfile, dailyProgress, claimDailyReward, playSound } = useStore();
+  // Ditambahkan setUserProfile dari kodemu
+  const { tasks, stats, checkDailyStreak, coinPopup, userProfile, setUserProfile, dailyProgress, claimDailyReward, playSound } = useStore();
   const router = useRouter(); 
   const extendedTasks = tasks as ExtendedTask[];
 
@@ -97,17 +98,46 @@ export default function Home() {
   const hasClaimableQuests = (!dp.loginClaimed) || (dp.tasksCompleted >= 3 && !dp.taskClaimed) || (dp.bossesDefeated >= 1 && !dp.bossClaimed);
 
   // ========================================================
-  // <-- PERBAIKAN LOGIC GATES: URUTAN WAJIB -->
+  // <-- PERBAIKAN LOGIC GATES & SYNC DATABASE DARI KODEMU -->
   // ========================================================
 
   useEffect(() => {
     setIsMounted(true);
-    
-    // 1. Jika sistem sudah siap (mounted) tapi accountName kosong, pindah ke login
+  }, []);
+
+  // 1. Pengecekan Login (Push ke /login kalau tidak ada akun)
+  useEffect(() => {
     if (isMounted && !userProfile?.accountName) {
       router.push('/login');
     }
   }, [isMounted, userProfile?.accountName, router]);
+
+  // 2. Sinkronisasi Data Profil (Hanya jalan saat butuh / baru refresh)
+  useEffect(() => {
+    const loadDatabaseProfile = async () => {
+      // Hanya lakukan fetch JIKA user sudah login (punya accountName) TAPI gender belum ada
+      if (userProfile?.accountName && !userProfile?.gender) {
+        try {
+          const res = await fetch('/api/user/profile');
+          if (res.ok) {
+            const dbData = await res.json();
+            
+            // Update Store dengan data asli Database
+            // Cek dbData.gender agar tidak me-nimpa dengan null lagi
+            if (dbData.gender) {
+              setUserProfile(dbData); 
+            }
+          }
+        } catch (err) {
+          console.error("Gagal sinkronisasi profil:", err);
+        }
+      }
+    };
+
+    if (isMounted) {
+      loadDatabaseProfile();
+    }
+  }, [isMounted, userProfile?.accountName, userProfile?.gender, setUserProfile]);
 
   useEffect(() => {
     if (isMounted) {
@@ -181,15 +211,15 @@ export default function Home() {
     );
   }
 
-  // 1. JIKA BELUM LOGIN (accountName kosong), jangan render apapun biar kena push router
+  // 1. JIKA BELUM LOGIN (accountName kosong), kembalikan layar kosong sementara router me-redirect
   if (!userProfile?.accountName) {
     return <div className="h-screen w-full bg-zinc-900" />;
   }
 
   // 2. JIKA SUDAH LOGIN TAPI BELUM PILIH KARAKTER (gender kosong)
-  // Tampilkan form pemilihan karakter (WAJIB)
+  // Tampilkan komponen CharacterSelection
   if (!userProfile?.gender) {
-    return <CharacterSelection onComplete={() => console.log("Karakter siap!")} />;
+    return <CharacterSelection onComplete={() => console.log("Karakter berhasil dibuat!")} />;
   }
 
   // 3. JIKA SEMUA LENGKAP, BARU MASUK KE DASHBOARD UTAMA
@@ -207,7 +237,7 @@ export default function Home() {
           </div>
         );
 
-case "Misi":
+      case "Misi":
         return (
           <div className="animate-in fade-in slide-in-from-left-4 duration-500 flex flex-col h-full">
             <div className="flex flex-col md:flex-row md:justify-between md:items-end gap-4 mb-6 shrink-0 border-b border-zinc-700/50 pb-6">
@@ -435,7 +465,8 @@ case "Misi":
           <div className="flex items-center justify-end gap-4 w-full lg:w-auto">
             <div className="flex items-center gap-4 px-4 py-1.5 bg-zinc-800 border-2 border-zinc-600 rounded-none shadow-[inset_2px_2px_4px_rgba(0,0,0,0.5)]">
               <div className="flex items-center gap-1.5 text-amber-400 font-pixel text-[8px]">
-                <Coins size={14} /> {stats.gold}
+                {/* Fallback ke userProfile.gold dari perbaikanmu */}
+                <Coins size={14} /> {stats.gold || userProfile.gold || 0}
               </div>
             </div>
 

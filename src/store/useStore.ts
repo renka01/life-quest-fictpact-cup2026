@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { persist, createJSONStorage, StateStorage } from 'zustand/middleware';
+import { persist, createJSONStorage } from 'zustand/middleware';
 
 // ==========================================
 // 1. TIPE DATA (TYPESCRIPT INTERFACES)
@@ -82,13 +82,14 @@ interface ConfirmDialog {
   onConfirm: () => void;
 }
 
-// <-- TAMBAHAN: Interface untuk User Profile
 export interface UserProfile {
-  accountName: string; // Tambahkan ini
-  nickname: string;    // Tambahkan ini
-  gender: 'Pria' | 'Wanita' | null;
-  avatarId: string | null;
-  bio?: string;
+  accountName: string;
+  nickname: string;
+  gender?: string | null; 
+  avatarId?: number | null; 
+  level?: number | null;    
+  gold?: number | null;     
+  exp?: number | null;      
 }
 
 export interface DailyProgress {
@@ -129,12 +130,10 @@ interface LifeQuestStore {
   recurringTransactions: RecurringTransaction[];
   coinPopup: CoinPopup;
 
-  // <-- PENGATURAN & AUDIO -->
   settings: AppSettings;
   updateSetting: <K extends keyof AppSettings>(key: K, value: AppSettings[K]) => void;
   playSound: (soundName: string) => void;
 
-  // <-- TAMBAHAN: State & Action untuk Profile
   userProfile: UserProfile;
   setUserProfile: (profile: Partial<UserProfile>) => void;
 
@@ -202,73 +201,22 @@ const getDifficultyMultiplier = (difficulty: number) => {
   }
 };
 
-// --- DEBOUNCE & SAVE FUNCTION ---
-function debounce<T extends (...args: any[]) => any>(func: T, delay: number): (...args: Parameters<T>) => void {
-  let timeout: NodeJS.Timeout;
-  return function(this: any, ...args: Parameters<T>) {
-    clearTimeout(timeout);
-    timeout = setTimeout(() => func.apply(this, args), delay);
-  };
-}
-
-const saveGameState = debounce(async (state: any) => {
-  try {
-    const res = await fetch('/api/progress', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ gameState: state }),
-    });
-    if (res.ok) {
-      console.log("✅ Progress saved to database.");
-    } else {
-      // Jika sesi berakhir atau tidak valid, API akan mengembalikan error.
-      // Kita bisa log ini, tapi tidak perlu menampilkan error ke pengguna.
-      console.warn("Could not save progress to database (session might be expired).");
-    }
-  } catch (error) {
-    console.error("Failed to save game state:", error);
-  }
-}, 2500); // Simpan 2.5 detik setelah perubahan terakhir
-
-
-// --- CUSTOM STORAGE UNTUK AUTOSAVE ---
-const customStorage: StateStorage = {
-  getItem: (name) => {
-    // createJSONStorage mengharapkan string, jadi kita teruskan saja.
-    return localStorage.getItem(name);
-  },
-  setItem: (name, value) => {
-    // Fungsi ini menerima state yang sudah di-string-kan dari createJSONStorage.
-    localStorage.setItem(name, value);
-    try {
-      // Kita parse kembali untuk mendapatkan bagian 'state' untuk backup ke database.
-      const { state } = JSON.parse(value);
-      saveGameState(state);
-    } catch (error) {
-      console.error("Gagal mem-parsing state untuk autosave:", error);
-    }
-  },
-  removeItem: (name) => localStorage.removeItem(name),
-};
-
 // ==========================================
 // 4. MEMBUAT STORE ZUSTAND
 // ==========================================
-// <-- TAMBAHAN: Dibungkus dengan persist
 export const useStore = create<LifeQuestStore>()(
   persist(
     (set, get) => ({
       // --- INITIAL DATA ---
-      
-      // <-- TAMBAHAN: Nilai awal profil
-  // --- INITIAL DATA ---
-userProfile: {
-  accountName: "", // Atau biarkan "" jika ingin kosong dulu
-  nickname: "",             // Gunakan nickname, jangan name
-  gender: null,
-  avatarId: null,
-  bio: ""
-},
+      userProfile: {
+        accountName: "",
+        nickname: "", 
+        gender: null,
+        avatarId: null,
+        level: 1,
+        gold: 0,
+        exp: 0
+      },
       settings: {
         language: "id",
         dateFormat: "DD/MM/YYYY",
@@ -302,14 +250,12 @@ userProfile: {
       confirmDialog: { isOpen: false, message: "", onConfirm: () => {} },
 
       // --- ACTIONS PROFILE ---
-      // <-- TAMBAHAN: Fungsi untuk ganti nama/gender
-// Cari bagian setUserProfile di dalam useStore.ts, pastikan kodenya begini:
-setUserProfile: (profile) => set((state) => ({
-  userProfile: { 
-    ...state.userProfile, 
-    ...profile 
-  }
-})),
+      setUserProfile: (profile) => set((state) => ({
+        userProfile: { 
+          ...state.userProfile, 
+          ...profile 
+        }
+      })),
 
       // --- ACTIONS SETTINGS & AUDIO ---
       updateSetting: (key, value) => set((state) => ({ 
@@ -317,7 +263,7 @@ setUserProfile: (profile) => set((state) => ({
       })),
       playSound: (soundName) => {
         const { settings } = get();
-        if (settings.audioTheme === 'mute') return; // Jangan putar jika di-mute
+        if (settings.audioTheme === 'mute') return; 
         if (typeof window !== 'undefined') {
           try {
             const AudioCtx = window.AudioContext || (window as any).webkitAudioContext;
@@ -360,8 +306,8 @@ setUserProfile: (profile) => set((state) => ({
               osc.start(now); osc.stop(now + 0.15);
             } else if (soundName === 'coin') {
               osc.type = 'square';
-              osc.frequency.setValueAtTime(987.77, now); // Nada B5
-              osc.frequency.setValueAtTime(1318.51, now + 0.1); // Nada E6
+              osc.frequency.setValueAtTime(987.77, now); 
+              osc.frequency.setValueAtTime(1318.51, now + 0.1); 
               gain.gain.setValueAtTime(0.05, now);
               gain.gain.setValueAtTime(0.05, now + 0.1);
               gain.gain.exponentialRampToValueAtTime(0.01, now + 0.4);
@@ -394,7 +340,7 @@ setUserProfile: (profile) => set((state) => ({
         return true;
       },
       sellItem: (itemId, price) => {
-        // Optional: Implement if needed
+        // Optional
       },
       equipItem: (slot, itemId) => set((state) => ({
         equippedItems: {
@@ -418,7 +364,6 @@ setUserProfile: (profile) => set((state) => ({
       addTask: (taskData) => set((state) => ({
         tasks: [{ id: Date.now(), ...taskData, habitCount: taskData.habitCount || 0 }, ...state.tasks]
       })),
-
       deleteTask: (id) => {
         const { showConfirm, closeConfirm } = get();
         showConfirm("Apakah kamu yakin ingin menghapus misi ini?", () => {
@@ -433,7 +378,6 @@ setUserProfile: (profile) => set((state) => ({
         const initialAmount = Math.abs(newAcc.balance || 0);
         const initialGram = Math.abs(newAcc.weight || 0);
 
-        // bikin log kalau ada saldo awal / gram awal
         const shouldCreateLog = initialAmount > 0 || initialGram > 0;
 
         const newLog: Transaction | null = shouldCreateLog
@@ -486,7 +430,6 @@ setUserProfile: (profile) => set((state) => ({
         const isExpense = amount < 0 || weightChange < 0;
         const logType: 'income' | 'expense' = isExpense ? 'expense' : 'income';
 
-        // EXP hanya untuk transaksi masuk / deposit
         const expGain = logType === 'income' ? (meta?.exp || 0) : 0;
         const goldGain = logType === 'income' ? (meta?.gold || 0) : 0;
 
@@ -573,15 +516,12 @@ setUserProfile: (profile) => set((state) => ({
           if (dueOnly === todayOnly) {
             return { ...tx, status: 'due' as const };
           }
-
           if (dueOnly < todayOnly && tx.status !== 'due') {
             return { ...tx, status: 'overdue' as const };
           }
-
           if (dueOnly > todayOnly) {
             return { ...tx, status: 'upcoming' as const };
           }
-
           return tx;
         });
 
@@ -640,18 +580,16 @@ setUserProfile: (profile) => set((state) => ({
         const today = new Date().toDateString();
         const lastLogin = stats.lastLoginDate;
 
-        if (lastLogin === today) return; // Sudah login hari ini
+        if (lastLogin === today) return; 
 
         const yesterday = new Date();
         yesterday.setDate(yesterday.getDate() - 1);
         
         let newStreak = 1;
-        // Jika login terakhir adalah kemarin, tambah streak
         if (lastLogin === yesterday.toDateString()) {
           newStreak = stats.streak + 1;
         }
 
-        // Reward logic
         const expBonus = newStreak * 10;
         const goldBonus = newStreak * 5;
         
@@ -662,7 +600,7 @@ setUserProfile: (profile) => set((state) => ({
             lastLoginDate: today,
             exp: state.stats.exp + expBonus,
             gold: state.stats.gold + goldBonus,
-            hp: state.stats.maxHp // HP dipulihkan sepenuhnya setiap hari berganti
+            hp: state.stats.maxHp 
           },
           dailyProgress: {
             loginClaimed: false,
@@ -672,7 +610,6 @@ setUserProfile: (profile) => set((state) => ({
             bossClaimed: false,
           }
         }));
-
       },
 
       claimDailyReward: (type) => {
@@ -715,7 +652,7 @@ setUserProfile: (profile) => set((state) => ({
           newExp -= stats.maxExp;
           newMaxExp = Math.floor(stats.maxExp * 1.2);
           newMaxHp += 10;
-          newHp = newMaxHp; // Full heal on level up
+          newHp = newMaxHp; 
           showAlert("LEVEL UP!", `Selamat! Kamu naik ke level ${newLevel}!`, "levelup");
         }
 
@@ -781,11 +718,9 @@ setUserProfile: (profile) => set((state) => ({
       handleHabitMinus: (task) => {
         const { tasks, stats, takeDamage, showAlert } = get();
         
-        // Hitung damage berdasarkan tingkat kesulitan (minimal 1 damage)
         const damage = Math.max(1, Math.round(5 * getDifficultyMultiplier(task.difficulty)));
         takeDamage(damage);
         
-        // Munculkan peringatan jika karakter kehabisan darah
         if (stats.hp > 0 && stats.hp - damage <= 0) {
           showAlert("NYAWA HABIS", "Karaktermu pingsan karena terlalu banyak kebiasaan buruk! Segera gunakan potion dari Toko.", "danger");
         }
@@ -817,33 +752,8 @@ setUserProfile: (profile) => set((state) => ({
     }),
     {
       name: 'lifequest-storage',
-      storage: createJSONStorage(() => customStorage),
-      onRehydrateStorage: () => (state, error) => {
-        if (error) {
-          console.error('An error occurred during hydration:', error);
-        } else {
-          // Setelah memuat dari local storage, ambil state terbaru dari DB.
-          // Ini memastikan data tersinkronisasi jika pengguna login di perangkat lain.
-          const loadGameState = async () => {
-            try {
-              const res = await fetch('/api/progress');
-              if (res.ok) {
-                const data = await res.json();
-                if (data && data.gameState) {
-                  // Gunakan metode statis setState pada hook store
-                  // untuk menimpa state yang terhidrasi dengan yang dari DB.
-                  useStore.setState(data.gameState);
-                  console.log("✅ Game state successfully loaded from database.");
-                }
-              }
-            } catch (e) {
-              console.error("Could not load game state from DB.", e);
-            }
-          }
-          // Hanya coba memuat dari DB jika pengguna sudah login (dicek via sesi API)
-          loadGameState();
-        }
-      },
+      // KITA GUNAKAN LOCAL STORAGE BIASA AGAR TIDAK BENTROK SAAT INIT CHARACTER
+      storage: createJSONStorage(() => localStorage), 
       partialize: (state) => Object.fromEntries(
         Object.entries(state).filter(([key]) => !['coinPopup', 'alertDialog', 'confirmDialog'].includes(key))
       ),
