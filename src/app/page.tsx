@@ -57,7 +57,13 @@ const RetroTransition = ({ isActive }: { isActive: boolean }) => {
 };
 
 export default function Home() {
-  const { tasks, stats, checkDailyStreak, coinPopup, userProfile, setUserProfile, dailyProgress, claimDailyReward, playSound } = useStore();
+  const { 
+    tasks, stats, checkDailyStreak, coinPopup, userProfile, 
+    setUserProfile, dailyProgress, claimDailyReward, playSound,
+    inventory, accounts, equippedItems,
+    hasLoadedFromCloud, setHasLoadedFromCloud // Ambil flag sinkronisasi
+  } = useStore();
+  
   const router = useRouter(); 
   const extendedTasks = tasks as ExtendedTask[];
 
@@ -99,69 +105,94 @@ export default function Home() {
   const dp = dailyProgress || { loginClaimed: false, tasksCompleted: 0, taskClaimed: false, bossesDefeated: 0, bossClaimed: false };
   const hasClaimableQuests = (!dp.loginClaimed) || (dp.tasksCompleted >= 3 && !dp.taskClaimed) || (dp.bossesDefeated >= 1 && !dp.bossClaimed);
 
-  // Set isMounted to true on client & Pilih Quote Acak
   useEffect(() => {
     setIsMounted(true);
-    // Cukup simpan angka acak antara 0 sampai 9 (karena ada 10 quote)
     setQuoteIndex(Math.floor(Math.random() * 10));
   }, []);
 
   // ========================================================
-  // <-- LOGIC GATES & SYNC DATABASE TERBARU -->
+  // <-- LOGIC GATES & CLOUD LOAD -->
   // ========================================================
   useEffect(() => {
     const initializeUser = async () => {
       if (!isMounted) return;
 
-      // 1. Jika di local store belum ada akun (bisa jadi karena baru beres login GitHub/Google)
-      if (!userProfile?.accountName) {
-        try {
-          // Coba fetch profil dari server. Kalau ada sesi NextAuth aktif, server akan membalas dengan data.
-          const res = await fetch('/api/user/profile');
-          if (res.ok) {
-            const dbData = await res.json();
-            // Cek apakah data valid dan memiliki accountName/email/nickname
-            if (dbData && (dbData.accountName || dbData.email || dbData.nickname)) {
-              // Sukses! User ternyata login via OAuth. Masukkan datanya ke store.
-              setUserProfile({
-                ...dbData,
-                accountName: dbData.accountName || dbData.email || 'Petarung',
-                nickname: dbData.nickname || (dbData.email ? dbData.email.split('@')[0] : 'Petarung')
-              });
-              return; // Selesai, JANGAN redirect ke /login
+      try {
+        const resProfile = await fetch('/api/user/profile');
+        if (resProfile.ok) {
+          const dbData = await resProfile.json();
+          if (dbData && (dbData.accountName || dbData.email || dbData.nickname)) {
+            
+            setUserProfile({
+              ...dbData,
+              accountName: dbData.accountName || dbData.email || 'Petarung',
+              nickname: dbData.nickname || (dbData.email ? dbData.email.split('@')[0] : 'Petarung')
+            });
+
+            // LOAD CLOUD DATA
+            const progRes = await fetch('/api/progress');
+            if (progRes.ok) {
+              const progData = await progRes.json();
+              if (progData.gameState) {
+                 useStore.getState().loadFromCloud(progData.gameState);
+              } else {
+                 // Kalau belum punya progress sama sekali (User Baru)
+                 setHasLoadedFromCloud(true); 
+              }
             }
+            return; 
           }
-        } catch (err) {
-          console.error("Gagal memverifikasi sesi OAuth:", err);
         }
-        
-        // Kalau server bilang tidak ada sesi, berarti memang belum login. Tendang ke /login.
-        router.push('/login');
-      } 
+      } catch (err) { console.error(err); }
       
-      // 2. Jika SUDAH login tapi belum pilih gender (Data profil belum lengkap)
-      else if (userProfile?.accountName && !userProfile?.gender) {
-        try {
-          const res = await fetch('/api/user/profile');
-          if (res.ok) {
-            const dbData = await res.json();
-            if (dbData.gender) {
-              setUserProfile(dbData); 
-            }
-          }
-        } catch (err) {
-          console.error("Gagal sinkronisasi profil:", err);
-        }
-      }
+      // Jika sampai baris ini berarti sesi auth tidak valid
+      router.push('/login');
     };
 
     initializeUser();
-  }, [isMounted, userProfile?.accountName, userProfile?.gender, router, setUserProfile]);
+  }, [isMounted, router, setUserProfile, setHasLoadedFromCloud]);
+
+  // ========================================================
+  // 🔥 AUTO-SAVE BACKGROUND DAEMON 🔥
+  // ========================================================
+  useEffect(() => {
+    // 1. Tahan auto-save kalau web belum siap atau data dari cloud belum di-load (mencegah numpuk data kosong)
+    if (!isMounted || !userProfile?.accountName || !useStore.getState().hasLoadedFromCloud) return;
+    
+    // 2. Gunakan Debounce (Delay 3 detik). 
+    // Jadi kalau kamu centang 5 misi berturut-turut dengan cepat, dia hanya akan nge-save 1 kali di akhir.
+    const autoSaveTimer = setTimeout(() => {
+      console.log("💾 Mengamankan progres ke Cloud..."); // Bisa dicek di Inspect Element -> Console
+      
+      // Panggil fungsi syncToCloud TANPA parameter true (agar pop-up tidak muncul)
+      useStore.getState().syncToCloud(); 
+    }, 3000); 
+
+    // 3. Bersihkan timer kalau ada perubahan baru sebelum 3 detik
+    return () => clearTimeout(autoSaveTimer);
+    
+  // 4. Daftar "Sensor". Jika salah satu data di bawah ini berubah, timer auto-save akan menyala.
+  }, [
+    tasks, stats, dailyProgress, inventory, accounts, equippedItems, 
+    isMounted, userProfile?.accountName
+  ]);
+
+  // ========================================================
+  // 🔥 AUTO-SAVE BACKGROUND DAEMON 🔥
+  // ========================================================
+  useEffect(() => {
+    // TUNGGU sampai load dari cloud benar-benar selesai!
+    if (!isMounted || !userProfile?.accountName || !hasLoadedFromCloud) return;
+    
+    const autoSaveTimer = setTimeout(() => {
+      useStore.getState().syncToCloud();
+    }, 3000); 
+
+    return () => clearTimeout(autoSaveTimer);
+  }, [tasks, stats, dailyProgress, inventory, accounts, equippedItems, isMounted, userProfile?.accountName, hasLoadedFromCloud]);
 
   useEffect(() => {
-    if (isMounted) {
-      checkDailyStreak();
-    }
+    if (isMounted) checkDailyStreak();
   }, [checkDailyStreak, isMounted]);
 
   useEffect(() => {
@@ -195,6 +226,7 @@ export default function Home() {
 
   const handleLogout = () => {
     setUserProfile({ accountName: "", nickname: "", gender: null, avatarId: null });
+    setHasLoadedFromCloud(false); // Reset flag
     router.push('/login');
   };
 
@@ -205,20 +237,12 @@ export default function Home() {
 
   const handleMenuChange = (menuName: string) => {
     if (menuName === activeMenu) return;
-
     playSound('glitch');
     setSearchQuery("");
-
     setIsTransitioning(true);
-    setTimeout(() => {
-      setActiveMenu(menuName);
-    }, 400);
-    setTimeout(() => {
-      setIsTransitioning(false);
-    }, 800);
+    setTimeout(() => { setActiveMenu(menuName); }, 400);
+    setTimeout(() => { setIsTransitioning(false); }, 800);
   };
-
-  // --- RENDER GATES ---
 
   if (!isMounted) {
     return (
@@ -230,18 +254,14 @@ export default function Home() {
     );
   }
 
-  // 1. JIKA BELUM LOGIN (accountName kosong), jangan render apapun biar kena push router
-  if (!userProfile?.accountName) {
-    return <div className="h-screen w-full bg-zinc-900" />;
-  }
-
-  // 2. JIKA SUDAH LOGIN TAPI BELUM PILIH KARAKTER (gender kosong)
-  // Tampilkan form pemilihan karakter (WAJIB)
+  if (!userProfile?.accountName) return <div className="h-screen w-full bg-zinc-900" />;
+  
   if (!userProfile?.gender) {
+    // Kalau User Baru, set flag true agar progress awal (pemilihan char) bisa di save
+    if(!hasLoadedFromCloud) setHasLoadedFromCloud(true); 
     return <CharacterSelection onComplete={() => console.log("Karakter siap!")} />;
   }
 
-  // 3. JIKA SEMUA LENGKAP, BARU MASUK KE DASHBOARD UTAMA
   const renderContent = () => {
     switch (activeMenu) {
       case "Dashboard":
@@ -422,9 +442,7 @@ export default function Home() {
           </>
         );
       
-      // MENGUBAH DASHBOARD UNTUK MEMANGGIL STATE QUOTE ACAK DARI TRANSLATIONS
       case "Dashboard": return <HeaderQuote text={tQuotes?.random?.[quoteIndex] || tQuotes.dash} />;
-      
       case "Kalender": return <HeaderQuote text={tQuotes.cal} />;
       case "Focus Arena": return <HeaderQuote text={tQuotes.focus} />;
       case "Statistik": return <HeaderQuote text={tQuotes.stats} />;
@@ -433,7 +451,6 @@ export default function Home() {
     }
   };
 
-  // Desain Quote Header Baru (Dengan Tinggi Statis & Font Pixel)
   const HeaderQuote = ({ text, accentColor = "amber", label = "HERO'S LOG" }: { 
     text: string; 
     accentColor?: "amber" | "teal" | "purple";
@@ -472,7 +489,6 @@ export default function Home() {
           cursor: pointer;
         }
 
-        /* Mengubah warna bawaan browser (seperti panah input number) menjadi gelap */
         input[type="number"] {
           color-scheme: dark;
         }
@@ -539,13 +555,11 @@ export default function Home() {
                   </div>
 
                   <div className="p-4 flex flex-col gap-4 max-h-[75vh] overflow-y-auto custom-scrollbar">
-                    {/* DAILY QUESTS SECTION */}
                     <div className="flex flex-col gap-3">
                       <h4 className="text-[10px] font-bold text-amber-400 uppercase tracking-widest border-b-2 border-zinc-700 pb-2 mb-1 flex items-center gap-2">
                         <CheckSquare size={14}/> {tSyslog.dailyQuests}
                       </h4>
                       
-                      {/* Quest 1: Login */}
                       <div className={`flex flex-col gap-2 p-3 border-2 ${dp.loginClaimed ? 'bg-emerald-950/20 border-emerald-900/50' : 'bg-zinc-800 border-zinc-600'}`}>
                         <div className="flex items-center justify-between">
                           <div className="flex flex-col gap-0.5">
@@ -560,7 +574,6 @@ export default function Home() {
                         </div>
                       </div>
 
-                      {/* Quest 2: Selesaikan 3 Misi */}
                       <div className={`flex flex-col gap-2 p-3 border-2 ${dp.taskClaimed ? 'bg-emerald-950/20 border-emerald-900/50' : 'bg-zinc-800 border-zinc-600'}`}>
                         <div className="flex items-center justify-between">
                           <div className="flex flex-col gap-0.5 w-full pr-4">
@@ -580,7 +593,6 @@ export default function Home() {
                         </div>
                       </div>
 
-                      {/* Quest 3: Kalahkan 1 Boss */}
                       <div className={`flex flex-col gap-2 p-3 border-2 ${dp.bossClaimed ? 'bg-emerald-950/20 border-emerald-900/50' : 'bg-zinc-800 border-zinc-600'}`}>
                         <div className="flex items-center justify-between">
                           <div className="flex flex-col gap-0.5">

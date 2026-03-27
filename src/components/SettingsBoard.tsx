@@ -43,7 +43,7 @@ const GoogleIcon = ({ size = 24, className = "" }: { size?: number, className?: 
 );
 
 export default function SettingsBoard() {
-  const { userProfile, setUserProfile, settings, updateSetting, playSound, showAlert } = useStore();
+  const { userProfile, setUserProfile, settings, updateSetting, playSound, showAlert, isSyncing, syncToCloud } = useStore();
   const t = translations[settings?.language || 'id']?.settings || translations['id'].settings;
   const tUi = translations[settings?.language || 'id']?.ui || translations['id'].ui;
   const { data: session } = useSession();
@@ -262,6 +262,15 @@ export default function SettingsBoard() {
           <SettingAction icon={Edit3} label={t.displayName} value={userProfile?.nickname || "Tuyul BisVy"} actionText={t.change} onClick={() => handleEditClick('nickname', t.displayName)} />
           <SettingAction icon={MessageSquare} label={t.aboutMe} value={userProfile?.bio ? `"${userProfile.bio.substring(0, 30)}${userProfile.bio.length > 30 ? '...' : ''}"` : "-"} actionText={t.change} onClick={() => handleEditClick('bio', t.aboutMe)} />
           <SettingAction icon={Key} label={t.password} value="********" actionText={t.change} onClick={() => { showAlert("SECURITY", t.alertPass, "info"); playSound('error'); }} />
+            {/* Tambahkan tombol ini di dalam div kumpulan SettingAction Akun */}
+  <SettingAction 
+    icon={RefreshCw} 
+    label="Cloud Save" 
+    value={isSyncing ? "Menyinkronkan..." : "Simpan progres ke database"} 
+    actionText={isSyncing ? "PROSES..." : "SYNC"} 
+    onClick={() => syncToCloud(true)} 
+    disabled={isSyncing} 
+  />
         </div>
         <div className="flex flex-col gap-2 mt-2">
           <SettingAction icon={RefreshCw} label={t.resetAcc} value={t.resetDesc} actionText={isLoading ? "PROSES..." : "RESET"} onClick={triggerResetConfirm} danger disabled={isLoading} />

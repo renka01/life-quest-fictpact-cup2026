@@ -187,7 +187,13 @@ interface LifeQuestStore {
   takeDamage: (amount: number) => void;
   healPlayer: (amount: number) => void;
   consumeItem: (itemId: number) => void;
-}
+
+  // 🔥 CLOUD SYNC
+  isSyncing: boolean;
+  hasLoadedFromCloud: boolean; 
+  setHasLoadedFromCloud: (val: boolean) => void;
+  loadFromCloud: (cloudState: any) => void;
+syncToCloud: (isManual?: boolean) => Promise<void>;}
 
 // ==========================================
 // 3. FUNGSI HELPER
@@ -250,6 +256,63 @@ export const useStore = create<LifeQuestStore>()(
       alertDialog: { isOpen: false, title: "", message: "", type: "info" },
       confirmDialog: { isOpen: false, message: "", onConfirm: () => {} },
 
+      // 🔥 ACTIONS CLOUD SYNC
+      isSyncing: false,
+      hasLoadedFromCloud: false,
+      setHasLoadedFromCloud: (val) => set({ hasLoadedFromCloud: val }),
+      
+      loadFromCloud: (cloudState) => {
+        if (!cloudState) return;
+        set((state) => ({
+          ...state,
+          ...cloudState,
+          alertDialog: state.alertDialog,
+          confirmDialog: state.confirmDialog,
+          coinPopup: state.coinPopup,
+          isSyncing: false,
+          hasLoadedFromCloud: true 
+        }));
+      },
+
+// Cari fungsi ini dan timpa
+      syncToCloud: async (isManual = false) => {
+        const state = get();
+        if (!state.userProfile.accountName || !state.hasLoadedFromCloud) return;
+
+        set({ isSyncing: true });
+        try {
+          const stateToSave = {
+            tasks: state.tasks,
+            accounts: state.accounts,
+            transactions: state.transactions,
+            stats: state.stats,
+            settings: state.settings,
+            userProfile: state.userProfile,
+            dailyProgress: state.dailyProgress,
+            inventory: state.inventory,
+            equippedItems: state.equippedItems,
+            recurringTransactions: state.recurringTransactions
+          };
+
+          const res = await fetch('/api/progress', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ gameState: stateToSave })
+          });
+
+          if (res.ok) {
+            if (isManual) state.showAlert("BERHASIL", "Progres Game berhasil disimpan ke Cloud!", "success");
+          } else {
+            if (isManual) state.showAlert("GAGAL", "Gagal menyimpan ke server (Error API).", "danger");
+            console.error("Gagal save, status:", res.status);
+          }
+        } catch (e) {
+          if (isManual) state.showAlert("GAGAL", "Koneksi terputus.", "danger");
+          console.error("Cloud Sync Error", e);
+        } finally {
+          set({ isSyncing: false });
+        }
+      },
       // --- ACTIONS PROFILE ---
       setUserProfile: (profile) => set((state) => ({
         userProfile: { 
@@ -753,10 +816,10 @@ export const useStore = create<LifeQuestStore>()(
     }),
     {
       name: 'lifequest-storage',
-      // KITA GUNAKAN LOCAL STORAGE BIASA AGAR TIDAK BENTROK SAAT INIT CHARACTER
       storage: createJSONStorage(() => localStorage), 
       partialize: (state) => Object.fromEntries(
-        Object.entries(state).filter(([key]) => !['coinPopup', 'alertDialog', 'confirmDialog'].includes(key))
+        // JANGAN persist state ini ke local storage
+        Object.entries(state).filter(([key]) => !['coinPopup', 'alertDialog', 'confirmDialog', 'isSyncing', 'hasLoadedFromCloud'].includes(key))
       ),
     }
   )
