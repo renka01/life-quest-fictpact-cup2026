@@ -89,7 +89,8 @@ export interface UserProfile {
   avatarId?: number | null; 
   level?: number | null;    
   gold?: number | null;     
-  exp?: number | null;      
+  exp?: number | null;
+  bio?: string;      
 }
 
 export interface DailyProgress {

@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import Technomancer from '@/components/art/Technomancer';
 import TechnomancerGirl from '@/components/art/TechnomancerGirl';
-import { Heart, Star, RefreshCw, Shield, Sword, Brain, User, X, Edit3 } from 'lucide-react';
+import { Heart, Star, RefreshCw, Shield, Sword, Brain, User, X, Edit3, AlertTriangle } from 'lucide-react';
 import { useStore } from '@/store/useStore';
 import { ITEMS } from '@/components/ShopBoard';
 import { translations } from '@/utils/translations';
@@ -15,6 +15,10 @@ export default function StatusPanel({ isOpen, onClose }: { isOpen: boolean, onCl
   // State untuk Modal Edit Bio
   const [isBioModalOpen, setIsBioModalOpen] = useState(false);
   const [bioInput, setBioInput] = useState('');
+
+  // State untuk Modal Reset Character
+  const [isResetModalOpen, setIsResetModalOpen] = useState(false);
+  const [isResetting, setIsResetting] = useState(false);
 
   // ── Hitung bonus stats ──────────────────────────────────────
   const baseSTR = 10 + stats.level * 2;
@@ -73,6 +77,40 @@ export default function StatusPanel({ isOpen, onClose }: { isOpen: boolean, onCl
     if (playSound) playSound('click');
   };
 
+  // ── Fungsi Reset Karakter ────────────────────────────────────
+  const handleOpenResetModal = () => {
+    setIsResetModalOpen(true);
+    if (playSound) playSound('click');
+  };
+
+  const confirmResetCharacter = async () => {
+    setIsResetting(true);
+    try {
+      const res = await fetch('/api/user/profile', {
+        method: 'POST', 
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          nickname: '', 
+          gender: null, 
+          avatarId: null
+        })
+      });
+
+      if (res.ok) {
+        setUserProfile({ nickname: '', gender: null, avatarId: null });
+        setIsResetModalOpen(false);
+        if (playSound) playSound('glitch'); 
+      } else {
+        alert("Gagal mereset karakter di server.");
+      }
+    } catch (err) {
+      console.error(err);
+      alert("Terjadi kesalahan koneksi saat mereset.");
+    } finally {
+      setIsResetting(false);
+    }
+  };
+
   return (
     <>
       <aside
@@ -111,11 +149,12 @@ export default function StatusPanel({ isOpen, onClose }: { isOpen: boolean, onCl
                 Lv. {stats.level} Adventurer
               </p>
               <button
-                onClick={() => useStore.getState().setUserProfile({ nickname: '', gender: null, avatarId: null })}
-                className="text-[8px] bg-red-500/20 text-red-400 px-2 py-1 border border-red-500/50 hover:bg-red-500 hover:text-white transition-colors font-pixel uppercase"
+                onClick={handleOpenResetModal}
+                disabled={isResetting}
+                className="text-[8px] bg-red-500/20 text-red-400 px-2 py-1 border border-red-500/50 hover:bg-red-500 hover:text-white transition-colors font-pixel uppercase disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {tLog.resetChar}
-              </button>
+              </button>            
             </div>
           )}
 
@@ -223,7 +262,7 @@ export default function StatusPanel({ isOpen, onClose }: { isOpen: boolean, onCl
         </div>
       </aside>
 
-      {/* ── MODAL EDIT BIO (Dari Settings) ── */}
+      {/* ── MODAL EDIT BIO ── */}
       {isBioModalOpen && (
         <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-[100] flex justify-center items-center p-4">
           <div className="w-full max-w-md bg-zinc-900 border-4 border-amber-500 shadow-[8px_8px_0_#000] flex flex-col animate-in zoom-in duration-200">
@@ -257,6 +296,56 @@ export default function StatusPanel({ isOpen, onClose }: { isOpen: boolean, onCl
                 className="px-6 py-2 bg-amber-500 text-amber-950 text-xs font-bold uppercase shadow-[4px_4px_0_#000] active:translate-y-[2px] active:shadow-none hover:bg-amber-400 transition-all"
               >
                 Simpan
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ── MODAL KONFIRMASI RESET KARAKTER ── */}
+      {isResetModalOpen && (
+        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-[100] flex justify-center items-center p-4">
+          <div className="w-full max-w-sm bg-zinc-900 border-4 border-red-500 shadow-[8px_8px_0_#000] flex flex-col animate-in zoom-in duration-200">
+            {/* Header Modal */}
+            <div className="bg-red-950/50 border-b-4 border-red-500 p-4 flex justify-between items-center">
+              <h3 className="font-pixel text-[10px] text-red-400 uppercase tracking-widest flex items-center gap-2">
+                <AlertTriangle size={14} className="text-red-500 animate-pulse" /> Peringatan Sistem
+              </h3>
+              <button onClick={() => setIsResetModalOpen(false)} disabled={isResetting} className="text-zinc-400 hover:text-white disabled:opacity-50">
+                <X size={18} />
+              </button>
+            </div>
+            
+            {/* Body Modal */}
+            <div className="p-6 text-center">
+              <p className="text-sm text-zinc-300 leading-relaxed mb-4">
+                Yakin ingin <strong className="text-red-400">mengulang karakter</strong>? 
+              </p>
+              <p className="text-[10px] text-zinc-500 italic bg-zinc-950 p-3 border-2 border-zinc-800 font-mono">
+                "Ini akan membawamu kembali ke layar pemilihan karakter. Aset dan item mungkin tetap tersimpan, tetapi identitas petarungmu akan terhapus."
+              </p>
+            </div>
+
+            {/* Footer Modal */}
+            <div className="p-4 border-t-2 border-zinc-700 bg-zinc-800 flex justify-end gap-3">
+              <button 
+                onClick={() => setIsResetModalOpen(false)}
+                disabled={isResetting}
+                className="px-4 py-2 text-xs font-bold text-zinc-400 hover:text-white uppercase transition-colors disabled:opacity-50"
+              >
+                Batal
+              </button>
+              <button 
+                onClick={confirmResetCharacter}
+                disabled={isResetting}
+                className="flex items-center gap-2 px-6 py-2 bg-red-600 text-white text-xs font-bold uppercase shadow-[4px_4px_0_#000] active:translate-y-[2px] active:shadow-none hover:bg-red-500 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {isResetting ? (
+                  <RefreshCw size={14} className="animate-spin" />
+                ) : (
+                  <Sword size={14} />
+                )}
+                {isResetting ? "Memproses..." : "Ya, Reset"}
               </button>
             </div>
           </div>
