@@ -1,7 +1,7 @@
 "use client";
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { ChevronDown, ChevronUp, ArrowLeft, BookOpen, Swords, ShieldAlert } from 'lucide-react';
+import { ChevronDown, ChevronUp, ArrowLeft, BookOpen, Swords, ShieldAlert, X } from 'lucide-react';
 
 // ═══════════════════════════════════════════════════════════
 // PIXEL ART REUSABLES
@@ -62,6 +62,65 @@ const GrandSpartanLandscape = () => (
 );
 
 // ═══════════════════════════════════════════════════════════
+// MODAL & KONTEN KEBIJAKAN PRIVASI / SYARAT
+// ═══════════════════════════════════════════════════════════
+const PrivacyContent = () => (
+  <div className="space-y-4 text-zinc-300 text-sm">
+    <p>Terakhir diperbarui: 26 Maret 2026</p>
+    <p>Aplikasi Daily Dungeon ("kami") menghargai privasi Anda. Kebijakan Privasi ini menjelaskan bagaimana kami mengumpulkan, menggunakan, dan melindungi informasi Anda saat Anda menggunakan aplikasi kami.</p>
+    <h3 className="font-bold text-amber-400 pt-2">1. Informasi yang Kami Kumpulkan</h3>
+    <p>Kami hanya mengumpulkan informasi yang esensial untuk fungsionalitas aplikasi, yaitu: alamat email Anda untuk keperluan autentikasi akun. Kami tidak mengumpulkan data pribadi sensitif lainnya.</p>
+    <h3 className="font-bold text-amber-400 pt-2">2. Penggunaan Informasi</h3>
+    <p>Alamat email Anda digunakan secara eksklusif untuk: membuat dan mengelola akun Anda, mereset kata sandi, dan proses autentikasi lainnya. Kami tidak akan pernah mengirimkan email promosi atau membagikan email Anda kepada pihak ketiga.</p>
+    <h3 className="font-bold text-amber-400 pt-2">3. Keamanan Data</h3>
+    <p>Kami menggunakan langkah-langkah keamanan standar industri untuk melindungi data Anda dari akses yang tidak sah. Kata sandi Anda di-hash dan tidak dapat kami lihat.</p>
+  </div>
+);
+
+const TermsContent = () => (
+  <div className="space-y-4 text-zinc-300 text-sm">
+    <p>Dengan menggunakan aplikasi Daily Dungeon, Anda setuju untuk terikat oleh Syarat dan Ketentuan berikut:</p>
+    <h3 className="font-bold text-amber-400 pt-2">1. Penggunaan Akun</h3>
+    <p>Anda bertanggung jawab penuh atas semua aktivitas yang terjadi di bawah akun Anda. Jaga kerahasiaan kata sandi Anda dan jangan bagikan dengan siapa pun.</p>
+    <h3 className="font-bold text-amber-400 pt-2">2. Perilaku Pengguna</h3>
+    <p>Anda setuju untuk tidak menggunakan aplikasi ini untuk tujuan ilegal atau yang dilarang. Dilarang keras melakukan pelecehan, spam, atau mencoba merusak integritas sistem kami.</p>
+    <h3 className="font-bold text-amber-400 pt-2">3. Pembatasan Tanggung Jawab</h3>
+    <p>Aplikasi ini disediakan "sebagaimana adanya". Kami tidak bertanggung jawab atas kehilangan data atau kerusakan lain yang mungkin timbul dari penggunaan aplikasi ini.</p>
+  </div>
+);
+
+const PolicyModal = ({ isOpen, onClose, title, children }: { isOpen: boolean; onClose: () => void; title: string; children: React.ReactNode }) => {
+  if (!isOpen) return null;
+
+  return (
+    <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex justify-center items-center z-[10000] animate-in fade-in-50" onClick={onClose}>
+      <div 
+        className="bg-zinc-900 border-2 border-zinc-700 rounded-2xl shadow-2xl w-full max-w-2xl max-h-[80vh] flex flex-col animate-in zoom-in-95"
+        onClick={e => e.stopPropagation()}
+      >
+        <header className="flex items-center justify-between p-4 border-b border-zinc-700 flex-shrink-0">
+          <h2 className="text-lg font-bold text-amber-400">{title}</h2>
+          <button onClick={onClose} className="p-2 rounded-full text-zinc-500 hover:bg-zinc-800 hover:text-white transition-colors">
+            <X size={20} />
+          </button>
+        </header>
+        <main className="p-6 overflow-y-auto">
+          {children}
+        </main>
+        <footer className="p-4 border-t border-zinc-700 flex-shrink-0 text-right">
+          <button 
+            onClick={onClose}
+            className="bg-amber-500 hover:bg-amber-400 text-zinc-900 px-6 py-2 rounded-lg font-bold text-sm transition-colors"
+          >
+            Tutup
+          </button>
+        </footer>
+      </div>
+    </div>
+  );
+};
+
+// ═══════════════════════════════════════════════════════════
 // KOMPONEN ACCORDION FAQ
 // ═══════════════════════════════════════════════════════════
 const FaqItem = ({ question, answer }: { question: string, answer: React.ReactNode }) => {
@@ -104,12 +163,25 @@ const faqs = [
 export default function FaqPage() {
   const router = useRouter();
   const [isMounted, setIsMounted] = React.useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modalContent, setModalContent] = useState<{ title: string; content: React.ReactNode } | null>(null);
   
   React.useEffect(() => setIsMounted(true), []);
+
+  const openModal = (type: 'privacy' | 'terms') => {
+    if (type === 'privacy') {
+      setModalContent({ title: 'Kebijakan Privasi', content: <PrivacyContent /> });
+    } else {
+      setModalContent({ title: 'Syarat dan Ketentuan', content: <TermsContent /> });
+    }
+    setIsModalOpen(true);
+  };
 
   return (
     <div className="min-h-screen bg-zinc-900 flex flex-col relative overflow-hidden font-sans">
       
+      {isModalOpen && modalContent && <PolicyModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} title={modalContent.title}>{modalContent.content}</PolicyModal>}
+
       {/* Latar Belakang Bintang */}
       {isMounted && (
         <div className="absolute inset-0 pointer-events-none opacity-20 z-0">
@@ -218,8 +290,8 @@ export default function FaqPage() {
         <div className="max-w-4xl mx-auto flex flex-col md:flex-row justify-between items-center text-xs text-zinc-400 pointer-events-auto">
           <p className="font-medium tracking-wide mb-4 md:mb-0 text-center md:text-left">© 2026 Daily Dungeon. All rights reserved.</p>
           <div className="flex gap-6 font-medium">
-            <a href="#" className="hover:text-amber-400 transition-colors">Kebijakan Privasi</a>
-            <a href="#" className="hover:text-amber-400 transition-colors">Syarat dan Ketentuan</a>
+            <button onClick={() => openModal('privacy')} className="hover:text-amber-400 transition-colors">Kebijakan Privasi</button>
+            <button onClick={() => openModal('terms')} className="hover:text-amber-400 transition-colors">Syarat dan Ketentuan</button>
           </div>
         </div>
       </footer>

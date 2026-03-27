@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { signIn } from 'next-auth/react';
-import { Instagram, Twitter, Github, CheckCircle2, Coins, Flame, Eye, EyeOff } from 'lucide-react';
+import { Instagram, Twitter, Github, CheckCircle2, Coins, Flame, Eye, EyeOff, X } from 'lucide-react';
 import { useStore } from '@/store/useStore';
 
 // ═══════════════════════════════════════════════════════════
@@ -217,6 +217,65 @@ const FeatureCard = ({ emoji, title, desc }: { emoji: string; title: string; des
 );
 
 // ═══════════════════════════════════════════════════════════
+// MODAL & KONTEN KEBIJAKAN PRIVASI / SYARAT
+// ═══════════════════════════════════════════════════════════
+const PrivacyContent = () => (
+  <div className="space-y-4 text-zinc-300 text-sm">
+    <p>Terakhir diperbarui: 26 Maret 2026</p>
+    <p>Aplikasi Daily Dungeon ("kami") menghargai privasi Anda. Kebijakan Privasi ini menjelaskan bagaimana kami mengumpulkan, menggunakan, dan melindungi informasi Anda saat Anda menggunakan aplikasi kami.</p>
+    <h3 className="font-bold text-amber-400 pt-2">1. Informasi yang Kami Kumpulkan</h3>
+    <p>Kami hanya mengumpulkan informasi yang esensial untuk fungsionalitas aplikasi, yaitu: alamat email Anda untuk keperluan autentikasi akun. Kami tidak mengumpulkan data pribadi sensitif lainnya.</p>
+    <h3 className="font-bold text-amber-400 pt-2">2. Penggunaan Informasi</h3>
+    <p>Alamat email Anda digunakan secara eksklusif untuk: membuat dan mengelola akun Anda, mereset kata sandi, dan proses autentikasi lainnya. Kami tidak akan pernah mengirimkan email promosi atau membagikan email Anda kepada pihak ketiga.</p>
+    <h3 className="font-bold text-amber-400 pt-2">3. Keamanan Data</h3>
+    <p>Kami menggunakan langkah-langkah keamanan standar industri untuk melindungi data Anda dari akses yang tidak sah. Kata sandi Anda di-hash dan tidak dapat kami lihat.</p>
+  </div>
+);
+
+const TermsContent = () => (
+  <div className="space-y-4 text-zinc-300 text-sm">
+    <p>Dengan menggunakan aplikasi Daily Dungeon, Anda setuju untuk terikat oleh Syarat dan Ketentuan berikut:</p>
+    <h3 className="font-bold text-amber-400 pt-2">1. Penggunaan Akun</h3>
+    <p>Anda bertanggung jawab penuh atas semua aktivitas yang terjadi di bawah akun Anda. Jaga kerahasiaan kata sandi Anda dan jangan bagikan dengan siapa pun.</p>
+    <h3 className="font-bold text-amber-400 pt-2">2. Perilaku Pengguna</h3>
+    <p>Anda setuju untuk tidak menggunakan aplikasi ini untuk tujuan ilegal atau yang dilarang. Dilarang keras melakukan pelecehan, spam, atau mencoba merusak integritas sistem kami.</p>
+    <h3 className="font-bold text-amber-400 pt-2">3. Pembatasan Tanggung Jawab</h3>
+    <p>Aplikasi ini disediakan "sebagaimana adanya". Kami tidak bertanggung jawab atas kehilangan data atau kerusakan lain yang mungkin timbul dari penggunaan aplikasi ini.</p>
+  </div>
+);
+
+const PolicyModal = ({ isOpen, onClose, title, children }: { isOpen: boolean; onClose: () => void; title: string; children: React.ReactNode }) => {
+  if (!isOpen) return null;
+
+  return (
+    <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex justify-center items-center z-[10000] animate-in fade-in-50" onClick={onClose}>
+      <div 
+        className="bg-zinc-900 border-2 border-zinc-700 rounded-2xl shadow-2xl w-full max-w-2xl max-h-[80vh] flex flex-col animate-in zoom-in-95"
+        onClick={e => e.stopPropagation()}
+      >
+        <header className="flex items-center justify-between p-4 border-b border-zinc-700 flex-shrink-0">
+          <h2 className="text-lg font-bold text-amber-400">{title}</h2>
+          <button onClick={onClose} className="p-2 rounded-full text-zinc-500 hover:bg-zinc-800 hover:text-white transition-colors">
+            <X size={20} />
+          </button>
+        </header>
+        <main className="p-6 overflow-y-auto">
+          {children}
+        </main>
+        <footer className="p-4 border-t border-zinc-700 flex-shrink-0 text-right">
+          <button 
+            onClick={onClose}
+            className="bg-amber-500 hover:bg-amber-400 text-zinc-900 px-6 py-2 rounded-lg font-bold text-sm transition-colors"
+          >
+            Tutup
+          </button>
+        </footer>
+      </div>
+    </div>
+  );
+};
+
+// ═══════════════════════════════════════════════════════════
 // KOMPONEN ACCORDION FAQ
 // ═══════════════════════════════════════════════════════════
 
@@ -238,6 +297,8 @@ export default function LoginPage() {
   const [isMounted, setIsMounted] = useState(false);
   const [showPass,  setShowPass]  = useState(false);
   const [showPass2, setShowPass2] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modalContent, setModalContent] = useState<{ title: string; content: React.ReactNode } | null>(null);
 
   useEffect(() => {
     setIsMounted(true);
@@ -285,6 +346,8 @@ export default function LoginPage() {
           setError(result.error);
           setLoading(false);
         } else if (result?.ok) {
+          // Hapus state lama dari local storage untuk memastikan sesi baru dimulai dengan bersih.
+          localStorage.removeItem('lifequest-storage');
           setShowTransition(true);
           setUserProfile({ accountName: email, nickname: email.split('@')[0] });
           router.push('/');
@@ -302,15 +365,49 @@ export default function LoginPage() {
 
       if (result?.error) {
         setError(result.error);
+          setLoading(false)
+        console.log("NextAuth signIn result:", result); // Tambahkan ini untuk debugging
+        console.error("OAuth Login Error:", result.error);  // Tambahkan ini
         setLoading(false);
       } else if (result?.ok) {
-        setShowTransition(true);
+        // Hapus state lama dari local storage untuk memastikan sesi baru dimulai dengan bersih.
+        localStorage.removeItem('lifequest-storage');
         setUserProfile({ accountName: email, nickname: email.split('@')[0] });
         router.push('/');
       } else {
         setLoading(false);
       }
     }
+  };
+
+  const openModal = (type: 'privacy' | 'terms') => {
+    if (type === 'privacy') {
+      setModalContent({ title: 'Kebijakan Privasi', content: <PrivacyContent /> });
+    } else {
+      setModalContent({ title: 'Syarat dan Ketentuan', content: <TermsContent /> });
+    }
+    setIsModalOpen(true);
+  };
+
+  const handleOAuthLogin = (provider: 'google' | 'github') => {
+    // Hapus state lama dari local storage untuk memastikan sesi baru dimulai dengan bersih.
+    localStorage.removeItem('lifequest-storage');
+    setLoading(true); // Set loading state for OAuth too
+    const options = provider === 'google' 
+        ? { prompt: 'select_account' } 
+        : { prompt: 'consent' };
+
+    // Panggil signIn setelah menghapus storage
+    signIn(provider, { callbackUrl: '/' }, options).then(result => {
+      if (result?.error) {
+        setError(result.error);
+        setLoading(false);
+        console.error("OAuth Login Error:", result.error);
+        console.log("NextAuth OAuth signIn result:", result); // Tambahkan ini untuk debugging
+      } else if (result?.ok) {
+        // Redirect akan ditangani oleh NextAuth.js secara otomatis, tidak perlu router.push manual.
+      }
+    });
   };
 
 // ═══════════════════════════════════════════════════════════
@@ -437,6 +534,9 @@ const SangarDragonIcon = () => (
 
   return (
     <div className="min-h-screen bg-zinc-900 flex flex-col relative overflow-hidden" style={{ fontFamily: "'Inter', 'Segoe UI', sans-serif" }}>
+      
+      {isModalOpen && modalContent && <PolicyModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} title={modalContent.title}>{modalContent.content}</PolicyModal>}
+
       <style>{`
         @keyframes float { 0% { transform: translateY(0px) rotate(0deg); } 100%{ transform: translateY(-12px) rotate(5deg); } }
         @keyframes twinkle { 0%, 100% { opacity: 0.1; } 50% { opacity: 1; } }
@@ -633,7 +733,7 @@ const SangarDragonIcon = () => (
               <div className="flex-1 h-px bg-amber-200"/>
             </div>
 
-            <button type="button" onClick={() => signIn('google', { callbackUrl: '/' }, { prompt: 'select_account' })} className="w-full py-3 bg-transparent border border-amber-500/30 text-zinc-300 rounded font-medium text-sm hover:bg-amber-500/10 transition-colors flex items-center justify-center gap-3">
+            <button type="button" onClick={() => handleOAuthLogin('google')} className="w-full py-3 bg-transparent border border-amber-500/30 text-zinc-300 rounded font-medium text-sm hover:bg-amber-500/10 transition-colors flex items-center justify-center gap-3">
               <svg viewBox="0 0 20 20" width="18" height="18">
                 <path d="M19.6 10.2c0-.6-.1-1.3-.2-1.9H10v3.6h5.4c-.2 1.2-1 2.3-2.1 3v2.5h3.4c2-1.8 3.1-4.5 3.1-7.2z" fill="#4285F4"/>
                 <path d="M10 20c2.7 0 5-.9 6.7-2.4l-3.4-2.5c-.9.6-2 1-3.3 1-2.5 0-4.7-1.7-5.5-4H1v2.6C2.7 17.8 6.2 20 10 20z" fill="#34A853"/>
@@ -642,7 +742,7 @@ const SangarDragonIcon = () => (
               </svg>
               {tab === 'login' ? 'Masuk dengan Google' : 'Daftar dengan Google'}
             </button>
-            <button type="button" onClick={() => signIn('github', { callbackUrl: '/' }, { prompt: 'consent' })} className="w-full py-3 bg-transparent border border-amber-500/30 text-zinc-300 rounded font-medium text-sm hover:bg-amber-500/10 transition-colors flex items-center justify-center gap-3">
+            <button type="button" onClick={() => handleOAuthLogin('github')} className="w-full py-3 bg-transparent border border-amber-500/30 text-zinc-300 rounded font-medium text-sm hover:bg-amber-500/10 transition-colors flex items-center justify-center gap-3">
               <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M12 2C6.477 2 2 6.477 2 12c0 4.42 2.865 8.166 6.839 9.489.5.092.682-.217.682-.482 0-.237-.008-.866-.013-1.7-2.782.603-3.369-1.34-3.369-1.34-.454-1.156-1.11-1.462-1.11-1.462-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.831.092-.646.35-1.086.636-1.336-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.025A9.578 9.578 0 0112 6.836c.85.004 1.705.114 2.504.336 1.909-1.294 2.747-1.025 2.747-1.025.546 1.379.203 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.743 0 .267.18.578.688.48C19.138 20.161 22 16.418 22 12c0-5.523-4.477-10-10-10z"/></svg>
               {tab === 'login' ? 'Masuk dengan Github' : 'Daftar dengan Github'}
             </button>
@@ -700,21 +800,31 @@ const SangarDragonIcon = () => (
         <div className="max-w-3xl mx-auto px-8 grid grid-cols-1 md:grid-cols-2 gap-12 text-sm pb-12 text-center md:text-left">
           <div className="flex flex-col gap-4 items-center md:items-start">
             <h4 className="text-amber-500 font-bold text-lg mb-2">Dukung</h4>
-            <a href="https://www.instagram.com/renhapiz" target="_blank" rel="noreferrer" className="text-zinc-300 hover:text-amber-400 transition-colors">FAQ / Bantuan</a>
-            <a href="https://www.instagram.com/renhapiz" target="_blank" rel="noreferrer" className="text-zinc-300 hover:text-amber-400 transition-colors">Laporkan Bug</a>
-            <a href="https://www.instagram.com/renhapiz" target="_blank" rel="noreferrer" className="text-zinc-300 hover:text-amber-400 transition-colors">Ajukan Fitur Baru</a>
+            <a href="/faq" className="text-zinc-300 hover:text-amber-400 transition-colors">FAQ / Bantuan</a>
+            <a href="mailto:dailydungeon268@gmail.com?subject=Laporan%20Bug%20-%20Daily%20Dungeon" target="_blank" rel="noreferrer" className="text-zinc-300 hover:text-amber-400 transition-colors">Laporkan Bug</a>
+            <a href="mailto:dailydungeon268@gmail.com?subject=Saran%20Fitur%20Baru%20-%20Daily%20Dungeon" target="_blank" rel="noreferrer" className="text-zinc-300 hover:text-amber-400 transition-colors">Ajukan Fitur Baru</a>
           </div>
-          <div className="flex flex-col gap-4 items-center md:items-start">
-            <h4 className="text-amber-500 font-bold text-lg mb-2">Sosial</h4>
-            <a href="https://www.instagram.com/renhapiz" target="_blank" rel="noreferrer" className="text-zinc-300 hover:text-amber-400 transition-colors flex items-center gap-3"><Instagram size={18}/> Instagram</a>
-            <a href="https://github.com/renka01/life-quest-fictpact-cup2026" target="_blank" rel="noreferrer" className="text-zinc-300 hover:text-amber-400 transition-colors flex items-center gap-3"><Github size={18}/> GitHub</a>
+          <div className="flex flex-col gap-4 items-center md:items-start text-zinc-300">
+            <h4 className="text-amber-500 font-bold text-lg mb-2">Sosial Developer</h4>
+            <div className="flex items-center gap-2">
+              <Instagram size={18}/>
+              <a href="https://www.instagram.com/renhapiz" target="_blank" rel="noreferrer" className="hover:text-amber-400 transition-colors">renhapiz</a>,
+              <a href="https://www.instagram.com/wldnxd" target="_blank" rel="noreferrer" className="hover:text-amber-400 transition-colors ml-1">wldnxd</a>,
+              <a href="https://www.instagram.com/rappizr" target="_blank" rel="noreferrer" className="hover:text-amber-400 transition-colors ml-1">rappizr</a>
+            </div>
+            <div className="flex items-center gap-2">
+              <Github size={18}/>
+              <a href="https://github.com/renka01" target="_blank" rel="noreferrer" className="hover:text-amber-400 transition-colors">renka01</a>,
+              <a href="https://github.com/wldnxd" target="_blank" rel="noreferrer" className="hover:text-amber-400 transition-colors ml-1">wldnxd</a>,
+              <a href="https://github.com/Rappizr" target="_blank" rel="noreferrer" className="hover:text-amber-400 transition-colors ml-1">Rappizr</a>
+            </div>
           </div>
         </div>
         <div className="max-w-5xl mx-auto px-8 flex flex-col md:flex-row justify-between items-center text-xs text-zinc-400 pt-6 border-t border-zinc-700/50">
           <p className="font-medium tracking-wide">© 2026 Daily Dungeon. All rights reserved.</p>
           <div className="flex gap-6 mt-4 md:mt-0 font-medium">
-            <a href="#" className="hover:text-amber-400 transition-colors">Kebijakan Privasi</a>
-            <a href="#" className="hover:text-amber-400 transition-colors">Syarat dan Ketentuan</a>
+            <button onClick={() => openModal('privacy')} className="hover:text-amber-400 transition-colors">Kebijakan Privasi</button>
+            <button onClick={() => openModal('terms')} className="hover:text-amber-400 transition-colors">Syarat dan Ketentuan</button>
           </div>
         </div>
       </footer>
