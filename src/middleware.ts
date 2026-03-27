@@ -25,5 +25,5 @@ export const config = {
   // Matcher menentukan rute mana saja yang akan dicek oleh middleware.
   // Kita menambahkan regex `.*\\.(?:png|jpg|jpeg|svg|gif|webp|mp3|wav|ogg)$`
   // agar semua file aset media di folder public tidak ikut diblokir.
-  matcher: ["/((?!api|login|register|_next/static|_next/image|favicon.ico|.*\\.(?:png|jpg|jpeg|svg|gif|webp|mp3|wav|ogg)$).*)"],
+  matcher: ["/((?!api|login|register|faq|start|_next/static|_next/image|favicon.ico|.*\\.(?:png|jpg|jpeg|svg|gif|webp|mp3|wav|ogg)$).*)"],
 };

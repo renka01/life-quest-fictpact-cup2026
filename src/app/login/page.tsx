@@ -605,30 +605,30 @@ export default function LoginPage() {
       <div className="z-0"><FloatingCoin x="50%" y="10%" delay={0.5}/></div>
       <div className="z-0"><FloatingCoin x="90%" y="50%" delay={1.5}/></div>
 
-      {/* HEADER TINGKAT TINGGI */}
-      <header className="relative z-[999] flex items-center justify-between px-4 md:px-8 py-4 md:py-6 flex-shrink-0">
+      {/* HEADER */}
+      <header className="relative z-50 flex items-center justify-between px-4 md:px-8 py-4 md:py-6 flex-shrink-0">
         <div className="flex items-center">
           <img
             src="/logo.png"
             alt="Daily Dungeon Logo"
-            className="h-10 sm:h-16 md:h-24 relative z-[999]"
+            className="h-10 sm:h-16 md:h-24 relative"
             style={{ imageRendering: 'pixelated' }}
           />
         </div>
-        <nav className="flex items-center gap-4 md:gap-6 relative z-[999]">
+        <nav className="flex items-center gap-4 md:gap-6">
           
-          {/* MENGGUNAKAN LINK BAWAAN NEXT.JS */}
-          <Link href="/start" className="hidden sm:block text-sm text-amber-200/70 hover:text-amber-400 transition-colors font-semibold cursor-pointer relative z-[999]">
+          {/* TOMBOL AYO MULAI DIKEMBALIKAN & DIJAMIN MUNCUL */}
+          <Link href="/start" className="text-sm text-amber-200/70 hover:text-amber-400 transition-colors font-semibold">
             {t.start}
           </Link>
           
           {/* LANGUAGE DROPDOWN */}
           {isMounted && (
-            <div className="relative z-[999]">
+            <div className="relative">
               <button 
                 type="button"
                 onClick={() => setIsLangOpen(!isLangOpen)}
-                className="flex items-center gap-1 text-sm text-amber-200/70 hover:text-amber-400 transition-colors font-semibold cursor-pointer"
+                className="flex items-center gap-1 text-sm text-amber-200/70 hover:text-amber-400 transition-colors font-semibold"
               >
                 <Globe size={16} />
                 <span className="hidden sm:block">{t.langLabel}</span>
@@ -636,7 +636,7 @@ export default function LoginPage() {
               </button>
 
               {isLangOpen && (
-                <div className="absolute top-full mt-4 right-0 w-36 bg-zinc-800 border-2 border-zinc-700 rounded-xl shadow-2xl overflow-hidden flex flex-col z-[999] animate-in slide-in-from-top-2">
+                <div className="absolute top-full mt-4 right-0 w-36 bg-zinc-800 border-2 border-zinc-700 rounded-xl shadow-2xl overflow-hidden flex flex-col z-[100] animate-in slide-in-from-top-2">
                   <button
                     type="button"
                     onClick={() => { updateSetting('language', 'id'); setIsLangOpen(false); }}
@@ -656,15 +656,14 @@ export default function LoginPage() {
             </div>
           )}
 
-          {/* MENGGUNAKAN LINK BAWAAN NEXT.JS UNTUK FAQ */}
-          <Link href="/faq" className="hidden lg:block text-sm text-amber-200/70 hover:text-amber-400 transition-colors font-semibold cursor-pointer relative z-[999]">
+          <Link href="/faq" className="hidden md:block text-sm text-amber-200/70 hover:text-amber-400 transition-colors font-semibold">
             {t.faq}
           </Link>
           
           <button
             type="button"
             onClick={() => setTab(tab === 'login' ? 'register' : 'login')}
-            className="bg-amber-500 hover:bg-amber-400 text-zinc-900 px-4 md:px-6 py-2 rounded shadow-md font-bold text-xs md:text-sm transition-colors cursor-pointer relative z-[999]">
+            className="bg-amber-500 hover:bg-amber-400 text-zinc-900 px-4 md:px-6 py-2 rounded shadow-md font-bold text-xs md:text-sm transition-colors">
             {tab === 'login' ? t.registerBtn : t.loginBtn}
           </button>
         </nav>
