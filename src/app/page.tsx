@@ -62,13 +62,14 @@ export default function Home() {
     tasks, stats, checkDailyStreak, coinPopup, userProfile, 
     setUserProfile, dailyProgress, claimDailyReward, playSound,
     inventory, accounts, equippedItems,
-    hasLoadedFromCloud, setHasLoadedFromCloud // Ambil flag sinkronisasi
+    hasLoadedFromCloud, setHasLoadedFromCloud 
   } = useStore();
   
   const router = useRouter(); 
   const extendedTasks = tasks as ExtendedTask[];
 
   const [isMounted, setIsMounted] = useState(false);
+  const [isAppReady, setIsAppReady] = useState(false); // STATE PENGUNCI LOADING
   const [searchQuery, setSearchQuery] = useState("");
   const [activeCategory, setActiveCategory] = useState("Semua");
   const [shopCategory, setShopCategory] = useState("all");
@@ -131,22 +132,23 @@ export default function Home() {
             });
 
             // LOAD CLOUD DATA
-          const progRes = await fetch('/api/progress');
+            const progRes = await fetch('/api/progress');
             if (progRes.ok) {
               const progData = await progRes.json();
               if (progData.gameState) {
                  useStore.getState().loadFromCloud(progData.gameState);
               } else {
-                 // Kalau belum punya progress sama sekali (User Baru)
                  setHasLoadedFromCloud(true); 
               }
             }
-           return; 
+            
+            // BERHASIL LOAD SEMUA, BUKA GERBANG LOADING
+            setIsAppReady(true);
+            return; 
           }
         }
       } catch (err) { console.error(err); }
       
-      // Jika sampai baris ini berarti sesi auth tidak valid
       router.push('/login');
     };
 
@@ -157,40 +159,18 @@ export default function Home() {
   // 🔥 AUTO-SAVE BACKGROUND DAEMON 🔥
   // ========================================================
   useEffect(() => {
-    // 1. Tahan auto-save kalau web belum siap atau data dari cloud belum di-load (mencegah numpuk data kosong)
-    if (!isMounted || !userProfile?.accountName || !useStore.getState().hasLoadedFromCloud) return;
-    
-    // 2. Gunakan Debounce (Delay 3 detik). 
-    // Jadi kalau kamu centang 5 misi berturut-turut dengan cepat, dia hanya akan nge-save 1 kali di akhir.
-    const autoSaveTimer = setTimeout(() => {
-      console.log("💾 Mengamankan progres ke Cloud..."); // Bisa dicek di Inspect Element -> Console
-      
-      // Panggil fungsi syncToCloud TANPA parameter true (agar pop-up tidak muncul)
-      useStore.getState().syncToCloud(); 
-    }, 3000); 
-
-    // 3. Bersihkan timer kalau ada perubahan baru sebelum 3 detik
-    return () => clearTimeout(autoSaveTimer);
-    
-  // 4. Daftar "Sensor". Jika salah satu data di bawah ini berubah, timer auto-save akan menyala.
-  }, [
-    tasks, stats, dailyProgress, inventory, accounts, equippedItems, 
-    isMounted, userProfile?.accountName
-  ]);
-
-  // ========================================================
-  // 🔥 AUTO-SAVE BACKGROUND DAEMON 🔥
-  // ========================================================
-  useEffect(() => {
-    // TUNGGU sampai load dari cloud benar-benar selesai!
     if (!isMounted || !userProfile?.accountName || !hasLoadedFromCloud) return;
     
     const autoSaveTimer = setTimeout(() => {
-      useStore.getState().syncToCloud();
+      console.log("💾 Mengamankan progres ke Cloud..."); 
+      useStore.getState().syncToCloud(); 
     }, 3000); 
 
     return () => clearTimeout(autoSaveTimer);
-  }, [tasks, stats, dailyProgress, inventory, accounts, equippedItems, isMounted, userProfile?.accountName, hasLoadedFromCloud]);
+  }, [
+    tasks, stats, dailyProgress, inventory, accounts, equippedItems, 
+    isMounted, userProfile?.accountName, hasLoadedFromCloud
+  ]);
 
   useEffect(() => {
     if (isMounted) checkDailyStreak();
@@ -225,9 +205,10 @@ export default function Home() {
     setActiveMenu("Keuangan");
   };
 
+  // UPDATE DARI TEMAN: Menggunakan await signOut() agar session di backend terhapus tuntas
   const handleLogout = async () => {
     setUserProfile({ accountName: "", nickname: "", gender: null, avatarId: null });
-    setHasLoadedFromCloud(false); // Reset flag
+    setHasLoadedFromCloud(false); 
     await signOut({ redirect: true, callbackUrl: "/login" });
   };
 
@@ -245,21 +226,40 @@ export default function Home() {
     setTimeout(() => { setIsTransitioning(false); }, 800);
   };
 
-  if (!isMounted) {
+  // ========================================================
+  // RENDER PENGUNCI LOADING SPARTAN FULLSCREEN
+  // ========================================================
+  if (!isMounted || !isAppReady || !userProfile?.accountName) {
     return (
-      <div className="h-screen w-full bg-zinc-900 flex items-center justify-center">
-        <span className="font-pixel text-2xl text-white tracking-[0.5em] animate-pulse drop-shadow-[0_0_10px_rgba(255,255,255,0.8)]">
-          LOADING
-        </span>
+      <div className="fixed inset-0 z-[9999] bg-zinc-950 flex flex-col items-center justify-center">
+        <div className="mb-12 relative flex justify-center items-center" style={{ animation: 'float 2s ease-in-out infinite alternate' }}>
+          <div className="absolute inset-0 bg-amber-500/30 blur-[50px] rounded-full animate-pulse" />
+          <img 
+            src="/favicon.ico" 
+            alt="Daily Dungeon Loading" 
+            className="w-32 h-32 md:w-48 md:h-48 relative z-10 drop-shadow-[0_10px_15px_rgba(0,0,0,0.8)]" 
+            style={{ imageRendering: 'pixelated' }} 
+          />
+        </div>
+        <div className="w-64 md:w-80 h-6 bg-zinc-900 border-4 border-zinc-700 p-0.5 relative overflow-hidden shadow-[0_0_15px_rgba(251,191,36,0.2)]">
+          <div className="h-full bg-amber-500" style={{ animation: 'fillBarPhase2 0.8s ease-out forwards' }} />
+        </div>
+        <style>{`
+          @keyframes float { 0% { transform: translateY(0px) rotate(0deg); } 100%{ transform: translateY(-12px) rotate(5deg); } }
+          @keyframes fillBarPhase2 { 0% { width: 80%; } 100% { width: 100%; } }
+        `}</style>
       </div>
     );
   }
-
-  if (!userProfile?.accountName) return <div className="h-screen w-full bg-zinc-900" />;
   
+  // Jika belum pilih gender (Character Selection)
   if (!userProfile?.gender) {
-      return <CharacterSelection onComplete={() => console.log("Karakter siap!")} />;
-    }
+      return (
+        <div className="animate-in fade-in duration-700">
+          <CharacterSelection onComplete={() => console.log("Karakter siap!")} />
+        </div>
+      );
+  }
   
   const renderContent = () => {
     switch (activeMenu) {
