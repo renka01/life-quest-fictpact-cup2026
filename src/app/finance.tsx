@@ -49,7 +49,7 @@ const CircularProgress = ({
           stroke="currentColor"
           strokeWidth="5"
           fill="transparent"
-          className="text-slate-950/50"
+          className="text-zinc-950/50"
         />
         <circle
           cx="28"
@@ -172,25 +172,25 @@ export default function Finance({
 
   return (
     <div className="flex flex-col h-full animate-in fade-in duration-500 gap-6 text-left p-4">
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-end shrink-0 border-b border-slate-700/50 pb-6 gap-4">
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-end shrink-0 border-b border-zinc-700/50 pb-6 gap-4">
         <div className="flex flex-col gap-3 text-left">
           <h1 className="font-pixel text-sm md:text-base text-white flex items-center gap-3 drop-shadow-[2px_2px_0_#000]">
             <span className="text-cyan-500"><Wallet size={18} /></span>
             {tFin.center}
           </h1>
           <div>
-            <p className="font-pixel text-[7px] md:text-[8px] text-slate-400 uppercase tracking-widest mb-2">
+            <p className="font-pixel text-[7px] md:text-[8px] text-zinc-400 uppercase tracking-widest mb-2">
               {tFin.netWorth}
             </p>
-            <p className="text-4xl font-bold text-white font-mono italic bg-clip-text text-transparent bg-gradient-to-r from-white to-slate-500">
+            <p className="text-4xl font-bold text-white font-mono italic bg-clip-text text-transparent bg-gradient-to-r from-white to-zinc-500">
               Rp {netWorth.toLocaleString()}
             </p>
           </div>
         </div>
 
         <div className="flex gap-4 font-mono italic w-full md:w-auto">
-          <div className="flex-1 md:flex-none bg-[#24283b] border-2 border-slate-600 border-b-4 border-b-emerald-500 px-6 py-3 rounded-none shadow-[4px_4px_0_#000]">
-            <p className="text-[10px] font-pixel not-italic text-slate-500 mb-2 uppercase">
+          <div className="flex-1 md:flex-none bg-zinc-800 border-2 border-zinc-600 border-b-4 border-b-emerald-500 px-6 py-3 rounded-none shadow-[4px_4px_0_#000]">
+            <p className="text-[10px] font-pixel not-italic text-zinc-500 mb-2 uppercase">
               {tFin.cash}
             </p>
             <p className="text-xl font-bold text-emerald-400">
@@ -198,8 +198,8 @@ export default function Finance({
             </p>
           </div>
 
-          <div className="flex-1 md:flex-none bg-[#24283b] border-2 border-slate-600 border-b-4 border-b-cyan-500 px-6 py-3 rounded-none shadow-[4px_4px_0_#000]">
-            <p className="text-[10px] font-pixel not-italic text-slate-500 mb-2 uppercase">
+          <div className="flex-1 md:flex-none bg-zinc-800 border-2 border-zinc-600 border-b-4 border-b-cyan-500 px-6 py-3 rounded-none shadow-[4px_4px_0_#000]">
+            <p className="text-[10px] font-pixel not-italic text-zinc-500 mb-2 uppercase">
               {tFin.asset}
             </p>
             <p className="text-xl font-bold text-cyan-400">
@@ -212,8 +212,8 @@ export default function Finance({
       <div className="grid grid-cols-1 xl:grid-cols-3 gap-6 flex-1 items-start">
         {/* KOLOM 1 */}
         {(activeCategory === 'all' || activeCategory === 'rekening') && (
-        <div className="bg-[#1a1b26] border-4 border-emerald-600 rounded-none flex flex-col min-h-[450px] overflow-hidden shadow-[8px_8px_0_rgba(0,0,0,0.5)]">
-          <div className="p-5 border-b-4 border-emerald-600 flex items-center gap-3 text-emerald-400 bg-[#24283b]">
+        <div className="bg-zinc-900 border-4 border-emerald-600 rounded-none flex flex-col min-h-[450px] overflow-hidden shadow-[8px_8px_0_rgba(0,0,0,0.5)]">
+          <div className="p-5 border-b-4 border-emerald-600 flex items-center gap-3 text-emerald-400 bg-zinc-800">
             <CreditCard size={20} />
             <h2 className="text-base font-bold uppercase tracking-wider">
               {tFin.walletTitle}
@@ -223,21 +223,21 @@ export default function Finance({
           <div className="p-5 flex flex-col gap-4 overflow-y-auto">
             <button
               onClick={() => openAddModal("rekening")}
-              className="w-full bg-[#24283b] border-2 border-dashed border-slate-600 hover:border-emerald-500 text-slate-400 hover:text-emerald-400 p-5 rounded-none flex items-center justify-center gap-2 text-sm font-bold transition-all uppercase hover:bg-emerald-500/10"
+              className="w-full bg-zinc-800 border-2 border-dashed border-zinc-600 hover:border-emerald-500 text-zinc-400 hover:text-emerald-400 p-5 rounded-none flex items-center justify-center gap-2 text-sm font-bold transition-all uppercase hover:bg-emerald-500/10"
             >
               <Plus size={18} /> {tFin.addWallet}
             </button>
 
           {filteredRekening.length === 0 && q && (
-            <p className="text-sm text-slate-500 italic text-center py-4">{tFin.noWallet}</p>
+            <p className="text-sm text-zinc-500 italic text-center py-4">{tFin.noWallet}</p>
           )}
           {filteredRekening.map((acc) => (
               <div
                 key={acc.id}
-                className="group bg-[#24283b] border-2 border-slate-700 p-4 rounded-none flex justify-between items-center transition-all hover:border-emerald-500 shadow-[4px_4px_0_#000] hover:translate-y-[-2px] hover:shadow-[6px_6px_0_#000]"
+                className="group bg-zinc-800 border-2 border-zinc-700 p-4 rounded-none flex justify-between items-center transition-all hover:border-emerald-500 shadow-[4px_4px_0_#000] hover:translate-y-[-2px] hover:shadow-[6px_6px_0_#000]"
               >
                 <div className="flex-1 text-left">
-                  <span className="text-base font-bold text-slate-200 block mb-1">
+                  <span className="text-base font-bold text-zinc-200 block mb-1">
                     {acc.name}
                   </span>
                   <p className="text-lg font-bold text-emerald-400 font-mono">
@@ -248,21 +248,21 @@ export default function Finance({
                 <div className="flex gap-1 items-center">
                   <button
                     onClick={() => deleteAccount(acc.id)}
-                    className="opacity-0 group-hover:opacity-100 p-2 text-slate-500 hover:text-pink-500 transition-all"
+                    className="opacity-0 group-hover:opacity-100 p-2 text-zinc-500 hover:text-pink-500 transition-all"
                   >
                     <X size={18} />
                   </button>
 
                   <button
                     onClick={() => openTransModal(acc.id, acc.name, acc.balance, true)}
-                    className="w-10 h-10 bg-[#1a1b26] border border-slate-600 text-emerald-500 rounded-none hover:bg-emerald-500 hover:text-slate-900 transition-colors flex items-center justify-center"
+                    className="w-10 h-10 bg-zinc-900 border border-zinc-600 text-emerald-500 rounded-none hover:bg-emerald-500 hover:text-zinc-900 transition-colors flex items-center justify-center"
                   >
                     <Plus size={20} />
                   </button>
 
                   <button
                     onClick={() => openTransModal(acc.id, acc.name, acc.balance, false)}
-                    className="w-10 h-10 bg-[#1a1b26] border border-slate-600 text-pink-500 rounded-none hover:bg-pink-500 hover:text-slate-900 transition-colors flex items-center justify-center"
+                    className="w-10 h-10 bg-zinc-900 border border-zinc-600 text-pink-500 rounded-none hover:bg-pink-500 hover:text-zinc-900 transition-colors flex items-center justify-center"
                   >
                     <Minus size={20} />
                   </button>
@@ -275,8 +275,8 @@ export default function Finance({
 
         {/* KOLOM 2 */}
         {(activeCategory === 'all' || activeCategory === 'tabungan') && (
-        <div className="bg-[#1a1b26] border-4 border-cyan-600 rounded-none flex flex-col min-h-[450px] overflow-hidden shadow-[8px_8px_0_rgba(0,0,0,0.5)]">
-          <div className="p-5 border-b-4 border-cyan-600 flex items-center gap-3 text-cyan-400 bg-[#24283b]">
+        <div className="bg-zinc-900 border-4 border-cyan-600 rounded-none flex flex-col min-h-[450px] overflow-hidden shadow-[8px_8px_0_rgba(0,0,0,0.5)]">
+          <div className="p-5 border-b-4 border-cyan-600 flex items-center gap-3 text-cyan-400 bg-zinc-800">
             <PiggyBank size={20} />
             <h2 className="text-base font-bold uppercase tracking-wider">
               {tFin.savingsTitle}
@@ -286,13 +286,13 @@ export default function Finance({
           <div className="p-5 flex flex-col gap-4 overflow-y-auto">
             <button
               onClick={() => openAddModal("tabungan")}
-              className="w-full bg-[#24283b] border-2 border-dashed border-slate-600 hover:border-cyan-500 text-slate-400 hover:text-cyan-400 p-5 rounded-none flex items-center justify-center gap-2 text-sm font-bold transition-all uppercase hover:bg-cyan-500/10"
+              className="w-full bg-zinc-800 border-2 border-dashed border-zinc-600 hover:border-cyan-500 text-zinc-400 hover:text-cyan-400 p-5 rounded-none flex items-center justify-center gap-2 text-sm font-bold transition-all uppercase hover:bg-cyan-500/10"
             >
               <Plus size={18} /> {tFin.addSaving}
             </button>
 
           {filteredTabungan.length === 0 && q && (
-            <p className="text-sm text-slate-500 italic text-center py-4">{tFin.noSaving}</p>
+            <p className="text-sm text-zinc-500 italic text-center py-4">{tFin.noSaving}</p>
           )}
           {filteredTabungan.map((acc) => {
               const isGold =
@@ -306,10 +306,10 @@ export default function Finance({
               return (
                 <div
                   key={acc.id}
-                  className={`group bg-[#24283b] border-2 ${
+                  className={`group bg-zinc-800 border-2 ${
                     isGold
                       ? "border-yellow-600 hover:border-yellow-400"
-                      : "border-slate-700 hover:border-cyan-500"
+                      : "border-zinc-700 hover:border-cyan-500"
                   } p-5 rounded-none flex flex-col gap-3 transition-all shadow-[4px_4px_0_#000] hover:translate-y-[-2px] hover:shadow-[6px_6px_0_#000]`}
                 >
                   <div className="flex justify-between items-start">
@@ -322,7 +322,7 @@ export default function Finance({
                         )}
                         <span
                           className={`text-base font-bold ${
-                            isGold ? "text-yellow-500" : "text-slate-200"
+                            isGold ? "text-yellow-500" : "text-zinc-200"
                           }`}
                         >
                           {acc.name}
@@ -335,10 +335,10 @@ export default function Finance({
                         </span>
                       )}
 
-                      <div className="text-sm font-mono text-slate-400">
+                      <div className="text-sm font-mono text-zinc-400">
                         Rp {(acc.balance || 0).toLocaleString()}
                       </div>
-                      <div className="text-[10px] text-slate-500 mt-0.5">
+                      <div className="text-[10px] text-zinc-500 mt-0.5">
                         {tFin.target} Rp {(acc.target || 0).toLocaleString()}
                       </div>
                     </div>
@@ -350,18 +350,18 @@ export default function Finance({
                     />
                   </div>
 
-                  <div className="flex justify-end items-center mt-1 pt-3 border-t-2 border-slate-700">
+                  <div className="flex justify-end items-center mt-1 pt-3 border-t-2 border-zinc-700">
                     <div className="flex gap-1">
                       <button
                         onClick={() => deleteAccount(acc.id)}
-                        className="opacity-0 group-hover:opacity-100 p-2 text-slate-500 hover:text-pink-500 transition-all"
+                        className="opacity-0 group-hover:opacity-100 p-2 text-zinc-500 hover:text-pink-500 transition-all"
                       >
                         <X size={16} />
                       </button>
 
                       <button
                         onClick={() => openTransModal(acc.id, acc.name, acc.balance, false)}
-                        className="w-8 h-8 bg-[#1a1b26] border border-slate-600 text-pink-500 rounded-none flex items-center justify-center transition-all hover:bg-pink-500 hover:text-slate-900"
+                        className="w-8 h-8 bg-zinc-900 border border-zinc-600 text-pink-500 rounded-none flex items-center justify-center transition-all hover:bg-pink-500 hover:text-zinc-900"
                       >
                         <Minus size={16} />
                       </button>
@@ -370,8 +370,8 @@ export default function Finance({
                         onClick={() => openTransModal(acc.id, acc.name, acc.balance, true)}
                         className={`px-4 py-1 rounded-none text-xs font-bold transition-all border ${
                           isGold
-                            ? "bg-yellow-500/10 text-yellow-500 border-yellow-500 hover:bg-yellow-500 hover:text-slate-900"
-                            : "bg-cyan-500/10 text-cyan-400 border-cyan-500 hover:bg-cyan-500 hover:text-slate-900"
+                            ? "bg-yellow-500/10 text-yellow-500 border-yellow-500 hover:bg-yellow-500 hover:text-zinc-900"
+                            : "bg-cyan-500/10 text-cyan-400 border-cyan-500 hover:bg-cyan-500 hover:text-zinc-900"
                         }`}
                       >
                         {tFin.fill}
@@ -386,8 +386,8 @@ export default function Finance({
         )}
 
         {/* KOLOM 3 */}
-        <div className="bg-[#1a1b26] border-4 border-pink-600 rounded-none flex flex-col h-[450px] overflow-hidden shadow-[8px_8px_0_rgba(0,0,0,0.5)]">
-          <div className="p-5 border-b-4 border-pink-600 flex justify-between items-center text-pink-400 bg-[#24283b]">
+        <div className="bg-zinc-900 border-4 border-pink-600 rounded-none flex flex-col h-[450px] overflow-hidden shadow-[8px_8px_0_rgba(0,0,0,0.5)]">
+          <div className="p-5 border-b-4 border-pink-600 flex justify-between items-center text-pink-400 bg-zinc-800">
             <div className="flex items-center gap-3">
               <History size={20} />
               <h2 className="text-base font-bold uppercase tracking-wider">{tFin.history}</h2>
@@ -395,28 +395,28 @@ export default function Finance({
 
             <button
               onClick={() => setIsRecurringOpen(true)}
-              className="text-[10px] bg-pink-500/10 hover:bg-pink-500 text-pink-400 hover:text-slate-900 border border-pink-500 px-2 py-1 rounded-none flex items-center gap-1 transition-colors"
+              className="text-[10px] bg-pink-500/10 hover:bg-pink-500 text-pink-400 hover:text-zinc-900 border border-pink-500 px-2 py-1 rounded-none flex items-center gap-1 transition-colors"
               title="Kelola Tagihan Rutin"
             >
               <CalendarClock size={14} /> {tFin.billsBtn}
             </button>
           </div>
 
-          <div className="flex-1 overflow-y-auto bg-[#1a1b26]">
+          <div className="flex-1 overflow-y-auto bg-zinc-900">
             {dueTodayBills.length > 0 && (
-              <div className="bg-[#24283b] border-b-2 border-slate-700">
-                <div className="px-4 py-2 text-[10px] font-bold text-pink-400 uppercase tracking-wider bg-[#1a1b26]">
+              <div className="bg-zinc-800 border-b-2 border-zinc-700">
+                <div className="px-4 py-2 text-[10px] font-bold text-pink-400 uppercase tracking-wider bg-zinc-900">
                   {tFin.reqConfirm}
                 </div>
 
                 {dueTodayBills.map((tx: any) => (
                   <div
                     key={tx.id}
-                    className="p-4 border-b border-slate-700 flex flex-col gap-3 bg-pink-500/5"
+                    className="p-4 border-b border-zinc-700 flex flex-col gap-3 bg-pink-500/5"
                   >
                     <div className="flex justify-between items-start">
                       <div className="flex flex-col text-left">
-                        <span className="text-sm text-slate-200 font-bold flex items-center gap-2">
+                        <span className="text-sm text-zinc-200 font-bold flex items-center gap-2">
                           <Clock size={12} className="text-pink-400" />
                           {tx.name}
                         </span>
@@ -433,13 +433,13 @@ export default function Finance({
                     <div className="flex gap-2 justify-end">
                       <button
                         onClick={() => snoozeRecurringTransaction(tx.id)}
-                        className="px-3 py-1 text-[10px] font-bold uppercase border border-yellow-500 text-yellow-400 hover:bg-yellow-500 hover:text-slate-950 transition-all"
+                        className="px-3 py-1 text-[10px] font-bold uppercase border border-yellow-500 text-yellow-400 hover:bg-yellow-500 hover:text-zinc-950 transition-all"
                       >
                         {tFin.delay}
                       </button>
                       <button
                         onClick={() => confirmRecurringPayment(tx.id)}
-                        className="px-3 py-1 text-[10px] font-bold uppercase border border-emerald-500 text-emerald-400 hover:bg-emerald-500 hover:text-slate-950 transition-all"
+                        className="px-3 py-1 text-[10px] font-bold uppercase border border-emerald-500 text-emerald-400 hover:bg-emerald-500 hover:text-zinc-950 transition-all"
                       >
                         {tFin.payNow}
                       </button>
@@ -450,19 +450,19 @@ export default function Finance({
             )}
 
             {overdueBills.length > 0 && (
-              <div className="bg-[#24283b] border-b-2 border-slate-700">
-                <div className="px-4 py-2 text-[10px] font-bold text-yellow-400 uppercase tracking-wider bg-[#1a1b26]">
+              <div className="bg-zinc-800 border-b-2 border-zinc-700">
+                <div className="px-4 py-2 text-[10px] font-bold text-yellow-400 uppercase tracking-wider bg-zinc-900">
                   {tFin.delayedBills}
                 </div>
 
                 {overdueBills.map((tx: any) => (
                   <div
                     key={tx.id}
-                    className="p-4 border-b border-slate-700 flex flex-col gap-3 bg-yellow-500/5"
+                    className="p-4 border-b border-zinc-700 flex flex-col gap-3 bg-yellow-500/5"
                   >
                     <div className="flex justify-between items-start">
                       <div className="flex flex-col text-left">
-                        <span className="text-sm text-slate-200 font-bold flex items-center gap-2">
+                        <span className="text-sm text-zinc-200 font-bold flex items-center gap-2">
                           <Clock size={12} className="text-yellow-400" />
                           {tx.name}
                         </span>
@@ -479,7 +479,7 @@ export default function Finance({
                     <div className="flex gap-2 justify-end">
                       <button
                         onClick={() => confirmRecurringPayment(tx.id)}
-                        className="px-3 py-1 text-[10px] font-bold uppercase border border-emerald-500 text-emerald-400 hover:bg-emerald-500 hover:text-slate-950 transition-all"
+                        className="px-3 py-1 text-[10px] font-bold uppercase border border-emerald-500 text-emerald-400 hover:bg-emerald-500 hover:text-zinc-950 transition-all"
                       >
                         {tFin.pay}
                       </button>
@@ -490,18 +490,18 @@ export default function Finance({
             )}
 
             {upcomingBills.length > 0 && (
-              <div className="bg-[#24283b] border-b-2 border-slate-700">
-                <div className="px-4 py-2 text-[10px] font-bold text-slate-500 uppercase tracking-wider bg-[#1a1b26]">
+              <div className="bg-zinc-800 border-b-2 border-zinc-700">
+                <div className="px-4 py-2 text-[10px] font-bold text-zinc-500 uppercase tracking-wider bg-zinc-900">
                   {tFin.upcomingBills}
                 </div>
 
                 {upcomingBills.map((tx: any) => (
                   <div
                     key={tx.id}
-                    className="p-4 border-b border-slate-700 flex justify-between items-center hover:bg-slate-800 transition-colors group"
+                    className="p-4 border-b border-zinc-700 flex justify-between items-center hover:bg-zinc-800 transition-colors group"
                   >
                     <div className="flex flex-col text-left">
-                      <span className="text-sm text-slate-300 font-bold flex items-center gap-2">
+                      <span className="text-sm text-zinc-300 font-bold flex items-center gap-2">
                         <Clock size={12} className="text-amber-500" />
                         {tx.name}
                       </span>
@@ -510,7 +510,7 @@ export default function Finance({
                       </span>
                     </div>
 
-                    <div className="font-mono font-bold text-sm text-slate-400 group-hover:text-white transition-colors">
+                    <div className="font-mono font-bold text-sm text-zinc-400 group-hover:text-white transition-colors">
                       Rp {tx.amount.toLocaleString()}
                     </div>
                   </div>
@@ -518,7 +518,7 @@ export default function Finance({
               </div>
             )}
 
-            <div className="px-4 py-2 text-[10px] font-bold text-slate-500 uppercase tracking-wider bg-[#1a1b26] sticky top-0 border-b border-slate-700">
+            <div className="px-4 py-2 text-[10px] font-bold text-zinc-500 uppercase tracking-wider bg-zinc-900 sticky top-0 border-b border-zinc-700">
               {tFin.historyDone}
             </div>
 
@@ -526,13 +526,13 @@ export default function Finance({
             filteredTransactions.map((log: any) => (
                 <div
                   key={log.id}
-                  className="p-4 border-b border-slate-700 flex justify-between items-center hover:bg-slate-800 transition-colors"
+                  className="p-4 border-b border-zinc-700 flex justify-between items-center hover:bg-zinc-800 transition-colors"
                 >
                   <div className="flex flex-col text-left">
-                    <span className="text-sm text-slate-200 font-bold">
+                    <span className="text-sm text-zinc-200 font-bold">
                       {log.accountName}
                     </span>
-                    <span className="text-xs text-slate-500 font-mono">
+                    <span className="text-xs text-zinc-500 font-mono">
                       {formatDate(log.timestamp)} •{" "}
                       {new Date(log.timestamp).toLocaleTimeString()}
                     </span>
@@ -567,7 +567,7 @@ export default function Finance({
                 </div>
               ))
             ) : (
-              <div className="p-10 text-center text-sm text-slate-500 italic">
+              <div className="p-10 text-center text-sm text-zinc-500 italic">
               {q ? tFin.noTrans : tFin.noHistory}
               </div>
             )}
@@ -647,12 +647,12 @@ function RecurringModal({
 
   return (
     <div className="fixed inset-0 bg-black/80 backdrop-blur-md z-[999] flex items-center justify-center p-4">
-      <div className="bg-[#1a1b26] border-4 border-pink-600 rounded-none w-full max-w-md overflow-hidden shadow-[8px_8px_0_#000] animate-in zoom-in duration-200">
-        <div className="p-5 border-b-4 border-slate-700 flex justify-between items-center bg-[#24283b]">
+      <div className="bg-zinc-900 border-4 border-pink-600 rounded-none w-full max-w-md overflow-hidden shadow-[8px_8px_0_#000] animate-in zoom-in duration-200">
+        <div className="p-5 border-b-4 border-zinc-700 flex justify-between items-center bg-zinc-800">
           <h2 className="font-bold text-base uppercase tracking-wider text-pink-400 flex items-center gap-2">
             <CalendarClock size={20} /> {tFin.autoPay}
           </h2>
-          <button onClick={onClose} className="text-slate-500 hover:text-white transition-colors">
+          <button onClick={onClose} className="text-zinc-500 hover:text-white transition-colors">
             <X size={24} />
           </button>
         </div>
@@ -660,7 +660,7 @@ function RecurringModal({
         <div className="p-6 flex flex-col gap-4">
           <div className="flex flex-col gap-2 max-h-48 overflow-y-auto mb-2">
             {recurringTransactions.length === 0 && (
-              <p className="text-xs text-slate-500 text-center italic py-4">
+              <p className="text-xs text-zinc-500 text-center italic py-4">
                 {tFin.noBills}
               </p>
             )}
@@ -668,11 +668,11 @@ function RecurringModal({
             {recurringTransactions.map((tx) => (
               <div
                 key={tx.id}
-                className="bg-[#24283b] border-2 border-slate-700 p-3 rounded-none flex justify-between items-center shadow-[2px_2px_0_#000]"
+                className="bg-zinc-800 border-2 border-zinc-700 p-3 rounded-none flex justify-between items-center shadow-[2px_2px_0_#000]"
               >
                 <div>
                   <p className="text-sm font-bold text-white">{tx.name}</p>
-                  <p className="text-[10px] text-slate-500">
+                  <p className="text-[10px] text-zinc-500">
                     {tFin.next} {new Date(tx.nextDueDate).toLocaleDateString()} •{" "}
                     {accounts.find((a) => a.id === tx.accountId)?.name}
                   </p>
@@ -684,7 +684,7 @@ function RecurringModal({
                   </span>
                   <button
                     onClick={() => deleteRecurringTransaction(tx.id)}
-                    className="text-slate-600 hover:text-pink-500"
+                    className="text-zinc-600 hover:text-pink-500"
                   >
                     <Trash2 size={14} />
                   </button>
@@ -693,8 +693,8 @@ function RecurringModal({
             ))}
           </div>
 
-          <div className="border-t-4 border-slate-700 pt-4 flex flex-col gap-3">
-            <p className="text-xs font-bold text-slate-400 uppercase">
+          <div className="border-t-4 border-zinc-700 pt-4 flex flex-col gap-3">
+            <p className="text-xs font-bold text-zinc-400 uppercase">
               {tFin.newBill}
             </p>
 
@@ -703,7 +703,7 @@ function RecurringModal({
               value={name}
               onChange={(e) => setName(e.target.value)}
               placeholder={tFin.billName}
-              className="bg-[#24283b] border-2 border-slate-600 rounded-none p-3 text-sm text-white outline-none focus:border-pink-500"
+              className="bg-zinc-800 border-2 border-zinc-600 rounded-none p-3 text-sm text-white outline-none focus:border-pink-500"
             />
 
             <div className="relative">
@@ -712,8 +712,8 @@ function RecurringModal({
                   onClick={() => setCurrency("IDR")}
                   className={`px-2 py-1 text-[10px] font-bold rounded-none ${
                     currency === "IDR"
-                      ? "bg-slate-700 text-white"
-                      : "bg-slate-900 text-slate-500"
+                      ? "bg-zinc-700 text-white"
+                      : "bg-zinc-900 text-zinc-500"
                   }`}
                 >
                   IDR
@@ -723,7 +723,7 @@ function RecurringModal({
                   className={`px-2 py-1 text-[10px] font-bold rounded-none ${
                     currency === "USD"
                       ? "bg-emerald-600 text-white"
-                      : "bg-slate-900 text-slate-500"
+                      : "bg-zinc-900 text-zinc-500"
                   }`}
                 >
                   USD
@@ -735,7 +735,7 @@ function RecurringModal({
                 value={amount === 0 ? "" : amount.toLocaleString("id-ID")}
                 onChange={handleAmountChange}
                 placeholder={`${tFin.amount} (${currency})`}
-                className="bg-[#24283b] border-2 border-slate-600 rounded-none p-3 text-sm text-white outline-none focus:border-pink-500 w-full"
+                className="bg-zinc-800 border-2 border-zinc-600 rounded-none p-3 text-sm text-white outline-none focus:border-pink-500 w-full"
               />
               {currency === "USD" && amount > 0 && (
                 <p className="text-[10px] text-emerald-500 mt-1 text-right">
@@ -749,14 +749,14 @@ function RecurringModal({
                 type="date"
                 value={date}
                 onChange={(e) => setDate(e.target.value)}
-                className="bg-[#24283b] border-2 border-slate-600 rounded-none p-3 text-sm text-white outline-none focus:border-pink-500 [color-scheme:dark] cursor-pointer"
+                className="bg-zinc-800 border-2 border-zinc-600 rounded-none p-3 text-sm text-white outline-none focus:border-pink-500 [color-scheme:dark] cursor-pointer"
               />
             </div>
 
             <select
               value={accountId}
               onChange={(e) => setAccountId(e.target.value)}
-              className="bg-[#24283b] border-2 border-slate-600 rounded-none p-3 text-sm text-slate-300 outline-none focus:border-pink-500"
+              className="bg-zinc-800 border-2 border-zinc-600 rounded-none p-3 text-sm text-zinc-300 outline-none focus:border-pink-500"
             >
               <option value="" disabled hidden>
                 {tFin.source}
@@ -773,7 +773,7 @@ function RecurringModal({
             <button
               onClick={handleAdd}
               disabled={!name || amount <= 0 || !accountId || !date}
-              className="bg-pink-600 hover:bg-pink-500 disabled:bg-slate-800 disabled:text-slate-500 text-white py-3 rounded-none font-bold text-sm transition-colors mt-2 shadow-[4px_4px_0_#000] active:translate-y-[2px] active:shadow-[2px_2px_0_#000]"
+              className="bg-pink-600 hover:bg-pink-500 disabled:bg-zinc-800 disabled:text-zinc-500 text-white py-3 rounded-none font-bold text-sm transition-colors mt-2 shadow-[4px_4px_0_#000] active:translate-y-[2px] active:shadow-[2px_2px_0_#000]"
             >
               {tFin.saveSchedule}
             </button>
@@ -878,11 +878,11 @@ function AddAccountModal({
   return (
     <div className="fixed inset-0 bg-black/80 backdrop-blur-md z-[999] flex items-center justify-center p-4">
       <div
-        className={`bg-[#1a1b26] border-4 rounded-none w-full max-w-md overflow-hidden shadow-[8px_8px_0_#000] animate-in zoom-in duration-200 ${
+        className={`bg-zinc-900 border-4 rounded-none w-full max-w-md overflow-hidden shadow-[8px_8px_0_#000] animate-in zoom-in duration-200 ${
           type === "rekening" ? "border-emerald-500" : "border-cyan-500"
         }`}
       >
-        <div className="p-5 border-b-4 border-slate-700 flex justify-between items-center bg-[#24283b]">
+        <div className="p-5 border-b-4 border-zinc-700 flex justify-between items-center bg-zinc-800">
           <h2
             className={`font-bold text-base uppercase tracking-wider flex items-center gap-2 ${
               type === "rekening" ? "text-emerald-400" : "text-cyan-400"
@@ -891,7 +891,7 @@ function AddAccountModal({
             {type === "rekening" ? <CreditCard size={20} /> : <PiggyBank size={20} />}
             {type === "rekening" ? tFin.addAccWallet : tFin.addAccTarget}
           </h2>
-          <button onClick={onClose} className="text-slate-500 hover:text-white transition-colors">
+          <button onClick={onClose} className="text-zinc-500 hover:text-white transition-colors">
             <X size={24} />
           </button>
         </div>
@@ -899,7 +899,7 @@ function AddAccountModal({
         <div className="p-6 flex flex-col gap-5">
           {type === "rekening" && (
             <div>
-              <label className="text-sm font-bold text-slate-400 mb-3 block uppercase">
+              <label className="text-sm font-bold text-zinc-400 mb-3 block uppercase">
                 {tFin.quickSelect}
               </label>
               <div className="grid grid-cols-3 sm:grid-cols-4 gap-3">
@@ -908,7 +908,7 @@ function AddAccountModal({
                     key={p.label}
                     onClick={() => setName(p.label)}
                     className={`flex flex-col items-center justify-center gap-2 p-4 rounded-none border-2 transition-all ${p.color} ${
-                      name === p.label ? "bg-slate-800 ring-2 ring-white/20" : "bg-[#24283b]"
+                      name === p.label ? "bg-zinc-800 ring-2 ring-white/20" : "bg-zinc-800"
                     }`}
                   >
                     <p.icon size={24} />
@@ -920,13 +920,13 @@ function AddAccountModal({
           )}
 
           {type === "tabungan" && (
-            <div className="bg-[#24283b] p-1 rounded-none border-2 border-slate-700 flex">
+            <div className="bg-zinc-800 p-1 rounded-none border-2 border-zinc-700 flex">
               <button
                 onClick={() => setIsGold(false)}
                 className={`flex-1 py-2 text-xs font-bold uppercase rounded-none transition-all ${
                   !isGold
-                    ? "bg-cyan-500 text-slate-950 shadow"
-                    : "text-slate-500 hover:text-slate-300"
+                    ? "bg-cyan-500 text-zinc-950 shadow"
+                    : "text-zinc-500 hover:text-zinc-300"
                 }`}
               >
                 {tFin.tabMoney}
@@ -935,8 +935,8 @@ function AddAccountModal({
                 onClick={() => setIsGold(true)}
                 className={`flex-1 py-2 text-xs font-bold uppercase rounded-none transition-all ${
                   isGold
-                    ? "bg-yellow-500 text-slate-950 shadow"
-                    : "text-slate-500 hover:text-slate-300"
+                    ? "bg-yellow-500 text-zinc-950 shadow"
+                    : "text-zinc-500 hover:text-zinc-300"
                 }`}
               >
                 {tFin.tabGold}
@@ -945,7 +945,7 @@ function AddAccountModal({
           )}
 
           <div>
-            <label className="text-sm font-bold text-slate-400 mb-2 block uppercase">
+            <label className="text-sm font-bold text-zinc-400 mb-2 block uppercase">
               {tFin.accName}
             </label>
             <input
@@ -959,20 +959,20 @@ function AddAccountModal({
                   ? tFin.phGold
                   : tFin.phTarget
               }
-              className="w-full bg-[#24283b] border-2 border-slate-600 rounded-none p-4 text-base text-white outline-none focus:border-white transition-all"
+              className="w-full bg-zinc-800 border-2 border-zinc-600 rounded-none p-4 text-base text-white outline-none focus:border-white transition-all"
               autoFocus
             />
           </div>
 
           {!isGold && (
             <div className="flex justify-end">
-              <div className="bg-[#24283b] p-0.5 rounded-none flex text-[10px] font-bold border-2 border-slate-600">
+              <div className="bg-zinc-800 p-0.5 rounded-none flex text-[10px] font-bold border-2 border-zinc-600">
                 <button
                   onClick={() => setCurrency("IDR")}
                   className={`px-3 py-1 rounded-none transition-all ${
                     currency === "IDR"
-                      ? "bg-slate-700 text-white shadow"
-                      : "text-slate-500 hover:text-slate-300"
+                      ? "bg-zinc-700 text-white shadow"
+                      : "text-zinc-500 hover:text-zinc-300"
                   }`}
                 >
                   IDR
@@ -982,7 +982,7 @@ function AddAccountModal({
                   className={`px-3 py-1 rounded-none transition-all ${
                     currency === "USD"
                       ? "bg-emerald-600 text-white shadow"
-                      : "text-slate-500 hover:text-slate-300"
+                      : "text-zinc-500 hover:text-zinc-300"
                   }`}
                 >
                   USD
@@ -1001,23 +1001,23 @@ function AddAccountModal({
                   type="number"
                   value={goldWeight}
                   onChange={(e) => setGoldWeight(e.target.value === '' ? '' : Number(e.target.value))}
-                  className="w-full bg-[#24283b] border-2 border-slate-600 rounded-none p-4 text-base text-white outline-none focus:border-yellow-500 transition-all"
+                  className="w-full bg-zinc-800 border-2 border-zinc-600 rounded-none p-4 text-base text-white outline-none focus:border-yellow-500 transition-all"
                   placeholder="0.00"
                 />
-                <p className="text-[10px] text-slate-500 mt-1">
+                <p className="text-[10px] text-zinc-500 mt-1">
                   ≈ Rp {((Number(goldWeight) || 0) * 2800000).toLocaleString()}
                 </p>
               </div>
             ) : (
               <div>
-                <label className="text-sm font-bold text-slate-400 mb-2 block uppercase">
+                <label className="text-sm font-bold text-zinc-400 mb-2 block uppercase">
                   {tFin.startBal} ({currency})
                 </label>
                 <input
                   type="text"
                   value={balance === 0 ? "" : balance.toLocaleString("id-ID")}
                   onChange={(e) => handleBalanceChange(e, setBalance)}
-                  className="w-full bg-[#24283b] border-2 border-slate-600 rounded-none p-4 text-base text-white outline-none focus:border-white transition-all"
+                  className="w-full bg-zinc-800 border-2 border-zinc-600 rounded-none p-4 text-base text-white outline-none focus:border-white transition-all"
                   placeholder="0"
                 />
                 {currency === "USD" && (
@@ -1030,14 +1030,14 @@ function AddAccountModal({
 
             {type === "tabungan" && (
               <div>
-                <label className="text-sm font-bold text-slate-400 mb-2 block uppercase">
+                <label className="text-sm font-bold text-zinc-400 mb-2 block uppercase">
                   {tFin.targetBal} ({currency})
                 </label>
                 <input
                   type="text"
                   value={target === 0 ? "" : target.toLocaleString("id-ID")}
                   onChange={(e) => handleBalanceChange(e, setTarget)}
-                  className="w-full bg-[#24283b] border-2 border-slate-600 rounded-none p-4 text-base text-white outline-none focus:border-white transition-all"
+                  className="w-full bg-zinc-800 border-2 border-zinc-600 rounded-none p-4 text-base text-white outline-none focus:border-white transition-all"
                   placeholder="0"
                 />
                 {currency === "USD" && (
@@ -1052,7 +1052,7 @@ function AddAccountModal({
           <button
             onClick={handleSave}
             disabled={!name}
-            className={`w-full py-4 rounded-none font-bold text-base text-slate-950 transition-all mt-2 shadow-[4px_4px_0_#000] active:translate-y-[2px] active:shadow-[2px_2px_0_#000] ${
+            className={`w-full py-4 rounded-none font-bold text-base text-zinc-950 transition-all mt-2 shadow-[4px_4px_0_#000] active:translate-y-[2px] active:shadow-[2px_2px_0_#000] ${
               type === "rekening"
                 ? "bg-emerald-500 hover:bg-emerald-400"
                 : "bg-cyan-500 hover:bg-cyan-400"
@@ -1184,11 +1184,11 @@ function TransactionModal({
   return (
     <div className="fixed inset-0 bg-black/80 backdrop-blur-md z-[999] flex items-center justify-center p-4">
       <div
-        className={`bg-[#1a1b26] border-4 rounded-none w-full max-w-sm overflow-hidden shadow-[8px_8px_0_#000] animate-in zoom-in duration-200 ${
+        className={`bg-zinc-900 border-4 rounded-none w-full max-w-sm overflow-hidden shadow-[8px_8px_0_#000] animate-in zoom-in duration-200 ${
           isAdding ? "border-emerald-500" : "border-pink-500"
         }`}
       >
-        <div className="p-5 border-b-4 border-slate-700 flex justify-between items-center bg-[#24283b]">
+        <div className="p-5 border-b-4 border-zinc-700 flex justify-between items-center bg-zinc-800">
           <h2
             className={`font-bold text-base uppercase tracking-wider ${
               isAdding ? "text-emerald-400" : "text-pink-400"
@@ -1196,31 +1196,31 @@ function TransactionModal({
           >
             {isAdding ? tFin.incomeOp : tFin.expenseOp}
           </h2>
-          <button onClick={onClose} className="text-slate-500 hover:text-white transition-colors">
+          <button onClick={onClose} className="text-zinc-500 hover:text-white transition-colors">
             <X size={24} />
           </button>
         </div>
 
         <div className="p-6 flex flex-col gap-4 text-left">
-          <div className="text-center bg-[#24283b] p-3 rounded-none border-2 border-slate-600">
-            <p className="text-sm text-slate-400 uppercase font-bold">
+          <div className="text-center bg-zinc-800 p-3 rounded-none border-2 border-zinc-600">
+            <p className="text-sm text-zinc-400 uppercase font-bold">
               {tFin.account} <span className="text-white">{accountName}</span>
             </p>
           </div>
 
           <div className="relative">
             <div className="flex justify-between items-center mb-2">
-              <label className="text-sm font-bold text-slate-400 uppercase">
+              <label className="text-sm font-bold text-zinc-400 uppercase">
                 {tFin.amount} ({currency})
               </label>
 
-              <div className="bg-[#24283b] p-0.5 rounded-none flex text-[10px] font-bold border-2 border-slate-600">
+              <div className="bg-zinc-800 p-0.5 rounded-none flex text-[10px] font-bold border-2 border-zinc-600">
                 <button
                   onClick={() => setCurrency("IDR")}
                   className={`px-2 py-0.5 rounded-none transition-all ${
                     currency === "IDR"
-                      ? "bg-slate-700 text-white shadow"
-                      : "text-slate-500 hover:text-slate-300"
+                      ? "bg-zinc-700 text-white shadow"
+                      : "text-zinc-500 hover:text-zinc-300"
                   }`}
                 >
                   IDR
@@ -1230,7 +1230,7 @@ function TransactionModal({
                   className={`px-2 py-0.5 rounded-none transition-all ${
                     currency === "USD"
                       ? "bg-emerald-600 text-white shadow"
-                      : "text-slate-500 hover:text-slate-300"
+                      : "text-zinc-500 hover:text-zinc-300"
                   }`}
                 >
                   USD
@@ -1243,7 +1243,7 @@ function TransactionModal({
               autoFocus
               value={money === 0 ? "" : money.toLocaleString("id-ID")}
               onChange={(e) => handleMoneyChange(e.target.value)}
-              className="w-full bg-[#24283b] border-2 border-slate-600 rounded-none h-14 px-4 font-mono text-white text-xl outline-none focus:border-emerald-500 transition-all"
+              className="w-full bg-zinc-800 border-2 border-zinc-600 rounded-none h-14 px-4 font-mono text-white text-xl outline-none focus:border-emerald-500 transition-all"
               placeholder="0"
             />
 
@@ -1264,10 +1264,10 @@ function TransactionModal({
                 inputMode="decimal"
                 value={gramInput}
                 onChange={(e) => handleGramChangeLocal(e.target.value)}
-                className="w-full bg-[#24283b] border-2 border-slate-600 rounded-none h-14 px-4 font-mono text-white text-xl outline-none focus:border-yellow-500 transition-all"
+                className="w-full bg-zinc-800 border-2 border-zinc-600 rounded-none h-14 px-4 font-mono text-white text-xl outline-none focus:border-yellow-500 transition-all"
                 placeholder="0.0000"
               />
-              <p className="text-xs text-slate-500 mt-1 italic text-right">
+              <p className="text-xs text-zinc-500 mt-1 italic text-right">
                 {tFin.rate}
               </p>
             </div>
@@ -1283,16 +1283,16 @@ function TransactionModal({
           )}
         </div>
 
-        <div className="p-5 bg-[#24283b] border-t-4 border-slate-700 flex gap-4">
+        <div className="p-5 bg-zinc-800 border-t-4 border-zinc-700 flex gap-4">
           <button
             onClick={onClose}
-            className="flex-1 py-3 text-sm font-bold text-slate-400 hover:text-white transition-colors uppercase"
+            className="flex-1 py-3 text-sm font-bold text-zinc-400 hover:text-white transition-colors uppercase"
           >
             {tFin.cancel}
           </button>
           <button
             onClick={handleConfirm}
-            className={`flex-1 py-3 text-slate-950 text-sm rounded-none transition-all uppercase font-bold shadow-[4px_4px_0_#000] active:translate-y-[2px] active:shadow-[2px_2px_0_#000] ${
+            className={`flex-1 py-3 text-zinc-950 text-sm rounded-none transition-all uppercase font-bold shadow-[4px_4px_0_#000] active:translate-y-[2px] active:shadow-[2px_2px_0_#000] ${
               isAdding ? "bg-emerald-500 hover:bg-emerald-400" : "bg-pink-500 hover:bg-pink-400"
             }`}
           >

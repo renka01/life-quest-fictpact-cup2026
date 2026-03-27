@@ -376,13 +376,13 @@ const BOSSES: Boss[] = [
   {
     id:6, name:'Undead Skeleton',   title:'Restless Bones',
     maxHp:150,  atk:8,  gold:18,  exp:25,
-    rarity:'common',    barColor:'bg-slate-400',  aura:'#cbd5e1', border:'border-slate-500',
+    rarity:'common',    barColor:'bg-zinc-400',  aura:'#cbd5e1', border:'border-zinc-500',
     sprite:<SkeletonSprite/>,
   },
   {
     id:7, name:'Dire Wolf',         title:'Beast of the Woods',
     maxHp:320,  atk:15, gold:45,  exp:70,
-    rarity:'uncommon',  barColor:'bg-slate-600',  aura:'#475569', border:'border-slate-700',
+    rarity:'uncommon',  barColor:'bg-zinc-600',  aura:'#475569', border:'border-zinc-700',
     sprite:<DireWolfSprite/>,
   },
   {
@@ -406,7 +406,7 @@ const BOSSES: Boss[] = [
 ];
 
 const RARITY_LABEL: Record<string,string> = {
-  common:'text-slate-400', uncommon:'text-emerald-400',
+  common:'text-zinc-400', uncommon:'text-emerald-400',
   rare:'text-blue-400', epic:'text-purple-400', legendary:'text-amber-400',
 };
 
@@ -416,8 +416,8 @@ const RARITY_LABEL: Record<string,string> = {
 
 const CONSUMABLES: Record<number, { heal: number; label: string; color: string }> = {
   6:  { heal: 15,   label: 'Soul Crystal',  color: 'bg-purple-500'  },
-  52: { heal: 30,   label: 'Mithril Ingot', color: 'bg-slate-400'   },
-  53: { heal: 40,   label: 'Beskar Ingot',  color: 'bg-slate-600'   },
+  52: { heal: 30,   label: 'Mithril Ingot', color: 'bg-zinc-400'   },
+  53: { heal: 40,   label: 'Beskar Ingot',  color: 'bg-zinc-600'   },
   54: { heal: 60,   label: 'Vibranium Ore', color: 'bg-indigo-500'  },
   55: { heal: 9999, label: 'Senzu Bean',    color: 'bg-emerald-500' }, // Full heal
   56: { heal: 20,   label: 'Slime Jelly',   color: 'bg-sky-500'     },
@@ -665,13 +665,13 @@ export default function FocusArena() {
   // ════════════════════════════════════════════════════════════
   if (phase === 'select') return (
     <div className="p-6 min-h-full" style={{ fontFamily: "'Courier New', monospace" }}>
-      <div className="flex flex-col md:flex-row md:justify-between md:items-end gap-4 mb-6 shrink-0 border-b border-slate-700/50 pb-6">
+      <div className="flex flex-col md:flex-row md:justify-between md:items-end gap-4 mb-6 shrink-0 border-b border-zinc-700/50 pb-6">
         <div className="flex flex-col gap-3 text-left">
           <h1 className="font-pixel text-sm md:text-base text-white flex items-center gap-3 drop-shadow-[2px_2px_0_#000]">
             <span className="text-red-500"><Swords size={18} /></span>
             {tFocus.title}
           </h1>
-          <p className="font-pixel text-[7px] md:text-[8px] text-slate-400 uppercase tracking-widest leading-relaxed">
+          <p className="font-pixel text-[7px] md:text-[8px] text-zinc-400 uppercase tracking-widest leading-relaxed">
             {tFocus.desc}
           </p>
         </div>
@@ -684,15 +684,15 @@ export default function FocusArena() {
           { label:'DEF', val: calcStats().def, icon: <Shield size={12} className="text-cyan-400"/>, col:'text-cyan-400' },
           { label:'INT', val: calcStats().int, icon: <Star size={12} className="text-amber-400"/>, col:'text-amber-400' },
         ].map(s => (
-          <div key={s.label} className="bg-slate-900 border border-slate-700 px-4 py-2 flex items-center gap-2">
+          <div key={s.label} className="bg-zinc-800 border border-zinc-700 px-4 py-2 flex items-center gap-2">
             {s.icon}
-            <span className="text-[9px] text-slate-400 uppercase">{s.label}</span>
+            <span className="text-[9px] text-zinc-400 uppercase">{s.label}</span>
             <span className={`text-sm font-bold ${s.col}`}>{s.val}</span>
           </div>
         ))}
-        <div className="bg-slate-900 border border-slate-700 px-4 py-2 flex items-center gap-2">
+        <div className="bg-zinc-800 border border-zinc-700 px-4 py-2 flex items-center gap-2">
           <Heart size={12} className="text-pink-400"/>
-          <span className="text-[9px] text-slate-400 uppercase">HP</span>
+          <span className="text-[9px] text-zinc-400 uppercase">HP</span>
           <span className="text-sm font-bold text-pink-400">{stats.hp}/{stats.maxHp}</span>
         </div>
       </div>
@@ -701,11 +701,11 @@ export default function FocusArena() {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
         {BOSSES.map(b => (
           <button key={b.id} onClick={() => startBattle(b)}
-            className={`flex flex-col bg-slate-900 border-2 ${b.border} overflow-hidden
+            className={`flex flex-col bg-zinc-800 border-2 ${b.border} overflow-hidden
               hover:-translate-y-1 hover:shadow-lg transition-all text-left group`}>
-            <div className="flex justify-between items-center px-2 py-1 border-b border-slate-800">
+            <div className="flex justify-between items-center px-2 py-1 border-b border-zinc-700">
               <span className={`text-[7px] font-bold tracking-widest uppercase ${RARITY_LABEL[b.rarity]}`}>{b.rarity}</span>
-              <span className="text-[7px] text-slate-500">HP {b.maxHp}</span>
+              <span className="text-[7px] text-zinc-500">HP {b.maxHp}</span>
             </div>
             <div className="flex-1 flex flex-col items-center justify-center py-4"
               style={{ backgroundImage:'linear-gradient(rgba(255,255,255,0.015) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.015) 1px,transparent 1px)', backgroundSize:'4px 4px' }}>
@@ -714,9 +714,9 @@ export default function FocusArena() {
                 {b.sprite}
               </div>
             </div>
-            <div className="px-3 py-2 border-t border-slate-800 bg-slate-950">
+            <div className="px-3 py-2 border-t border-zinc-700 bg-zinc-900">
               <p className={`text-[10px] font-bold uppercase ${RARITY_LABEL[b.rarity]}`}>{b.name}</p>
-              <p className="text-[8px] text-slate-600 italic mb-1">"{b.title}"</p>
+              <p className="text-[8px] text-zinc-500 italic mb-1">"{b.title}"</p>
               <div className="flex gap-3 text-[8px] items-center">
                 <span className="text-amber-400 flex items-center gap-0.5"><Coins size={10}/> {b.gold}G</span>
                 <span className="text-cyan-400 flex items-center gap-0.5"><Star size={10}/> {b.exp}XP</span>
@@ -740,12 +740,12 @@ export default function FocusArena() {
           <Trophy size={48} className="text-amber-400 drop-shadow-[0_0_15px_rgba(251,191,36,0.5)]" />
         </div>
         <h2 className="text-2xl font-bold text-amber-400 uppercase tracking-widest">{tFocus.victory}</h2>
-        <p className="text-slate-400 text-[11px] uppercase tracking-widest mt-1">{boss.name} has been defeated</p>
+        <p className="text-zinc-400 text-[11px] uppercase tracking-widest mt-1">{boss.name} has been defeated</p>
       </div>
       <div className="flex gap-8 text-center">
-        <div><p className="text-amber-400 text-2xl font-bold">+{boss.gold}</p><p className="text-[9px] text-slate-500 uppercase">Gold</p></div>
-        <div><p className="text-cyan-400 text-2xl font-bold">+{boss.exp}</p><p className="text-[9px] text-slate-500 uppercase">EXP</p></div>
-        <div><p className="text-pink-400 text-2xl font-bold">x{combo}</p><p className="text-[9px] text-slate-500 uppercase">{tFocus.combo}</p></div>
+        <div><p className="text-amber-400 text-2xl font-bold">+{boss.gold}</p><p className="text-[9px] text-zinc-500 uppercase">Gold</p></div>
+        <div><p className="text-cyan-400 text-2xl font-bold">+{boss.exp}</p><p className="text-[9px] text-zinc-500 uppercase">EXP</p></div>
+        <div><p className="text-pink-400 text-2xl font-bold">x{combo}</p><p className="text-[9px] text-zinc-500 uppercase">{tFocus.combo}</p></div>
       </div>
       <div className="flex gap-3">
         <button onClick={() => setPhase('select')}
@@ -764,12 +764,12 @@ export default function FocusArena() {
       style={{ fontFamily: "'Courier New', monospace" }}>
       <div className="text-center">
         <div className="flex justify-center mb-3">
-          <Skull size={48} className="text-slate-400 drop-shadow-[0_0_15px_rgba(148,163,184,0.5)]" />
+          <Skull size={48} className="text-zinc-400 drop-shadow-[0_0_15px_rgba(148,163,184,0.5)]" />
         </div>
         <h2 className="text-2xl font-bold text-red-400 uppercase tracking-widest">{tFocus.defeated}</h2>
-        <p className="text-slate-400 text-[11px] uppercase tracking-widest mt-1">{boss.name} was too powerful</p>
+        <p className="text-zinc-400 text-[11px] uppercase tracking-widest mt-1">{boss.name} was too powerful</p>
       </div>
-      <p className="text-[10px] text-slate-500 text-center max-w-xs">
+      <p className="text-[10px] text-zinc-500 text-center max-w-xs">
         Dealt <span className="text-white">{boss.maxHp - bossHp}</span> / <span className="text-white">{boss.maxHp}</span> HP.
         Equip better gear and try again!
       </p>
@@ -779,7 +779,7 @@ export default function FocusArena() {
           <RefreshCw size={12}/> {tFocus.retry}
         </button>
         <button onClick={() => setPhase('select')}
-          className="px-5 py-2 bg-slate-800 text-slate-300 text-[11px] font-bold uppercase tracking-widest border-2 border-slate-600 hover:bg-slate-700">
+          className="px-5 py-2 bg-zinc-800 text-zinc-300 text-[11px] font-bold uppercase tracking-widest border-2 border-zinc-600 hover:bg-zinc-700">
           {tFocus.selectBoss}
         </button>
       </div>
@@ -795,18 +795,18 @@ export default function FocusArena() {
     <div className="p-4 min-h-full flex flex-col gap-4" style={{ fontFamily: "'Courier New', monospace" }}>
 
       {/* ── Header ── */}
-      <div className="flex justify-between items-center border-b-2 border-slate-700 pb-3">
+      <div className="flex justify-between items-center border-b-2 border-zinc-700 pb-3">
         <span className="text-[10px] font-bold text-white uppercase tracking-widest flex items-center gap-2">
           <Swords size={14} className="text-red-400"/> [ {tFocus.title} ]
         </span>
         <div className="flex items-center gap-3">
           {combo > 0 && (
-            <span className={`text-[9px] font-bold px-2 py-0.5 border border-slate-600 ${combo >= 9 ? 'bg-amber-400 text-amber-900' : 'bg-slate-800 text-slate-300'}`}>
+            <span className={`text-[9px] font-bold px-2 py-0.5 border border-zinc-600 ${combo >= 9 ? 'bg-amber-400 text-amber-900' : 'bg-zinc-800 text-zinc-300'}`}>
               {tFocus.combo} x{combo}
             </span>
           )}
           <button onClick={flee}
-            className="px-3 py-1 bg-slate-900 text-slate-500 text-[9px] font-bold uppercase border border-slate-700 hover:border-red-500 hover:text-red-400 flex items-center gap-1">
+            className="px-3 py-1 bg-zinc-800 text-zinc-400 text-[9px] font-bold uppercase border border-zinc-600 hover:border-red-500 hover:text-red-400 flex items-center gap-1">
             <SkipForward size={10}/> {tFocus.back}
           </button>
         </div>
@@ -818,24 +818,24 @@ export default function FocusArena() {
         {/* ─── LEFT: Player character ─── */}
         <div className="flex flex-col gap-3">
           {/* Player HP */}
-          <div className="bg-slate-900 border-2 border-slate-700 p-3">
+          <div className="bg-zinc-800 border-2 border-zinc-700 p-3">
             <div className="flex justify-between mb-1">
               <span className="text-[9px] text-pink-400 flex items-center gap-1"><Heart size={10}/> {tFocus.yourHp}</span>
-              <span className="text-[9px] text-slate-400">{localHp}/{stats.maxHp}</span>
+              <span className="text-[9px] text-zinc-400">{localHp}/{stats.maxHp}</span>
             </div>
-            <div className="h-3 bg-slate-800 border border-slate-700 overflow-hidden">
+            <div className="h-3 bg-zinc-900 border border-zinc-700 overflow-hidden">
               <div className={`h-full bg-pink-500 transition-all duration-300 ${playerHit ? 'opacity-40' : ''}`}
                 style={{ width:`${playerHpPct}%` }}/>
             </div>
           </div>
 
           {/* Character sprite */}
-          <div className={`relative bg-slate-950 border-2 border-slate-700 overflow-hidden flex items-center justify-center`}
+          <div className={`relative bg-zinc-900 border-2 border-zinc-700 overflow-hidden flex items-center justify-center`}
             style={{ minHeight:200,
-              backgroundImage:'linear-gradient(rgba(30,41,59,0.4) 1px,transparent 1px),linear-gradient(90deg,rgba(30,41,59,0.4) 1px,transparent 1px)',
+              backgroundImage:'linear-gradient(rgba(255,255,255,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.03) 1px,transparent 1px)',
               backgroundSize:'8px 8px' }}>
             {/* Floor */}
-            <div className="absolute bottom-0 left-0 right-0 h-6 bg-slate-800 border-t border-slate-700"/>
+            <div className="absolute bottom-0 left-0 right-0 h-6 bg-zinc-800 border-t border-zinc-700"/>
             {/* Player hit flash */}
             {playerHit && <div className="absolute inset-0 bg-red-500 opacity-25 pointer-events-none z-20"/>}
             {/* Character with attack animation */}
@@ -854,8 +854,8 @@ export default function FocusArena() {
               { label:'DEF', val:pStats.def, col:'text-cyan-400' },
               { label:'INT', val:pStats.int, col:'text-amber-400' },
             ].map(s => (
-              <div key={s.label} className="bg-slate-900 border border-slate-700 p-2 text-center">
-                <p className="text-[7px] text-slate-500 uppercase">{s.label}</p>
+              <div key={s.label} className="bg-zinc-900 border border-zinc-700 p-2 text-center">
+                <p className="text-[7px] text-zinc-500 uppercase">{s.label}</p>
                 <p className={`text-[11px] font-bold ${s.col}`}>{s.val}</p>
               </div>
             ))}
@@ -865,16 +865,16 @@ export default function FocusArena() {
         {/* ─── CENTER: Controls + log ─── */}
         <div className="flex flex-col gap-3">
           {/* ATTACK BUTTON */}
-          <div className="bg-slate-900 border-2 border-slate-700 p-4 flex flex-col gap-3">
-            <p className="text-[10px] text-slate-400 font-bold uppercase text-center flex items-center justify-center gap-2">
+          <div className="bg-zinc-800 border-2 border-zinc-700 p-4 flex flex-col gap-3">
+            <p className="text-[10px] text-zinc-400 font-bold uppercase text-center flex items-center justify-center gap-2">
               <Timer size={14} className="text-cyan-400"/> {tFocus.pomodoro}
             </p>
             
             {!isFocusing && !canAttack && (
               <div className="flex flex-col gap-2">
-                <label className="text-[9px] text-slate-500 uppercase">{tFocus.setMins}</label>
+                <label className="text-[9px] text-zinc-500 uppercase">{tFocus.setMins}</label>
                 <input type="number" min="1" max="120" value={focusMinutes} onChange={e => setFocusMinutes(e.target.value === '' ? '' : Number(e.target.value))} 
-                  className="bg-slate-950 border border-slate-700 p-2 text-white font-mono text-center outline-none focus:border-cyan-500"/>
+                  className="bg-zinc-900 border border-zinc-700 p-2 text-white font-mono text-center outline-none focus:border-cyan-500"/>
                 <button onClick={() => { const mins = Number(focusMinutes) || 1; setTimeLeft(mins * 60); setIsFocusing(true); addLog(`[TIME] Memulai sesi fokus ${mins} menit. JANGAN MENYERAH!`); }}
                   className="mt-2 py-3 bg-cyan-600 hover:bg-cyan-500 text-white text-xs font-bold uppercase tracking-widest border-2 border-cyan-400 shadow-[0_4px_0_#0891b2] active:translate-y-[4px] active:shadow-none transition-all flex items-center justify-center gap-2">
                   <Play size={14}/> {tFocus.start}
@@ -888,7 +888,7 @@ export default function FocusArena() {
                   {formatTime(timeLeft)}
                 </div>
                 <button onClick={() => { setIsFocusing(false); setTimeLeft(0); doBossAttack(true); }}
-                  className="w-full py-2 bg-slate-800 text-slate-400 hover:bg-red-950 hover:text-red-400 border border-slate-700 hover:border-red-500 text-[10px] font-bold uppercase transition-all flex items-center justify-center gap-2">
+                  className="w-full py-2 bg-zinc-800 text-zinc-400 hover:bg-red-950 hover:text-red-400 border border-zinc-700 hover:border-red-500 text-[10px] font-bold uppercase transition-all flex items-center justify-center gap-2">
                   <Square size={12}/> {tFocus.giveUp}
                 </button>
               </div>
@@ -897,7 +897,7 @@ export default function FocusArena() {
             {canAttack && (
               <button onClick={doAttack} disabled={bossHp <= 0}
                 className={`py-4 text-sm font-bold uppercase tracking-widest border-2 transition-all flex items-center justify-center gap-2
-                  ${bossHp <= 0 ? 'bg-slate-800 border-slate-700 text-slate-600 cursor-not-allowed'
+                  ${bossHp <= 0 ? 'bg-zinc-800 border-zinc-700 text-zinc-600 cursor-not-allowed'
                     : 'bg-red-600 border-red-400 text-white hover:bg-red-500 shadow-[0_4px_0_#7f1d1d] active:translate-y-[4px] active:shadow-none animate-bounce'}`}>
                 <Swords size={18}/> {tFocus.attack}
               </button>
@@ -906,8 +906,8 @@ export default function FocusArena() {
 
           {/* Potion buttons */}
           {potions.length > 0 && (
-            <div className="bg-slate-900 border-2 border-slate-700 p-3">
-              <p className="text-[8px] text-slate-500 uppercase tracking-widest mb-2 flex items-center gap-1">
+            <div className="bg-zinc-800 border-2 border-zinc-700 p-3">
+              <p className="text-[8px] text-zinc-500 uppercase tracking-widest mb-2 flex items-center gap-1">
                 <FlaskConical size={10}/> {tFocus.potions}
               </p>
               <div className="flex flex-wrap gap-2">
@@ -924,13 +924,13 @@ export default function FocusArena() {
           )}
 
           {/* Battle log */}
-          <div className="flex-1 bg-slate-950 border-2 border-slate-700 flex flex-col overflow-hidden">
-            <div className="px-3 py-1.5 border-b border-slate-800">
-              <span className="text-[8px] text-slate-500 uppercase tracking-widest">{tFocus.battleLog}</span>
+          <div className="flex-1 bg-zinc-900 border-2 border-zinc-700 flex flex-col overflow-hidden">
+            <div className="px-3 py-1.5 border-b border-zinc-800">
+              <span className="text-[8px] text-zinc-500 uppercase tracking-widest">{tFocus.battleLog}</span>
             </div>
             <div className="flex-1 overflow-y-auto p-2 flex flex-col gap-0.5" style={{ maxHeight:200 }}>
               {battleLog.map((log, i) => (
-                <p key={i} className={`text-[9px] font-mono leading-relaxed ${i === 0 ? 'text-white' : 'text-slate-600'}`}>{log}</p>
+                <p key={i} className={`text-[9px] font-mono leading-relaxed ${i === 0 ? 'text-white' : 'text-zinc-500'}`}>{log}</p>
               ))}
             </div>
           </div>
@@ -939,23 +939,23 @@ export default function FocusArena() {
         {/* ─── RIGHT: Boss ─── */}
         <div className="flex flex-col gap-3">
           {/* Boss HP */}
-          <div className={`bg-slate-900 border-2 ${boss.border} p-3`}>
+          <div className={`bg-zinc-800 border-2 ${boss.border} p-3`}>
             <div className="flex justify-between mb-1">
               <span className={`text-[9px] font-bold uppercase ${RARITY_LABEL[boss.rarity]}`}>{boss.name}</span>
-              <span className="text-[9px] text-slate-400">{bossHp}/{boss.maxHp}</span>
+              <span className="text-[9px] text-zinc-400">{bossHp}/{boss.maxHp}</span>
             </div>
-            <div className="h-3 bg-slate-800 border border-slate-700 overflow-hidden">
+            <div className="h-3 bg-zinc-900 border border-zinc-700 overflow-hidden">
               <div className={`h-full ${boss.barColor} transition-all duration-300 ${bossHit ? 'opacity-40' : ''}`}
                 style={{ width:`${bossHpPct}%` }}/>
             </div>
           </div>
 
           {/* Boss arena */}
-          <div className="relative bg-slate-950 border-2 border-slate-700 overflow-hidden flex items-center justify-center"
+          <div className="relative bg-zinc-900 border-2 border-zinc-700 overflow-hidden flex items-center justify-center"
             style={{ minHeight:200,
-              backgroundImage:'linear-gradient(rgba(30,41,59,0.4) 1px,transparent 1px),linear-gradient(90deg,rgba(30,41,59,0.4) 1px,transparent 1px)',
+              backgroundImage:'linear-gradient(rgba(255,255,255,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.03) 1px,transparent 1px)',
               backgroundSize:'8px 8px' }}>
-            <div className="absolute bottom-0 left-0 right-0 h-6 bg-slate-800 border-t border-slate-700"/>
+            <div className="absolute bottom-0 left-0 right-0 h-6 bg-zinc-800 border-t border-zinc-700"/>
             {/* Boss hit flash */}
             {bossHit && <div className="absolute inset-0 bg-red-500 opacity-30 pointer-events-none z-20"/>}
             {/* Boss sprite */}
@@ -977,10 +977,10 @@ export default function FocusArena() {
           </div>
 
           {/* Boss info */}
-          <div className={`bg-slate-900 border-2 ${boss.border} p-3`}>
+          <div className={`bg-zinc-800 border-2 ${boss.border} p-3`}>
             <p className={`text-[8px] font-bold uppercase ${RARITY_LABEL[boss.rarity]}`}>{boss.rarity}</p>
             <p className="text-[10px] text-white font-bold uppercase mt-0.5">{boss.name}</p>
-            <p className="text-[8px] text-slate-500 italic mt-0.5">"{boss.title}"</p>
+            <p className="text-[8px] text-zinc-500 italic mt-0.5">"{boss.title}"</p>
             <div className="flex gap-3 mt-2 text-[8px]">
               <span className="text-amber-400">{tFocus.reward}: {boss.gold}G / {boss.exp}XP</span>
             </div>

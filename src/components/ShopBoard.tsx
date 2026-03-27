@@ -993,7 +993,7 @@ export const ITEMS: ShopItem[] = [
 const RARITY_STYLE: Record<Rarity, {
   label: string; labelClass: string; border: string; dot: string; hoverShadow: string;
 }> = {
-  common:    { label: 'COMMON',    labelClass: 'text-slate-400',   border: 'border-slate-600',   dot: 'bg-slate-400',   hoverShadow: '' },
+  common:    { label: 'COMMON',    labelClass: 'text-zinc-400',   border: 'border-zinc-600',   dot: 'bg-zinc-400',   hoverShadow: '' },
   uncommon:  { label: 'UNCOMMON',  labelClass: 'text-emerald-400', border: 'border-emerald-500', dot: 'bg-emerald-400', hoverShadow: 'hover:shadow-emerald-500/30' },
   rare:      { label: 'RARE',      labelClass: 'text-blue-400',    border: 'border-blue-500',    dot: 'bg-blue-400',    hoverShadow: 'hover:shadow-blue-500/30' },
   epic:      { label: 'EPIC',      labelClass: 'text-purple-400',  border: 'border-purple-500',  dot: 'bg-purple-400',  hoverShadow: 'hover:shadow-purple-500/40' },
@@ -1020,8 +1020,8 @@ const EquipmentPanel: React.FC<EquipmentPanelProps> = ({ equippedItems, onUnequi
   };
 
   return (
-    <div className="mt-8 border-t-2 border-slate-700 pt-6" style={{ fontFamily: "'Courier New', monospace" }}>
-      <h3 className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4">
+    <div className="mt-8 border-t-2 border-zinc-700 pt-6" style={{ fontFamily: "'Courier New', monospace" }}>
+      <h3 className="text-xs font-bold text-zinc-400 uppercase tracking-widest mb-4">
         {t.equipped}
       </h3>
 
@@ -1035,8 +1035,8 @@ const EquipmentPanel: React.FC<EquipmentPanelProps> = ({ equippedItems, onUnequi
             <div
               key={slot}
               className={`
-                relative flex flex-col items-center justify-center aspect-square border-2 bg-slate-900
-                ${item ? rs!.border + ' cursor-pointer hover:-translate-y-1' : 'border-slate-700 border-dashed'}
+                relative flex flex-col items-center justify-center aspect-square border-2 bg-zinc-900
+                ${item ? rs!.border + ' cursor-pointer hover:-translate-y-1' : 'border-zinc-700 border-dashed'}
                 transition-all duration-100 group
               `}
               onClick={() => item && onUnequip(slot)}
@@ -1056,8 +1056,8 @@ const EquipmentPanel: React.FC<EquipmentPanelProps> = ({ equippedItems, onUnequi
                 </>
               ) : (
                 <>
-                  <span className="text-slate-700 text-base">+</span>
-                  <span className="text-[8px] text-slate-500 text-center">{SLOT_LABELS[slot]}</span>
+                  <span className="text-zinc-700 text-base">+</span>
+                  <span className="text-[8px] text-zinc-500 text-center">{SLOT_LABELS[slot]}</span>
                 </>
               )}
             </div>
@@ -1067,8 +1067,8 @@ const EquipmentPanel: React.FC<EquipmentPanelProps> = ({ equippedItems, onUnequi
 
       {/* Active stat bonuses */}
       {equippedList.length > 0 && (
-        <div className="p-3 bg-slate-900 border-2 border-slate-700">
-          <p className="text-[9px] text-slate-500 uppercase tracking-widest mb-2">{t.activeBonus}</p>
+        <div className="p-3 bg-zinc-900 border-2 border-zinc-700">
+          <p className="text-[9px] text-zinc-500 uppercase tracking-widest mb-2">{t.activeBonus}</p>
           {equippedList.map((item) => (
             <p key={item.id} className="text-[9px] text-emerald-400 leading-loose">
               + {item.stat}
@@ -1143,7 +1143,7 @@ export default function ShopBoard({ searchQuery = "", activeCategory = "all" }: 
 
       {/* TOAST NOTIFICATION */}
       {toast && (
-        <div className="fixed top-8 left-1/2 -translate-x-1/2 z-[9999] bg-[#020617] border-b-4 border-amber-500 px-6 py-4
+        <div className="fixed top-8 left-1/2 -translate-x-1/2 z-[9999] bg-zinc-950 border-b-4 border-amber-500 px-6 py-4
           text-amber-400 text-xs font-pixel uppercase tracking-widest shadow-[0_8px_0_rgba(0,0,0,0.5)] animate-in slide-in-from-top-5 fade-in duration-300 flex items-center gap-3">
           <ShoppingBag size={16} className="text-amber-400" />
           {toast}
@@ -1151,18 +1151,18 @@ export default function ShopBoard({ searchQuery = "", activeCategory = "all" }: 
       )}
 
       {/* --- HEADER TOKO & LOOT STYLE FOCUS ARENA --- */}
-      <div className="flex flex-col md:flex-row md:justify-between md:items-end gap-4 mb-8 shrink-0 border-b border-slate-700/50 pb-6">
+      <div className="flex flex-col md:flex-row md:justify-between md:items-end gap-4 mb-8 shrink-0 border-b border-zinc-700/50 pb-6">
         <div className="flex flex-col gap-3 text-left">
           <h1 className="font-pixel text-sm md:text-base text-white flex items-center gap-3 drop-shadow-[2px_2px_0_#000]">
             <span className="text-amber-500"><ShoppingBag size={18} /></span>
             {t.title}
           </h1>
-          <p className="font-pixel text-[7px] md:text-[8px] text-slate-400 uppercase tracking-widest leading-relaxed">
+          <p className="font-pixel text-[7px] md:text-[8px] text-zinc-400 uppercase tracking-widest leading-relaxed">
             {t.desc}
           </p>
         </div>
 
-        <div className="bg-[#24283b] border-2 border-amber-500 px-6 py-3 flex items-center justify-center gap-3 shadow-[4px_4px_0_#000] shrink-0 w-full md:w-auto">
+        <div className="bg-zinc-800 border-2 border-amber-500 px-6 py-3 flex items-center justify-center gap-3 shadow-[4px_4px_0_#000] shrink-0 w-full md:w-auto">
           <Coins size={16} className="text-amber-400 animate-bounce" />
           <span className="text-sm text-amber-400 font-pixel tracking-widest">{stats.gold} G</span>
         </div>
@@ -1172,21 +1172,21 @@ export default function ShopBoard({ searchQuery = "", activeCategory = "all" }: 
       {/* CATEGORY FILTER */}
       <div className="flex flex-col lg:flex-row gap-4 lg:items-center mb-6">
         <div className="flex flex-wrap gap-2">
-          <button onClick={() => setActiveFilter('all')} className={`px-3 py-1.5 text-[10px] font-bold border-2 transition-colors uppercase tracking-widest ${activeFilter === 'all' ? 'border-amber-400 text-amber-400 bg-slate-800 shadow-[2px_2px_0_#fbbf24]' : 'border-slate-700 text-slate-500 hover:border-slate-500 bg-slate-900'}`}>{t.all}</button>
+          <button onClick={() => setActiveFilter('all')} className={`px-3 py-1.5 text-[10px] font-bold border-2 transition-colors uppercase tracking-widest ${activeFilter === 'all' ? 'border-amber-400 text-amber-400 bg-zinc-800 shadow-[2px_2px_0_#fbbf24]' : 'border-zinc-700 text-zinc-500 hover:border-zinc-500 bg-zinc-900'}`}>{t.all}</button>
           {categories.map(slot => (
-            <button key={slot.id} onClick={() => setActiveFilter(slot.id as EquipSlot)} className={`px-3 py-1.5 text-[10px] font-bold border-2 transition-colors uppercase tracking-widest ${activeFilter === slot.id ? 'border-amber-400 text-amber-400 bg-slate-800 shadow-[2px_2px_0_#fbbf24]' : 'border-slate-700 text-slate-500 hover:border-slate-500 bg-slate-900'}`}>
+            <button key={slot.id} onClick={() => setActiveFilter(slot.id as EquipSlot)} className={`px-3 py-1.5 text-[10px] font-bold border-2 transition-colors uppercase tracking-widest ${activeFilter === slot.id ? 'border-amber-400 text-amber-400 bg-zinc-800 shadow-[2px_2px_0_#fbbf24]' : 'border-zinc-700 text-zinc-500 hover:border-zinc-500 bg-zinc-900'}`}>
               {slot.label}
             </button>
           ))}
         </div>
 
-        <div className="w-px h-8 bg-slate-700 hidden lg:block"></div>
+        <div className="w-px h-8 bg-zinc-700 hidden lg:block"></div>
 
         {/* OWNERSHIP FILTER */}
         <div className="flex flex-wrap gap-2">
-          <button onClick={() => setOwnershipFilter('all')} className={`px-3 py-1.5 text-[10px] font-bold border-2 transition-colors uppercase tracking-widest ${ownershipFilter === 'all' ? 'border-purple-400 text-purple-400 bg-slate-800 shadow-[2px_2px_0_#c084fc]' : 'border-slate-700 text-slate-500 hover:border-slate-500 bg-slate-900'}`}>{t.all}</button>
-          <button onClick={() => setOwnershipFilter('owned')} className={`px-3 py-1.5 text-[10px] font-bold border-2 transition-colors uppercase tracking-widest ${ownershipFilter === 'owned' ? 'border-emerald-400 text-emerald-400 bg-slate-800 shadow-[2px_2px_0_#34d399]' : 'border-slate-700 text-slate-500 hover:border-slate-500 bg-slate-900'}`}>{t.owned}</button>
-          <button onClick={() => setOwnershipFilter('notOwned')} className={`px-3 py-1.5 text-[10px] font-bold border-2 transition-colors uppercase tracking-widest ${ownershipFilter === 'notOwned' ? 'border-pink-400 text-pink-400 bg-slate-800 shadow-[2px_2px_0_#f472b6]' : 'border-slate-700 text-slate-500 hover:border-slate-500 bg-slate-900'}`}>{t.notOwned}</button>
+          <button onClick={() => setOwnershipFilter('all')} className={`px-3 py-1.5 text-[10px] font-bold border-2 transition-colors uppercase tracking-widest ${ownershipFilter === 'all' ? 'border-purple-400 text-purple-400 bg-zinc-800 shadow-[2px_2px_0_#c084fc]' : 'border-zinc-700 text-zinc-500 hover:border-zinc-500 bg-zinc-900'}`}>{t.all}</button>
+          <button onClick={() => setOwnershipFilter('owned')} className={`px-3 py-1.5 text-[10px] font-bold border-2 transition-colors uppercase tracking-widest ${ownershipFilter === 'owned' ? 'border-emerald-400 text-emerald-400 bg-zinc-800 shadow-[2px_2px_0_#34d399]' : 'border-zinc-700 text-zinc-500 hover:border-zinc-500 bg-zinc-900'}`}>{t.owned}</button>
+          <button onClick={() => setOwnershipFilter('notOwned')} className={`px-3 py-1.5 text-[10px] font-bold border-2 transition-colors uppercase tracking-widest ${ownershipFilter === 'notOwned' ? 'border-pink-400 text-pink-400 bg-zinc-800 shadow-[2px_2px_0_#f472b6]' : 'border-zinc-700 text-zinc-500 hover:border-zinc-500 bg-zinc-900'}`}>{t.notOwned}</button>
         </div>
       </div>
 
@@ -1218,15 +1218,15 @@ export default function ShopBoard({ searchQuery = "", activeCategory = "all" }: 
               onClick={() => handleItemClick(item)}
               style={{ imageRendering: 'pixelated' }}
               className={`
-                relative flex flex-col w-full aspect-[3/4] bg-slate-900 border-2 overflow-hidden
+                relative flex flex-col w-full aspect-[3/4] bg-zinc-900 border-2 overflow-hidden
                 transition-all duration-100 text-left
-                ${isEquipped ? rs.border + ' shadow-lg' : 'border-slate-700'}
+                ${isEquipped ? rs.border + ' shadow-lg' : 'border-zinc-700'}
                 ${isHovered && !isEquipped ? '-translate-y-1 shadow-lg ' + rs.hoverShadow : ''}
                 ${ownedCount > 0 && !isEquipped ? 'border-dashed border-emerald-500/50' : ''}
               `}
             >
               {/* Top bar */}
-              <div className="flex justify-between items-center px-2 py-1 border-b border-slate-800 shrink-0">
+              <div className="flex justify-between items-center px-2 py-1 border-b border-zinc-800 shrink-0">
                 <span className={`text-[7px] font-bold tracking-widest ${rs.labelClass}`}>{rs.label}</span>
                 <div className={`w-2 h-2 ${rs.dot}`} />
               </div>
@@ -1278,7 +1278,7 @@ export default function ShopBoard({ searchQuery = "", activeCategory = "all" }: 
                 <div
                   className="absolute inset-0 flex flex-col items-center justify-center px-2 z-20"
                   style={{
-                    background: 'rgba(10,6,30,0.93)',
+                    background: 'rgba(24,24,27,0.93)',
                     backgroundImage:
                       'repeating-linear-gradient(0deg,transparent,transparent 3px,rgba(0,0,0,0.15) 3px,rgba(0,0,0,0.15) 4px)',
                   }}
@@ -1288,7 +1288,7 @@ export default function ShopBoard({ searchQuery = "", activeCategory = "all" }: 
                       <p key={i} className="text-[10px] font-bold text-emerald-400 font-mono leading-loose">{s.trim()}</p>
                     ))}
                   </div>
-                  <p className="text-[9px] text-slate-400 font-mono mt-2 uppercase">
+                  <p className="text-[9px] text-zinc-400 font-mono mt-2 uppercase">
                     {t.slot}: {categories.find(c => c.id === item.slot)?.label || item.slot}
                   </p>
                   <p className="text-[11px] font-bold mt-3 text-amber-400">
@@ -1298,7 +1298,7 @@ export default function ShopBoard({ searchQuery = "", activeCategory = "all" }: 
               )}
 
               {/* Price */}
-              <div className="bg-slate-950 border-t-2 border-slate-800 py-2 flex items-center justify-center gap-1.5">
+              <div className="bg-zinc-950 border-t-2 border-zinc-800 py-2 flex items-center justify-center gap-1.5">
                 <div
                   className="w-3 h-3 bg-amber-400"
                   style={{ clipPath: 'polygon(50% 0%,100% 25%,100% 75%,50% 100%,0% 75%,0% 25%)' }}
