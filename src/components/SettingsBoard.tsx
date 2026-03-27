@@ -27,9 +27,20 @@ import {
   Github,
   Instagram,
   AlertTriangle,
-  CheckCircle // Ikon baru untuk modal sukses
+  CheckCircle,
+  Check // Tambah ikon Check untuk desain baru
 } from "lucide-react";
 import { translations } from "@/utils/translations";
+
+// --- Komponen SVG Manual untuk Google ---
+const GoogleIcon = ({ size = 24, className = "" }: { size?: number, className?: string }) => (
+  <svg viewBox="0 0 24 24" width={size} height={size} className={className}>
+    <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="currentColor" />
+    <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="currentColor" />
+    <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="currentColor" />
+    <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="currentColor" />
+  </svg>
+);
 
 export default function SettingsBoard() {
   const { userProfile, setUserProfile, settings, updateSetting, playSound, showAlert } = useStore();
@@ -59,6 +70,14 @@ export default function SettingsBoard() {
     title: string;
     message: string;
   }>({ isOpen: false, type: null, title: '', message: '' });
+
+  // --- MENENTUKAN METODE LOGIN SAAT INI ---
+  let connectedProvider = 'credentials';
+  if (session?.user?.image?.includes('github')) {
+    connectedProvider = 'github';
+  } else if (session?.user?.image?.includes('googleusercontent')) {
+    connectedProvider = 'google';
+  }
 
   // --- TRIGGER MODAL KONFIRMASI ---
   const triggerResetConfirm = () => {
@@ -102,7 +121,6 @@ export default function SettingsBoard() {
 
       if (response.ok) {
         playSound('success');
-        // Tampilkan Modal Sukses sebagai pengganti alert bawaan
         if (confirmModal.type === 'reset') {
           setSuccessModal({
             isOpen: true,
@@ -142,11 +160,11 @@ export default function SettingsBoard() {
   };
 
 
-  // Komponen Baris Tombol Aksi (Untuk Ubah Nama, dll)
+  // Komponen Baris Tombol Aksi
   const SettingAction = ({ label, value, actionText, onClick, danger = false, disabled = false, icon: Icon }: any) => (
     <div className={`flex flex-col sm:flex-row sm:items-center justify-between p-4 bg-zinc-800 border-2 border-zinc-700 transition-colors group gap-3 sm:gap-0 ${disabled ? 'opacity-50 pointer-events-none' : 'hover:border-amber-500'}`}>
       <div className="flex items-center gap-3">
-        <div className="w-8 h-8 bg-zinc-900 border border-zinc-600 flex items-center justify-center text-zinc-400 group-hover:text-amber-400 transition-colors">
+        <div className="w-8 h-8 bg-zinc-900 border border-zinc-600 flex items-center justify-center text-zinc-400 group-hover:text-amber-400 transition-colors shrink-0">
           {Icon && <Icon size={16} />}
         </div>
         <div className="flex flex-col text-left">
@@ -172,7 +190,7 @@ export default function SettingsBoard() {
   const SettingSelect = ({ label, value, options, onChange, icon: Icon }: any) => (
     <div className="flex flex-col sm:flex-row sm:items-center justify-between p-4 bg-zinc-800 border-2 border-zinc-700 hover:border-amber-500 transition-colors group gap-3 sm:gap-0">
       <div className="flex items-center gap-3">
-        <div className="w-8 h-8 bg-zinc-900 border border-zinc-600 flex items-center justify-center text-zinc-400 group-hover:text-amber-400 transition-colors">
+        <div className="w-8 h-8 bg-zinc-900 border border-zinc-600 flex items-center justify-center text-zinc-400 group-hover:text-amber-400 transition-colors shrink-0">
           {Icon && <Icon size={16} />}
         </div>
         <span className="text-sm font-bold text-zinc-200">{label}</span>
@@ -191,7 +209,7 @@ export default function SettingsBoard() {
   const SettingToggle = ({ label, checked, onChange, icon: Icon, description }: any) => (
     <div className="flex flex-col sm:flex-row sm:items-center justify-between p-4 bg-zinc-800 border-2 border-zinc-700 hover:border-amber-500 transition-colors group gap-3 sm:gap-0">
       <div className="flex items-center gap-3">
-        <div className="w-8 h-8 bg-zinc-900 border border-zinc-600 flex items-center justify-center text-zinc-400 group-hover:text-amber-400 transition-colors">
+        <div className="w-8 h-8 bg-zinc-900 border border-zinc-600 flex items-center justify-center text-zinc-400 group-hover:text-amber-400 transition-colors shrink-0">
           {Icon && <Icon size={16} />}
         </div>
         <div className="flex flex-col text-left">
@@ -251,25 +269,50 @@ export default function SettingsBoard() {
         </div>
       </section>
 
-      {/* SECTION: METODE MASUK AKUN */}
+      {/* SECTION: METODE MASUK AKUN (DESAIN BARU KOTAK KECIL) */}
       <section className="flex flex-col gap-3">
         <h2 className="text-[10px] font-bold text-amber-400 uppercase tracking-widest flex items-center gap-2 mb-2">
           <Smartphone size={14} /> {t.loginMethod}
         </h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div className="bg-zinc-800 border-2 border-zinc-700 p-4 flex items-center justify-between">
-            <span className="text-sm font-bold text-zinc-200">Apple</span>
-            <button className="text-[10px] font-bold uppercase border-2 border-zinc-600 px-3 py-1.5 text-zinc-400 hover:text-white hover:border-white transition-colors">
-              Connect
-            </button>
+        
+        <div className="flex flex-row gap-4 pt-2">
+          
+          {/* KOTAK GITHUB */}
+          <div className={`
+            relative w-20 h-20 border-2 flex flex-col items-center justify-center 
+            transition-all duration-300 shadow-[4px_4px_0_#000]
+            ${connectedProvider === 'github' 
+              ? 'bg-emerald-950 border-emerald-500' 
+              : 'bg-zinc-800 border-zinc-700'}
+          `}>
+            <Github size={32} className={connectedProvider === 'github' ? 'text-emerald-400 drop-shadow-[0_0_8px_rgba(52,211,153,0.5)]' : 'text-zinc-600'} />
+            
+            {/* Indikator Centang Terhubung */}
+            {connectedProvider === 'github' && (
+              <div className="absolute top-1 right-1 flex items-center justify-center w-5 h-5 bg-emerald-500 rounded-full border-2 border-emerald-950 shadow-sm">
+                <Check size={12} className="text-emerald-950" strokeWidth={4} />
+              </div>
+            )}
           </div>
-          <div className="bg-zinc-800 border-2 border-emerald-500/50 p-4 flex items-center justify-between relative overflow-hidden">
-            <div className="absolute top-0 right-0 w-8 h-8 bg-emerald-500/10 rounded-bl-full" />
-            <span className="text-sm font-bold text-emerald-400">Google</span>
-            <span className="text-[10px] font-bold uppercase bg-emerald-500 text-zinc-900 px-3 py-1.5 shadow-[2px_2px_0_#000]">
-              Connected
-            </span>
+
+          {/* KOTAK GOOGLE */}
+          <div className={`
+            relative w-20 h-20 border-2 flex flex-col items-center justify-center 
+            transition-all duration-300 shadow-[4px_4px_0_#000]
+            ${connectedProvider === 'google' 
+              ? 'bg-emerald-950 border-emerald-500' 
+              : 'bg-zinc-800 border-zinc-700'}
+          `}>
+            <GoogleIcon size={32} className={connectedProvider === 'google' ? 'text-emerald-400 drop-shadow-[0_0_8px_rgba(52,211,153,0.5)]' : 'text-zinc-600'} />
+            
+            {/* Indikator Centang Terhubung */}
+            {connectedProvider === 'google' && (
+              <div className="absolute top-1 right-1 flex items-center justify-center w-5 h-5 bg-emerald-500 rounded-full border-2 border-emerald-950 shadow-sm">
+                <Check size={12} className="text-emerald-950" strokeWidth={4} />
+              </div>
+            )}
           </div>
+
         </div>
       </section>
 
@@ -287,17 +330,7 @@ export default function SettingsBoard() {
         </div>
       </section>
 
-      {/* SECTION: KARAKTER */}
-      <section className="flex flex-col gap-3">
-        <h2 className="text-[10px] font-bold text-amber-400 uppercase tracking-widest flex items-center gap-2 mb-2">
-          <Swords size={14} /> {t.char}
-        </h2>
-        <div className="flex flex-col gap-2">
-          <SettingAction icon={User} label={t.setStats} value={t.resetStats} actionText={t.reset} onClick={() => { showAlert("RESET STATUS", t.alertStats, "warning"); playSound('error'); }} />
-        </div>
-      </section>
-
-      {/* SECTION BARU: TENTANG LIFEQUEST */}
+      {/* SECTION: TENTANG DAILY DUNGEON */}
       <section className="flex flex-col gap-3 mt-4 pt-8 border-t-2 border-zinc-700/50">
         <h2 className="text-[10px] font-bold text-amber-400 uppercase tracking-widest flex items-center gap-2 mb-2">
           <Info size={14} /> Tentang Daily Dungeon
@@ -318,14 +351,14 @@ export default function SettingsBoard() {
             </div>
             <div className="p-6">
               {editModal.field === 'bio' ? (
-                <textarea value={editModal.value} onChange={e => setEditModal({...editModal, value: e.target.value})} className="w-full bg-zinc-950 border-2 border-zinc-600 p-3 text-white outline-none focus:border-amber-400 min-h-[100px] resize-none" placeholder="Tuliskan tentang dirimu..." autoFocus />
+                <textarea value={editModal.value} onChange={e => setEditModal({...editModal, value: e.target.value})} className="w-full bg-zinc-950 border-2 border-zinc-600 p-3 text-white outline-none focus:border-amber-400 min-h-[100px] resize-none font-mono" placeholder="Tuliskan tentang dirimu..." autoFocus />
               ) : (
-                <input type="text" value={editModal.value} onChange={e => setEditModal({...editModal, value: e.target.value})} className="w-full bg-zinc-950 border-2 border-zinc-600 p-3 text-white outline-none focus:border-amber-400" autoFocus />
+                <input type="text" value={editModal.value} onChange={e => setEditModal({...editModal, value: e.target.value})} className="w-full bg-zinc-950 border-2 border-zinc-600 p-3 text-white outline-none focus:border-amber-400 font-mono" autoFocus />
               )}
             </div>
             <div className="p-4 border-t-2 border-zinc-700 bg-zinc-800 flex justify-end gap-3">
-              <button onClick={() => setEditModal({...editModal, isOpen: false})} className="px-4 py-2 text-xs font-bold text-zinc-400 hover:text-white uppercase">{tUi.cancel}</button>
-              <button onClick={handleSaveEdit} className="px-6 py-2 bg-amber-500 text-amber-950 text-xs font-bold uppercase shadow-[4px_4px_0_#000] active:translate-y-[2px] active:shadow-none hover:bg-amber-400">{t.save}</button>
+              <button onClick={() => setEditModal({...editModal, isOpen: false})} className="px-4 py-2 text-xs font-bold text-zinc-400 hover:text-white uppercase transition-colors">{tUi.cancel}</button>
+              <button onClick={handleSaveEdit} className="px-6 py-2 bg-amber-500 text-amber-950 text-xs font-bold uppercase shadow-[4px_4px_0_#000] active:translate-y-[2px] active:shadow-none hover:bg-amber-400 transition-all">{t.save}</button>
             </div>
           </div>
         </div>
@@ -368,7 +401,7 @@ export default function SettingsBoard() {
                   <p className="text-xs text-zinc-400 mb-2 text-center uppercase tracking-widest">Ikuti Petualangan Kami</p>
                   
                   <a href="https://www.instagram.com/renhapiz" target="_blank" rel="noreferrer" className="flex items-center gap-4 bg-zinc-800 border-2 border-pink-600 hover:bg-pink-600/20 transition-colors p-4 shadow-[4px_4px_0_#000] active:translate-y-[2px] active:shadow-none group">
-                    <div className="p-2 bg-pink-500/10 rounded-full group-hover:scale-110 transition-transform">
+                    <div className="p-2 bg-pink-500/10 rounded-full group-hover:scale-110 transition-transform shrinking-0">
                       <Instagram className="text-pink-500" size={24} />
                     </div>
                     <div className="flex flex-col">
@@ -378,7 +411,7 @@ export default function SettingsBoard() {
                   </a>
 
                   <a href="https://github.com/renka01/life-quest-fictpact-cup2026" target="_blank" rel="noreferrer" className="flex items-center gap-4 bg-zinc-800 border-2 border-zinc-500 hover:bg-zinc-500/20 transition-colors p-4 shadow-[4px_4px_0_#000] active:translate-y-[2px] active:shadow-none group">
-                    <div className="p-2 bg-zinc-500/10 rounded-full group-hover:scale-110 transition-transform">
+                    <div className="p-2 bg-zinc-500/10 rounded-full group-hover:scale-110 transition-transform shrinking-0">
                       <Github className="text-zinc-300" size={24} />
                     </div>
                     <div className="flex flex-col">
@@ -425,7 +458,7 @@ export default function SettingsBoard() {
               }`}>
                 {confirmModal.isDangerAction ? <Trash2 size={32} /> : <RefreshCw size={32} />}
               </div>
-              <p className="text-sm text-zinc-300 leading-relaxed">
+              <p className="text-sm text-zinc-300 leading-relaxed font-mono">
                 {confirmModal.message}
               </p>
             </div>
@@ -463,7 +496,7 @@ export default function SettingsBoard() {
         </div>
       )}
 
-      {/* --- MODAL SUKSES (BARU) --- */}
+      {/* --- MODAL SUKSES --- */}
       {successModal.isOpen && (
         <div className="fixed inset-0 bg-black/90 backdrop-blur-sm z-[200] flex justify-center items-center p-4">
           <div className="w-full max-w-sm bg-zinc-900 border-4 border-emerald-500 shadow-[8px_8px_0_#000] flex flex-col animate-in zoom-in-95 duration-300">
@@ -480,7 +513,7 @@ export default function SettingsBoard() {
               <div className="w-16 h-16 mx-auto mb-4 border-2 flex items-center justify-center bg-emerald-500/10 border-emerald-500 text-emerald-500 animate-bounce">
                 <CheckCircle size={32} />
               </div>
-              <p className="text-sm text-zinc-300 leading-relaxed font-bold">
+              <p className="text-sm text-zinc-300 leading-relaxed font-bold font-mono">
                 {successModal.message}
               </p>
             </div>
@@ -489,7 +522,7 @@ export default function SettingsBoard() {
             <div className="p-4 border-t-2 border-zinc-700 bg-zinc-800 flex justify-center">
               <button 
                 onClick={handleSuccessClose} 
-                className="px-8 py-2 text-xs font-bold uppercase shadow-[4px_4px_0_#000] active:translate-y-[2px] active:shadow-none transition-all w-full bg-emerald-500 text-zinc-900 hover:bg-emerald-400"
+                className="px-8 py-2 text-xs font-bold uppercase shadow-[4px_4px_0_#000] active:translate-y-[2px] active:shadow-none w-full bg-emerald-500 text-zinc-900 hover:bg-emerald-400 transition-colors"
               >
                 LANJUTKAN
               </button>
