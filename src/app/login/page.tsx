@@ -783,12 +783,13 @@ export default function LoginPage() {
 
             {tab === 'login' && (
               <div className="flex justify-end mt-[-4px]">
-                <Link
-                  href="/forgot-password"
-                  className="text-xs text-amber-500 hover:text-amber-400 transition-colors cursor-pointer relative z-[50]"
+                <button
+                  type="button"
+                  onClick={() => router.push('/forgot-password')}
+                  className="text-xs text-amber-500 hover:text-amber-400 transition-colors cursor-pointer relative z-[50] bg-transparent border-none p-0 outline-none"
                 >
                   {t.forgotPass}
-                </Link>
+                </button>
               </div>
             )}
 
