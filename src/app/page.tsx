@@ -130,7 +130,7 @@ export default function Home() {
             });
 
             // LOAD CLOUD DATA
-            const progRes = await fetch('/api/progress');
+          const progRes = await fetch('/api/progress');
             if (progRes.ok) {
               const progData = await progRes.json();
               if (progData.gameState) {
@@ -140,7 +140,7 @@ export default function Home() {
                  setHasLoadedFromCloud(true); 
               }
             }
-            return; 
+           return; 
           }
         }
       } catch (err) { console.error(err); }
@@ -257,11 +257,9 @@ export default function Home() {
   if (!userProfile?.accountName) return <div className="h-screen w-full bg-zinc-900" />;
   
   if (!userProfile?.gender) {
-    // Kalau User Baru, set flag true agar progress awal (pemilihan char) bisa di save
-    if(!hasLoadedFromCloud) setHasLoadedFromCloud(true); 
-    return <CharacterSelection onComplete={() => console.log("Karakter siap!")} />;
-  }
-
+      return <CharacterSelection onComplete={() => console.log("Karakter siap!")} />;
+    }
+  
   const renderContent = () => {
     switch (activeMenu) {
       case "Dashboard":
