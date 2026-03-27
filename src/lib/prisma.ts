@@ -17,13 +17,10 @@ if (!connectionString) {
 const pool = new Pool({ connectionString });
 const adapter = new PrismaPg(pool);
 
-const prisma =
+export const prisma =
   global.prisma ||
   new PrismaClient({
     adapter,
   });
 
 if (process.env.NODE_ENV !== 'production') global.prisma = prisma;
-
-export default prisma;
-
