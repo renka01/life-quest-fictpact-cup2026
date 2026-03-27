@@ -6,13 +6,12 @@ import { Instagram, Twitter, Github, CheckCircle2, Coins, Flame, Eye, EyeOff, X 
 import { useStore } from '@/store/useStore';
 
 // ═══════════════════════════════════════════════════════════
-// PIXEL ART CHARACTER SPRITES (Karakter Diperbesar: 200x200)
-// PIXEL ART REUSABLES
+// PIXEL ART CHARACTER SPRITES (Dibuat Full Responsive)
 // ═══════════════════════════════════════════════════════════
 
 /** Shadow Knight */
 const ShadowKnight = () => (
-  <svg viewBox="-4 0 40 32" width="200" height="200" style={{ imageRendering: 'pixelated' }}>
+  <svg viewBox="-4 0 40 32" width="100%" height="100%" style={{ imageRendering: 'pixelated' }}>
     <style>{`@keyframes sk{0%,100%{transform:translateY(0)}50%{transform:translateY(1px)}}.skc{animation:sk 0.9s steps(2) infinite}`}</style>
     <g className="skc">
       <path d="M11 5 H21 V10 H22 V12 H24 V20 H25 V23 H23 V20 H22 V28 H18 V24 H14 V28 H10 V20 H9 V23 H7 V20 H8 V12 H10 V10 H11 V5 Z M8 20 H11 V24 H8 V20 Z" fill="black"/>
@@ -59,7 +58,7 @@ const ShadowKnight = () => (
 
 /** Arcane Mage */
 const ArcaneMage = () => (
-  <svg viewBox="-4 0 40 32" width="200" height="200" style={{ imageRendering: 'pixelated' }}>
+  <svg viewBox="-4 0 40 32" width="100%" height="100%" style={{ imageRendering: 'pixelated' }}>
     <style>{`@keyframes am{0%,100%{transform:translateY(0)}50%{transform:translateY(1px)}}.amc{animation:am 1s steps(2) infinite}`}</style>
     <g className="amc">
       <path d="M11 5 H21 V10 H22 V12 H24 V20 H25 V23 H23 V20 H22 V28 H18 V24 H14 V28 H10 V20 H9 V23 H7 V20 H8 V12 H10 V10 H11 V5 Z M8 20 H11 V24 H8 V20 Z" fill="black"/>
@@ -103,7 +102,7 @@ const ArcaneMage = () => (
 
 /** Void Ranger */
 const VoidRanger = () => (
-  <svg viewBox="-4 0 40 32" width="200" height="200" style={{ imageRendering: 'pixelated' }}>
+  <svg viewBox="-4 0 40 32" width="100%" height="100%" style={{ imageRendering: 'pixelated' }}>
     <style>{`@keyframes vr{0%,100%{transform:translateY(0)}50%{transform:translateY(1px)}}.vrc{animation:vr 0.8s steps(2) infinite}`}</style>
     <g className="vrc">
       <path d="M11 5 H21 V10 H22 V12 H24 V20 H25 V23 H23 V20 H22 V28 H18 V24 H14 V28 H10 V20 H9 V23 H7 V20 H8 V12 H10 V10 H11 V5 Z M8 20 H11 V24 H8 V20 Z" fill="black"/>
@@ -188,7 +187,7 @@ const GrandSpartanLandscape = () => (
 // FLOATING GOLD COINS
 // ═══════════════════════════════════════════════════════════
 const FloatingCoin = ({ x, y, delay }: { x: number | string; y: number | string; delay: number }) => (
-  <div style={{
+  <div className="hidden sm:block" style={{
     position: 'absolute', left: x, top: y,
     animation: `float ${3 + delay}s ease-in-out ${delay}s infinite alternate`,
     opacity: 0.5, pointerEvents: 'none',
@@ -248,7 +247,7 @@ const PolicyModal = ({ isOpen, onClose, title, children }: { isOpen: boolean; on
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex justify-center items-center z-[10000] animate-in fade-in-50" onClick={onClose}>
+    <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex justify-center items-center z-[10000] p-4 animate-in fade-in-50" onClick={onClose}>
       <div 
         className="bg-zinc-900 border-2 border-zinc-700 rounded-2xl shadow-2xl w-full max-w-2xl max-h-[80vh] flex flex-col animate-in zoom-in-95"
         onClick={e => e.stopPropagation()}
@@ -276,24 +275,22 @@ const PolicyModal = ({ isOpen, onClose, title, children }: { isOpen: boolean; on
 };
 
 // ═══════════════════════════════════════════════════════════
-// CUSTOM FEATURE ICONS (Pixel Art Mengikuti Referensi)
+// CUSTOM FEATURE ICONS (Dibuat Responsive width/height 100%)
 // ═══════════════════════════════════════════════════════════
 
 const HabitTrackerIcon = () => (
-  <svg viewBox="0 0 48 48" width="120" height="120" style={{ imageRendering: 'pixelated' }}>
+  <svg viewBox="0 0 48 48" width="100%" height="100%" style={{ imageRendering: 'pixelated' }}>
     <g className="hover:-translate-y-2 transition-transform duration-500">
       <rect x="4" y="8" width="40" height="8" fill="#f8fafc" opacity="0.9"/>
       <rect x="4" y="8" width="8" height="8" fill="#4ade80"/>
       <rect x="6" y="11" width="4" height="2" fill="#ffffff"/>
       <rect x="7" y="10" width="2" height="4" fill="#ffffff"/>
       <rect x="14" y="11" width="12" height="2" fill="#cbd5e1"/>
-      
       <rect x="10" y="20" width="38" height="8" fill="#f8fafc" opacity="0.9"/>
       <rect x="10" y="20" width="8" height="8" fill="#2dd4bf"/>
       <rect x="12" y="23" width="4" height="2" fill="#ffffff"/>
       <rect x="13" y="22" width="2" height="4" fill="#ffffff"/>
       <rect x="20" y="23" width="16" height="2" fill="#cbd5e1"/>
-
       <rect x="2" y="32" width="40" height="8" fill="#f8fafc" opacity="0.9"/>
       <rect x="2" y="32" width="8" height="8" fill="#38bdf8"/>
       <rect x="5" y="35" width="2" height="2" fill="#ffffff"/>
@@ -306,27 +303,23 @@ const HabitTrackerIcon = () => (
 );
 
 const LootRewardIcon = () => (
-  <svg viewBox="0 0 48 48" width="120" height="120" style={{ imageRendering: 'pixelated' }}>
+  <svg viewBox="0 0 48 48" width="100%" height="100%" style={{ imageRendering: 'pixelated' }}>
     <g className="hover:-translate-y-2 transition-transform duration-500">
       <rect x="36" y="6" width="4" height="4" fill="#fbbf24"/>
       <rect x="34" y="8" width="8" height="2" fill="#fde047"/>
       <rect x="36" y="4" width="2" height="8" fill="#fde047"/>
-
       <g transform="rotate(45 30 20)">
         <rect x="28" y="6" width="4" height="20" fill="#4ade80"/>
         <rect x="26" y="26" width="8" height="2" fill="#fbbf24"/>
         <rect x="28" y="28" width="4" height="6" fill="#78350f"/>
       </g>
-
       <rect x="6" y="14" width="4" height="4" fill="#38bdf8"/>
       <rect x="4" y="18" width="8" height="8" fill="#0ea5e9"/>
       <rect x="6" y="20" width="2" height="4" fill="#cffafe"/>
-
       <rect x="8" y="34" width="8" height="8" fill="#eab308"/>
       <rect x="10" y="32" width="4" height="12" fill="#facc15"/>
       <rect x="6" y="36" width="12" height="4" fill="#facc15"/>
       <rect x="10" y="36" width="4" height="4" fill="#ca8a04"/>
-
       <rect x="22" y="24" width="14" height="14" fill="#5b21b6"/>
       <rect x="20" y="28" width="18" height="10" fill="#7c3aed"/>
       <rect x="24" y="20" width="10" height="6" fill="#5b21b6"/>
@@ -341,7 +334,7 @@ const LootRewardIcon = () => (
 );
 
 const SangarDragonIcon = () => (
-  <svg viewBox="0 0 32 32" width="120" height="120" style={{ imageRendering: 'pixelated' }}>
+  <svg viewBox="0 0 32 32" width="100%" height="100%" style={{ imageRendering: 'pixelated' }}>
     <g className="hover:-translate-y-2 transition-transform duration-500">
       <rect x="22" y="2" width="2" height="6" fill="#e2e8f0"/>
       <rect x="20" y="4" width="2" height="6" fill="#cbd5e1"/>
@@ -417,7 +410,6 @@ export default function LoginPage() {
     }
 
     try {
-      // 1. REGISTRASI
       if (tab === 'register') {
         if (pass !== pass2) {
           setError('Kata sandi tidak cocok!');
@@ -435,7 +427,6 @@ export default function LoginPage() {
         if (!res.ok) throw new Error(data.message || 'Terjadi kesalahan saat mendaftar.');
       }
 
-      // 2. LOGIN (Berlaku untuk tab Login dan setelah Register berhasil)
       const result = await signIn('credentials', {
         redirect: false,
         email,
@@ -448,9 +439,7 @@ export default function LoginPage() {
         return;
       }
 
-      // 3. AMBIL DATA DARI DB SETELAH LOGIN SUKSES
       if (result?.ok) {
-        // Hapus state lama dari local storage untuk memastikan sesi baru dimulai dengan bersih
         localStorage.removeItem('lifequest-storage');
         setShowTransition(true);
 
@@ -496,12 +485,10 @@ export default function LoginPage() {
     setIsModalOpen(true);
   };
 
-  // PERBAIKAN: Memisahkan opsi agar GitHub tidak ikut menerima prompt: 'select_account'
-const handleOAuthLogin = (provider: 'google' | 'github') => {
+  const handleOAuthLogin = (provider: 'google' | 'github') => {
     localStorage.removeItem('lifequest-storage');
     setLoading(true);
     
-    // PERBAIKAN: Gunakan tipe eksplisit dan undefined untuk selain google
     const options: Record<string, string> | undefined = 
       provider === 'google' ? { prompt: 'select_account' } : undefined;
 
@@ -515,7 +502,7 @@ const handleOAuthLogin = (provider: 'google' | 'github') => {
   };
   
   return (
-    <div className="min-h-screen bg-zinc-900 flex flex-col relative overflow-hidden" style={{ fontFamily: "'Inter', 'Segoe UI', sans-serif" }}>
+    <div className="min-h-screen bg-zinc-900 flex flex-col relative w-full overflow-x-hidden" style={{ fontFamily: "'Inter', 'Segoe UI', sans-serif" }}>
       
       {isModalOpen && modalContent && <PolicyModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} title={modalContent.title}>{modalContent.content}</PolicyModal>}
 
@@ -558,16 +545,16 @@ const handleOAuthLogin = (provider: 'google' | 'github') => {
       <div className="z-0"><FloatingCoin x="90%" y="50%" delay={1.5}/></div>
 
       {/* HEADER */}
-      <header className="relative z-20 flex items-center justify-between px-8 py-6 flex-shrink-0">
+      <header className="relative z-20 flex items-center justify-between px-4 md:px-8 py-4 md:py-6 flex-shrink-0">
         <div className="flex items-center">
           <img
             src="/logo.png"
             alt="Daily Dungeon Logo"
-            className="h-16 md:h-24"
+            className="h-10 sm:h-16 md:h-24"
             style={{ imageRendering: 'pixelated' }}
           />
         </div>
-        <nav className="flex items-center gap-6">
+        <nav className="flex items-center gap-4 md:gap-6">
           <button onClick={() => router.push('/start')} className="hidden md:block text-sm text-amber-200/70 hover:text-amber-400 transition-colors font-semibold">
             Ayo Mulai
           </button>
@@ -577,74 +564,88 @@ const handleOAuthLogin = (provider: 'google' | 'github') => {
           </button>
           <button
             onClick={() => setTab(tab === 'login' ? 'register' : 'login')}
-            className="bg-amber-500 hover:bg-amber-400 text-zinc-900 px-6 py-2 rounded shadow-md font-bold text-sm transition-colors">
+            className="bg-amber-500 hover:bg-amber-400 text-zinc-900 px-4 md:px-6 py-2 rounded shadow-md font-bold text-xs md:text-sm transition-colors">
             {tab === 'login' ? 'Daftar' : 'Masuk'}
           </button>
         </nav>
       </header>
 
       {/* MAIN CONTENT */}
-      <main className="relative z-20 flex flex-col lg:flex-row items-start justify-center max-w-6xl mx-auto w-full px-6 gap-12 lg:gap-24" style={{ height: 'calc(100vh - 120px)', overflow: 'hidden' }}>
-        {/* KIRI: Scrollable Area */}
-        <div className="scroll-left flex-1 overflow-y-auto h-full pb-32">
-          <div className="flex flex-col items-center text-center pt-8 lg:pt-12 px-2 lg:px-8">
+      <main className="relative z-20 flex flex-col lg:flex-row items-center lg:items-start justify-center max-w-6xl mx-auto w-full px-4 sm:px-6 gap-8 lg:gap-24 lg:h-[calc(100vh-120px)] lg:overflow-hidden">
+        
+        {/* KIRI: Area Penjelasan & Karakter */}
+        <div className="scroll-left w-full lg:flex-1 lg:overflow-y-auto h-auto lg:h-full pb-8 lg:pb-32 flex flex-col items-center lg:items-start">
+          <div className="flex flex-col items-center text-center pt-4 lg:pt-12 px-2 lg:px-8 w-full">
             
-            {/* Karakter */}
-            <div className="flex items-end justify-center gap-2 mb-8 h-48">
-              <div className="transform translate-y-4 hover:-translate-y-2 transition-transform duration-500"><ShadowKnight/></div>
-              <div className="transform -translate-y-2 scale-110 z-10 hover:-translate-y-6 transition-transform duration-500"><VoidRanger/></div>
-              <div className="transform translate-y-4 hover:-translate-y-2 transition-transform duration-500"><ArcaneMage/></div>
-            </div>
+{/* PERBAIKAN KARAKTER: Ukuran SVG diperbesar signifikan */}
+            <div className="flex items-end justify-center gap-4 sm:gap-8 md:gap-12 mb-8 md:mb-12 h-32 sm:h-48 md:h-72 w-full">
+              
+              {/* Kiri */}
+              <div className="w-24 h-24 sm:w-36 sm:h-36 md:w-56 md:h-56 shrink-0 transform transition-transform duration-500 hover:-translate-y-4">
+                <ShadowKnight/>
+              </div>
+              
+              {/* Tengah (Paling Besar) */}
+              <div className="w-25 h-25 sm:w-40 sm:h-40 md:w-72 md:h-72 shrink-0 transform -translate-y-4 md:-translate-y-8 z-10 transition-transform duration-500 hover:-translate-y-12">
+                <VoidRanger/>
+              </div>
+              
+              {/* Kanan */}
+              <div className="w-24 h-24 sm:w-36 sm:h-36 md:w-56 md:h-56 shrink-0 transform transition-transform duration-500 hover:-translate-y-4">
+                <ArcaneMage/>
+              </div>
 
-            <h1 className="text-white text-4xl lg:text-5xl font-extrabold leading-tight mb-4 max-w-2xl tracking-tight">
+            </div>
+            <h1 className="text-white text-3xl sm:text-4xl lg:text-5xl font-extrabold leading-tight mb-4 max-w-2xl tracking-tight px-2">
               Buat Hidupmu Menjadi Game
             </h1>
-            <p className="text-zinc-300 text-sm md:text-base max-w-2xl leading-relaxed font-medium mb-12">
+            <p className="text-zinc-300 text-xs sm:text-sm md:text-base max-w-2xl leading-relaxed font-medium mb-8 px-4">
               Daily Dungeon adalah aplikasi untuk membangun produktivitas dan kebiasaan baik dengan mengubah kehidupan nyata menjadi permainan. Dengan sistem imbalan dan leveling layaknya game RPG, aplikasi ini memotivasimu untuk mencapai target, bekerja keras, dan melawan kemalasan.
             </p>
 
-          {/* === FITUR DESKRIPSI === */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 w-full max-w-4xl shrink-0 mt-8">
-            
-            <div className="flex flex-col items-center text-center px-2 group">
-              <div className="mb-6 drop-shadow-2xl">
-                <HabitTrackerIcon />
+            {/* PERBAIKAN FITUR: sm:grid-cols-3 agar langsung berjejer 3 dari ukuran tablet/fold */}
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6 w-full max-w-4xl shrink-0 mt-6 md:mt-10 px-2 sm:px-4">
+              
+              <div className="flex flex-col items-center text-center px-2 group">
+                <div className="w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 mb-4 md:mb-6 drop-shadow-2xl">
+                  <HabitTrackerIcon />
+                </div>
+                <h3 className="text-white font-bold text-base md:text-lg mb-2 leading-snug">Pantau Kebiasaan</h3>
+                <p className="text-zinc-400 text-xs sm:text-sm leading-relaxed">
+                  Tetap bertanggung jawab dengan memantau Habit, target Harian, dan daftar Todo-mu.
+                </p>
               </div>
-              <h3 className="text-white font-bold text-lg mb-2 leading-snug">Pantau Kebiasaan</h3>
-              <p className="text-zinc-400 text-sm leading-relaxed">
-                Tetap bertanggung jawab dengan memantau Habit, target Harian, dan daftar Todo-mu.
-              </p>
+
+              <div className="flex flex-col items-center text-center px-2 group">
+                <div className="w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 mb-4 md:mb-6 drop-shadow-2xl">
+                  <LootRewardIcon />
+                </div>
+                <h3 className="text-white font-bold text-base md:text-lg mb-2 leading-snug">Dapatkan Hadiah</h3>
+                <p className="text-zinc-400 text-xs sm:text-sm leading-relaxed">
+                  Selesaikan tugas, raih Gold & EXP, lalu beli perlengkapan epik di Toko!
+                </p>
+              </div>
+
+              {/* Hapus sm:col-span-2 agar tidak mengambil 2 kolom sendiri */}
+              <div className="flex flex-col items-center text-center px-2 group">
+                <div className="w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 mb-4 md:mb-6 drop-shadow-2xl">
+                  <SangarDragonIcon />
+                </div>
+                <h3 className="text-white font-bold text-base md:text-lg mb-2 leading-snug">Kalahkan Boss</h3>
+                <p className="text-zinc-400 text-xs sm:text-sm leading-relaxed">
+                  Gunakan Focus Arena untuk bekerja fokus dan menyerang monster kemalasan.
+                </p>
+              </div>
             </div>
 
-            <div className="flex flex-col items-center text-center px-2 group">
-              <div className="mb-6 drop-shadow-2xl">
-                <LootRewardIcon />
-              </div>
-              <h3 className="text-white font-bold text-lg mb-2 leading-snug">Dapatkan Hadiah</h3>
-              <p className="text-zinc-400 text-sm leading-relaxed">
-                Selesaikan tugas, raih Gold & EXP, lalu beli perlengkapan epik di Toko!
-              </p>
-            </div>
-
-            <div className="flex flex-col items-center text-center px-2 group">
-              <div className="mb-6 drop-shadow-2xl">
-                <SangarDragonIcon />
-              </div>
-              <h3 className="text-white font-bold text-lg mb-2 leading-snug">Kalahkan Boss</h3>
-              <p className="text-zinc-400 text-sm leading-relaxed">
-                Gunakan Focus Arena untuk bekerja fokus dan menyerang monster kemalasan.
-              </p>
-            </div>
+            <div className="h-4 lg:h-24"/>
           </div>
-
-          <div className="h-24"/>
         </div>
-      </div>
 
-        {/* KANAN: Form (Sticky) */}
-        <div className="w-full max-w-md lg:w-[400px] flex-shrink-0 lg:sticky lg:top-0 pt-8 lg:pt-12 pb-16 lg:pb-0">
+        {/* KANAN: Form */}
+        <div className="w-full max-w-sm md:max-w-md flex-shrink-0 lg:sticky lg:top-0 pb-32 lg:pb-0 mx-auto px-4 sm:px-0">
           <div className="text-center mb-6">
-            <h2 className="text-white text-3xl font-bold">
+            <h2 className="text-white text-2xl md:text-3xl font-bold">
               {tab === 'login' ? 'Masuk ke Arena' : 'Daftar Sebagai Petarung'}
             </h2>
           </div>
@@ -737,49 +738,30 @@ const handleOAuthLogin = (provider: 'google' | 'github') => {
         <GrandSpartanLandscape />
       </div>
 
-      {/* FULLSCREEN LOADING TRANSITION (Muncul saat tombol Masuk diklik) */}
+      {/* FULLSCREEN LOADING TRANSITION */}
       {showTransition && (
         <div className="fixed inset-0 z-[9999] bg-zinc-950 flex flex-col items-center justify-center animate-in fade-in duration-500">
-          
-          {/* Animasi Logo Web Melayang & Bercahaya */}
-          <div 
-            className="mb-12 relative flex justify-center items-center" 
-            style={{ animation: 'float 2s ease-in-out infinite alternate' }}
-          >
-            {/* Efek Cahaya (Glow) Aura di belakang logo */}
+          <div className="mb-12 relative flex justify-center items-center" style={{ animation: 'float 2s ease-in-out infinite alternate' }}>
             <div className="absolute inset-0 bg-amber-500/30 blur-[50px] rounded-full animate-pulse" />
-            
-            {/* Gambar Logo 1:1 (Favicon) */}
             <img 
               src="/favicon.ico" 
               alt="Daily Dungeon Loading" 
-              className="w-32 h-32 md:w-48 md:h-48 relative z-10 drop-shadow-[0_10px_15px_rgba(0,0,0,0.8)]" 
+              className="w-24 h-24 sm:w-32 sm:h-32 md:w-48 md:h-48 relative z-10 drop-shadow-[0_10px_15px_rgba(0,0,0,0.8)]" 
               style={{ imageRendering: 'pixelated' }} 
             />
           </div>
-
-          {/* Pixelated Progress Bar */}
-          <div className="w-64 md:w-80 h-6 bg-zinc-900 border-4 border-zinc-700 p-0.5 relative overflow-hidden shadow-[0_0_15px_rgba(251,191,36,0.2)]">
+          <div className="w-56 sm:w-64 md:w-80 h-4 md:h-6 bg-zinc-900 border-4 border-zinc-700 p-0.5 relative overflow-hidden shadow-[0_0_15px_rgba(251,191,36,0.2)]">
             <div className="h-full bg-amber-500 loading-bar" />
           </div>
-
-          {/* Keyframes khusus Loading Bar yang agak tersendat ala game retro */}
           <style>{`
-            .loading-bar {
-              animation: fillBar 1.5s ease-out forwards;
-            }
-            @keyframes fillBar {
-              0% { width: 0%; }
-              30% { width: 35%; }
-              50% { width: 35%; } /* Efek lag/tersendat sedikit */
-              70% { width: 80%; }
-              100% { width: 100%; }
-            }
+            .loading-bar { animation: fillBar 1.5s ease-out forwards; }
+            @keyframes fillBar { 0% { width: 0%; } 30% { width: 35%; } 50% { width: 35%; } 70% { width: 80%; } 100% { width: 100%; } }
           `}</style>
         </div>
       )}
+      
       <footer className="relative z-20 w-full mt-16 pt-12 pb-8 bg-gradient-to-t from-zinc-900 via-zinc-900/90 to-transparent">
-        <div className="max-w-3xl mx-auto px-8 grid grid-cols-1 md:grid-cols-2 gap-12 text-sm pb-12 text-center md:text-left">
+        <div className="max-w-3xl mx-auto px-4 sm:px-8 grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 text-sm pb-12 text-center md:text-left">
           <div className="flex flex-col gap-4 items-center md:items-start">
             <h4 className="text-amber-500 font-bold text-lg mb-2">Dukung</h4>
             <a href="/faq" className="text-zinc-300 hover:text-amber-400 transition-colors">FAQ / Bantuan</a>
@@ -802,9 +784,9 @@ const handleOAuthLogin = (provider: 'google' | 'github') => {
             </div>
           </div>
         </div>
-        <div className="max-w-5xl mx-auto px-8 flex flex-col md:flex-row justify-between items-center text-xs text-zinc-400 pt-6 border-t border-zinc-700/50">
+        <div className="max-w-5xl mx-auto px-4 sm:px-8 flex flex-col md:flex-row justify-between items-center text-xs text-zinc-400 pt-6 border-t border-zinc-700/50 text-center gap-4 md:gap-0">
           <p className="font-medium tracking-wide">© 2026 Daily Dungeon. All rights reserved.</p>
-          <div className="flex gap-6 mt-4 md:mt-0 font-medium">
+          <div className="flex flex-wrap justify-center gap-4 sm:gap-6 font-medium">
             <button onClick={() => openModal('privacy')} className="hover:text-amber-400 transition-colors">Kebijakan Privasi</button>
             <button onClick={() => openModal('terms')} className="hover:text-amber-400 transition-colors">Syarat dan Ketentuan</button>
           </div>
