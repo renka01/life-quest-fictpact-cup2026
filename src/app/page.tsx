@@ -506,14 +506,16 @@ export default function Home() {
       <Navbar activeMenu={activeMenu} setActiveMenu={handleMenuChange} />
 
       <div className="flex-1 flex flex-col h-full relative z-10 min-w-0">
-        <header className="h-20 bg-zinc-900 border-b-4 border-zinc-700 flex flex-col lg:flex-row justify-between items-center gap-4 p-4 lg:px-8 z-50 shrink-0">
-          <div className="flex items-center gap-4 w-full lg:w-2/3 max-w-2xl relative h-full">
+
+        <header className="h-auto min-h-[5rem] md:h-20 bg-zinc-900 border-b-4 border-zinc-700 flex flex-col md:flex-row justify-between items-center gap-3 md:gap-4 p-3 md:p-4 lg:px-8 z-50 shrink-0">
+          
+          <div className="flex items-center gap-2 md:gap-4 w-full md:flex-1 max-w-2xl relative h-full">
             {renderHeaderContent()}
           </div>
 
-          <div className="flex items-center justify-end gap-4 w-full lg:w-auto">
-            <div className="flex items-center gap-4 px-4 py-1.5 bg-zinc-800 border-2 border-zinc-600 rounded-none shadow-[inset_2px_2px_4px_rgba(0,0,0,0.5)]">
-              <div className="flex items-center gap-1.5 text-amber-400 font-pixel text-[8px]">
+          <div className="flex items-center justify-end gap-2 sm:gap-4 w-full md:w-auto mt-2 md:mt-0">
+            <div className="flex items-center gap-2 px-2 sm:px-4 py-1.5 bg-zinc-800 border-2 border-zinc-600 rounded-none shadow-[inset_2px_2px_4px_rgba(0,0,0,0.5)]">
+              <div className="flex items-center gap-1.5 text-amber-400 font-pixel text-[8px] sm:text-[10px]">
                 <Coins size={14} /> {stats?.gold || userProfile?.gold || 0}
               </div>
             </div>
@@ -535,7 +537,7 @@ export default function Home() {
               </button>
 
               {showCoinAnim && (
-                <div className="absolute top-full mt-4 right-0 w-max bg-zinc-800 border-2 border-amber-500 px-4 py-2.5 rounded-none shadow-[4px_4px_0_#000] flex items-center gap-3 animate-in slide-in-from-top-2 fade-in duration-300 z-[60] pointer-events-none text-left">
+                <div className="absolute top-full mt-4 right-0 w-max max-w-[90vw] bg-zinc-800 border-2 border-amber-500 px-3 sm:px-4 py-2 sm:py-2.5 rounded-none shadow-[4px_4px_0_#000] flex items-center gap-2 sm:gap-3 animate-in slide-in-from-top-2 fade-in duration-300 z-[60] pointer-events-none text-left">
                    <Coins size={16} className="text-amber-400 animate-bounce" />
                    <div className="flex flex-col">
                      <span className="text-[9px] text-zinc-400 font-bold uppercase tracking-wider mb-0.5">{tSyslog.income}</span>
@@ -545,7 +547,7 @@ export default function Home() {
               )}
 
               {isNotifOpen && (
-                <div className="absolute right-0 mt-4 w-80 bg-zinc-900 border-4 border-zinc-700 rounded-none shadow-[8px_8px_0_#000] z-[100] animate-in fade-in slide-in-from-top-2 overflow-hidden text-left">
+                <div className="absolute right-0 mt-4 w-72 sm:w-80 max-w-[90vw] bg-zinc-900 border-4 border-zinc-700 rounded-none shadow-[8px_8px_0_#000] z-[100] animate-in fade-in slide-in-from-top-2 overflow-hidden text-left">
                   <div className="p-4 border-b-4 border-zinc-700 flex justify-between items-center bg-zinc-800">
                     <span className="font-bold text-sm text-white uppercase tracking-widest">{tSyslog.title}</span>
                     <button onClick={() => setIsNotifOpen(false)} className="text-zinc-500 hover:text-white">
