@@ -2,7 +2,8 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { signIn } from 'next-auth/react';
-import { Instagram, Twitter, Github, CheckCircle2, Coins, Flame, Eye, EyeOff, X } from 'lucide-react';
+import { Instagram, Twitter, Github, Eye, EyeOff, X, Globe, ChevronDown } from 'lucide-react';
+import Link from 'next/link';
 import { useStore } from '@/store/useStore';
 
 // ═══════════════════════════════════════════════════════════
@@ -203,81 +204,8 @@ const FloatingCoin = ({ x, y, delay }: { x: number | string; y: number | string;
 );
 
 // ═══════════════════════════════════════════════════════════
-// FEATURE CARD
+// CUSTOM FEATURE ICONS
 // ═══════════════════════════════════════════════════════════
-const FeatureCard = ({ emoji, title, desc }: { emoji: string; title: string; desc: string }) => (
-  <div className="flex items-start gap-4 bg-zinc-800/60 border border-amber-500/10 rounded-xl p-4">
-    <span className="text-3xl flex-shrink-0">{emoji}</span>
-    <div>
-      <h3 className="text-white font-bold text-base mb-1">{title}</h3>
-      <p className="text-zinc-400 text-sm leading-relaxed">{desc}</p>
-    </div>
-  </div>
-);
-
-// ═══════════════════════════════════════════════════════════
-// MODAL & KONTEN KEBIJAKAN PRIVASI / SYARAT
-// ═══════════════════════════════════════════════════════════
-const PrivacyContent = () => (
-  <div className="space-y-4 text-zinc-300 text-sm">
-    <p>Terakhir diperbarui: 26 Maret 2026</p>
-    <p>Aplikasi Daily Dungeon ("kami") menghargai privasi Anda. Kebijakan Privasi ini menjelaskan bagaimana kami mengumpulkan, menggunakan, dan melindungi informasi Anda saat Anda menggunakan aplikasi kami.</p>
-    <h3 className="font-bold text-amber-400 pt-2">1. Informasi yang Kami Kumpulkan</h3>
-    <p>Kami hanya mengumpulkan informasi yang esensial untuk fungsionalitas aplikasi, yaitu: alamat email Anda untuk keperluan autentikasi akun. Kami tidak mengumpulkan data pribadi sensitif lainnya.</p>
-    <h3 className="font-bold text-amber-400 pt-2">2. Penggunaan Informasi</h3>
-    <p>Alamat email Anda digunakan secara eksklusif untuk: membuat dan mengelola akun Anda, mereset kata sandi, dan proses autentikasi lainnya. Kami tidak akan pernah mengirimkan email promosi atau membagikan email Anda kepada pihak ketiga.</p>
-    <h3 className="font-bold text-amber-400 pt-2">3. Keamanan Data</h3>
-    <p>Kami menggunakan langkah-langkah keamanan standar industri untuk melindungi data Anda dari akses yang tidak sah. Kata sandi Anda di-hash dan tidak dapat kami lihat.</p>
-  </div>
-);
-
-const TermsContent = () => (
-  <div className="space-y-4 text-zinc-300 text-sm">
-    <p>Dengan menggunakan aplikasi Daily Dungeon, Anda setuju untuk terikat oleh Syarat dan Ketentuan berikut:</p>
-    <h3 className="font-bold text-amber-400 pt-2">1. Penggunaan Akun</h3>
-    <p>Anda bertanggung jawab penuh atas semua aktivitas yang terjadi di bawah akun Anda. Jaga kerahasiaan kata sandi Anda dan jangan bagikan dengan siapa pun.</p>
-    <h3 className="font-bold text-amber-400 pt-2">2. Perilaku Pengguna</h3>
-    <p>Anda setuju untuk tidak menggunakan aplikasi ini untuk tujuan ilegal atau yang dilarang. Dilarang keras melakukan pelecehan, spam, atau mencoba merusak integritas sistem kami.</p>
-    <h3 className="font-bold text-amber-400 pt-2">3. Pembatasan Tanggung Jawab</h3>
-    <p>Aplikasi ini disediakan "sebagaimana adanya". Kami tidak bertanggung jawab atas kehilangan data atau kerusakan lain yang mungkin timbul dari penggunaan aplikasi ini.</p>
-  </div>
-);
-
-const PolicyModal = ({ isOpen, onClose, title, children }: { isOpen: boolean; onClose: () => void; title: string; children: React.ReactNode }) => {
-  if (!isOpen) return null;
-
-  return (
-    <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex justify-center items-center z-[10000] p-4 animate-in fade-in-50" onClick={onClose}>
-      <div 
-        className="bg-zinc-900 border-2 border-zinc-700 rounded-2xl shadow-2xl w-full max-w-2xl max-h-[80vh] flex flex-col animate-in zoom-in-95"
-        onClick={e => e.stopPropagation()}
-      >
-        <header className="flex items-center justify-between p-4 border-b border-zinc-700 flex-shrink-0">
-          <h2 className="text-lg font-bold text-amber-400">{title}</h2>
-          <button onClick={onClose} className="p-2 rounded-full text-zinc-500 hover:bg-zinc-800 hover:text-white transition-colors">
-            <X size={20} />
-          </button>
-        </header>
-        <main className="p-6 overflow-y-auto">
-          {children}
-        </main>
-        <footer className="p-4 border-t border-zinc-700 flex-shrink-0 text-right">
-          <button 
-            onClick={onClose}
-            className="bg-amber-500 hover:bg-amber-400 text-zinc-900 px-6 py-2 rounded-lg font-bold text-sm transition-colors"
-          >
-            Tutup
-          </button>
-        </footer>
-      </div>
-    </div>
-  );
-};
-
-// ═══════════════════════════════════════════════════════════
-// CUSTOM FEATURE ICONS (Dibuat Responsive width/height 100%)
-// ═══════════════════════════════════════════════════════════
-
 const HabitTrackerIcon = () => (
   <svg viewBox="0 0 48 48" width="100%" height="100%" style={{ imageRendering: 'pixelated' }}>
     <g className="hover:-translate-y-2 transition-transform duration-500">
@@ -373,6 +301,90 @@ const SangarDragonIcon = () => (
 );
 
 // ═══════════════════════════════════════════════════════════
+// MODAL & KONTEN KEBIJAKAN PRIVASI / SYARAT
+// ═══════════════════════════════════════════════════════════
+const PrivacyContent = ({ lang = 'id' }: { lang?: string }) => (
+  lang === 'id' ? (
+    <div className="space-y-4 text-zinc-300 text-sm">
+      <p>Terakhir diperbarui: 26 Maret 2026</p>
+      <p>Aplikasi Daily Dungeon ("kami") menghargai privasi Anda. Kebijakan Privasi ini menjelaskan bagaimana kami mengumpulkan, menggunakan, dan melindungi informasi Anda saat Anda menggunakan aplikasi kami.</p>
+      <h3 className="font-bold text-amber-400 pt-2">1. Informasi yang Kami Kumpulkan</h3>
+      <p>Kami hanya mengumpulkan informasi yang esensial untuk fungsionalitas aplikasi, yaitu: alamat email Anda untuk keperluan autentikasi akun. Kami tidak mengumpulkan data pribadi sensitif lainnya.</p>
+      <h3 className="font-bold text-amber-400 pt-2">2. Penggunaan Informasi</h3>
+      <p>Alamat email Anda digunakan secara eksklusif untuk: membuat dan mengelola akun Anda, mereset kata sandi, dan proses autentikasi lainnya. Kami tidak akan pernah mengirimkan email promosi atau membagikan email Anda kepada pihak ketiga.</p>
+      <h3 className="font-bold text-amber-400 pt-2">3. Keamanan Data</h3>
+      <p>Kami menggunakan langkah-langkah keamanan standar industri untuk melindungi data Anda dari akses yang tidak sah. Kata sandi Anda di-hash dan tidak dapat kami lihat.</p>
+    </div>
+  ) : (
+    <div className="space-y-4 text-zinc-300 text-sm">
+      <p>Last updated: March 26, 2026</p>
+      <p>The Daily Dungeon application ("we") respects your privacy. This Privacy Policy explains how we collect, use, and protect your information when you use our application.</p>
+      <h3 className="font-bold text-amber-400 pt-2">1. Information We Collect</h3>
+      <p>We only collect essential information for the app's functionality, namely: your email address for account authentication purposes. We do not collect other sensitive personal data.</p>
+      <h3 className="font-bold text-amber-400 pt-2">2. Use of Information</h3>
+      <p>Your email address is strictly used to: create and manage your account, reset passwords, and other authentication processes. We will never send promotional emails or share your email with third parties.</p>
+      <h3 className="font-bold text-amber-400 pt-2">3. Data Security</h3>
+      <p>We use industry-standard security measures to protect your data from unauthorized access. Your passwords are hashed and cannot be seen by us.</p>
+    </div>
+  )
+);
+
+const TermsContent = ({ lang = 'id' }: { lang?: string }) => (
+  lang === 'id' ? (
+    <div className="space-y-4 text-zinc-300 text-sm">
+      <p>Dengan menggunakan aplikasi Daily Dungeon, Anda setuju untuk terikat oleh Syarat dan Ketentuan berikut:</p>
+      <h3 className="font-bold text-amber-400 pt-2">1. Penggunaan Akun</h3>
+      <p>Anda bertanggung jawab penuh atas semua aktivitas yang terjadi di bawah akun Anda. Jaga kerahasiaan kata sandi Anda dan jangan bagikan dengan siapa pun.</p>
+      <h3 className="font-bold text-amber-400 pt-2">2. Perilaku Pengguna</h3>
+      <p>Anda setuju untuk tidak menggunakan aplikasi ini untuk tujuan ilegal atau yang dilarang. Dilarang keras melakukan pelecehan, spam, atau mencoba merusak integritas sistem kami.</p>
+      <h3 className="font-bold text-amber-400 pt-2">3. Pembatasan Tanggung Jawab</h3>
+      <p>Aplikasi ini disediakan "sebagaimana adanya". Kami tidak bertanggung jawab atas kehilangan data atau kerusakan lain yang mungkin timbul dari penggunaan aplikasi ini.</p>
+    </div>
+  ) : (
+    <div className="space-y-4 text-zinc-300 text-sm">
+      <p>By using the Daily Dungeon application, you agree to be bound by the following Terms and Conditions:</p>
+      <h3 className="font-bold text-amber-400 pt-2">1. Account Usage</h3>
+      <p>You are fully responsible for all activities that occur under your account. Keep your password confidential and do not share it with anyone.</p>
+      <h3 className="font-bold text-amber-400 pt-2">2. User Conduct</h3>
+      <p>You agree not to use this application for illegal or prohibited purposes. Harassment, spamming, or attempting to compromise the integrity of our system is strictly prohibited.</p>
+      <h3 className="font-bold text-amber-400 pt-2">3. Limitation of Liability</h3>
+      <p>This application is provided "as is". We are not responsible for data loss or other damages that may arise from the use of this application.</p>
+    </div>
+  )
+);
+
+const PolicyModal = ({ isOpen, onClose, title, children, lang = 'id' }: { isOpen: boolean; onClose: () => void; title: string; children: React.ReactNode; lang?: string }) => {
+  if (!isOpen) return null;
+
+  return (
+    <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex justify-center items-center z-[10000] p-4 animate-in fade-in-50" onClick={onClose}>
+      <div 
+        className="bg-zinc-900 border-2 border-zinc-700 rounded-2xl shadow-2xl w-full max-w-2xl max-h-[80vh] flex flex-col animate-in zoom-in-95"
+        onClick={e => e.stopPropagation()}
+      >
+        <header className="flex items-center justify-between p-4 border-b border-zinc-700 flex-shrink-0">
+          <h2 className="text-lg font-bold text-amber-400">{title}</h2>
+          <button onClick={onClose} className="p-2 rounded-full text-zinc-500 hover:bg-zinc-800 hover:text-white transition-colors">
+            <X size={20} />
+          </button>
+        </header>
+        <main className="p-6 overflow-y-auto">
+          {children}
+        </main>
+        <footer className="p-4 border-t border-zinc-700 flex-shrink-0 text-right">
+          <button 
+            onClick={onClose}
+            className="bg-amber-500 hover:bg-amber-400 text-zinc-900 px-6 py-2 rounded-lg font-bold text-sm transition-colors"
+          >
+            {lang === 'id' ? 'Tutup' : 'Close'}
+          </button>
+        </footer>
+      </div>
+    </div>
+  );
+};
+
+// ═══════════════════════════════════════════════════════════
 // MAIN PAGE COMPONENT
 // ═══════════════════════════════════════════════════════════
 
@@ -380,7 +392,8 @@ type Tab = 'login' | 'register';
 
 export default function LoginPage() {
   const router = useRouter();
-  const { setUserProfile } = useStore();
+  const { setUserProfile, settings, updateSetting } = useStore();
+  
   const [tab,     setTab]    = useState<Tab>('login');
   const [email,   setEmail]  = useState('');
   const [pass,    setPass]   = useState('');
@@ -389,6 +402,7 @@ export default function LoginPage() {
   const [loading, setLoading] = useState(false);
   const [showTransition, setShowTransition] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
+  const [isLangOpen, setIsLangOpen] = useState(false);
   const [showPass,  setShowPass]  = useState(false);
   const [showPass2, setShowPass2] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -398,13 +412,56 @@ export default function LoginPage() {
     setIsMounted(true);
   }, []);
 
+  const lang = settings?.language || 'id';
+  const t = {
+    start: lang === 'id' ? 'Ayo Mulai' : 'Start',
+    langLabel: lang === 'id' ? 'ID' : 'EN',
+    faq: lang === 'id' ? 'Pelajari Lebih Lanjut' : 'Learn More',
+    registerBtn: lang === 'id' ? 'Daftar' : 'Register',
+    loginBtn: lang === 'id' ? 'Masuk' : 'Login',
+    titleLogin: lang === 'id' ? 'Masuk ke Arena' : 'Enter the Arena',
+    titleRegister: lang === 'id' ? 'Daftar Sebagai Petarung' : 'Register as a Fighter',
+    emailReq: lang === 'id' ? 'Email dan kata sandi wajib diisi.' : 'Email and password are required.',
+    passMatch: lang === 'id' ? 'Kata sandi tidak cocok!' : 'Passwords do not match!',
+    emailPlaceholder: 'Email',
+    passPlaceholder: lang === 'id' ? 'Kata Sandi' : 'Password',
+    confirmPassPlaceholder: lang === 'id' ? 'Konfirmasi Kata Sandi' : 'Confirm Password',
+    loadingBtn: lang === 'id' ? 'Membuka Gerbang...' : 'Opening Gates...',
+    forgotPass: lang === 'id' ? 'Lupa Kata Sandi?' : 'Forgot Password?',
+    continueBtn: lang === 'id' ? 'Lanjutkan' : 'Continue',
+    or: lang === 'id' ? 'ATAU' : 'OR',
+    googleLogin: lang === 'id' ? 'Masuk dengan Google' : 'Login with Google',
+    googleReg: lang === 'id' ? 'Daftar dengan Google' : 'Register with Google',
+    githubLogin: lang === 'id' ? 'Masuk dengan Github' : 'Login with Github',
+    githubReg: lang === 'id' ? 'Daftar dengan Github' : 'Register with Github',
+    heroTitle: lang === 'id' ? 'Buat Hidupmu Menjadi Game' : 'Gamify Your Life',
+    heroDesc: lang === 'id' 
+      ? 'Daily Dungeon adalah aplikasi untuk membangun produktivitas dan kebiasaan baik dengan mengubah kehidupan nyata menjadi permainan. Dengan sistem imbalan dan leveling layaknya game RPG, aplikasi ini memotivasimu untuk mencapai target, bekerja keras, dan melawan kemalasan.'
+      : 'Daily Dungeon is an app to build productivity and good habits by turning real life into a game. With a reward and leveling system like an RPG, it motivates you to achieve your goals, work hard, and fight laziness.',
+    feat1Title: lang === 'id' ? 'Pantau Kebiasaan' : 'Track Habits',
+    feat1Desc: lang === 'id' ? 'Tetap bertanggung jawab dengan memantau Habit, target Harian, dan daftar Todo-mu.' : 'Stay accountable by tracking Habits, Dailies, and your To-Do list.',
+    feat2Title: lang === 'id' ? 'Dapatkan Hadiah' : 'Earn Rewards',
+    feat2Desc: lang === 'id' ? 'Selesaikan tugas, raih Gold & EXP, lalu beli perlengkapan epik di Toko!' : 'Complete tasks, earn Gold & EXP, and buy epic gear in the Shop!',
+    feat3Title: lang === 'id' ? 'Kalahkan Boss' : 'Defeat Bosses',
+    feat3Desc: lang === 'id' ? 'Gunakan Focus Arena untuk bekerja fokus dan menyerang monster kemalasan.' : 'Use the Focus Arena to work focused and attack the monsters of laziness.',
+    support: lang === 'id' ? 'Dukung' : 'Support',
+    faqLink: lang === 'id' ? 'FAQ / Bantuan' : 'FAQ / Help',
+    reportBug: lang === 'id' ? 'Laporkan Bug' : 'Report a Bug',
+    suggestFeature: lang === 'id' ? 'Ajukan Fitur Baru' : 'Suggest a Feature',
+    social: lang === 'id' ? 'Sosial Developer' : 'Developer Socials',
+    rights: lang === 'id' ? '© 2026 Daily Dungeon. Hak Cipta Dilindungi.' : '© 2026 Daily Dungeon. All rights reserved.',
+    privacyTitle: lang === 'id' ? 'Kebijakan Privasi' : 'Privacy Policy',
+    termsTitle: lang === 'id' ? 'Syarat dan Ketentuan' : 'Terms & Conditions',
+    close: lang === 'id' ? 'Tutup' : 'Close'
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
     setLoading(true);
 
     if (!email || !pass) {
-      setError('Email dan kata sandi wajib diisi.');
+      setError(t.emailReq);
       setLoading(false);
       return;
     }
@@ -412,7 +469,7 @@ export default function LoginPage() {
     try {
       if (tab === 'register') {
         if (pass !== pass2) {
-          setError('Kata sandi tidak cocok!');
+          setError(t.passMatch);
           setLoading(false);
           return;
         }
@@ -478,9 +535,9 @@ export default function LoginPage() {
 
   const openModal = (type: 'privacy' | 'terms') => {
     if (type === 'privacy') {
-      setModalContent({ title: 'Kebijakan Privasi', content: <PrivacyContent /> });
+      setModalContent({ title: t.privacyTitle, content: <PrivacyContent lang={lang} /> });
     } else {
-      setModalContent({ title: 'Syarat dan Ketentuan', content: <TermsContent /> });
+      setModalContent({ title: t.termsTitle, content: <TermsContent lang={lang} /> });
     }
     setIsModalOpen(true);
   };
@@ -504,7 +561,11 @@ export default function LoginPage() {
   return (
     <div className="min-h-screen bg-zinc-900 flex flex-col relative w-full overflow-x-hidden" style={{ fontFamily: "'Inter', 'Segoe UI', sans-serif" }}>
       
-      {isModalOpen && modalContent && <PolicyModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} title={modalContent.title}>{modalContent.content}</PolicyModal>}
+      {isModalOpen && modalContent && (
+        <PolicyModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} title={modalContent.title} lang={lang}>
+          {modalContent.content}
+        </PolicyModal>
+      )}
 
       <style>{`
         @keyframes float { 0% { transform: translateY(0px) rotate(0deg); } 100%{ transform: translateY(-12px) rotate(5deg); } }
@@ -544,97 +605,121 @@ export default function LoginPage() {
       <div className="z-0"><FloatingCoin x="50%" y="10%" delay={0.5}/></div>
       <div className="z-0"><FloatingCoin x="90%" y="50%" delay={1.5}/></div>
 
-      {/* HEADER */}
-      <header className="relative z-20 flex items-center justify-between px-4 md:px-8 py-4 md:py-6 flex-shrink-0">
+      {/* HEADER TINGKAT TINGGI */}
+      <header className="relative z-[999] flex items-center justify-between px-4 md:px-8 py-4 md:py-6 flex-shrink-0">
         <div className="flex items-center">
           <img
             src="/logo.png"
             alt="Daily Dungeon Logo"
-            className="h-10 sm:h-16 md:h-24"
+            className="h-10 sm:h-16 md:h-24 relative z-[999]"
             style={{ imageRendering: 'pixelated' }}
           />
         </div>
-        <nav className="flex items-center gap-4 md:gap-6">
-          <button onClick={() => router.push('/start')} className="hidden md:block text-sm text-amber-200/70 hover:text-amber-400 transition-colors font-semibold">
-            Ayo Mulai
-          </button>
-          <button className="hidden md:block text-sm text-amber-200/70 hover:text-amber-400 transition-colors font-semibold">Bahasa ▾</button>
-          <button onClick={() => router.push('/faq')} className="hidden md:block text-sm text-amber-200/70 hover:text-amber-400 transition-colors font-semibold">
-            Pelajari Lebih Lanjut
-          </button>
+        <nav className="flex items-center gap-4 md:gap-6 relative z-[999]">
+          
+          {/* MENGGUNAKAN LINK BAWAAN NEXT.JS */}
+          <Link href="/start" className="hidden sm:block text-sm text-amber-200/70 hover:text-amber-400 transition-colors font-semibold cursor-pointer relative z-[999]">
+            {t.start}
+          </Link>
+          
+          {/* LANGUAGE DROPDOWN */}
+          {isMounted && (
+            <div className="relative z-[999]">
+              <button 
+                type="button"
+                onClick={() => setIsLangOpen(!isLangOpen)}
+                className="flex items-center gap-1 text-sm text-amber-200/70 hover:text-amber-400 transition-colors font-semibold cursor-pointer"
+              >
+                <Globe size={16} />
+                <span className="hidden sm:block">{t.langLabel}</span>
+                <ChevronDown size={14} className={`transition-transform duration-300 ${isLangOpen ? 'rotate-180' : ''}`} />
+              </button>
+
+              {isLangOpen && (
+                <div className="absolute top-full mt-4 right-0 w-36 bg-zinc-800 border-2 border-zinc-700 rounded-xl shadow-2xl overflow-hidden flex flex-col z-[999] animate-in slide-in-from-top-2">
+                  <button
+                    type="button"
+                    onClick={() => { updateSetting('language', 'id'); setIsLangOpen(false); }}
+                    className={`px-4 py-3 text-left text-sm font-bold hover:bg-zinc-700 transition-colors flex items-center gap-2 ${settings.language === 'id' ? 'text-amber-400 bg-zinc-900/50' : 'text-zinc-300'}`}
+                  >
+                    <span>🇮🇩</span> Indonesia
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => { updateSetting('language', 'en'); setIsLangOpen(false); }}
+                    className={`px-4 py-3 text-left text-sm font-bold hover:bg-zinc-700 transition-colors flex items-center gap-2 ${settings.language === 'en' ? 'text-amber-400 bg-zinc-900/50' : 'text-zinc-300'}`}
+                  >
+                    <span>🇬🇧</span> English
+                  </button>
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* MENGGUNAKAN LINK BAWAAN NEXT.JS UNTUK FAQ */}
+          <Link href="/faq" className="hidden lg:block text-sm text-amber-200/70 hover:text-amber-400 transition-colors font-semibold cursor-pointer relative z-[999]">
+            {t.faq}
+          </Link>
+          
           <button
+            type="button"
             onClick={() => setTab(tab === 'login' ? 'register' : 'login')}
-            className="bg-amber-500 hover:bg-amber-400 text-zinc-900 px-4 md:px-6 py-2 rounded shadow-md font-bold text-xs md:text-sm transition-colors">
-            {tab === 'login' ? 'Daftar' : 'Masuk'}
+            className="bg-amber-500 hover:bg-amber-400 text-zinc-900 px-4 md:px-6 py-2 rounded shadow-md font-bold text-xs md:text-sm transition-colors cursor-pointer relative z-[999]">
+            {tab === 'login' ? t.registerBtn : t.loginBtn}
           </button>
         </nav>
       </header>
 
       {/* MAIN CONTENT */}
-      <main className="relative z-20 flex flex-col lg:flex-row items-center lg:items-start justify-center max-w-6xl mx-auto w-full px-4 sm:px-6 gap-8 lg:gap-24 lg:h-[calc(100vh-120px)] lg:overflow-hidden">
+      <main className="relative z-20 flex flex-col lg:flex-row items-center lg:items-start justify-center max-w-6xl mx-auto w-full px-4 sm:px-6 gap-8 lg:gap-24 lg:h-[calc(100vh-120px)] lg:overflow-hidden pointer-events-none">
         
         {/* KIRI: Area Penjelasan & Karakter */}
-        <div className="scroll-left w-full lg:flex-1 lg:overflow-y-auto h-auto lg:h-full pb-8 lg:pb-32 flex flex-col items-center lg:items-start">
+        <div className="scroll-left w-full lg:flex-1 lg:overflow-y-auto h-auto lg:h-full pb-8 lg:pb-32 flex flex-col items-center lg:items-start pointer-events-auto">
           <div className="flex flex-col items-center text-center pt-4 lg:pt-12 px-2 lg:px-8 w-full">
             
-{/* PERBAIKAN KARAKTER: Ukuran SVG diperbesar signifikan */}
+            {/* Karakter Berkumpul */}
             <div className="flex items-end justify-center gap-4 sm:gap-8 md:gap-12 mb-8 md:mb-12 h-32 sm:h-48 md:h-72 w-full">
-              
-              {/* Kiri */}
               <div className="w-24 h-24 sm:w-36 sm:h-36 md:w-56 md:h-56 shrink-0 transform transition-transform duration-500 hover:-translate-y-4">
                 <ShadowKnight/>
               </div>
-              
-              {/* Tengah (Paling Besar) */}
               <div className="w-25 h-25 sm:w-40 sm:h-40 md:w-72 md:h-72 shrink-0 transform -translate-y-4 md:-translate-y-8 z-10 transition-transform duration-500 hover:-translate-y-12">
                 <VoidRanger/>
               </div>
-              
-              {/* Kanan */}
               <div className="w-24 h-24 sm:w-36 sm:h-36 md:w-56 md:h-56 shrink-0 transform transition-transform duration-500 hover:-translate-y-4">
                 <ArcaneMage/>
               </div>
-
             </div>
+
             <h1 className="text-white text-3xl sm:text-4xl lg:text-5xl font-extrabold leading-tight mb-4 max-w-2xl tracking-tight px-2">
-              Buat Hidupmu Menjadi Game
+              {t.heroTitle}
             </h1>
             <p className="text-zinc-300 text-xs sm:text-sm md:text-base max-w-2xl leading-relaxed font-medium mb-8 px-4">
-              Daily Dungeon adalah aplikasi untuk membangun produktivitas dan kebiasaan baik dengan mengubah kehidupan nyata menjadi permainan. Dengan sistem imbalan dan leveling layaknya game RPG, aplikasi ini memotivasimu untuk mencapai target, bekerja keras, dan melawan kemalasan.
+              {t.heroDesc}
             </p>
 
-            {/* PERBAIKAN FITUR: sm:grid-cols-3 agar langsung berjejer 3 dari ukuran tablet/fold */}
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6 w-full max-w-4xl shrink-0 mt-6 md:mt-10 px-2 sm:px-4">
-              
               <div className="flex flex-col items-center text-center px-2 group">
                 <div className="w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 mb-4 md:mb-6 drop-shadow-2xl">
                   <HabitTrackerIcon />
                 </div>
-                <h3 className="text-white font-bold text-base md:text-lg mb-2 leading-snug">Pantau Kebiasaan</h3>
-                <p className="text-zinc-400 text-xs sm:text-sm leading-relaxed">
-                  Tetap bertanggung jawab dengan memantau Habit, target Harian, dan daftar Todo-mu.
-                </p>
+                <h3 className="text-white font-bold text-base md:text-lg mb-2 leading-snug">{t.feat1Title}</h3>
+                <p className="text-zinc-400 text-xs sm:text-sm leading-relaxed">{t.feat1Desc}</p>
               </div>
 
               <div className="flex flex-col items-center text-center px-2 group">
                 <div className="w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 mb-4 md:mb-6 drop-shadow-2xl">
                   <LootRewardIcon />
                 </div>
-                <h3 className="text-white font-bold text-base md:text-lg mb-2 leading-snug">Dapatkan Hadiah</h3>
-                <p className="text-zinc-400 text-xs sm:text-sm leading-relaxed">
-                  Selesaikan tugas, raih Gold & EXP, lalu beli perlengkapan epik di Toko!
-                </p>
+                <h3 className="text-white font-bold text-base md:text-lg mb-2 leading-snug">{t.feat2Title}</h3>
+                <p className="text-zinc-400 text-xs sm:text-sm leading-relaxed">{t.feat2Desc}</p>
               </div>
 
-              {/* Hapus sm:col-span-2 agar tidak mengambil 2 kolom sendiri */}
               <div className="flex flex-col items-center text-center px-2 group">
                 <div className="w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 mb-4 md:mb-6 drop-shadow-2xl">
                   <SangarDragonIcon />
                 </div>
-                <h3 className="text-white font-bold text-base md:text-lg mb-2 leading-snug">Kalahkan Boss</h3>
-                <p className="text-zinc-400 text-xs sm:text-sm leading-relaxed">
-                  Gunakan Focus Arena untuk bekerja fokus dan menyerang monster kemalasan.
-                </p>
+                <h3 className="text-white font-bold text-base md:text-lg mb-2 leading-snug">{t.feat3Title}</h3>
+                <p className="text-zinc-400 text-xs sm:text-sm leading-relaxed">{t.feat3Desc}</p>
               </div>
             </div>
 
@@ -643,25 +728,25 @@ export default function LoginPage() {
         </div>
 
         {/* KANAN: Form */}
-        <div className="w-full max-w-sm md:max-w-md flex-shrink-0 lg:sticky lg:top-0 pb-32 lg:pb-0 mx-auto px-4 sm:px-0">
-          <div className="text-center mb-6">
+        <div className="w-full max-w-sm md:max-w-md flex-shrink-0 lg:sticky lg:top-0 pb-32 lg:pb-0 mx-auto px-4 sm:px-0 pointer-events-auto relative z-[50]">
+          <div className="text-center mb-6 mt-0 lg:mt-24">
             <h2 className="text-white text-2xl md:text-3xl font-bold">
-              {tab === 'login' ? 'Masuk ke Arena' : 'Daftar Sebagai Petarung'}
+              {tab === 'login' ? t.titleLogin : t.titleRegister}
             </h2>
           </div>
 
-          <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+          <form onSubmit={handleSubmit} className="flex flex-col gap-4 relative z-[50]">
             <input
               type="email"
               value={email} onChange={e => setEmail(e.target.value)}
-              placeholder="Email"
-              className="input-habitica w-full px-4 py-3 rounded text-sm"
+              placeholder={t.emailPlaceholder}
+              className="input-habitica w-full px-4 py-3 rounded text-sm relative z-10"
             />
-            <div className="relative">
+            <div className="relative z-10">
               <input
                 type={showPass ? "text" : "password"}
                 value={pass} onChange={e => setPass(e.target.value)}
-                placeholder="Kata sandi"
+                placeholder={t.passPlaceholder}
                 className="input-habitica w-full px-4 py-3 rounded text-sm pr-10"
               />
               <button
@@ -675,22 +760,21 @@ export default function LoginPage() {
 
             {tab === 'login' && (
               <div className="flex justify-end mt-[-4px]">
-                <button
-                  type="button"
-                  onClick={() => router.push('/forgot-password')}
-                  className="text-xs text-amber-500 hover:text-amber-400 transition-colors"
+                <Link
+                  href="/forgot-password"
+                  className="text-xs text-amber-500 hover:text-amber-400 transition-colors cursor-pointer relative z-[50]"
                 >
-                  Lupa Kata Sandi?
-                </button>
+                  {t.forgotPass}
+                </Link>
               </div>
             )}
 
             {tab === 'register' && (
-              <div className="relative">
+              <div className="relative z-10">
                 <input
                   type={showPass2 ? "text" : "password"}
                   value={pass2} onChange={e => setPass2(e.target.value)}
-                  placeholder="Konfirmasi Kata Sandi"
+                  placeholder={t.confirmPassPlaceholder}
                   className="input-habitica w-full px-4 py-3 rounded text-sm pr-10"
                 />
                 <button
@@ -706,28 +790,29 @@ export default function LoginPage() {
             {error && <div className="text-red-400 text-xs text-center">{error}</div>}
 
             <button type="submit" disabled={loading}
-              className="w-full py-3 bg-amber-500 text-zinc-900 font-bold rounded shadow-lg hover:bg-amber-400 transition-colors mt-2">
-              {loading ? 'Membuka Gerbang...' : tab === 'login' ? 'Masuk' : 'Lanjutkan'}
+              className="w-full py-3 bg-amber-500 text-zinc-900 font-bold rounded shadow-lg hover:bg-amber-400 transition-colors mt-2 cursor-pointer relative z-[50]">
+              {loading ? t.loadingBtn : tab === 'login' ? t.loginBtn : t.continueBtn}
             </button>
 
             <div className="flex items-center gap-3 my-2 opacity-40">
               <div className="flex-1 h-px bg-amber-200"/>
-              <span className="text-xs text-amber-200 uppercase tracking-widest">ATAU</span>
+              <span className="text-xs text-amber-200 uppercase tracking-widest">{t.or}</span>
               <div className="flex-1 h-px bg-amber-200"/>
             </div>
 
-            <button type="button" onClick={() => handleOAuthLogin('google')} className="w-full py-3 bg-transparent border border-amber-500/30 text-zinc-300 rounded font-medium text-sm hover:bg-amber-500/10 transition-colors flex items-center justify-center gap-3">
+            <button type="button" onClick={() => handleOAuthLogin('google')} className="w-full py-3 bg-transparent border border-amber-500/30 text-zinc-300 rounded font-medium text-sm hover:bg-amber-500/10 transition-colors flex items-center justify-center gap-3 cursor-pointer relative z-[50]">
               <svg viewBox="0 0 20 20" width="18" height="18">
                 <path d="M19.6 10.2c0-.6-.1-1.3-.2-1.9H10v3.6h5.4c-.2 1.2-1 2.3-2.1 3v2.5h3.4c2-1.8 3.1-4.5 3.1-7.2z" fill="#4285F4"/>
                 <path d="M10 20c2.7 0 5-.9 6.7-2.4l-3.4-2.5c-.9.6-2 1-3.3 1-2.5 0-4.7-1.7-5.5-4H1v2.6C2.7 17.8 6.2 20 10 20z" fill="#34A853"/>
                 <path d="M4.5 12.1c-.2-.6-.3-1.3-.3-2.1s.1-1.5.3-2.1V5.3H1C.4 6.6 0 8.2 0 10s.4 3.4 1 4.7l3.5-2.6z" fill="#FBBC05"/>
                 <path d="M10 4c1.4 0 2.7.5 3.7 1.4l2.8-2.8C14.9.9 12.7 0 10 0 6.2 0 2.7 2.2 1 5.3l3.5 2.6C5.3 5.7 7.5 4 10 4z" fill="#EA4335"/>
               </svg>
-              {tab === 'login' ? 'Masuk dengan Google' : 'Daftar dengan Google'}
+              {tab === 'login' ? t.googleLogin : t.googleReg}
             </button>
-            <button type="button" onClick={() => handleOAuthLogin('github')} className="w-full py-3 bg-transparent border border-amber-500/30 text-zinc-300 rounded font-medium text-sm hover:bg-amber-500/10 transition-colors flex items-center justify-center gap-3">
+            
+            <button type="button" onClick={() => handleOAuthLogin('github')} className="w-full py-3 bg-transparent border border-amber-500/30 text-zinc-300 rounded font-medium text-sm hover:bg-amber-500/10 transition-colors flex items-center justify-center gap-3 cursor-pointer relative z-[50]">
               <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M12 2C6.477 2 2 6.477 2 12c0 4.42 2.865 8.166 6.839 9.489.5.092.682-.217.682-.482 0-.237-.008-.866-.013-1.7-2.782.603-3.369-1.34-3.369-1.34-.454-1.156-1.11-1.462-1.11-1.462-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.831.092-.646.35-1.086.636-1.336-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.025A9.578 9.578 0 0112 6.836c.85.004 1.705.114 2.504.336 1.909-1.294 2.747-1.025 2.747-1.025.546 1.379.203 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.743 0 .267.18.578.688.48C19.138 20.161 22 16.418 22 12c0-5.523-4.477-10-10-10z"/></svg>
-              {tab === 'login' ? 'Masuk dengan Github' : 'Daftar dengan Github'}
+              {tab === 'login' ? t.githubLogin : t.githubReg}
             </button>
           </form>
         </div>
@@ -740,7 +825,7 @@ export default function LoginPage() {
 
       {/* FULLSCREEN LOADING TRANSITION */}
       {showTransition && (
-        <div className="fixed inset-0 z-[9999] bg-zinc-950 flex flex-col items-center justify-center animate-in fade-in duration-500">
+        <div className="fixed inset-0 z-[9999] bg-zinc-950 flex flex-col items-center justify-center animate-in fade-in duration-500 pointer-events-auto">
           <div className="mb-12 relative flex justify-center items-center" style={{ animation: 'float 2s ease-in-out infinite alternate' }}>
             <div className="absolute inset-0 bg-amber-500/30 blur-[50px] rounded-full animate-pulse" />
             <img 
@@ -760,35 +845,35 @@ export default function LoginPage() {
         </div>
       )}
       
-      <footer className="relative z-20 w-full mt-16 pt-12 pb-8 bg-gradient-to-t from-zinc-900 via-zinc-900/90 to-transparent">
-        <div className="max-w-3xl mx-auto px-4 sm:px-8 grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 text-sm pb-12 text-center md:text-left">
-          <div className="flex flex-col gap-4 items-center md:items-start">
-            <h4 className="text-amber-500 font-bold text-lg mb-2">Dukung</h4>
-            <a href="/faq" className="text-zinc-300 hover:text-amber-400 transition-colors">FAQ / Bantuan</a>
-            <a href="mailto:dailydungeon268@gmail.com?subject=Laporan%20Bug%20-%20Daily%20Dungeon" target="_blank" rel="noreferrer" className="text-zinc-300 hover:text-amber-400 transition-colors">Laporkan Bug</a>
-            <a href="mailto:dailydungeon268@gmail.com?subject=Saran%20Fitur%20Baru%20-%20Daily%20Dungeon" target="_blank" rel="noreferrer" className="text-zinc-300 hover:text-amber-400 transition-colors">Ajukan Fitur Baru</a>
+      <footer className="relative z-50 w-full mt-16 pt-12 pb-8 bg-gradient-to-t from-zinc-900 via-zinc-900/90 to-transparent pointer-events-none">
+        <div className="max-w-3xl mx-auto px-4 sm:px-8 grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 text-sm pb-12 text-center md:text-left pointer-events-auto">
+          <div className="flex flex-col gap-4 items-center md:items-start relative z-50">
+            <h4 className="text-amber-500 font-bold text-lg mb-2">{t.support}</h4>
+            <Link href="/faq" className="text-zinc-300 hover:text-amber-400 transition-colors cursor-pointer">{t.faqLink}</Link>
+            <a href="mailto:dailydungeon268@gmail.com?subject=Laporan%20Bug%20-%20Daily%20Dungeon" target="_blank" rel="noreferrer" className="text-zinc-300 hover:text-amber-400 transition-colors cursor-pointer">{t.reportBug}</a>
+            <a href="mailto:dailydungeon268@gmail.com?subject=Saran%20Fitur%20Baru%20-%20Daily%20Dungeon" target="_blank" rel="noreferrer" className="text-zinc-300 hover:text-amber-400 transition-colors cursor-pointer">{t.suggestFeature}</a>
           </div>
-          <div className="flex flex-col gap-4 items-center md:items-start text-zinc-300">
-            <h4 className="text-amber-500 font-bold text-lg mb-2">Sosial Developer</h4>
+          <div className="flex flex-col gap-4 items-center md:items-start text-zinc-300 relative z-50">
+            <h4 className="text-amber-500 font-bold text-lg mb-2">{t.social}</h4>
             <div className="flex items-center gap-2">
               <Instagram size={18}/>
-              <a href="https://www.instagram.com/renhapiz" target="_blank" rel="noreferrer" className="hover:text-amber-400 transition-colors">renhapiz</a>,
-              <a href="https://www.instagram.com/wldnxd" target="_blank" rel="noreferrer" className="hover:text-amber-400 transition-colors ml-1">wldnxd</a>,
-              <a href="https://www.instagram.com/rappizr" target="_blank" rel="noreferrer" className="hover:text-amber-400 transition-colors ml-1">rappizr</a>
+              <a href="https://www.instagram.com/renhapiz" target="_blank" rel="noreferrer" className="hover:text-amber-400 transition-colors cursor-pointer">renhapiz</a>,
+              <a href="https://www.instagram.com/wldnxd" target="_blank" rel="noreferrer" className="hover:text-amber-400 transition-colors ml-1 cursor-pointer">wldnxd</a>,
+              <a href="https://www.instagram.com/rappizr" target="_blank" rel="noreferrer" className="hover:text-amber-400 transition-colors ml-1 cursor-pointer">rappizr</a>
             </div>
             <div className="flex items-center gap-2">
               <Github size={18}/>
-              <a href="https://github.com/renka01" target="_blank" rel="noreferrer" className="hover:text-amber-400 transition-colors">renka01</a>,
-              <a href="https://github.com/wldnxd" target="_blank" rel="noreferrer" className="hover:text-amber-400 transition-colors ml-1">wldnxd</a>,
-              <a href="https://github.com/Rappizr" target="_blank" rel="noreferrer" className="hover:text-amber-400 transition-colors ml-1">Rappizr</a>
+              <a href="https://github.com/renka01" target="_blank" rel="noreferrer" className="hover:text-amber-400 transition-colors cursor-pointer">renka01</a>,
+              <a href="https://github.com/wldnxd" target="_blank" rel="noreferrer" className="hover:text-amber-400 transition-colors ml-1 cursor-pointer">wldnxd</a>,
+              <a href="https://github.com/Rappizr" target="_blank" rel="noreferrer" className="hover:text-amber-400 transition-colors ml-1 cursor-pointer">Rappizr</a>
             </div>
           </div>
         </div>
-        <div className="max-w-5xl mx-auto px-4 sm:px-8 flex flex-col md:flex-row justify-between items-center text-xs text-zinc-400 pt-6 border-t border-zinc-700/50 text-center gap-4 md:gap-0">
-          <p className="font-medium tracking-wide">© 2026 Daily Dungeon. All rights reserved.</p>
+        <div className="max-w-5xl mx-auto px-4 sm:px-8 flex flex-col md:flex-row justify-between items-center text-xs text-zinc-400 pt-6 border-t border-zinc-700/50 text-center gap-4 md:gap-0 pointer-events-auto relative z-50">
+          <p className="font-medium tracking-wide">{t.rights}</p>
           <div className="flex flex-wrap justify-center gap-4 sm:gap-6 font-medium">
-            <button onClick={() => openModal('privacy')} className="hover:text-amber-400 transition-colors">Kebijakan Privasi</button>
-            <button onClick={() => openModal('terms')} className="hover:text-amber-400 transition-colors">Syarat dan Ketentuan</button>
+            <button onClick={() => openModal('privacy')} className="hover:text-amber-400 transition-colors cursor-pointer">{t.privacyTitle}</button>
+            <button onClick={() => openModal('terms')} className="hover:text-amber-400 transition-colors cursor-pointer">{t.termsTitle}</button>
           </div>
         </div>
       </footer>

@@ -10,32 +10,57 @@ type Tab = 'login' | 'register';
 // ═══════════════════════════════════════════════════════════
 // MODAL & KONTEN KEBIJAKAN PRIVASI / SYARAT
 // ═══════════════════════════════════════════════════════════
-const PrivacyContent = () => (
-  <div className="space-y-4 text-zinc-300 text-sm">
-    <p>Terakhir diperbarui: 26 Maret 2026</p>
-    <p>Aplikasi Daily Dungeon ("kami") menghargai privasi Anda. Kebijakan Privasi ini menjelaskan bagaimana kami mengumpulkan, menggunakan, dan melindungi informasi Anda saat Anda menggunakan aplikasi kami.</p>
-    <h3 className="font-bold text-amber-400 pt-2">1. Informasi yang Kami Kumpulkan</h3>
-    <p>Kami hanya mengumpulkan informasi yang esensial untuk fungsionalitas aplikasi, yaitu: alamat email Anda untuk keperluan autentikasi akun. Kami tidak mengumpulkan data pribadi sensitif lainnya.</p>
-    <h3 className="font-bold text-amber-400 pt-2">2. Penggunaan Informasi</h3>
-    <p>Alamat email Anda digunakan secara eksklusif untuk: membuat dan mengelola akun Anda, mereset kata sandi, dan proses autentikasi lainnya. Kami tidak akan pernah mengirimkan email promosi atau membagikan email Anda kepada pihak ketiga.</p>
-    <h3 className="font-bold text-amber-400 pt-2">3. Keamanan Data</h3>
-    <p>Kami menggunakan langkah-langkah keamanan standar industri untuk melindungi data Anda dari akses yang tidak sah. Kata sandi Anda di-hash dan tidak dapat kami lihat.</p>
-  </div>
+const PrivacyContent = ({ lang = 'id' }: { lang?: string }) => (
+  lang === 'id' ? (
+    <div className="space-y-4 text-zinc-300 text-sm">
+      <p>Terakhir diperbarui: 26 Maret 2026</p>
+      <p>Aplikasi Daily Dungeon ("kami") menghargai privasi Anda. Kebijakan Privasi ini menjelaskan bagaimana kami mengumpulkan, menggunakan, dan melindungi informasi Anda saat Anda menggunakan aplikasi kami.</p>
+      <h3 className="font-bold text-amber-400 pt-2">1. Informasi yang Kami Kumpulkan</h3>
+      <p>Kami hanya mengumpulkan informasi yang esensial untuk fungsionalitas aplikasi, yaitu: alamat email Anda untuk keperluan autentikasi akun. Kami tidak mengumpulkan data pribadi sensitif lainnya.</p>
+      <h3 className="font-bold text-amber-400 pt-2">2. Penggunaan Informasi</h3>
+      <p>Alamat email Anda digunakan secara eksklusif untuk: membuat dan mengelola akun Anda, mereset kata sandi, dan proses autentikasi lainnya. Kami tidak akan pernah mengirimkan email promosi atau membagikan email Anda kepada pihak ketiga.</p>
+      <h3 className="font-bold text-amber-400 pt-2">3. Keamanan Data</h3>
+      <p>Kami menggunakan langkah-langkah keamanan standar industri untuk melindungi data Anda dari akses yang tidak sah. Kata sandi Anda di-hash dan tidak dapat kami lihat.</p>
+    </div>
+  ) : (
+    <div className="space-y-4 text-zinc-300 text-sm">
+      <p>Last updated: March 26, 2026</p>
+      <p>The Daily Dungeon application ("we") respects your privacy. This Privacy Policy explains how we collect, use, and protect your information when you use our application.</p>
+      <h3 className="font-bold text-amber-400 pt-2">1. Information We Collect</h3>
+      <p>We only collect essential information for the app's functionality, namely: your email address for account authentication purposes. We do not collect other sensitive personal data.</p>
+      <h3 className="font-bold text-amber-400 pt-2">2. Use of Information</h3>
+      <p>Your email address is strictly used to: create and manage your account, reset passwords, and other authentication processes. We will never send promotional emails or share your email with third parties.</p>
+      <h3 className="font-bold text-amber-400 pt-2">3. Data Security</h3>
+      <p>We use industry-standard security measures to protect your data from unauthorized access. Your passwords are hashed and cannot be seen by us.</p>
+    </div>
+  )
 );
 
-const TermsContent = () => (
-  <div className="space-y-4 text-zinc-300 text-sm">
-    <p>Dengan menggunakan aplikasi Daily Dungeon, Anda setuju untuk terikat oleh Syarat dan Ketentuan berikut:</p>
-    <h3 className="font-bold text-amber-400 pt-2">1. Penggunaan Akun</h3>
-    <p>Anda bertanggung jawab penuh atas semua aktivitas yang terjadi di bawah akun Anda. Jaga kerahasiaan kata sandi Anda dan jangan bagikan dengan siapa pun.</p>
-    <h3 className="font-bold text-amber-400 pt-2">2. Perilaku Pengguna</h3>
-    <p>Anda setuju untuk tidak menggunakan aplikasi ini untuk tujuan ilegal atau yang dilarang. Dilarang keras melakukan pelecehan, spam, atau mencoba merusak integritas sistem kami.</p>
-    <h3 className="font-bold text-amber-400 pt-2">3. Pembatasan Tanggung Jawab</h3>
-    <p>Aplikasi ini disediakan "sebagaimana adanya". Kami tidak bertanggung jawab atas kehilangan data atau kerusakan lain yang mungkin timbul dari penggunaan aplikasi ini.</p>
-  </div>
+const TermsContent = ({ lang = 'id' }: { lang?: string }) => (
+  lang === 'id' ? (
+    <div className="space-y-4 text-zinc-300 text-sm">
+      <p>Dengan menggunakan aplikasi Daily Dungeon, Anda setuju untuk terikat oleh Syarat dan Ketentuan berikut:</p>
+      <h3 className="font-bold text-amber-400 pt-2">1. Penggunaan Akun</h3>
+      <p>Anda bertanggung jawab penuh atas semua aktivitas yang terjadi di bawah akun Anda. Jaga kerahasiaan kata sandi Anda dan jangan bagikan dengan siapa pun.</p>
+      <h3 className="font-bold text-amber-400 pt-2">2. Perilaku Pengguna</h3>
+      <p>Anda setuju untuk tidak menggunakan aplikasi ini untuk tujuan ilegal atau yang dilarang. Dilarang keras melakukan pelecehan, spam, atau mencoba merusak integritas sistem kami.</p>
+      <h3 className="font-bold text-amber-400 pt-2">3. Pembatasan Tanggung Jawab</h3>
+      <p>Aplikasi ini disediakan "sebagaimana adanya". Kami tidak bertanggung jawab atas kehilangan data atau kerusakan lain yang mungkin timbul dari penggunaan aplikasi ini.</p>
+    </div>
+  ) : (
+    <div className="space-y-4 text-zinc-300 text-sm">
+      <p>By using the Daily Dungeon application, you agree to be bound by the following Terms and Conditions:</p>
+      <h3 className="font-bold text-amber-400 pt-2">1. Account Usage</h3>
+      <p>You are fully responsible for all activities that occur under your account. Keep your password confidential and do not share it with anyone.</p>
+      <h3 className="font-bold text-amber-400 pt-2">2. User Conduct</h3>
+      <p>You agree not to use this application for illegal or prohibited purposes. Harassment, spamming, or attempting to compromise the integrity of our system is strictly prohibited.</p>
+      <h3 className="font-bold text-amber-400 pt-2">3. Limitation of Liability</h3>
+      <p>This application is provided "as is". We are not responsible for data loss or other damages that may arise from the use of this application.</p>
+    </div>
+  )
 );
 
-const PolicyModal = ({ isOpen, onClose, title, children }: { isOpen: boolean; onClose: () => void; title: string; children: React.ReactNode }) => {
+const PolicyModal = ({ isOpen, onClose, title, children, lang = 'id' }: { isOpen: boolean; onClose: () => void; title: string; children: React.ReactNode; lang?: string }) => {
   if (!isOpen) return null;
 
   return (
@@ -58,7 +83,7 @@ const PolicyModal = ({ isOpen, onClose, title, children }: { isOpen: boolean; on
             onClick={onClose}
             className="bg-amber-500 hover:bg-amber-400 text-zinc-900 px-6 py-2 rounded-lg font-bold text-sm transition-colors"
           >
-            Tutup
+            {lang === 'id' ? 'Tutup' : 'Close'}
           </button>
         </footer>
       </div>
@@ -107,7 +132,7 @@ const SpartanArmy = () => (
 
 export default function StartPage() {
   const router = useRouter();
-  const { setUserProfile } = useStore();
+  const { setUserProfile, settings, updateSetting } = useStore();
   const [tab, setTab] = useState<Tab>('register');
   const [email, setEmail] = useState('');
   const [pass, setPass] = useState('');
@@ -122,20 +147,40 @@ export default function StartPage() {
 
   useEffect(() => setIsMounted(true), []);
 
+  const lang = settings?.language || 'id';
+  const t = {
+    emailReq: lang === 'id' ? 'Email dan kata sandi wajib diisi.' : 'Email and password are required.',
+    passMatch: lang === 'id' ? 'Kata sandi tidak cocok!' : 'Passwords do not match!',
+    regError: lang === 'id' ? 'Terjadi kesalahan saat mendaftar.' : 'An error occurred during registration.',
+    privacyTitle: lang === 'id' ? 'Kebijakan Privasi' : 'Privacy Policy',
+    termsTitle: lang === 'id' ? 'Syarat dan Ketentuan' : 'Terms and Conditions',
+    registerTab: lang === 'id' ? 'DAFTAR BARU' : 'REGISTER',
+    loginTab: lang === 'id' ? 'MASUK' : 'LOGIN',
+    emailPlaceholder: lang === 'id' ? 'Alamat Email' : 'Email Address',
+    passPlaceholder: lang === 'id' ? 'Kata Sandi' : 'Password',
+    confirmPassPlaceholder: lang === 'id' ? 'Konfirmasi Kata Sandi' : 'Confirm Password',
+    processing: lang === 'id' ? 'MEMPROSES...' : 'PROCESSING...',
+    startAdv: lang === 'id' ? 'MULAI PETUALANGAN' : 'START ADVENTURE',
+    createChar: lang === 'id' ? 'BUAT KARAKTER' : 'CREATE CHARACTER',
+    alreadyHave: lang === 'id' ? 'Sudah punya akun?' : 'Already have an account?',
+    or: lang === 'id' ? 'Atau' : 'Or',
+    rights: lang === 'id' ? '© 2026 Daily Dungeon. Hak Cipta Dilindungi.' : '© 2026 Daily Dungeon. All rights reserved.'
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
     setLoading(true);
 
     if (!email || !pass) {
-      setError('Email dan kata sandi wajib diisi.');
+      setError(t.emailReq);
       setLoading(false);
       return;
     }
 
     if (tab === 'register') {
       if (pass !== pass2) {
-        setError('Kata sandi tidak cocok!');
+        setError(t.passMatch);
         setLoading(false);
         return;
       }
@@ -148,7 +193,7 @@ export default function StartPage() {
         });
 
         const data = await res.json();
-        if (!res.ok) throw new Error(data.message || 'Terjadi kesalahan saat mendaftar.');
+        if (!res.ok) throw new Error(data.message || t.regError);
 
         const result = await signIn('credentials', { redirect: false, email, password: pass });
         if (result?.error) {
@@ -176,17 +221,19 @@ export default function StartPage() {
 
   const openModal = (type: 'privacy' | 'terms') => {
     if (type === 'privacy') {
-      setModalContent({ title: 'Kebijakan Privasi', content: <PrivacyContent /> });
+      setModalContent({ title: t.privacyTitle, content: <PrivacyContent lang={lang} /> });
     } else {
-      setModalContent({ title: 'Syarat dan Ketentuan', content: <TermsContent /> });
+      setModalContent({ title: t.termsTitle, content: <TermsContent lang={lang} /> });
     }
     setIsModalOpen(true);
   };
 
   return (
     <div className="min-h-screen bg-zinc-900 flex flex-col items-center justify-center relative p-6 font-sans overflow-x-hidden overflow-y-auto">
-      
-      {isModalOpen && modalContent && <PolicyModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} title={modalContent.title}>{modalContent.content}</PolicyModal>}
+
+      {isModalOpen && modalContent && (
+        <PolicyModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} title={modalContent.title} lang={lang}>{modalContent.content}</PolicyModal>
+      )}
 
       {/* Latar Belakang Bintang */}
       {isMounted && (
@@ -211,6 +258,17 @@ export default function StartPage() {
         <ArrowLeft size={24} className="group-hover:-translate-x-1 transition-transform" />
       </button>
 
+      {/* TOMBOL GANTI BAHASA */}
+      {isMounted && (
+        <button 
+          onClick={() => updateSetting('language', settings.language === 'id' ? 'en' : 'id')} 
+          className="absolute top-6 right-6 z-50 flex items-center justify-center h-12 px-4 bg-zinc-900 border-2 border-zinc-700 text-zinc-400 hover:bg-amber-500 hover:border-amber-400 hover:text-zinc-900 rounded-xl transition-all shadow-lg font-bold group"
+          title={lang === 'id' ? 'Ganti Bahasa' : 'Change Language'}
+        >
+          {settings.language === 'id' ? '🇮🇩 ID' : '🇬🇧 EN'}
+        </button>
+      )}
+
       <div className="w-full max-w-md z-10 relative pb-16 pt-8">
         
         <div className="flex justify-center mb-6 drop-shadow-[0_4px_8px_rgba(0,0,0,0.5)]">
@@ -222,18 +280,18 @@ export default function StartPage() {
           
           <div className="flex bg-zinc-900 p-1.5 rounded-2xl mb-8 border-2 border-zinc-950">
             <button onClick={() => setTab('register')} className={`flex-1 py-3 text-sm md:text-base font-extrabold rounded-xl transition-all ${tab === 'register' ? 'bg-amber-500 text-zinc-950 shadow-[0_3px_0_#b45309]' : 'text-zinc-400 hover:text-white'}`}>
-              DAFTAR BARU
+              {t.registerTab}
             </button>
             <button onClick={() => setTab('login')} className={`flex-1 py-3 text-sm md:text-base font-extrabold rounded-xl transition-all ${tab === 'login' ? 'bg-amber-500 text-zinc-950 shadow-[0_3px_0_#b45309]' : 'text-zinc-400 hover:text-white'}`}>
-              MASUK
+              {t.loginTab}
             </button>
           </div>
 
           <form onSubmit={handleSubmit} className="flex flex-col gap-5">
-            <input type="email" value={email} onChange={e => setEmail(e.target.value)} placeholder="Alamat Email" className="w-full bg-zinc-900 border-2 border-zinc-700 text-white font-medium px-5 py-3.5 rounded-2xl text-base focus:outline-none focus:border-amber-500 focus:bg-zinc-800 transition-all placeholder:text-zinc-500" />
+            <input type="email" value={email} onChange={e => setEmail(e.target.value)} placeholder={t.emailPlaceholder} className="w-full bg-zinc-900 border-2 border-zinc-700 text-white font-medium px-5 py-3.5 rounded-2xl text-base focus:outline-none focus:border-amber-500 focus:bg-zinc-800 transition-all placeholder:text-zinc-500" />
             
             <div className="relative">
-              <input type={showPass ? "text" : "password"} value={pass} onChange={e => setPass(e.target.value)} placeholder="Kata Sandi" className="w-full bg-zinc-900 border-2 border-zinc-700 text-white font-medium px-5 py-3.5 rounded-2xl text-base focus:outline-none focus:border-amber-500 focus:bg-zinc-800 transition-all placeholder:text-zinc-500 pr-12" />
+              <input type={showPass ? "text" : "password"} value={pass} onChange={e => setPass(e.target.value)} placeholder={t.passPlaceholder} className="w-full bg-zinc-900 border-2 border-zinc-700 text-white font-medium px-5 py-3.5 rounded-2xl text-base focus:outline-none focus:border-amber-500 focus:bg-zinc-800 transition-all placeholder:text-zinc-500 pr-12" />
               <button type="button" onClick={() => setShowPass(!showPass)} className="absolute right-4 top-1/2 -translate-y-1/2 text-zinc-500 hover:text-amber-500 transition-colors">
                 {showPass ? <EyeOff size={22} /> : <Eye size={22} />}
               </button>
@@ -241,7 +299,7 @@ export default function StartPage() {
 
             {tab === 'register' && (
               <div className="relative">
-                <input type={showPass2 ? "text" : "password"} value={pass2} onChange={e => setPass2(e.target.value)} placeholder="Konfirmasi Kata Sandi" className="w-full bg-zinc-900 border-2 border-zinc-700 text-white font-medium px-5 py-3.5 rounded-2xl text-base focus:outline-none focus:border-amber-500 focus:bg-zinc-800 transition-all placeholder:text-zinc-500 pr-12" />
+                <input type={showPass2 ? "text" : "password"} value={pass2} onChange={e => setPass2(e.target.value)} placeholder={t.confirmPassPlaceholder} className="w-full bg-zinc-900 border-2 border-zinc-700 text-white font-medium px-5 py-3.5 rounded-2xl text-base focus:outline-none focus:border-amber-500 focus:bg-zinc-800 transition-all placeholder:text-zinc-500 pr-12" />
                 <button type="button" onClick={() => setShowPass2(!showPass2)} className="absolute right-4 top-1/2 -translate-y-1/2 text-zinc-500 hover:text-amber-500 transition-colors">
                   {showPass2 ? <EyeOff size={22} /> : <Eye size={22} />}
                 </button>
@@ -252,7 +310,7 @@ export default function StartPage() {
 
             {/* Gamified 3D Button */}
             <button type="submit" disabled={loading} className="w-full py-4 mt-2 bg-amber-500 text-zinc-950 font-black text-lg rounded-2xl border-b-[6px] border-amber-700 hover:bg-amber-400 hover:border-b-[4px] hover:translate-y-[2px] active:border-b-0 active:translate-y-[6px] transition-all disabled:opacity-70 disabled:pointer-events-none uppercase tracking-wide border-2 border-zinc-950">
-              {loading ? 'MEMPROSES...' : tab === 'login' ? 'MULAI PETUALANGAN' : 'BUAT KARAKTER'}
+              {loading ? t.processing : tab === 'login' ? t.startAdv : t.createChar}
             </button>
 
             {/* Link "Sudah punya akun?" - Langsung pindah ke tab MASUK */}
@@ -263,14 +321,14 @@ export default function StartPage() {
                   onClick={() => setTab('login')}
                   className="text-sm text-amber-500 hover:text-amber-400 transition-colors font-medium underline underline-offset-2"
                 >
-                 Sudah punya akun? 
+                 {t.alreadyHave}
                 </button>
               </div>
             )}
 
             <div className="flex items-center gap-4 my-2 opacity-60">
               <div className="flex-1 h-px bg-zinc-500"/>
-              <span className="text-xs text-zinc-400 font-bold uppercase tracking-widest">Atau</span>
+              <span className="text-xs text-zinc-400 font-bold uppercase tracking-widest">{t.or}</span>
               <div className="flex-1 h-px bg-zinc-500"/>
             </div>
 
@@ -294,10 +352,10 @@ export default function StartPage() {
       {/* FOOTER */}
       <footer className="absolute bottom-0 left-0 right-0 z-20 w-full pt-16 pb-8 px-6 bg-gradient-to-t from-zinc-900 via-zinc-900/90 to-transparent pointer-events-none">
         <div className="max-w-4xl mx-auto flex flex-col md:flex-row justify-between items-center text-xs text-zinc-500 pointer-events-auto">
-          <p className="font-medium tracking-wide mb-4 md:mb-0 text-center md:text-left">© 2026 Daily Dungeon. All rights reserved.</p>
+          <p className="font-medium tracking-wide mb-4 md:mb-0 text-center md:text-left">{t.rights}</p>
           <div className="flex gap-6 font-medium">
-            <button onClick={() => openModal('privacy')} className="hover:text-amber-400 transition-colors">Kebijakan Privasi</button>
-            <button onClick={() => openModal('terms')} className="hover:text-amber-400 transition-colors">Syarat dan Ketentuan</button>
+            <button onClick={() => openModal('privacy')} className="hover:text-amber-400 transition-colors">{t.privacyTitle}</button>
+            <button onClick={() => openModal('terms')} className="hover:text-amber-400 transition-colors">{t.termsTitle}</button>
           </div>
         </div>
       </footer>

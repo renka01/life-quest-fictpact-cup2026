@@ -2,36 +2,62 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { ArrowLeft, X } from 'lucide-react';
+import { useStore } from '@/store/useStore';
 
 // ─────────────────────────────────────────────────────────────
 // MODAL & KONTEN KEBIJAKAN PRIVASI / SYARAT
 // ─────────────────────────────────────────────────────────────
-const PrivacyContent = () => (
-  <div className="space-y-4 text-zinc-300 text-sm">
-    <p>Terakhir diperbarui: 26 Maret 2026</p>
-    <p>Aplikasi Daily Dungeon ("kami") menghargai privasi Anda. Kebijakan Privasi ini menjelaskan bagaimana kami mengumpulkan, menggunakan, dan melindungi informasi Anda saat Anda menggunakan aplikasi kami.</p>
-    <h3 className="font-bold text-amber-400 pt-2">1. Informasi yang Kami Kumpulkan</h3>
-    <p>Kami hanya mengumpulkan informasi yang esensial untuk fungsionalitas aplikasi, yaitu: alamat email Anda untuk keperluan autentikasi akun. Kami tidak mengumpulkan data pribadi sensitif lainnya.</p>
-    <h3 className="font-bold text-amber-400 pt-2">2. Penggunaan Informasi</h3>
-    <p>Alamat email Anda digunakan secara eksklusif untuk: membuat dan mengelola akun Anda, mereset kata sandi, dan proses autentikasi lainnya. Kami tidak akan pernah mengirimkan email promosi atau membagikan email Anda kepada pihak ketiga.</p>
-    <h3 className="font-bold text-amber-400 pt-2">3. Keamanan Data</h3>
-    <p>Kami menggunakan langkah-langkah keamanan standar industri untuk melindungi data Anda dari akses yang tidak sah. Kata sandi Anda di-hash dan tidak dapat kami lihat.</p>
-  </div>
+const PrivacyContent = ({ lang = 'id' }: { lang?: string }) => (
+  lang === 'id' ? (
+    <div className="space-y-4 text-zinc-300 text-sm">
+      <p>Terakhir diperbarui: 26 Maret 2026</p>
+      <p>Aplikasi Daily Dungeon ("kami") menghargai privasi Anda. Kebijakan Privasi ini menjelaskan bagaimana kami mengumpulkan, menggunakan, dan melindungi informasi Anda saat Anda menggunakan aplikasi kami.</p>
+      <h3 className="font-bold text-amber-400 pt-2">1. Informasi yang Kami Kumpulkan</h3>
+      <p>Kami hanya mengumpulkan informasi yang esensial untuk fungsionalitas aplikasi, yaitu: alamat email Anda untuk keperluan autentikasi akun. Kami tidak mengumpulkan data pribadi sensitif lainnya.</p>
+      <h3 className="font-bold text-amber-400 pt-2">2. Penggunaan Informasi</h3>
+      <p>Alamat email Anda digunakan secara eksklusif untuk: membuat dan mengelola akun Anda, mereset kata sandi, dan proses autentikasi lainnya. Kami tidak akan pernah mengirimkan email promosi atau membagikan email Anda kepada pihak ketiga.</p>
+      <h3 className="font-bold text-amber-400 pt-2">3. Keamanan Data</h3>
+      <p>Kami menggunakan langkah-langkah keamanan standar industri untuk melindungi data Anda dari akses yang tidak sah. Kata sandi Anda di-hash dan tidak dapat kami lihat.</p>
+    </div>
+  ) : (
+    <div className="space-y-4 text-zinc-300 text-sm">
+      <p>Last updated: March 26, 2026</p>
+      <p>The Daily Dungeon application ("we") respects your privacy. This Privacy Policy explains how we collect, use, and protect your information when you use our application.</p>
+      <h3 className="font-bold text-amber-400 pt-2">1. Information We Collect</h3>
+      <p>We only collect essential information for the app's functionality, namely: your email address for account authentication purposes. We do not collect other sensitive personal data.</p>
+      <h3 className="font-bold text-amber-400 pt-2">2. Use of Information</h3>
+      <p>Your email address is strictly used to: create and manage your account, reset passwords, and other authentication processes. We will never send promotional emails or share your email with third parties.</p>
+      <h3 className="font-bold text-amber-400 pt-2">3. Data Security</h3>
+      <p>We use industry-standard security measures to protect your data from unauthorized access. Your passwords are hashed and cannot be seen by us.</p>
+    </div>
+  )
 );
 
-const TermsContent = () => (
-  <div className="space-y-4 text-zinc-300 text-sm">
-    <p>Dengan menggunakan aplikasi Daily Dungeon, Anda setuju untuk terikat oleh Syarat dan Ketentuan berikut:</p>
-    <h3 className="font-bold text-amber-400 pt-2">1. Penggunaan Akun</h3>
-    <p>Anda bertanggung jawab penuh atas semua aktivitas yang terjadi di bawah akun Anda. Jaga kerahasiaan kata sandi Anda dan jangan bagikan dengan siapa pun.</p>
-    <h3 className="font-bold text-amber-400 pt-2">2. Perilaku Pengguna</h3>
-    <p>Anda setuju untuk tidak menggunakan aplikasi ini untuk tujuan ilegal atau yang dilarang. Dilarang keras melakukan pelecehan, spam, atau mencoba merusak integritas sistem kami.</p>
-    <h3 className="font-bold text-amber-400 pt-2">3. Pembatasan Tanggung Jawab</h3>
-    <p>Aplikasi ini disediakan "sebagaimana adanya". Kami tidak bertanggung jawab atas kehilangan data atau kerusakan lain yang mungkin timbul dari penggunaan aplikasi ini.</p>
-  </div>
+const TermsContent = ({ lang = 'id' }: { lang?: string }) => (
+  lang === 'id' ? (
+    <div className="space-y-4 text-zinc-300 text-sm">
+      <p>Dengan menggunakan aplikasi Daily Dungeon, Anda setuju untuk terikat oleh Syarat dan Ketentuan berikut:</p>
+      <h3 className="font-bold text-amber-400 pt-2">1. Penggunaan Akun</h3>
+      <p>Anda bertanggung jawab penuh atas semua aktivitas yang terjadi di bawah akun Anda. Jaga kerahasiaan kata sandi Anda dan jangan bagikan dengan siapa pun.</p>
+      <h3 className="font-bold text-amber-400 pt-2">2. Perilaku Pengguna</h3>
+      <p>Anda setuju untuk tidak menggunakan aplikasi ini untuk tujuan ilegal atau yang dilarang. Dilarang keras melakukan pelecehan, spam, atau mencoba merusak integritas sistem kami.</p>
+      <h3 className="font-bold text-amber-400 pt-2">3. Pembatasan Tanggung Jawab</h3>
+      <p>Aplikasi ini disediakan "sebagaimana adanya". Kami tidak bertanggung jawab atas kehilangan data atau kerusakan lain yang mungkin timbul dari penggunaan aplikasi ini.</p>
+    </div>
+  ) : (
+    <div className="space-y-4 text-zinc-300 text-sm">
+      <p>By using the Daily Dungeon application, you agree to be bound by the following Terms and Conditions:</p>
+      <h3 className="font-bold text-amber-400 pt-2">1. Account Usage</h3>
+      <p>You are fully responsible for all activities that occur under your account. Keep your password confidential and do not share it with anyone.</p>
+      <h3 className="font-bold text-amber-400 pt-2">2. User Conduct</h3>
+      <p>You agree not to use this application for illegal or prohibited purposes. Harassment, spamming, or attempting to compromise the integrity of our system is strictly prohibited.</p>
+      <h3 className="font-bold text-amber-400 pt-2">3. Limitation of Liability</h3>
+      <p>This application is provided "as is". We are not responsible for data loss or other damages that may arise from the use of this application.</p>
+    </div>
+  )
 );
 
-const PolicyModal = ({ isOpen, onClose, title, children }: { isOpen: boolean, onClose: () => void, title: string, children: React.ReactNode }) => {
+const PolicyModal = ({ isOpen, onClose, title, children, lang = 'id' }: { isOpen: boolean; onClose: () => void; title: string; children: React.ReactNode; lang?: string }) => {
   if (!isOpen) return null;
   return (
     <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex justify-center items-center z-[10000] animate-in fade-in-50" onClick={onClose}>
@@ -45,7 +71,7 @@ const PolicyModal = ({ isOpen, onClose, title, children }: { isOpen: boolean, on
         <main className="p-6 overflow-y-auto">{children}</main>
         <footer className="p-4 border-t border-zinc-700 flex-shrink-0 text-right">
           <button onClick={onClose} className="bg-amber-500 hover:bg-amber-400 text-zinc-900 px-6 py-2 rounded-lg font-bold text-sm transition-colors">
-            Tutup
+            {lang === 'id' ? 'Tutup' : 'Close'}
           </button>
         </footer>
       </div>
@@ -207,12 +233,31 @@ const SpartanArmy = () => (
 // ─────────────────────────────────────────────────────────────
 export default function ForgotPasswordPage() {
   const router  = useRouter();
+  const { settings, updateSetting } = useStore();
   const [email,  setEmail]  = useState('');
   const [status, setStatus] = useState<'idle'|'loading'|'success'|'error'>('idle');
   const [message,setMessage]= useState('');
   const [isMounted, setIsMounted] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalContent, setModalContent] = useState<{ title: string, content: React.ReactNode } | null>(null);
+
+  const lang = settings?.language || 'id';
+  const t = {
+    privacyTitle: lang === 'id' ? 'Kebijakan Privasi' : 'Privacy Policy',
+    termsTitle: lang === 'id' ? 'Syarat dan Ketentuan' : 'Terms and Conditions',
+    lockedOutTitle: lang === 'id' ? 'Terkunci di Luar?' : 'Locked Out?',
+    lockedOutDesc: lang === 'id' ? 'Jangan panik, ksatria. Masukkan emailmu untuk mendapatkan kunci darurat.' : 'Don\'t panic, knight. Enter your email to get an emergency key.',
+    emailPlaceholder: 'adventurer@dungeon.id',
+    sendBtn: lang === 'id' ? 'KIRIM TAUTAN' : 'SEND LINK',
+    loadingBtn: lang === 'id' ? 'MENCARI KUNCI...' : 'SEARCHING KEY...',
+    successTitle: lang === 'id' ? 'KUNCI DARURAT DIKIRIM!' : 'EMERGENCY KEY SENT!',
+    successDesc: lang === 'id' ? 'Cek emailmu — kami sudah mengirimkan tautan untuk membuka kembali akses ke dungeonmu.' : 'Check your email — we have sent a link to reopen your access to the dungeon.',
+    validNote: lang === 'id' ? '⏳ Tautan berlaku selama 15 menit' : '⏳ Link is valid for 15 minutes',
+    backBtn: lang === 'id' ? 'Kembali ke Gerbang' : 'Back to Gate',
+    failSend: lang === 'id' ? 'Gagal mengirim email pemulihan.' : 'Failed to send recovery email.',
+    netError: lang === 'id' ? 'Terjadi kesalahan jaringan. Coba lagi nanti.' : 'Network error occurred. Try again later.',
+    rights: lang === 'id' ? '© 2026 Daily Dungeon. Hak Cipta Dilindungi.' : '© 2026 Daily Dungeon. All rights reserved.'
+  };
 
   React.useEffect(() => setIsMounted(true), []);
 
@@ -229,18 +274,18 @@ export default function ForgotPasswordPage() {
       });
       const data = await res.json();
       if (res.ok) { setStatus('success'); setMessage(data.message); }
-      else         { setStatus('error');   setMessage(data.message || 'Gagal mengirim email pemulihan.'); }
+      else         { setStatus('error');   setMessage(data.message || t.failSend); }
     } catch {
       setStatus('error');
-      setMessage('Terjadi kesalahan jaringan. Coba lagi nanti.');
+      setMessage(t.netError);
     }
   };
 
   const openModal = (type: 'privacy' | 'terms') => {
     if (type === 'privacy') {
-      setModalContent({ title: 'Kebijakan Privasi', content: <PrivacyContent /> });
+      setModalContent({ title: t.privacyTitle, content: <PrivacyContent lang={lang} /> });
     } else {
-      setModalContent({ title: 'Syarat dan Ketentuan', content: <TermsContent /> });
+      setModalContent({ title: t.termsTitle, content: <TermsContent lang={lang} /> });
     }
     setIsModalOpen(true);
   };
@@ -248,7 +293,7 @@ export default function ForgotPasswordPage() {
   return (
     <div className="min-h-screen bg-zinc-900 flex flex-col items-center justify-center relative p-6 font-sans overflow-x-hidden overflow-y-auto">
       {isModalOpen && modalContent && (
-        <PolicyModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} title={modalContent.title}>
+        <PolicyModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} title={modalContent.title} lang={lang}>
           {modalContent.content}
         </PolicyModal>
       )}
@@ -275,35 +320,45 @@ export default function ForgotPasswordPage() {
         <ArrowLeft size={24} className="group-hover:-translate-x-1 transition-transform" />
       </button>
 
+      {isMounted && (
+        <button 
+          onClick={() => updateSetting('language', settings.language === 'id' ? 'en' : 'id')} 
+          className="absolute top-6 right-6 z-50 flex items-center justify-center h-12 px-4 bg-zinc-900 border-2 border-zinc-700 text-zinc-400 hover:bg-amber-500 hover:border-amber-400 hover:text-zinc-900 rounded-xl transition-all shadow-lg font-bold group"
+          title={lang === 'id' ? 'Ganti Bahasa' : 'Change Language'}
+        >
+          {settings.language === 'id' ? '🇮🇩 ID' : '🇬🇧 EN'}
+        </button>
+      )}
+
       <div className="w-full max-w-md z-10 relative pb-16 pt-8 flex flex-col items-center">
         <div className="mb-8"><ConfusedSpartan/></div>
 
         <div className="bg-zinc-800 border-[4px] border-zinc-950 rounded-3xl p-6 md:p-8 shadow-[8px_8px_0_rgba(0,0,0,0.5)] relative overflow-hidden w-full">
             {status === 'success' ? (
               <div className="text-center py-4">
-                <h2 className="text-xl font-extrabold text-amber-400 mb-3">KUNCI DARURAT DIKIRIM!</h2>
-                <p className="text-zinc-300 text-sm mb-6">{message || 'Cek emailmu — kami sudah mengirimkan tautan untuk membuka kembali akses ke dungeonmu.'}</p>
+                <h2 className="text-xl font-extrabold text-amber-400 mb-3">{t.successTitle}</h2>
+                <p className="text-zinc-300 text-sm mb-6">{message || t.successDesc}</p>
                 <div className="bg-amber-900/20 border border-amber-700/40 px-4 py-3 w-full text-center mb-4 rounded-lg">
                   <p className="text-xs text-amber-400 uppercase tracking-wider font-bold">
-                    ⏳ Tautan berlaku selama 15 menit
+                    {t.validNote}
                   </p>
                 </div>
                 <button onClick={() => router.push('/login')}
                   className="w-full py-3 mt-2 bg-zinc-700 text-zinc-300 font-bold text-sm rounded-xl border-b-[4px] border-zinc-800 hover:bg-zinc-600 hover:border-b-[2px] hover:translate-y-[2px] active:border-b-0 active:translate-y-[4px] transition-all uppercase">
-                  Kembali ke Gerbang
+                  {t.backBtn}
                 </button>
               </div>
             ) : (
               <form onSubmit={handleSubmit} className="flex flex-col gap-4">
                 <div className="text-center">
-                  <h2 className="text-2xl font-extrabold text-white mb-2">Terkunci di Luar?</h2>
-                  <p className="text-zinc-400 text-sm">Jangan panik, ksatria. Masukkan emailmu untuk mendapatkan kunci darurat.</p>
+                  <h2 className="text-2xl font-extrabold text-white mb-2">{t.lockedOutTitle}</h2>
+                  <p className="text-zinc-400 text-sm">{t.lockedOutDesc}</p>
                 </div>
                 <div>
                   <input
                     type="email" required
                     value={email} onChange={e => setEmail(e.target.value)}
-                    placeholder="adventurer@dungeon.id"
+                    placeholder={t.emailPlaceholder}
                     className="w-full bg-zinc-900 border-2 border-zinc-700 text-white font-medium px-5 py-3.5 rounded-2xl text-base focus:outline-none focus:border-amber-500 focus:bg-zinc-800 transition-all placeholder:text-zinc-500"
                   />
                 </div>
@@ -314,7 +369,7 @@ export default function ForgotPasswordPage() {
                 )}
                 <button type="submit" disabled={status === 'loading'}
                   className="w-full py-4 bg-amber-500 text-zinc-950 font-black text-lg rounded-2xl border-b-[6px] border-amber-700 hover:bg-amber-400 hover:border-b-[4px] hover:translate-y-[2px] active:border-b-0 active:translate-y-[6px] transition-all disabled:opacity-70 disabled:pointer-events-none uppercase tracking-wide border-2 border-zinc-950">
-                  {status === 'loading' ? 'MENCARI KUNCI...' : 'KIRIM TAUTAN'}
+                  {status === 'loading' ? t.loadingBtn : t.sendBtn}
                 </button>
               </form>
             )}
@@ -328,11 +383,11 @@ export default function ForgotPasswordPage() {
       <footer className="absolute bottom-0 left-0 right-0 z-20 w-full pt-16 pb-8 px-6 bg-gradient-to-t from-zinc-900 via-zinc-900/90 to-transparent pointer-events-none">
         <div className="max-w-4xl mx-auto flex flex-col md:flex-row justify-between items-center text-xs text-zinc-500 pointer-events-auto">
           <p className="font-medium tracking-wide mb-4 md:mb-0 text-center md:text-left">
-            © 2026 Daily Dungeon. All rights reserved.
+            {t.rights}
           </p>
           <div className="flex gap-6 font-medium">
             <button onClick={() => openModal('privacy')} className="hover:text-amber-400 transition-colors">Kebijakan Privasi</button>
-            <button onClick={() => openModal('terms')} className="hover:text-amber-400 transition-colors">Syarat dan Ketentuan</button>
+            <button onClick={() => openModal('terms')} className="hover:text-amber-400 transition-colors">{t.termsTitle}</button>
           </div>
         </div>
       </footer>

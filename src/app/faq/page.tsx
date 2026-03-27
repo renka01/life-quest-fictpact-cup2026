@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { ChevronDown, ChevronUp, ArrowLeft, BookOpen, Swords, ShieldAlert, X } from 'lucide-react';
+import { useStore } from '@/store/useStore';
 
 // ═══════════════════════════════════════════════════════════
 // PIXEL ART REUSABLES
@@ -64,32 +65,57 @@ const GrandSpartanLandscape = () => (
 // ═══════════════════════════════════════════════════════════
 // MODAL & KONTEN KEBIJAKAN PRIVASI / SYARAT
 // ═══════════════════════════════════════════════════════════
-const PrivacyContent = () => (
-  <div className="space-y-4 text-zinc-300 text-sm">
-    <p>Terakhir diperbarui: 26 Maret 2026</p>
-    <p>Aplikasi Daily Dungeon ("kami") menghargai privasi Anda. Kebijakan Privasi ini menjelaskan bagaimana kami mengumpulkan, menggunakan, dan melindungi informasi Anda saat Anda menggunakan aplikasi kami.</p>
-    <h3 className="font-bold text-amber-400 pt-2">1. Informasi yang Kami Kumpulkan</h3>
-    <p>Kami hanya mengumpulkan informasi yang esensial untuk fungsionalitas aplikasi, yaitu: alamat email Anda untuk keperluan autentikasi akun. Kami tidak mengumpulkan data pribadi sensitif lainnya.</p>
-    <h3 className="font-bold text-amber-400 pt-2">2. Penggunaan Informasi</h3>
-    <p>Alamat email Anda digunakan secara eksklusif untuk: membuat dan mengelola akun Anda, mereset kata sandi, dan proses autentikasi lainnya. Kami tidak akan pernah mengirimkan email promosi atau membagikan email Anda kepada pihak ketiga.</p>
-    <h3 className="font-bold text-amber-400 pt-2">3. Keamanan Data</h3>
-    <p>Kami menggunakan langkah-langkah keamanan standar industri untuk melindungi data Anda dari akses yang tidak sah. Kata sandi Anda di-hash dan tidak dapat kami lihat.</p>
-  </div>
+const PrivacyContent = ({ lang = 'id' }: { lang?: string }) => (
+  lang === 'id' ? (
+    <div className="space-y-4 text-zinc-300 text-sm">
+      <p>Terakhir diperbarui: 26 Maret 2026</p>
+      <p>Aplikasi Daily Dungeon ("kami") menghargai privasi Anda. Kebijakan Privasi ini menjelaskan bagaimana kami mengumpulkan, menggunakan, dan melindungi informasi Anda saat Anda menggunakan aplikasi kami.</p>
+      <h3 className="font-bold text-amber-400 pt-2">1. Informasi yang Kami Kumpulkan</h3>
+      <p>Kami hanya mengumpulkan informasi yang esensial untuk fungsionalitas aplikasi, yaitu: alamat email Anda untuk keperluan autentikasi akun. Kami tidak mengumpulkan data pribadi sensitif lainnya.</p>
+      <h3 className="font-bold text-amber-400 pt-2">2. Penggunaan Informasi</h3>
+      <p>Alamat email Anda digunakan secara eksklusif untuk: membuat dan mengelola akun Anda, mereset kata sandi, dan proses autentikasi lainnya. Kami tidak akan pernah mengirimkan email promosi atau membagikan email Anda kepada pihak ketiga.</p>
+      <h3 className="font-bold text-amber-400 pt-2">3. Keamanan Data</h3>
+      <p>Kami menggunakan langkah-langkah keamanan standar industri untuk melindungi data Anda dari akses yang tidak sah. Kata sandi Anda di-hash dan tidak dapat kami lihat.</p>
+    </div>
+  ) : (
+    <div className="space-y-4 text-zinc-300 text-sm">
+      <p>Last updated: March 26, 2026</p>
+      <p>The Daily Dungeon application ("we") respects your privacy. This Privacy Policy explains how we collect, use, and protect your information when you use our application.</p>
+      <h3 className="font-bold text-amber-400 pt-2">1. Information We Collect</h3>
+      <p>We only collect essential information for the app's functionality, namely: your email address for account authentication purposes. We do not collect other sensitive personal data.</p>
+      <h3 className="font-bold text-amber-400 pt-2">2. Use of Information</h3>
+      <p>Your email address is strictly used to: create and manage your account, reset passwords, and other authentication processes. We will never send promotional emails or share your email with third parties.</p>
+      <h3 className="font-bold text-amber-400 pt-2">3. Data Security</h3>
+      <p>We use industry-standard security measures to protect your data from unauthorized access. Your passwords are hashed and cannot be seen by us.</p>
+    </div>
+  )
 );
 
-const TermsContent = () => (
-  <div className="space-y-4 text-zinc-300 text-sm">
-    <p>Dengan menggunakan aplikasi Daily Dungeon, Anda setuju untuk terikat oleh Syarat dan Ketentuan berikut:</p>
-    <h3 className="font-bold text-amber-400 pt-2">1. Penggunaan Akun</h3>
-    <p>Anda bertanggung jawab penuh atas semua aktivitas yang terjadi di bawah akun Anda. Jaga kerahasiaan kata sandi Anda dan jangan bagikan dengan siapa pun.</p>
-    <h3 className="font-bold text-amber-400 pt-2">2. Perilaku Pengguna</h3>
-    <p>Anda setuju untuk tidak menggunakan aplikasi ini untuk tujuan ilegal atau yang dilarang. Dilarang keras melakukan pelecehan, spam, atau mencoba merusak integritas sistem kami.</p>
-    <h3 className="font-bold text-amber-400 pt-2">3. Pembatasan Tanggung Jawab</h3>
-    <p>Aplikasi ini disediakan "sebagaimana adanya". Kami tidak bertanggung jawab atas kehilangan data atau kerusakan lain yang mungkin timbul dari penggunaan aplikasi ini.</p>
-  </div>
+const TermsContent = ({ lang = 'id' }: { lang?: string }) => (
+  lang === 'id' ? (
+    <div className="space-y-4 text-zinc-300 text-sm">
+      <p>Dengan menggunakan aplikasi Daily Dungeon, Anda setuju untuk terikat oleh Syarat dan Ketentuan berikut:</p>
+      <h3 className="font-bold text-amber-400 pt-2">1. Penggunaan Akun</h3>
+      <p>Anda bertanggung jawab penuh atas semua aktivitas yang terjadi di bawah akun Anda. Jaga kerahasiaan kata sandi Anda dan jangan bagikan dengan siapa pun.</p>
+      <h3 className="font-bold text-amber-400 pt-2">2. Perilaku Pengguna</h3>
+      <p>Anda setuju untuk tidak menggunakan aplikasi ini untuk tujuan ilegal atau yang dilarang. Dilarang keras melakukan pelecehan, spam, atau mencoba merusak integritas sistem kami.</p>
+      <h3 className="font-bold text-amber-400 pt-2">3. Pembatasan Tanggung Jawab</h3>
+      <p>Aplikasi ini disediakan "sebagaimana adanya". Kami tidak bertanggung jawab atas kehilangan data atau kerusakan lain yang mungkin timbul dari penggunaan aplikasi ini.</p>
+    </div>
+  ) : (
+    <div className="space-y-4 text-zinc-300 text-sm">
+      <p>By using the Daily Dungeon application, you agree to be bound by the following Terms and Conditions:</p>
+      <h3 className="font-bold text-amber-400 pt-2">1. Account Usage</h3>
+      <p>You are fully responsible for all activities that occur under your account. Keep your password confidential and do not share it with anyone.</p>
+      <h3 className="font-bold text-amber-400 pt-2">2. User Conduct</h3>
+      <p>You agree not to use this application for illegal or prohibited purposes. Harassment, spamming, or attempting to compromise the integrity of our system is strictly prohibited.</p>
+      <h3 className="font-bold text-amber-400 pt-2">3. Limitation of Liability</h3>
+      <p>This application is provided "as is". We are not responsible for data loss or other damages that may arise from the use of this application.</p>
+    </div>
+  )
 );
 
-const PolicyModal = ({ isOpen, onClose, title, children }: { isOpen: boolean; onClose: () => void; title: string; children: React.ReactNode }) => {
+const PolicyModal = ({ isOpen, onClose, title, children, lang = 'id' }: { isOpen: boolean; onClose: () => void; title: string; children: React.ReactNode; lang?: string }) => {
   if (!isOpen) return null;
 
   return (
@@ -112,7 +138,7 @@ const PolicyModal = ({ isOpen, onClose, title, children }: { isOpen: boolean; on
             onClick={onClose}
             className="bg-amber-500 hover:bg-amber-400 text-zinc-900 px-6 py-2 rounded-lg font-bold text-sm transition-colors"
           >
-            Tutup
+            {lang === 'id' ? 'Tutup' : 'Close'}
           </button>
         </footer>
       </div>
@@ -145,34 +171,61 @@ const FaqItem = ({ question, answer }: { question: string, answer: React.ReactNo
   );
 };
 
-const faqs = [
-  { q: "Apa itu Daily Dungeon?", a: "Daily Dungeon adalah aplikasi produktivitas (To-Do List & Habit Tracker) yang mengubah kewajiban dunia nyatamu menjadi petualangan RPG epik. Dengan menyelesaikan tugas, kamu akan mendapatkan EXP dan Gold untuk memperkuat karaktermu." },
-  { q: "Apa bedanya Siklus Misi (Habit), Operasi Harian (Daily), dan Target (Todo)?", a: <ul className="list-disc pl-5 space-y-2"><li><b>Habit (Siklus Misi):</b> Kebiasaan baik/buruk yang bisa ditekan berkali-kali tanpa jadwal ketat.</li><li><b>Daily (Operasi Harian):</b> Tugas rutin terjadwal yang otomatis me-reset di hari berikutnya.</li><li><b>Todo (Target Utama):</b> Misi sekali jalan yang akan hilang dari daftar setelah diselesaikan.</li></ul> },
-  { q: "Apa yang terjadi jika saya tidak mengerjakan Operasi Harian (Daily)?", a: "Hati-hati! Di penghujung hari, monster kemalasan akan menyerang. Karaktermu akan menerima Damage (kehilangan HP) untuk setiap tugas harian (Daily) atau kebiasaan buruk yang kamu abaikan. Jika HP kamu habis, kamu mungkin akan menerima penalti kehilangan level atau Gold." },
-  { q: "Bagaimana cara kerja Focus Arena?", a: "Focus Arena menggunakan teknik Pomodoro. Pilih satu monster/boss, atur durasi fokus (misal 25 menit), lalu mulai bekerja tanpa gangguan. Jika timer selesai tanpa kamu batalkan, karaktermu akan melancarkan serangan kritikal (Critical Hit) ke Boss dan memberimu Loot langka!" },
-  { q: "Apakah aplikasi ini gratis dimainkan?", a: "Ya! Petualangan inti, pelacakan misi, dan fitur RPG 100% gratis untuk semua pejuang. Kami berencana untuk menghadirkan kosmetik premium opsional di masa depan untuk mendukung pengembangan server." },
-  { q: "Bagaimana cara mendapatkan Equipment (Senjata & Armor) baru?", a: "Kumpulkan Gold dengan menyelesaikan misi-misi yang kamu buat. Setelah Gold terkumpul, kamu bisa membeli berbagai perlengkapan di Toko & Loot untuk meningkatkan status kekuatan karaktermu." },
-  { q: "Apa fungsi dari Login Streak?", a: "Login Streak melacak seberapa konsisten kamu masuk ke Daily Dungeon setiap harinya. Semakin panjang Streak yang kamu capai, semakin besar bonus EXP dan Gold yang akan kamu terima dari Daily Reward." },
-  { q: "Apakah karakter saya bisa mati?", a: "Jika HP karaktermu mencapai 0 karena terlalu banyak misi harian yang terlewat atau terlalu sering menekan Habit buruk, karaktermu akan 'pingsan'. Kamu mungkin akan kehilangan sebagian Gold atau level sebagai penalti. Jangan lupa persiapkan Potion Kesehatan di Toko!" },
-  { q: "Bisakah saya mereset ulang progress (ulang dari awal)?", a: "Tentu, bagi kamu yang ingin memulai petualangan baru, tersedia opsi untuk mereset atribut maupun keseluruhan akun di dalam menu Pengaturan Sistem (Settings)." }
-];
-
 // ═══════════════════════════════════════════════════════════
 // MAIN FAQ PAGE
 // ═══════════════════════════════════════════════════════════
 export default function FaqPage() {
   const router = useRouter();
+  const { settings, updateSetting } = useStore();
   const [isMounted, setIsMounted] = React.useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalContent, setModalContent] = useState<{ title: string; content: React.ReactNode } | null>(null);
   
   React.useEffect(() => setIsMounted(true), []);
 
+  const lang = settings?.language || 'id';
+  const t = {
+    title: lang === 'id' ? 'Pusat Pengetahuan' : 'Knowledge Center',
+    desc: lang === 'id' ? 'Pelajari semua mekanisme bertahan hidup, strategi berpetualang, dan cara memaksimalkan potensimu di Daily Dungeon.' : 'Learn all survival mechanics, adventuring strategies, and how to maximize your potential in Daily Dungeon.',
+    f1Title: lang === 'id' ? '1. Buat Misi' : '1. Create Quests',
+    f1Desc: lang === 'id' ? 'Pindahkan tugas, jadwal, dan target dunia nyatamu ke dalam sistem Log Misi kami.' : 'Move your real-world tasks, schedules, and goals into our Quest Log system.',
+    f2Title: lang === 'id' ? '2. Mulai Grinding' : '2. Start Grinding',
+    f2Desc: lang === 'id' ? 'Kerjakan misi untuk mendapatkan EXP dan Gold, gunakan Focus Arena untuk membunuh Boss.' : 'Complete quests to earn EXP and Gold, use Focus Arena to slay Bosses.',
+    f3Title: lang === 'id' ? '3. Bertahan Hidup' : '3. Survive',
+    f3Desc: lang === 'id' ? 'Setiap kemalasan ada harganya. Misi yang tidak selesai akan menyerap HP karaktermu setiap malam.' : 'Every laziness has a price. Uncompleted quests will drain your character\'s HP every night.',
+    faqTitle: lang === 'id' ? 'Pertanyaan Umum (FAQ)' : 'Frequently Asked Questions (FAQ)',
+    privacyTitle: lang === 'id' ? 'Kebijakan Privasi' : 'Privacy Policy',
+    termsTitle: lang === 'id' ? 'Syarat dan Ketentuan' : 'Terms and Conditions',
+    rights: lang === 'id' ? '© 2026 Daily Dungeon. Hak Cipta Dilindungi.' : '© 2026 Daily Dungeon. All rights reserved.'
+  };
+
+  const faqs = lang === 'id' ? [
+    { q: "Apa itu Daily Dungeon?", a: "Daily Dungeon adalah aplikasi produktivitas (To-Do List & Habit Tracker) yang mengubah kewajiban dunia nyatamu menjadi petualangan RPG epik. Dengan menyelesaikan tugas, kamu akan mendapatkan EXP dan Gold untuk memperkuat karaktermu." },
+    { q: "Apa bedanya Siklus Misi (Habit), Operasi Harian (Daily), dan Target (Todo)?", a: <ul className="list-disc pl-5 space-y-2"><li><b>Habit (Siklus Misi):</b> Kebiasaan baik/buruk yang bisa ditekan berkali-kali tanpa jadwal ketat.</li><li><b>Daily (Operasi Harian):</b> Tugas rutin terjadwal yang otomatis me-reset di hari berikutnya.</li><li><b>Todo (Target Utama):</b> Misi sekali jalan yang akan hilang dari daftar setelah diselesaikan.</li></ul> },
+    { q: "Apa yang terjadi jika saya tidak mengerjakan Operasi Harian (Daily)?", a: "Hati-hati! Di penghujung hari, monster kemalasan akan menyerang. Karaktermu akan menerima Damage (kehilangan HP) untuk setiap tugas harian (Daily) atau kebiasaan buruk yang kamu abaikan. Jika HP kamu habis, kamu mungkin akan menerima penalti kehilangan level atau Gold." },
+    { q: "Bagaimana cara kerja Focus Arena?", a: "Focus Arena menggunakan teknik Pomodoro. Pilih satu monster/boss, atur durasi fokus (misal 25 menit), lalu mulai bekerja tanpa gangguan. Jika timer selesai tanpa kamu batalkan, karaktermu akan melancarkan serangan kritikal (Critical Hit) ke Boss dan memberimu Loot langka!" },
+    { q: "Apakah aplikasi ini gratis dimainkan?", a: "Ya! Petualangan inti, pelacakan misi, dan fitur RPG 100% gratis untuk semua pejuang. Kami berencana untuk menghadirkan kosmetik premium opsional di masa depan untuk mendukung pengembangan server." },
+    { q: "Bagaimana cara mendapatkan Equipment (Senjata & Armor) baru?", a: "Kumpulkan Gold dengan menyelesaikan misi-misi yang kamu buat. Setelah Gold terkumpul, kamu bisa membeli berbagai perlengkapan di Toko & Loot untuk meningkatkan status kekuatan karaktermu." },
+    { q: "Apa fungsi dari Login Streak?", a: "Login Streak melacak seberapa konsisten kamu masuk ke Daily Dungeon setiap harinya. Semakin panjang Streak yang kamu capai, semakin besar bonus EXP dan Gold yang akan kamu terima dari Daily Reward." },
+    { q: "Apakah karakter saya bisa mati?", a: "Jika HP karaktermu mencapai 0 karena terlalu banyak misi harian yang terlewat atau terlalu sering menekan Habit buruk, karaktermu akan 'pingsan'. Kamu mungkin akan kehilangan sebagian Gold atau level sebagai penalti. Jangan lupa persiapkan Potion Kesehatan di Toko!" },
+    { q: "Bisakah saya mereset ulang progress (ulang dari awal)?", a: "Tentu, bagi kamu yang ingin memulai petualangan baru, tersedia opsi untuk mereset atribut maupun keseluruhan akun di dalam menu Pengaturan Sistem (Settings)." }
+  ] : [
+    { q: "What is Daily Dungeon?", a: "Daily Dungeon is a productivity app (To-Do List & Habit Tracker) that turns your real-world obligations into an epic RPG adventure. By completing tasks, you'll earn EXP and Gold to strengthen your character." },
+    { q: "What is the difference between Habit, Daily, and Todo?", a: <ul className="list-disc pl-5 space-y-2"><li><b>Habit:</b> Good/bad habits that can be pressed multiple times without a strict schedule.</li><li><b>Daily:</b> Scheduled routine tasks that reset automatically the next day.</li><li><b>Todo:</b> One-time missions that disappear from the list once completed.</li></ul> },
+    { q: "What happens if I don't complete a Daily?", a: "Beware! At the end of the day, the laziness monster will attack. Your character will take Damage (lose HP) for every Daily or bad habit you missed. If your HP reaches zero, you might receive a penalty like losing a level or Gold." },
+    { q: "How does the Focus Arena work?", a: "Focus Arena uses the Pomodoro technique. Choose a monster/boss, set a focus duration (e.g., 25 minutes), and start working without distractions. If the timer finishes without being canceled, your character will land a Critical Hit on the Boss and grant you rare Loot!" },
+    { q: "Is this app free to play?", a: "Yes! The core adventure, quest tracking, and RPG features are 100% free for all warriors. We plan to introduce optional premium cosmetics in the future to support server development." },
+    { q: "How do I get new Equipment (Weapons & Armor)?", a: "Collect Gold by completing the quests you create. Once you have enough Gold, you can buy various gear in the Shop & Loot to increase your character's combat stats." },
+    { q: "What is the purpose of the Login Streak?", a: "The Login Streak tracks how consistently you enter Daily Dungeon every day. The longer your Streak, the bigger the EXP and Gold bonus you'll receive from the Daily Reward." },
+    { q: "Can my character die?", a: "If your character's HP reaches 0 due to too many missed Dailies or too many bad Habits, your character will 'faint'. You might lose some Gold or a level as a penalty. Don't forget to stock up on Health Potions in the Shop!" },
+    { q: "Can I reset my progress (start over)?", a: "Sure, for those who want to start a new adventure, there is an option to reset stats or the entire account in the System Settings menu." }
+  ];
+
   const openModal = (type: 'privacy' | 'terms') => {
     if (type === 'privacy') {
-      setModalContent({ title: 'Kebijakan Privasi', content: <PrivacyContent /> });
+      setModalContent({ title: t.privacyTitle, content: <PrivacyContent lang={lang} /> });
     } else {
-      setModalContent({ title: 'Syarat dan Ketentuan', content: <TermsContent /> });
+      setModalContent({ title: t.termsTitle, content: <TermsContent lang={lang} /> });
     }
     setIsModalOpen(true);
   };
@@ -180,7 +233,9 @@ export default function FaqPage() {
   return (
     <div className="min-h-screen bg-zinc-900 flex flex-col relative overflow-hidden font-sans">
       
-      {isModalOpen && modalContent && <PolicyModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} title={modalContent.title}>{modalContent.content}</PolicyModal>}
+      {isModalOpen && modalContent && (
+        <PolicyModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} title={modalContent.title} lang={lang}>{modalContent.content}</PolicyModal>
+      )}
 
       {/* Latar Belakang Bintang */}
       {isMounted && (
@@ -221,6 +276,16 @@ export default function FaqPage() {
         <ArrowLeft size={24} className="group-hover:-translate-x-1 transition-transform" />
       </button>
 
+      {/* TOMBOL GANTI BAHASA */}
+      {isMounted && (
+        <button 
+          onClick={() => updateSetting('language', settings.language === 'id' ? 'en' : 'id')} 
+          className="absolute top-6 right-6 z-50 flex items-center justify-center h-12 px-4 bg-zinc-900 border-2 border-zinc-700 text-zinc-400 hover:bg-amber-500 hover:border-amber-400 hover:text-zinc-900 rounded-xl transition-all shadow-lg font-bold group"
+        >
+          {settings.language === 'id' ? '🇮🇩 ID' : '🇬🇧 EN'}
+        </button>
+      )}
+
       {/* Scrollable Content */}
       <div className="scroll-left flex-1 overflow-y-auto h-full z-10 relative px-4 md:px-6">
         <main className="w-full max-w-4xl mx-auto flex-1 flex flex-col pt-12 md:pt-16 min-h-full">
@@ -230,10 +295,10 @@ export default function FaqPage() {
               <img src="/logo.png" alt="Logo" className="h-24 md:h-32 hover:scale-105 transition-transform duration-500" style={{ imageRendering: 'pixelated' }} />
             </div>
             <h1 className="text-4xl md:text-5xl font-extrabold text-white tracking-tight mb-4">
-              Pusat Pengetahuan
+              {t.title}
             </h1>
             <p className="text-zinc-400 font-medium text-base md:text-lg max-w-xl mx-auto">
-              Pelajari semua mekanisme bertahan hidup, strategi berpetualang, dan cara memaksimalkan potensimu di Daily Dungeon.
+              {t.desc}
             </p>
           </div>
 
@@ -243,29 +308,29 @@ export default function FaqPage() {
               <div className="w-14 h-14 bg-blue-500/10 rounded-full flex items-center justify-center text-blue-400 mb-4 border border-blue-500/30 shadow-[0_0_15px_rgba(59,130,246,0.2)]">
                 <BookOpen size={24} />
               </div>
-              <h3 className="text-white font-bold mb-2">1. Buat Misi</h3>
-              <p className="text-sm text-zinc-400">Pindahkan tugas, jadwal, dan target dunia nyatamu ke dalam sistem Log Misi kami.</p>
+              <h3 className="text-white font-bold mb-2">{t.f1Title}</h3>
+              <p className="text-sm text-zinc-400">{t.f1Desc}</p>
             </div>
             
             <div className="bg-zinc-800/40 border border-amber-500/20 p-6 rounded-xl flex flex-col items-center text-center hover:-translate-y-1 transition-transform duration-300">
               <div className="w-14 h-14 bg-amber-500/10 rounded-full flex items-center justify-center text-amber-400 mb-4 border border-amber-500/30 shadow-[0_0_15px_rgba(245,158,11,0.2)]">
                 <Swords size={24} />
               </div>
-              <h3 className="text-white font-bold mb-2">2. Mulai Grinding</h3>
-              <p className="text-sm text-zinc-400">Kerjakan misi untuk mendapatkan EXP dan Gold, gunakan Focus Arena untuk membunuh Boss.</p>
+              <h3 className="text-white font-bold mb-2">{t.f2Title}</h3>
+              <p className="text-sm text-zinc-400">{t.f2Desc}</p>
             </div>
 
             <div className="bg-zinc-800/40 border border-amber-500/20 p-6 rounded-xl flex flex-col items-center text-center hover:-translate-y-1 transition-transform duration-300">
               <div className="w-14 h-14 bg-red-500/10 rounded-full flex items-center justify-center text-red-400 mb-4 border border-red-500/30 shadow-[0_0_15px_rgba(239,68,68,0.2)]">
                 <ShieldAlert size={24} />
               </div>
-              <h3 className="text-white font-bold mb-2">3. Bertahan Hidup</h3>
-              <p className="text-sm text-zinc-400">Setiap kemalasan ada harganya. Misi yang tidak selesai akan menyerap HP karaktermu setiap malam.</p>
+              <h3 className="text-white font-bold mb-2">{t.f3Title}</h3>
+              <p className="text-sm text-zinc-400">{t.f3Desc}</p>
             </div>
           </div>
 
           <div className="flex items-center gap-3 mb-6">
-            <h2 className="text-2xl font-bold text-white">Pertanyaan Umum (FAQ)</h2>
+            <h2 className="text-2xl font-bold text-white">{t.faqTitle}</h2>
             <div className="h-px bg-amber-500/30 flex-1 ml-4" />
           </div>
 
@@ -288,10 +353,10 @@ export default function FaqPage() {
       {/* FOOTER */}
       <footer className="absolute bottom-0 left-0 right-0 z-20 w-full pt-16 pb-8 px-6 bg-gradient-to-t from-zinc-900 via-zinc-900/90 to-transparent pointer-events-none">
         <div className="max-w-4xl mx-auto flex flex-col md:flex-row justify-between items-center text-xs text-zinc-400 pointer-events-auto">
-          <p className="font-medium tracking-wide mb-4 md:mb-0 text-center md:text-left">© 2026 Daily Dungeon. All rights reserved.</p>
+          <p className="font-medium tracking-wide mb-4 md:mb-0 text-center md:text-left">{t.rights}</p>
           <div className="flex gap-6 font-medium">
-            <button onClick={() => openModal('privacy')} className="hover:text-amber-400 transition-colors">Kebijakan Privasi</button>
-            <button onClick={() => openModal('terms')} className="hover:text-amber-400 transition-colors">Syarat dan Ketentuan</button>
+            <button onClick={() => openModal('privacy')} className="hover:text-amber-400 transition-colors">{t.privacyTitle}</button>
+            <button onClick={() => openModal('terms')} className="hover:text-amber-400 transition-colors">{t.termsTitle}</button>
           </div>
         </div>
       </footer>

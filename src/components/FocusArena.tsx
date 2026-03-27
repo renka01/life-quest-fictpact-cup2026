@@ -8,7 +8,7 @@ import { Swords, Heart, Star, Shield, Trophy, SkipForward, RefreshCw, FlaskConic
 import { translations } from '@/utils/translations';
 
 // ═══════════════════════════════════════════════════════════════════════
-// BOSS SPRITES (pixel art)
+// BOSS SPRITES (pixel art) - TETAP UTUH
 // ═══════════════════════════════════════════════════════════════════════
 
 const GoblinSprite = () => (
@@ -198,8 +198,6 @@ const ShadowMonarchSprite = () => (
   </svg>
 );
 
-// --- 5 MONSTER BARU ---
-
 const SkeletonSprite = () => (
   <svg viewBox="0 0 32 32" width="100" height="100" style={{ imageRendering: 'pixelated' }}>
     <style>{`@keyframes skel-idle{0%,100%{transform:translateY(0)}50%{transform:translateY(1px)}}.skeli{animation:skel-idle 0.8s steps(2) infinite}`}</style>
@@ -340,69 +338,16 @@ interface Boss {
 }
 
 const BOSSES: Boss[] = [
-  // --- EXISTING MONSTERS ---
-  {
-    id:1, name:'Goblin Scout',      title:'The Weakling',
-    maxHp:120,  atk:6,  gold:15,  exp:20,
-    rarity:'common',    barColor:'bg-green-500',  aura:'#22c55e', border:'border-green-600',
-    sprite:<GoblinSprite/>,
-  },
-  {
-    id:2, name:'Orc Warrior',       title:'Berserker of the East',
-    maxHp:280,  atk:12, gold:40,  exp:60,
-    rarity:'uncommon',  barColor:'bg-lime-500',   aura:'#84cc16', border:'border-lime-600',
-    sprite:<OrcWarriorSprite/>,
-  },
-  {
-    id:3, name:'Ancient Dragon',    title:'Keeper of the Flame',
-    maxHp:550,  atk:22, gold:80,  exp:120,
-    rarity:'rare',      barColor:'bg-red-500',    aura:'#ef4444', border:'border-red-600',
-    sprite:<DragonSprite/>,
-  },
-  {
-    id:4, name:'Demon King',        title:'Ruler of the Abyss',
-    maxHp:900,  atk:35, gold:150, exp:220,
-    rarity:'epic',      barColor:'bg-purple-500', aura:'#a855f7', border:'border-purple-600',
-    sprite:<DemonKingSprite/>,
-  },
-  {
-    id:5, name:'Shadow Monarch',    title:'Sung Jin-Woo',
-    maxHp:1200, atk:50, gold:250, exp:380,
-    rarity:'legendary', barColor:'bg-violet-500', aura:'#7c3aed', border:'border-violet-500',
-    sprite:<ShadowMonarchSprite/>,
-  },
-
-  // --- NEW MONSTERS ---
-  {
-    id:6, name:'Undead Skeleton',   title:'Restless Bones',
-    maxHp:150,  atk:8,  gold:18,  exp:25,
-    rarity:'common',    barColor:'bg-zinc-400',  aura:'#cbd5e1', border:'border-zinc-500',
-    sprite:<SkeletonSprite/>,
-  },
-  {
-    id:7, name:'Dire Wolf',         title:'Beast of the Woods',
-    maxHp:320,  atk:15, gold:45,  exp:70,
-    rarity:'uncommon',  barColor:'bg-zinc-600',  aura:'#475569', border:'border-zinc-700',
-    sprite:<DireWolfSprite/>,
-  },
-  {
-    id:8, name:'Iron Minotaur',     title:'Labyrinth Guard',
-    maxHp:600,  atk:25, gold:90,  exp:140,
-    rarity:'rare',      barColor:'bg-orange-700', aura:'#c2410c', border:'border-orange-800',
-    sprite:<MinotaurSprite/>,
-  },
-  {
-    id:9, name:'Vampire Lord',      title:'Night Stalker',
-    maxHp:950,  atk:40, gold:170, exp:250,
-    rarity:'epic',      barColor:'bg-rose-700',   aura:'#be123c', border:'border-rose-800',
-    sprite:<VampireLordSprite/>,
-  },
-  {
-    id:10, name:'Cosmic Behemoth',  title:'Eater of Stars',
-    maxHp:1500, atk:60, gold:300, exp:450,
-    rarity:'legendary', barColor:'bg-cyan-500',   aura:'#06b6d4', border:'border-cyan-600',
-    sprite:<CosmicBehemothSprite/>,
-  },
+  { id:1, name:'Goblin Scout',      title:'The Weakling', maxHp:120,  atk:6,  gold:15,  exp:20, rarity:'common',    barColor:'bg-green-500',  aura:'#22c55e', border:'border-green-600', sprite:<GoblinSprite/> },
+  { id:2, name:'Orc Warrior',       title:'Berserker of the East', maxHp:280,  atk:12, gold:40,  exp:60, rarity:'uncommon',  barColor:'bg-lime-500',   aura:'#84cc16', border:'border-lime-600', sprite:<OrcWarriorSprite/> },
+  { id:3, name:'Ancient Dragon',    title:'Keeper of the Flame', maxHp:550,  atk:22, gold:80,  exp:120, rarity:'rare',      barColor:'bg-red-500',    aura:'#ef4444', border:'border-red-600', sprite:<DragonSprite/> },
+  { id:4, name:'Demon King',        title:'Ruler of the Abyss', maxHp:900,  atk:35, gold:150, exp:220, rarity:'epic',      barColor:'bg-purple-500', aura:'#a855f7', border:'border-purple-600', sprite:<DemonKingSprite/> },
+  { id:5, name:'Shadow Monarch',    title:'Sung Jin-Woo', maxHp:1200, atk:50, gold:250, exp:380, rarity:'legendary', barColor:'bg-violet-500', aura:'#7c3aed', border:'border-violet-500', sprite:<ShadowMonarchSprite/> },
+  { id:6, name:'Undead Skeleton',   title:'Restless Bones', maxHp:150,  atk:8,  gold:18,  exp:25, rarity:'common',    barColor:'bg-zinc-400',  aura:'#cbd5e1', border:'border-zinc-500', sprite:<SkeletonSprite/> },
+  { id:7, name:'Dire Wolf',         title:'Beast of the Woods', maxHp:320,  atk:15, gold:45,  exp:70, rarity:'uncommon',  barColor:'bg-zinc-600',  aura:'#475569', border:'border-zinc-700', sprite:<DireWolfSprite/> },
+  { id:8, name:'Iron Minotaur',     title:'Labyrinth Guard', maxHp:600,  atk:25, gold:90,  exp:140, rarity:'rare',      barColor:'bg-orange-700', aura:'#c2410c', border:'border-orange-800', sprite:<MinotaurSprite/> },
+  { id:9, name:'Vampire Lord',      title:'Night Stalker', maxHp:950,  atk:40, gold:170, exp:250, rarity:'epic',      barColor:'bg-rose-700',   aura:'#be123c', border:'border-rose-800', sprite:<VampireLordSprite/> },
+  { id:10, name:'Cosmic Behemoth',  title:'Eater of Stars', maxHp:1500, atk:60, gold:300, exp:450, rarity:'legendary', barColor:'bg-cyan-500',   aura:'#06b6d4', border:'border-cyan-600', sprite:<CosmicBehemothSprite/> },
 ];
 
 const RARITY_LABEL: Record<string,string> = {
@@ -411,15 +356,14 @@ const RARITY_LABEL: Record<string,string> = {
 };
 
 // ═══════════════════════════════════════════════════════════════════════
-// CONSUMABLES  (material items yang bisa dikonsumsi)
+// CONSUMABLES
 // ═══════════════════════════════════════════════════════════════════════
-
 const CONSUMABLES: Record<number, { heal: number; label: string; color: string }> = {
   6:  { heal: 15,   label: 'Soul Crystal',  color: 'bg-purple-500'  },
   52: { heal: 30,   label: 'Mithril Ingot', color: 'bg-zinc-400'   },
   53: { heal: 40,   label: 'Beskar Ingot',  color: 'bg-zinc-600'   },
   54: { heal: 60,   label: 'Vibranium Ore', color: 'bg-indigo-500'  },
-  55: { heal: 9999, label: 'Senzu Bean',    color: 'bg-emerald-500' }, // Full heal
+  55: { heal: 9999, label: 'Senzu Bean',    color: 'bg-emerald-500' }, 
   56: { heal: 20,   label: 'Slime Jelly',   color: 'bg-sky-500'     },
   57: { heal: 35,   label: 'Dragon Scale',  color: 'bg-red-500'     },
   58: { heal: 25,   label: 'Demon Horn',    color: 'bg-rose-700'    },
@@ -427,69 +371,94 @@ const CONSUMABLES: Record<number, { heal: number; label: string; color: string }
   60: { heal: 50,   label: 'Star Fragment', color: 'bg-amber-400'   },
 };
 
-// ═══════════════════════════════════════════════════════════════════════
-// DAMAGE NUMBER
-// ═══════════════════════════════════════════════════════════════════════
-
 interface DmgNum { id:number; val:number; crit:boolean; x:number; }
+type Phase = 'select' | 'battle' | 'victory' | 'defeat';
 
 // ═══════════════════════════════════════════════════════════════════════
 // MAIN COMPONENT
 // ═══════════════════════════════════════════════════════════════════════
 
-type Phase = 'select' | 'battle' | 'victory' | 'defeat';
-
 export default function FocusArena() {
   const {
-    stats, equippedItems, inventory, userProfile,
+    stats, equippedItems, inventory, userProfile, settings,
+    activeFocusSession, startFocus, stopFocus, // 🔥 STORE BARU
     _applyReward, takeDamage, healPlayer, consumeItem, recordBossDefeated
   } = useStore();
 
-  const [phase,       setPhase]       = useState<Phase>('select');
-  const [boss,        setBoss]        = useState<Boss | null>(null);
-  const [bossHp,      setBossHp]      = useState(0);
-  const [localHp,     setLocalHp]     = useState(stats.hp);  // local copy for battle
-  const [isAttacking, setIsAttacking] = useState(false);
-  const [bossHit,     setBossHit]     = useState(false);
-  const [playerHit,   setPlayerHit]   = useState(false);
-  const [battleLog,   setBattleLog]   = useState<string[]>([]);
-  const [dmgNums,     setDmgNums]     = useState<DmgNum[]>([]);
-  const [combo,       setCombo]       = useState(0);
-  const { settings } = useStore();
   const tFocus = translations[settings?.language || 'id']?.focus || translations['id'].focus;
 
-  // Pomodoro States
+  const [phase,        setPhase]        = useState<Phase>('select');
+  const [boss,         setBoss]         = useState<Boss | null>(null);
+  const [bossHp,       setBossHp]       = useState(0);
+  const [localHp,      setLocalHp]      = useState(stats.hp); 
+  const [isAttacking,  setIsAttacking]  = useState(false);
+  const [bossHit,      setBossHit]      = useState(false);
+  const [playerHit,    setPlayerHit]    = useState(false);
+  const [battleLog,    setBattleLog]    = useState<string[]>([]);
+  const [dmgNums,      setDmgNums]      = useState<DmgNum[]>([]);
+  const [combo,        setCombo]        = useState(0);
+
+  // States untuk UI Timer
   const [focusMinutes, setFocusMinutes] = useState<number | string>(25);
   const [timeLeft,     setTimeLeft]     = useState(0);
-  const [isFocusing,   setIsFocusing]   = useState(false);
   const [canAttack,    setCanAttack]    = useState(false);
 
   const dmgIdRef    = useRef(0);
 
-  // ── Pomodoro Timer countdown ─────────────────────────────────────
+  // ── 1. AUTO RESUME JIKA ADA SESI BERJALAN ────────────────────────
   useEffect(() => {
-    if (!isFocusing || timeLeft <= 0) {
-      if (isFocusing && timeLeft === 0) {
-        setIsFocusing(false);
-        setCanAttack(true);
-        new Audio('/sounds/success.mp3').play().catch(() => {}); // Bunyi timer selesai
-        addLog(`[TIME] Waktu fokus selesai! SEKARANG SERANG!`);
+    if (activeFocusSession.isActive && phase === 'select') {
+      const currentBoss = BOSSES.find(b => b.id === activeFocusSession.bossId);
+      if (currentBoss) {
+        setBoss(currentBoss);
+        setBossHp(currentBoss.maxHp); // Harusnya disimpan di store jika ingin HP boss juga tidak keriset, tapi ini cukup untuk me-resume timer
+        setLocalHp(stats.hp);
+        setPhase('battle');
+        addLog(`[RESUME] Melanjutkan sesi melawan ${currentBoss.name}!`);
+      } else {
+        stopFocus(); // Jika boss tidak valid, reset sesi
       }
-      return;
     }
-    const timer = setInterval(() => setTimeLeft(prev => prev - 1), 1000);
-    return () => clearInterval(timer);
-  }, [isFocusing, timeLeft]);
+  }, [activeFocusSession.isActive]);
+
+  // ── 2. TIMER TICK DARI GLOBAL STORE ─────────────────────────────
+  useEffect(() => {
+    let interval: NodeJS.Timeout;
+
+    if (activeFocusSession.isActive) {
+      const checkTime = () => {
+        const now = Date.now();
+        const remainingSeconds = Math.floor((activeFocusSession.endTime - now) / 1000);
+
+        if (remainingSeconds <= 0) {
+          // WAKTU HABIS
+          setTimeLeft(0);
+          stopFocus();
+          setCanAttack(true); // Izinkan menyerang
+          new Audio('/sounds/success.mp3').play().catch(() => {});
+          addLog(`[TIME] Waktu fokus selesai! SEKARANG SERANG!`);
+        } else {
+          // Terus hitung mundur
+          setTimeLeft(remainingSeconds);
+        }
+      };
+
+      checkTime(); // Panggil sekali langsung
+      interval = setInterval(checkTime, 1000);
+    }
+
+    return () => clearInterval(interval);
+  }, [activeFocusSession.isActive, activeFocusSession.endTime]);
+
 
   // ── Win / lose checks ──────────────────────────────────────
   useEffect(() => {
     if (phase !== 'battle' || !boss) return;
     if (bossHp <= 0) {
       _applyReward(boss.exp, boss.gold, 1);
-      if (stats.hp > localHp) {
-        takeDamage(stats.hp - localHp);
-      }
+      if (stats.hp > localHp) takeDamage(stats.hp - localHp);
       if (recordBossDefeated) recordBossDefeated();
+      
       addLog(`[WIN] VICTORY! ${boss.name} defeated! +${boss.gold}G +${boss.exp}XP`);
       setTimeout(() => setPhase('victory'), 600);
     }
@@ -542,12 +511,29 @@ export default function FocusArena() {
     setTimeout(() => setDmgNums(prev => prev.filter(d => d.id !== id)), 900);
   };
 
-  // Format Waktu
   const formatTime = (secs: number) => {
     const m = Math.floor(secs / 60).toString().padStart(2, '0');
     const s = (secs % 60).toString().padStart(2, '0');
     return `${m}:${s}`;
   };
+
+  // ── Boss attacks ───────────────────────────────────────────
+  const doBossAttack = useCallback((isPenalty = false) => {
+    if (!boss) return;
+    const raw  = boss.atk + Math.floor(Math.random() * 8) + (isPenalty ? 10 : 0);
+    const def  = pStats.def;
+    const dmg  = Math.max(1, raw - Math.floor(def * 0.4));
+
+    setPlayerHit(true);
+    setTimeout(() => setPlayerHit(false), 300);
+    new Audio('/sounds/hurt.mp3').play().catch(() => {});
+
+    setLocalHp(hp => Math.max(0, hp - dmg));
+    
+    if (isPenalty) addLog(`[WARN] PENALTY! Boss marah karena kamu menyerah!`);
+    addLog(`[DMG] ${boss.name} memukulmu sebesar ${dmg} damage!`);
+  }, [boss, pStats.def]);
+
 
   // ── Player attacks ─────────────────────────────────────────
   const doAttack = useCallback(() => {
@@ -561,12 +547,10 @@ export default function FocusArena() {
     const raw        = pStats.atk + comboBonus + Math.floor(Math.random() * 8);
     const dmg        = Math.round(raw * (isCrit ? 2 : 1));
 
-    // Attack animation
     setIsAttacking(true);
     setTimeout(() => setIsAttacking(false), 350);
-    new Audio('/sounds/hit.mp3').play().catch(() => {}); // Suara player memukul
+    new Audio('/sounds/hit.mp3').play().catch(() => {});
 
-    // Boss flash
     setTimeout(() => { setBossHit(true); setTimeout(() => setBossHit(false), 200); }, 200);
 
     setBossHp(hp => Math.max(0, hp - dmg));
@@ -576,29 +560,12 @@ export default function FocusArena() {
     else if (newCombo % 3 === 0) addLog(`[COMBO] Combo x${newCombo}! +${comboBonus} bonus — ${dmg} dmg`);
     else addLog(`[ATK] You deal ${dmg} damage to ${boss.name}!`);
 
-    setCanAttack(false); // Reset timer
+    setCanAttack(false); // Reset timer attack
     
-    // Counter attack dari boss setelah diserang
+    // Boss counter attack
     setTimeout(() => doBossAttack(), 1000);
 
   }, [boss, phase, canAttack, bossHp, combo, pStats]);
-
-  // ── Boss attacks ───────────────────────────────────────────
-  const doBossAttack = useCallback((isPenalty = false) => {
-    if (!boss) return;
-    const raw  = boss.atk + Math.floor(Math.random() * 8) + (isPenalty ? 10 : 0);
-    const def  = pStats.def;
-    const dmg  = Math.max(1, raw - Math.floor(def * 0.4));
-
-    setPlayerHit(true);
-    setTimeout(() => setPlayerHit(false), 300);
-    new Audio('/sounds/hurt.mp3').play().catch(() => {}); // Suara player terkena hit
-
-    setLocalHp(hp => Math.max(0, hp - dmg));
-    
-    if (isPenalty) addLog(`[WARN] PENALTY! Boss marah karena kamu menyerah!`);
-    addLog(`[DMG] ${boss.name} memukulmu sebesar ${dmg} damage!`);
-  }, [boss, pStats.def]);
 
   // ── Start battle ───────────────────────────────────────────
   const startBattle = (b: Boss) => {
@@ -607,12 +574,10 @@ export default function FocusArena() {
     setLocalHp(stats.hp);
     setCombo(0);
     setBattleLog([]);
-    setIsFocusing(false);
     setCanAttack(false);
     setTimeLeft(0);
     setPhase('battle');
     addLog(`[START] Battle started! Defeat ${b.name}!`);
-    addLog(`[STAT] ATK: ${calcStats().atk} | DEF: ${calcStats().def} | INT: ${calcStats().int}`);
   };
 
   // ── Use potion ─────────────────────────────────────────────
@@ -632,7 +597,9 @@ export default function FocusArena() {
 
   // ── Flee ───────────────────────────────────────────────────
   const flee = () => {
-    if (isFocusing) {
+    if (activeFocusSession.isActive) {
+      stopFocus();
+      setTimeLeft(0);
       doBossAttack(true); // Kena hit karena kabur saat fokus
     }
     addLog('[FLEE] You fled the battle...');
@@ -677,12 +644,11 @@ export default function FocusArena() {
         </div>
       </div>
 
-      {/* Stats preview */}
       <div className="flex gap-4 mb-6 flex-wrap">
         {[
-          { label:'ATK', val: calcStats().atk, icon: <Swords size={12} className="text-pink-400"/>, col:'text-pink-400' },
-          { label:'DEF', val: calcStats().def, icon: <Shield size={12} className="text-cyan-400"/>, col:'text-cyan-400' },
-          { label:'INT', val: calcStats().int, icon: <Star size={12} className="text-amber-400"/>, col:'text-amber-400' },
+          { label:'ATK', val: pStats.atk, icon: <Swords size={12} className="text-pink-400"/>, col:'text-pink-400' },
+          { label:'DEF', val: pStats.def, icon: <Shield size={12} className="text-cyan-400"/>, col:'text-cyan-400' },
+          { label:'INT', val: pStats.int, icon: <Star size={12} className="text-amber-400"/>, col:'text-amber-400' },
         ].map(s => (
           <div key={s.label} className="bg-zinc-800 border border-zinc-700 px-4 py-2 flex items-center gap-2">
             {s.icon}
@@ -697,7 +663,6 @@ export default function FocusArena() {
         </div>
       </div>
 
-      {/* Boss grid (Sekarang nampilin 10 Monster) */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
         {BOSSES.map(b => (
           <button key={b.id} onClick={() => startBattle(b)}
@@ -730,11 +695,10 @@ export default function FocusArena() {
   );
 
   // ════════════════════════════════════════════════════════════
-  // RENDER: VICTORY
+  // RENDER: VICTORY & DEFEAT
   // ════════════════════════════════════════════════════════════
   if (phase === 'victory' && boss) return (
-    <div className="flex flex-col items-center justify-center min-h-[60vh] gap-6"
-      style={{ fontFamily: "'Courier New', monospace" }}>
+    <div className="flex flex-col items-center justify-center min-h-[60vh] gap-6" style={{ fontFamily: "'Courier New', monospace" }}>
       <div className="text-center">
         <div className="flex justify-center mb-3">
           <Trophy size={48} className="text-amber-400 drop-shadow-[0_0_15px_rgba(251,191,36,0.5)]" />
@@ -756,12 +720,8 @@ export default function FocusArena() {
     </div>
   );
 
-  // ════════════════════════════════════════════════════════════
-  // RENDER: DEFEAT
-  // ════════════════════════════════════════════════════════════
   if (phase === 'defeat' && boss) return (
-    <div className="flex flex-col items-center justify-center min-h-[60vh] gap-6"
-      style={{ fontFamily: "'Courier New', monospace" }}>
+    <div className="flex flex-col items-center justify-center min-h-[60vh] gap-6" style={{ fontFamily: "'Courier New', monospace" }}>
       <div className="text-center">
         <div className="flex justify-center mb-3">
           <Skull size={48} className="text-zinc-400 drop-shadow-[0_0_15px_rgba(148,163,184,0.5)]" />
@@ -770,8 +730,7 @@ export default function FocusArena() {
         <p className="text-zinc-400 text-[11px] uppercase tracking-widest mt-1">{boss.name} was too powerful</p>
       </div>
       <p className="text-[10px] text-zinc-500 text-center max-w-xs">
-        Dealt <span className="text-white">{boss.maxHp - bossHp}</span> / <span className="text-white">{boss.maxHp}</span> HP.
-        Equip better gear and try again!
+        Dealt <span className="text-white">{boss.maxHp - bossHp}</span> / <span className="text-white">{boss.maxHp}</span> HP. Equip better gear and try again!
       </p>
       <div className="flex gap-3">
         <button onClick={() => startBattle(boss)}
@@ -812,33 +771,24 @@ export default function FocusArena() {
         </div>
       </div>
 
-      {/* ── Main battle grid ── */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 flex-1">
 
         {/* ─── LEFT: Player character ─── */}
         <div className="flex flex-col gap-3">
-          {/* Player HP */}
           <div className="bg-zinc-800 border-2 border-zinc-700 p-3">
             <div className="flex justify-between mb-1">
               <span className="text-[9px] text-pink-400 flex items-center gap-1"><Heart size={10}/> {tFocus.yourHp}</span>
               <span className="text-[9px] text-zinc-400">{localHp}/{stats.maxHp}</span>
             </div>
             <div className="h-3 bg-zinc-900 border border-zinc-700 overflow-hidden">
-              <div className={`h-full bg-pink-500 transition-all duration-300 ${playerHit ? 'opacity-40' : ''}`}
-                style={{ width:`${playerHpPct}%` }}/>
+              <div className={`h-full bg-pink-500 transition-all duration-300 ${playerHit ? 'opacity-40' : ''}`} style={{ width:`${playerHpPct}%` }}/>
             </div>
           </div>
 
-          {/* Character sprite */}
           <div className={`relative bg-zinc-900 border-2 border-zinc-700 overflow-hidden flex items-center justify-center`}
-            style={{ minHeight:200,
-              backgroundImage:'linear-gradient(rgba(255,255,255,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.03) 1px,transparent 1px)',
-              backgroundSize:'8px 8px' }}>
-            {/* Floor */}
+            style={{ minHeight:200, backgroundImage:'linear-gradient(rgba(255,255,255,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.03) 1px,transparent 1px)', backgroundSize:'8px 8px' }}>
             <div className="absolute bottom-0 left-0 right-0 h-6 bg-zinc-800 border-t border-zinc-700"/>
-            {/* Player hit flash */}
             {playerHit && <div className="absolute inset-0 bg-red-500 opacity-25 pointer-events-none z-20"/>}
-            {/* Character with attack animation */}
             <div className={`transition-transform duration-[200ms] ${isAttacking ? 'translate-x-8' : 'translate-x-0'}`}
               style={{ transform: isAttacking ? 'translateX(32px)' : 'translateX(0px)', transition:'transform 0.2s' }}>
               <div style={{ transform:'scale(1.4)' }}>
@@ -847,7 +797,6 @@ export default function FocusArena() {
             </div>
           </div>
 
-          {/* Player stats */}
           <div className="grid grid-cols-3 gap-2">
             {[
               { label:'ATK', val:pStats.atk, col:'text-pink-400' },
@@ -864,30 +813,38 @@ export default function FocusArena() {
 
         {/* ─── CENTER: Controls + log ─── */}
         <div className="flex flex-col gap-3">
-          {/* ATTACK BUTTON */}
           <div className="bg-zinc-800 border-2 border-zinc-700 p-4 flex flex-col gap-3">
             <p className="text-[10px] text-zinc-400 font-bold uppercase text-center flex items-center justify-center gap-2">
               <Timer size={14} className="text-cyan-400"/> {tFocus.pomodoro}
             </p>
             
-            {!isFocusing && !canAttack && (
+            {/* 🔥 MENGGUNAKAN LOGIKA GLOBAL STORE DI SINI */}
+            {!activeFocusSession.isActive && !canAttack && (
               <div className="flex flex-col gap-2">
                 <label className="text-[9px] text-zinc-500 uppercase">{tFocus.setMins}</label>
                 <input type="number" min="1" max="120" value={focusMinutes} onChange={e => setFocusMinutes(e.target.value === '' ? '' : Number(e.target.value))} 
                   className="bg-zinc-900 border border-zinc-700 p-2 text-white font-mono text-center outline-none focus:border-cyan-500"/>
-                <button onClick={() => { const mins = Number(focusMinutes) || 1; setTimeLeft(mins * 60); setIsFocusing(true); addLog(`[TIME] Memulai sesi fokus ${mins} menit. JANGAN MENYERAH!`); }}
+                <button onClick={() => { 
+                    const mins = Number(focusMinutes) || 1; 
+                    startFocus(boss.id, mins); // Panggil fungsi Zustand!
+                    addLog(`[TIME] Memulai sesi fokus ${mins} menit. JANGAN MENYERAH!`); 
+                  }}
                   className="mt-2 py-3 bg-cyan-600 hover:bg-cyan-500 text-white text-xs font-bold uppercase tracking-widest border-2 border-cyan-400 shadow-[0_4px_0_#0891b2] active:translate-y-[4px] active:shadow-none transition-all flex items-center justify-center gap-2">
                   <Play size={14}/> {tFocus.start}
                 </button>
               </div>
             )}
 
-            {isFocusing && (
+            {activeFocusSession.isActive && (
               <div className="flex flex-col items-center gap-3">
                 <div className="text-3xl font-bold font-pixel text-cyan-400 animate-pulse drop-shadow-[0_0_8px_rgba(34,211,238,0.5)]">
                   {formatTime(timeLeft)}
                 </div>
-                <button onClick={() => { setIsFocusing(false); setTimeLeft(0); doBossAttack(true); }}
+                <button onClick={() => { 
+                    stopFocus(); 
+                    setTimeLeft(0); 
+                    doBossAttack(true); // Hukuman dari bos
+                  }}
                   className="w-full py-2 bg-zinc-800 text-zinc-400 hover:bg-red-950 hover:text-red-400 border border-zinc-700 hover:border-red-500 text-[10px] font-bold uppercase transition-all flex items-center justify-center gap-2">
                   <Square size={12}/> {tFocus.giveUp}
                 </button>
@@ -904,7 +861,7 @@ export default function FocusArena() {
             )}
           </div>
 
-          {/* Potion buttons */}
+          {/* Potions */}
           {potions.length > 0 && (
             <div className="bg-zinc-800 border-2 border-zinc-700 p-3">
               <p className="text-[8px] text-zinc-500 uppercase tracking-widest mb-2 flex items-center gap-1">
@@ -923,7 +880,6 @@ export default function FocusArena() {
             </div>
           )}
 
-          {/* Battle log */}
           <div className="flex-1 bg-zinc-900 border-2 border-zinc-700 flex flex-col overflow-hidden">
             <div className="px-3 py-1.5 border-b border-zinc-800">
               <span className="text-[8px] text-zinc-500 uppercase tracking-widest">{tFocus.battleLog}</span>
@@ -938,45 +894,33 @@ export default function FocusArena() {
 
         {/* ─── RIGHT: Boss ─── */}
         <div className="flex flex-col gap-3">
-          {/* Boss HP */}
           <div className={`bg-zinc-800 border-2 ${boss.border} p-3`}>
             <div className="flex justify-between mb-1">
               <span className={`text-[9px] font-bold uppercase ${RARITY_LABEL[boss.rarity]}`}>{boss.name}</span>
               <span className="text-[9px] text-zinc-400">{bossHp}/{boss.maxHp}</span>
             </div>
             <div className="h-3 bg-zinc-900 border border-zinc-700 overflow-hidden">
-              <div className={`h-full ${boss.barColor} transition-all duration-300 ${bossHit ? 'opacity-40' : ''}`}
-                style={{ width:`${bossHpPct}%` }}/>
+              <div className={`h-full ${boss.barColor} transition-all duration-300 ${bossHit ? 'opacity-40' : ''}`} style={{ width:`${bossHpPct}%` }}/>
             </div>
           </div>
 
-          {/* Boss arena */}
           <div className="relative bg-zinc-900 border-2 border-zinc-700 overflow-hidden flex items-center justify-center"
-            style={{ minHeight:200,
-              backgroundImage:'linear-gradient(rgba(255,255,255,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.03) 1px,transparent 1px)',
-              backgroundSize:'8px 8px' }}>
+            style={{ minHeight:200, backgroundImage:'linear-gradient(rgba(255,255,255,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.03) 1px,transparent 1px)', backgroundSize:'8px 8px' }}>
             <div className="absolute bottom-0 left-0 right-0 h-6 bg-zinc-800 border-t border-zinc-700"/>
-            {/* Boss hit flash */}
             {bossHit && <div className="absolute inset-0 bg-red-500 opacity-30 pointer-events-none z-20"/>}
-            {/* Boss sprite */}
-            <div style={{ filter:`drop-shadow(0 0 12px ${boss.aura}66)` }}
-              className={`transition-transform duration-100 ${bossHit ? 'translate-x-1' : 'translate-x-0'}`}>
+            <div style={{ filter:`drop-shadow(0 0 12px ${boss.aura}66)` }} className={`transition-transform duration-100 ${bossHit ? 'translate-x-1' : 'translate-x-0'}`}>
               <div style={{ transform:'scale(1.4)' }}>
                 {boss.sprite}
               </div>
             </div>
-            {/* Damage numbers */}
             {dmgNums.map(d => (
-              <div key={d.id}
-                className={`absolute top-4 pointer-events-none font-bold text-[14px] z-30
-                  ${d.crit ? 'text-yellow-300' : 'text-white'}`}
+              <div key={d.id} className={`absolute top-4 pointer-events-none font-bold text-[14px] z-30 ${d.crit ? 'text-yellow-300' : 'text-white'}`}
                 style={{ left:`${d.x}%`, transform:'translateX(-50%)', animation:'float-up 0.9s ease-out forwards' }}>
                 {d.crit ? '★ ' : ''}{d.val}
               </div>
             ))}
           </div>
 
-          {/* Boss info */}
           <div className={`bg-zinc-800 border-2 ${boss.border} p-3`}>
             <p className={`text-[8px] font-bold uppercase ${RARITY_LABEL[boss.rarity]}`}>{boss.rarity}</p>
             <p className="text-[10px] text-white font-bold uppercase mt-0.5">{boss.name}</p>
@@ -991,7 +935,6 @@ export default function FocusArena() {
         </div>
       </div>
 
-      {/* Float-up animation */}
       <style>{`
         @keyframes float-up {
           0%   { transform: translateX(-50%) translateY(0px); opacity: 1; }

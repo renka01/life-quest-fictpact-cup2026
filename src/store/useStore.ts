@@ -120,6 +120,14 @@ export type EquippedItems = {
   [key in EquipSlot]?: number;
 };
 
+// 🔥 TIPE DATA BARU UNTUK FOCUS ARENA
+export interface ActiveFocusSession {
+  isActive: boolean;
+  bossId: string | number | null;
+  duration: number;
+  endTime: number;
+}
+
 // ==========================================
 // 2. STATE & ACTIONS INTERFACE
 // ==========================================
@@ -188,12 +196,18 @@ interface LifeQuestStore {
   healPlayer: (amount: number) => void;
   consumeItem: (itemId: number) => void;
 
-  // 🔥 CLOUD SYNC
+  // 🔥 STATE & ACTIONS FOCUS ARENA
+  activeFocusSession: ActiveFocusSession;
+  startFocus: (bossId: string | number, duration: number) => void;
+  stopFocus: () => void;
+
+  // CLOUD SYNC
   isSyncing: boolean;
   hasLoadedFromCloud: boolean; 
   setHasLoadedFromCloud: (val: boolean) => void;
   loadFromCloud: (cloudState: any) => void;
-syncToCloud: (isManual?: boolean) => Promise<void>;}
+  syncToCloud: (isManual?: boolean) => Promise<void>;
+}
 
 // ==========================================
 // 3. FUNGSI HELPER
@@ -255,8 +269,34 @@ export const useStore = create<LifeQuestStore>()(
       },
       alertDialog: { isOpen: false, title: "", message: "", type: "info" },
       confirmDialog: { isOpen: false, message: "", onConfirm: () => {} },
+      
+      // 🔥 INITIAL DATA FOCUS ARENA
+      activeFocusSession: {
+        isActive: false,
+        bossId: null,
+        duration: 0,
+        endTime: 0
+      },
 
-      // 🔥 ACTIONS CLOUD SYNC
+      // --- ACTIONS FOCUS ARENA ---
+      startFocus: (bossId, duration) => set({
+        activeFocusSession: {
+          isActive: true,
+          bossId,
+          duration,
+          endTime: Date.now() + duration * 60 * 1000 // Menit diubah jadi milidetik
+        }
+      }),
+      stopFocus: () => set({
+        activeFocusSession: {
+          isActive: false,
+          bossId: null,
+          duration: 0,
+          endTime: 0
+        }
+      }),
+
+      // --- ACTIONS CLOUD SYNC ---
       isSyncing: false,
       hasLoadedFromCloud: false,
       setHasLoadedFromCloud: (val) => set({ hasLoadedFromCloud: val }),
@@ -274,7 +314,6 @@ export const useStore = create<LifeQuestStore>()(
         }));
       },
 
-// Cari fungsi ini dan timpa
       syncToCloud: async (isManual = false) => {
         const state = get();
         if (!state.userProfile.accountName || !state.hasLoadedFromCloud) return;
@@ -291,7 +330,8 @@ export const useStore = create<LifeQuestStore>()(
             dailyProgress: state.dailyProgress,
             inventory: state.inventory,
             equippedItems: state.equippedItems,
-            recurringTransactions: state.recurringTransactions
+            recurringTransactions: state.recurringTransactions,
+            activeFocusSession: state.activeFocusSession // 🔥 Fokus sekarang ikut di-save ke database!
           };
 
           const res = await fetch('/api/progress', {
@@ -313,6 +353,7 @@ export const useStore = create<LifeQuestStore>()(
           set({ isSyncing: false });
         }
       },
+
       // --- ACTIONS PROFILE ---
       setUserProfile: (profile) => set((state) => ({
         userProfile: { 
