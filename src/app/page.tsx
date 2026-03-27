@@ -36,6 +36,7 @@ import Finance from "./finance";
 import CalendarBoard from "@/components/CalendarBoard";
 import SettingsBoard from "@/components/SettingsBoard";
 import { translations } from "@/utils/translations";
+import { signOut } from "next-auth/react";
 
 // --- KOMPONEN TRANSISI RETRO (CYBER SHUTTERS) ---
 const RetroTransition = ({ isActive }: { isActive: boolean }) => {
@@ -224,10 +225,10 @@ export default function Home() {
     setActiveMenu("Keuangan");
   };
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
     setUserProfile({ accountName: "", nickname: "", gender: null, avatarId: null });
     setHasLoadedFromCloud(false); // Reset flag
-    router.push('/login');
+    await signOut({ redirect: true, callbackUrl: "/login" });
   };
 
   const handleClaimReward = (type: 'login' | 'task' | 'boss') => {
