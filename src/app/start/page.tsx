@@ -255,6 +255,19 @@ export default function StartPage() {
               {loading ? 'MEMPROSES...' : tab === 'login' ? 'MULAI PETUALANGAN' : 'BUAT KARAKTER'}
             </button>
 
+            {/* Link "Sudah punya akun?" - Langsung pindah ke tab MASUK */}
+            {tab === 'register' && (
+              <div className="text-center mt-2">
+                <button
+                  type="button"
+                  onClick={() => setTab('login')}
+                  className="text-sm text-amber-500 hover:text-amber-400 transition-colors font-medium underline underline-offset-2"
+                >
+                 Sudah punya akun? 
+                </button>
+              </div>
+            )}
+
             <div className="flex items-center gap-4 my-2 opacity-60">
               <div className="flex-1 h-px bg-zinc-500"/>
               <span className="text-xs text-zinc-400 font-bold uppercase tracking-widest">Atau</span>
