@@ -203,7 +203,20 @@ export const translations: any = {
     },
     quotes: {
       dash: "Setiap hari adalah kesempatan untuk grinding.", cal: "Pantau tenggat waktu dan jadwalkan misimu.",
-      focus: "Kalahkan monster kemalasan dengan fokus penuh.", stats: "Data tidak pernah berbohong.", set: "Sesuaikan dunia sesuai keinginanmu."
+      focus: "Kalahkan monster kemalasan dengan fokus penuh.", stats: "Data tidak pernah berbohong.", set: "Sesuaikan dunia sesuai keinginanmu.",
+      // DAFTAR QUOTE ACAK ID
+      random: [
+        "Setiap hari adalah kesempatan untuk grinding.",
+        "Misi kecil hari ini adalah kemenangan besar esok hari.",
+        "Jangan biarkan nyawamu habis sebelum tugas selesai.",
+        "Level up tidak terjadi dalam semalam. Terus berjuang!",
+        "Monster terkuat yang harus kau kalahkan adalah kemalasan.",
+        "Ambil pedangmu, selesaikan Todo-list mu!",
+        "Bahkan seorang pahlawan butuh waktu untuk istirahat.",
+        "Kumpulkan gold, hemat potion, capai targetmu.",
+        "Petualangan terhebat dimulai dari satu langkah kecil.",
+        "Kegagalan hanyalah checkpoint. Coba lagi!"
+      ]
     },
 
     // Dashboard
@@ -507,7 +520,20 @@ export const translations: any = {
     },
     quotes: {
       dash: "Every day is an opportunity to grind.", cal: "Monitor deadlines and schedule your missions.",
-      focus: "Defeat the monster of laziness with full focus.", stats: "Data never lies.", set: "Customize the world to your liking."
+      focus: "Defeat the monster of laziness with full focus.", stats: "Data never lies.", set: "Customize the world to your liking.",
+      // DAFTAR QUOTE ACAK EN
+      random: [
+        "Every day is an opportunity to grind.",
+        "A small quest today is a grand victory tomorrow.",
+        "Don't let your HP drop before the task is done.",
+        "Leveling up doesn't happen overnight. Keep fighting!",
+        "The strongest monster you must defeat is laziness.",
+        "Take your sword, clear your Todo-list!",
+        "Even a hero needs time to rest.",
+        "Gather gold, save potions, reach your goals.",
+        "The greatest adventure begins with a single step.",
+        "Failure is just a checkpoint. Try again!"
+      ]
     },
 
     // Dashboard

@@ -82,6 +82,9 @@ export default function Home() {
   const [showCoinAnim, setShowCoinAnim] = useState(false);
   const [isTransitioning, setIsTransitioning] = useState(false);
 
+  // --- STATE UNTUK QUOTE ACAK ---
+  const [quoteIndex, setQuoteIndex] = useState(0); 
+
   const [dashboardFinanceAction, setDashboardFinanceAction] = useState<"rekening" | "tabungan" | "tagihan" | null>(null);
   const { settings } = useStore();
   const tPage = translations[settings?.language || 'id']?.page || translations['id'].page;
@@ -96,9 +99,11 @@ export default function Home() {
   const dp = dailyProgress || { loginClaimed: false, tasksCompleted: 0, taskClaimed: false, bossesDefeated: 0, bossClaimed: false };
   const hasClaimableQuests = (!dp.loginClaimed) || (dp.tasksCompleted >= 3 && !dp.taskClaimed) || (dp.bossesDefeated >= 1 && !dp.bossClaimed);
 
-  // Set isMounted to true on client
+  // Set isMounted to true on client & Pilih Quote Acak
   useEffect(() => {
     setIsMounted(true);
+    // Cukup simpan angka acak antara 0 sampai 9 (karena ada 10 quote)
+    setQuoteIndex(Math.floor(Math.random() * 10));
   }, []);
 
   // ========================================================
@@ -416,7 +421,10 @@ export default function Home() {
             </div>
           </>
         );
-      case "Dashboard": return <HeaderQuote text={tQuotes.dash} />;
+      
+      // MENGUBAH DASHBOARD UNTUK MEMANGGIL STATE QUOTE ACAK DARI TRANSLATIONS
+      case "Dashboard": return <HeaderQuote text={tQuotes?.random?.[quoteIndex] || tQuotes.dash} />;
+      
       case "Kalender": return <HeaderQuote text={tQuotes.cal} />;
       case "Focus Arena": return <HeaderQuote text={tQuotes.focus} />;
       case "Statistik": return <HeaderQuote text={tQuotes.stats} />;
@@ -425,11 +433,23 @@ export default function Home() {
     }
   };
 
-  // Desain Quote Header Baru
-  const HeaderQuote = ({ text }: { text: string }) => (
-    <div className="hidden md:flex items-center gap-3 px-4 py-2.5 bg-zinc-800 border-2 border-zinc-600 shadow-[4px_4px_0_#000] w-full max-w-xl">
-      <div className="w-2 h-2 bg-purple-500 rounded-none animate-pulse shrink-0"></div>
-      <p className="text-xs text-zinc-300 font-mono italic tracking-wide">&quot;{text}&quot;</p>
+  // Desain Quote Header Baru (Dengan Tinggi Statis & Font Pixel)
+  const HeaderQuote = ({ text, accentColor = "amber", label = "HERO'S LOG" }: { 
+    text: string; 
+    accentColor?: "amber" | "teal" | "purple";
+    label?: string;
+  }) => (
+    <div className="hidden md:flex relative max-w-xl w-full h-[54px] bg-zinc-800 border-2 border-zinc-600 shadow-[4px_4px_0_#000] overflow-hidden">
+      <div className={`w-1.5 flex-shrink-0 ${accentColor === "teal" ? "bg-teal-500" : accentColor === "purple" ? "bg-purple-500" : "bg-amber-500"}`} 
+           style={{ backgroundImage: `repeating-linear-gradient(to bottom, currentColor 0px, currentColor 4px, transparent 4px, transparent 8px)` }} />
+      <div className="flex items-center gap-3 px-4 py-2 flex-1 min-w-0">
+        <div className="flex flex-col gap-0.5 flex-1 min-w-0">
+          <span className="font-pixel text-[6px] tracking-widest text-purple-400 uppercase">{label}</span>
+          <span className="font-pixel text-[7px] md:text-[8px] text-zinc-300 leading-normal line-clamp-2">
+            &quot;{text}&quot;
+          </span>
+        </div>
+      </div>
     </div>
   );
 
@@ -471,8 +491,8 @@ export default function Home() {
       <Navbar activeMenu={activeMenu} setActiveMenu={handleMenuChange} />
 
       <div className="flex-1 flex flex-col h-full relative z-10 min-w-0">
-        <header className="min-h-20 bg-zinc-900 border-b-4 border-zinc-700 flex flex-col lg:flex-row justify-between items-center gap-4 p-4 lg:px-8 z-50 shrink-0">
-          <div className="flex items-center gap-4 w-full lg:w-2/3 max-w-2xl relative">
+        <header className="h-20 bg-zinc-900 border-b-4 border-zinc-700 flex flex-col lg:flex-row justify-between items-center gap-4 p-4 lg:px-8 z-50 shrink-0">
+          <div className="flex items-center gap-4 w-full lg:w-2/3 max-w-2xl relative h-full">
             {renderHeaderContent()}
           </div>
 
