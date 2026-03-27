@@ -7,8 +7,8 @@ import {
 import { useStore } from '@/store/useStore';
 
 export default function AchievementBoard() {
-  // Ambil data real dari global state
-  const { tasks, stats, dailyProgress, equippedItems } = useStore();
+  // Ambil data real dari global state, tambahkan 'accounts'
+  const { tasks, stats, dailyProgress, equippedItems, accounts } = useStore();
 
   // Hitung progress secara dinamis
   const completedTasksCount = tasks?.filter((t: any) => t.done).length || 0;
@@ -17,9 +17,14 @@ export default function AchievementBoard() {
   const currentStreak = stats?.streak || 0; 
   const bossesDefeated = dailyProgress?.bossesDefeated || 0;
   
-  // Asumsi untuk tabungan dan fokus jika belum ada state pastinya, kita set 0 dulu
-  const currentSavings = 0; // Nanti bisa diganti: finance?.savings || 0
-  const focusMinutes = 0; // Nanti bisa diganti: stats?.focusTime || 0
+  // Hitung total saldo di semua akun bertipe "tabungan"
+  const currentSavings = accounts
+    ?.filter((acc) => acc.type === 'tabungan')
+    .reduce((total, acc) => total + acc.balance, 0) || 0;
+
+  // Karena di useStore belum ada state untuk menyimpan total menit Focus Arena,
+  // kita biarkan 0 dulu. Nanti tinggal disambung kalau state-nya sudah kamu buat.
+  const focusMinutes = 0; 
   
   // Hitung berapa item yang sedang dipakai (weapon, armor, dll)
   const equippedCount = Object.values(equippedItems || {}).filter(Boolean).length;
@@ -38,7 +43,7 @@ export default function AchievementBoard() {
     // --- KATEGORI: FOKUS & KONSISTENSI ---
     { id: 7, title: "Nyala Api Perjuangan", desc: "Pertahankan Streak Login 7 hari.", icon: Flame, color: "text-orange-500", bg: "bg-orange-500/10", border: "border-orange-500", progress: currentStreak, max: 7 },
     { id: 8, title: "Meditasi Mendalam", desc: "Gunakan Focus Arena selama 500 menit.", icon: Hourglass, color: "text-blue-400", bg: "bg-blue-500/10", border: "border-blue-500", progress: focusMinutes, max: 500 },
-    { id: 9, title: "Spesialis Rutinitas", desc: "Selesaikan 30 misi rutinitas harian.", icon: Activity, color: "text-cyan-400", bg: "bg-cyan-500/10", border: "border-cyan-500", progress: completedTasksCount, max: 30 }, // Sementara diproksikan ke total task
+    { id: 9, title: "Spesialis Rutinitas", desc: "Selesaikan 30 misi.", icon: Activity, color: "text-cyan-400", bg: "bg-cyan-500/10", border: "border-cyan-500", progress: completedTasksCount, max: 30 }, 
     
     // --- KATEGORI: COMBAT ---
     { id: 10, title: "Pelindung Desa", desc: "Kalahkan Boss pertamamu.", icon: Shield, color: "text-red-500", bg: "bg-red-500/10", border: "border-red-500", progress: bossesDefeated, max: 1 },
