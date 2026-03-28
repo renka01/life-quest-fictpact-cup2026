@@ -265,7 +265,7 @@ export default function Home() {
     switch (activeMenu) {
       case "Dashboard":
         return (
-          <div className="animate-in fade-in slide-in-from-left-4 duration-500 h-full">
+          <div className="animate-in fade-in slide-in-from-left-4 duration-500 w-full flex flex-col">
             <DashboardBoard
               onOpenTaskModal={(type) => openAddModal(type ?? null, false)}
               onOpenFinanceAction={handleDashboardFinanceAction}
@@ -277,7 +277,7 @@ export default function Home() {
 
       case "Misi":
         return (
-          <div className="animate-in fade-in slide-in-from-left-4 duration-500 flex flex-col h-full">
+          <div className="animate-in fade-in slide-in-from-left-4 duration-500 flex flex-col w-full min-h-[80vh]">
             <div className="flex flex-col md:flex-row md:justify-between md:items-end gap-4 mb-6 shrink-0 border-b border-zinc-700/50 pb-6">
               <div className="flex flex-col gap-3 text-left">
                 <h1 className="font-pixel text-sm md:text-base text-white flex items-center gap-3 drop-shadow-[2px_2px_0_#000] uppercase">
@@ -307,42 +307,42 @@ export default function Home() {
         );
       case "Toko & Loot":
         return (
-          <div className="animate-in fade-in slide-in-from-left-4 duration-500 h-full">
+          <div className="animate-in fade-in slide-in-from-left-4 duration-500 w-full flex flex-col">
             <ShopBoard searchQuery={searchQuery} activeCategory={shopCategory} />
           </div>
         );
 
       case "Keuangan":
         return (
-          <div className="animate-in fade-in slide-in-from-right-4 duration-500">
+          <div className="animate-in fade-in slide-in-from-right-4 duration-500 w-full flex flex-col">
             <Finance initialOpenType={dashboardFinanceAction} searchQuery={searchQuery} activeCategory={financeCategory} />
           </div>
         );
 
       case "Kalender":
         return (
-          <div className="animate-in fade-in slide-in-from-left-4 duration-500 h-full">
+          <div className="animate-in fade-in slide-in-from-left-4 duration-500 w-full flex flex-col">
             <CalendarBoard />
           </div>
         );
 
       case "Focus Arena":
         return (
-          <div className="animate-in fade-in slide-in-from-left-4 duration-500 h-full">
+          <div className="animate-in fade-in slide-in-from-left-4 duration-500 w-full flex flex-col">
             <FocusArena />
           </div>
         );
 
       case "Statistik":
         return (
-          <div className="animate-in fade-in slide-in-from-left-4 duration-500 h-full">
+          <div className="animate-in fade-in slide-in-from-left-4 duration-500 w-full flex flex-col">
             <StatisticsBoard />
           </div>
         );
 
       case "Pengaturan":
         return (
-          <div className="animate-in fade-in slide-in-from-left-4 duration-500 h-full">
+          <div className="animate-in fade-in slide-in-from-left-4 duration-500 w-full flex flex-col">
             <SettingsBoard />
           </div>
         );
@@ -362,7 +362,7 @@ export default function Home() {
 
       case "Pencapaian":
         return (
-          <div className="animate-in fade-in slide-in-from-left-4 duration-500 h-full">
+          <div className="animate-in fade-in slide-in-from-left-4 duration-500 w-full flex flex-col">
             <AchievementBoard />
           </div>
         );  
@@ -470,7 +470,7 @@ export default function Home() {
   );
 
   return (
-    <div className="h-screen w-full bg-zinc-900 text-zinc-200 font-mono flex overflow-hidden selection:bg-purple-500 selection:text-white relative">
+    <div className="h-[100dvh] w-full bg-zinc-900 text-zinc-200 font-mono flex overflow-hidden selection:bg-purple-500 selection:text-white relative">
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
 
@@ -688,8 +688,10 @@ export default function Home() {
           </div>
         </header>
 
-        <main className="flex-1 overflow-y-auto overflow-x-hidden bg-zinc-900 p-4 lg:p-8 pb-24 md:pb-8 custom-scrollbar">
+        <main className="flex-1 overflow-y-auto overflow-x-hidden bg-zinc-900 p-4 lg:p-8 custom-scrollbar">
           {renderContent()}
+          {/* Spacer fisik untuk menjamin konten mobile aman dari navbar */}
+          <div className="h-32 md:h-8 w-full shrink-0 block pointer-events-none" />
         </main>
       </div>
 

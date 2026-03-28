@@ -127,10 +127,10 @@ export default function FinanceFormModal({ isOpen, onClose, type }: FinanceModal
 
   return (
     <div className="fixed inset-0 bg-black/90 backdrop-blur-sm z-[100] flex items-center justify-center p-4">
-      <div className={`bg-zinc-900 border-4 ${borderClass} rounded-none w-full max-w-md overflow-hidden animate-in zoom-in duration-200 shadow-[8px_8px_0_#000]`}>
+      <div className={`bg-zinc-900 border-4 ${borderClass} rounded-none w-full max-w-md max-h-[80dvh] flex flex-col animate-in zoom-in duration-200 shadow-[8px_8px_0_#000] mb-4`}>
         
         {/* HEADER */}
-        <div className="p-4 border-b-4 border-zinc-700 flex justify-between items-center bg-zinc-800">
+        <div className="p-4 border-b-4 border-zinc-700 flex justify-between items-center bg-zinc-800 shrink-0">
           <div className="flex items-center gap-2">
             {isRekening ? <CreditCard size={16} className="text-emerald-400"/> : <PiggyBank size={16} className="text-cyan-400"/>}
             <h2 className="font-pixel text-[10px] text-white tracking-widest uppercase italic">
@@ -142,7 +142,7 @@ export default function FinanceFormModal({ isOpen, onClose, type }: FinanceModal
           </button>
         </div>
 
-        <div className="p-6 flex flex-col gap-5 max-h-[70vh] overflow-y-auto custom-scrollbar text-left text-white">
+        <div className="p-6 flex-1 min-h-0 flex flex-col gap-5 overflow-y-auto custom-scrollbar text-left text-white">
           
           {/* 1. PILIH PROVIDER */}
           <div className="flex flex-col gap-2">
@@ -228,10 +228,12 @@ export default function FinanceFormModal({ isOpen, onClose, type }: FinanceModal
               />
             </div>
           )}
+          {/* Spacer */}
+          <div className="h-16 md:h-4 w-full shrink-0" />
         </div>
 
         {/* FOOTER */}
-        <div className="p-4 bg-zinc-800 border-t-2 border-zinc-700 flex justify-end gap-3 font-pixel">
+        <div className="px-4 pt-4 pb-6 bg-zinc-800 border-t-2 border-zinc-700 flex justify-end gap-3 font-pixel shrink-0">
           <button onClick={onClose} className="px-4 py-2 text-[10px] font-bold text-zinc-400 hover:text-white uppercase italic transition-colors">Batal</button>
           <button 
             type="button"

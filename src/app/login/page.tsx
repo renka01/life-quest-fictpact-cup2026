@@ -583,7 +583,7 @@ export default function LoginPage() {
   };
   
   return (
-    <div className="min-h-screen bg-zinc-900 flex flex-col relative w-full overflow-x-hidden" style={{ fontFamily: "'Inter', 'Segoe UI', sans-serif" }}>
+    <div className="min-h-[100dvh] bg-zinc-900 flex flex-col relative w-full overflow-x-hidden" style={{ fontFamily: "'Inter', 'Segoe UI', sans-serif" }}>
       
       {isModalOpen && modalContent && (
         <PolicyModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} title={modalContent.title} lang={lang}>

@@ -80,8 +80,7 @@ export default function CharacterSelection({ onComplete }: CharacterSelectionPro
   };
 
   return (
-    <div className="min-h-screen w-full bg-zinc-900 flex flex-col items-center justify-center p-8 font-mono relative overflow-x-hidden overflow-y-auto py-12 selection:bg-amber-500 selection:text-zinc-900">
-      
+    <div className="min-h-[100dvh] w-full bg-zinc-900 flex flex-col items-center justify-center p-8 font-mono relative overflow-x-hidden overflow-y-auto py-12 selection:bg-amber-500 selection:text-zinc-900">
       {/* Background grid - Disesuaikan dengan warna login */}
       <div
         className="absolute inset-0 pointer-events-none opacity-20"

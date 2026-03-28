@@ -90,13 +90,13 @@ export const TaskFormModal = ({ isOpen, onClose, initialType, isFixed }: { isOpe
 
   return (
     <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-[100] flex justify-center items-center p-4">
-      <div className={`w-full max-w-md bg-zinc-900 border-4 rounded-none flex flex-col overflow-hidden transition-all duration-300 ${mTheme.border} ${mTheme.shadow}`}>
+      <div className={`w-full max-w-md max-h-[80dvh] bg-zinc-900 border-4 rounded-none flex flex-col overflow-hidden transition-all duration-300 ${mTheme.border} ${mTheme.shadow} mb-4`}>
         <div className={`${mTheme.headerBg} border-b-4 ${mTheme.headerBorder} p-4 flex justify-between items-center`}>
           <h3 className={`font-pixel text-[10px] uppercase tracking-widest ${mTheme.text}`}>{isFixed ? mTheme.title : tForm.newTitle}</h3>
           <button onClick={onClose} className={`${mTheme.text} ${mTheme.hover} transition-colors`}><X size={18} /></button>
         </div>
         
-        <div className="p-6 flex flex-col gap-5 overflow-y-auto max-h-[70vh]">
+        <div className="p-6 flex-1 min-h-0 flex flex-col gap-5 overflow-y-auto custom-scrollbar">
           <div className="flex flex-col gap-1.5">
             <label className="text-[10px] text-zinc-400 font-bold uppercase tracking-wider">{tForm.taskName}</label>
             <input type="text" value={newTaskTitle} onChange={(e) => setNewTaskTitle(e.target.value)} placeholder={tForm.taskNamePh} className={`bg-zinc-800 border-2 border-zinc-600 rounded-none p-3 text-sm text-zinc-200 outline-none transition-colors w-full ${mTheme.focus}`} autoFocus/>
@@ -198,9 +198,11 @@ export const TaskFormModal = ({ isOpen, onClose, initialType, isFixed }: { isOpe
               <input type="text" value={customCategory} onChange={(e) => setCustomCategory(e.target.value)} placeholder={tForm.catCustomPh} className={`bg-zinc-900 border-b-2 p-2 text-sm outline-none w-full mt-2 ${mTheme.border} ${mTheme.text}`} autoFocus/>
             )}
           </div>
+          {/* Spacer */}
+          <div className="h-2 w-full shrink-0" />
         </div>
         
-        <div className="p-4 bg-zinc-800 border-t-4 border-zinc-700 flex justify-end gap-3 shrink-0">
+        <div className="px-4 pt-4 pb-6 bg-zinc-800 border-t-4 border-zinc-700 flex justify-end gap-3 shrink-0">
           <button onClick={onClose} className="px-6 py-2 text-xs font-bold text-zinc-400 hover:text-white transition-colors uppercase">{t.cancel}</button>
           <button onClick={submitNewTask} disabled={!newTaskType} className={`px-8 py-2 rounded-none text-xs font-bold shadow-[4px_4px_0_#000] active:translate-y-[2px] active:shadow-[2px_2px_0_#000] transition-all uppercase ${newTaskType ? mTheme.button : 'bg-zinc-800 text-zinc-500 cursor-not-allowed'}`}>{t.add}</button>
         </div>

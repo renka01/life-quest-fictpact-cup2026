@@ -117,7 +117,7 @@ export default function StatusPanel({ isOpen, onClose }: { isOpen: boolean, onCl
         className={`
           fixed top-0 right-0 h-full w-64 bg-zinc-900 border-l-4 border-zinc-700
           p-6 flex-col gap-6 z-40 shadow-[-4px_0_0_rgba(0,0,0,0.5)] overflow-y-auto
-          shrink-0 transition-transform duration-300 pb-24
+          shrink-0 transition-transform duration-300
           ${isOpen ? 'translate-x-0 flex' : 'translate-x-full hidden xl:flex'}
           xl:static xl:translate-x-0 xl:w-80
         `}
@@ -258,6 +258,8 @@ export default function StatusPanel({ isOpen, onClose }: { isOpen: boolean, onCl
               {userProfile?.bio ? `"${userProfile.bio}"` : `"${tLog.bioPh}"`}
             </p>
           </div>
+          {/* Mobile Spacer */}
+          <div className="h-24 xl:h-0 w-full shrink-0 pointer-events-none" />
 
         </div>
       </aside>

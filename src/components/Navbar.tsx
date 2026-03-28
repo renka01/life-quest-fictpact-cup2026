@@ -32,7 +32,7 @@ export default function Navbar({ activeMenu, setActiveMenu }: { activeMenu: stri
       </div>
 
       {/* Navigation Links */}
-      <nav className="flex-1 flex flex-row items-center justify-around w-full px-1 overflow-x-auto md:flex-col md:justify-start md:items-stretch md:py-6 md:gap-3 md:px-3 md:overflow-y-auto no-scrollbar">
+      <nav className="flex-1 flex flex-row items-center justify-start sm:justify-around w-full px-2 overflow-x-auto md:flex-col md:justify-start md:items-stretch md:py-6 md:gap-3 md:px-3 md:overflow-y-auto no-scrollbar scroll-smooth">
         {[
           { id: "Dashboard", name: t.Dashboard, icon: LayoutDashboard },
           { id: "Misi", name: t.Misi, icon: ListTodo },
@@ -48,7 +48,7 @@ export default function Navbar({ activeMenu, setActiveMenu }: { activeMenu: stri
             <button 
               key={idx} 
               onClick={() => setActiveMenu(item.id)}
-              className={`flex flex-col md:flex-row items-center justify-center md:justify-start gap-1 md:gap-4 px-1 py-1 md:px-4 md:py-3 border-0 md:border-2 transition-all group rounded-none flex-1 md:flex-none w-full ${
+              className={`flex flex-col md:flex-row items-center justify-center md:justify-start gap-1 md:gap-4 px-2 py-2 md:px-4 md:py-3 border-0 md:border-2 transition-all group rounded-none shrink-0 min-w-[64px] sm:min-w-0 sm:flex-1 md:flex-none w-auto md:w-full ${
                 isActive 
                   ? 'text-amber-400 md:bg-zinc-800 md:border-amber-500 md:shadow-[4px_4px_0_#000] md:translate-x-[-2px] md:translate-y-[-2px]' 
                   : 'text-zinc-500 hover:text-zinc-300 md:border-transparent md:hover:bg-zinc-800 md:hover:border-zinc-600'

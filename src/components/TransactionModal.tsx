@@ -125,9 +125,9 @@ export default function TransactionModal({
   return (
     <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-[110] flex items-center justify-center p-4">
       <div
-        className={`bg-zinc-900 border-4 ${borderCol} rounded-none w-full max-w-sm overflow-hidden shadow-[8px_8px_0_#000] animate-in zoom-in duration-200`}
+        className={`bg-zinc-900 border-4 ${borderCol} rounded-none w-full max-w-sm max-h-[80dvh] flex flex-col shadow-[8px_8px_0_#000] animate-in zoom-in duration-200 mb-4`}
       >
-        <div className="p-4 border-b-4 border-zinc-700 flex justify-between items-center bg-zinc-800">
+        <div className="p-4 border-b-4 border-zinc-700 flex justify-between items-center bg-zinc-800 shrink-0">
           <h2 className="font-pixel text-[10px] text-white tracking-widest uppercase flex items-center gap-2">
             {isAdding ? "DEPOSIT SYNC" : "WITHDRAW SYNC"}
           </h2>
@@ -136,9 +136,9 @@ export default function TransactionModal({
           </button>
         </div>
 
-        <div className="p-6 flex flex-col gap-5 text-left">
+        <div className="p-6 flex-1 min-h-0 flex flex-col gap-5 text-left overflow-y-auto custom-scrollbar">
           <div className="text-center bg-zinc-800 p-3 rounded-none border-2 border-zinc-600">
-            <p className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest">
+            <p className="text-sm text-zinc-400 uppercase tracking-widest">
               SOURCE: <span className="text-white">{accountName}</span>
             </p>
           </div>
@@ -193,12 +193,15 @@ export default function TransactionModal({
               </p>
             </div>
           )}
+          {/* Spacer */}
+          <div className="h-16 md:h-4 w-full shrink-0" />
         </div>
 
-        <div className="p-4 border-t-2 border-zinc-700 bg-zinc-800 flex gap-3">
+        <div className="px-4 pt-4 pb-6 border-t-2 border-zinc-700 bg-zinc-800 flex gap-3 shrink-0">
           <button onClick={onClose} className="flex-1 py-3 text-[10px] font-bold text-zinc-400 hover:text-white uppercase transition-colors">
-            BATAL
+            CANCEL
           </button>
+
           <button
             onClick={handleConfirm}
             className={`flex-1 py-3 ${btnCol} text-[10px] font-bold uppercase shadow-[4px_4px_0_#000] active:translate-y-[2px] active:shadow-none transition-all`}

@@ -171,7 +171,7 @@ export default function Finance({
   const filteredTransactions = transactions.filter((log: any) => log.accountName.toLowerCase().includes(q));
 
   return (
-    <div className="flex flex-col h-full animate-in fade-in duration-500 gap-6 text-left p-4">
+    <div className="flex flex-col min-h-full animate-in fade-in duration-500 gap-6 text-left p-4">
       <div className="flex flex-col md:flex-row justify-between items-start md:items-end shrink-0 border-b border-zinc-700/50 pb-6 gap-4">
         <div className="flex flex-col gap-3 text-left">
           <h1 className="font-pixel text-sm md:text-base text-white flex items-center gap-3 drop-shadow-[2px_2px_0_#000]">
@@ -269,6 +269,8 @@ export default function Finance({
                 </div>
               </div>
             ))}
+            {/* Spacer */}
+            <div className="h-2 w-full shrink-0" />
           </div>
         </div>
         )}
@@ -381,24 +383,26 @@ export default function Finance({
                 </div>
               );
             })}
+            {/* Spacer */}
+            <div className="h-2 w-full shrink-0" />
           </div>
         </div>
         )}
 
         {/* KOLOM 3 */}
         <div className="bg-zinc-900 border-4 border-pink-600 rounded-none flex flex-col h-[450px] overflow-hidden shadow-[8px_8px_0_rgba(0,0,0,0.5)]">
-          <div className="p-5 border-b-4 border-pink-600 flex justify-between items-center text-pink-400 bg-zinc-800">
-            <div className="flex items-center gap-3">
-              <History size={20} />
-              <h2 className="text-base font-bold uppercase tracking-wider">{tFin.history}</h2>
+          <div className="p-4 sm:p-5 border-b-4 border-pink-600 flex justify-between items-center gap-2 text-pink-400 bg-zinc-800">
+            <div className="flex items-center gap-2 sm:gap-3 min-w-0">
+              <History size={18} className="shrink-0 sm:w-5 sm:h-5" />
+              <h2 className="text-sm sm:text-base font-bold uppercase tracking-wider truncate">{tFin.history}</h2>
             </div>
 
             <button
               onClick={() => setIsRecurringOpen(true)}
-              className="text-[10px] bg-pink-500/10 hover:bg-pink-500 text-pink-400 hover:text-zinc-900 border border-pink-500 px-2 py-1 rounded-none flex items-center gap-1 transition-colors"
+              className="text-[9px] sm:text-[10px] bg-pink-500/10 hover:bg-pink-500 text-pink-400 hover:text-zinc-900 border border-pink-500 px-2 py-1 rounded-none flex items-center gap-1 transition-colors shrink-0"
               title="Kelola Tagihan Rutin"
             >
-              <CalendarClock size={14} /> {tFin.billsBtn}
+              <CalendarClock size={12} className="shrink-0 sm:w-3.5 sm:h-3.5" /> <span className="truncate">{tFin.billsBtn}</span>
             </button>
           </div>
 
@@ -571,6 +575,8 @@ export default function Finance({
               {q ? tFin.noTrans : tFin.noHistory}
               </div>
             )}
+            {/* Spacer */}
+            <div className="h-4 w-full shrink-0" />
           </div>
         </div>
       </div>
@@ -647,17 +653,17 @@ function RecurringModal({
 
   return (
     <div className="fixed inset-0 bg-black/80 backdrop-blur-md z-[999] flex items-center justify-center p-4">
-      <div className="bg-zinc-900 border-4 border-pink-600 rounded-none w-full max-w-md overflow-hidden shadow-[8px_8px_0_#000] animate-in zoom-in duration-200">
-        <div className="p-5 border-b-4 border-zinc-700 flex justify-between items-center bg-zinc-800">
-          <h2 className="font-bold text-base uppercase tracking-wider text-pink-400 flex items-center gap-2">
+      <div className="bg-zinc-900 border-4 border-pink-600 rounded-none w-full max-w-md max-h-[80dvh] flex flex-col shadow-[8px_8px_0_#000] animate-in zoom-in duration-200 mb-4">
+        <div className="p-4 sm:p-5 border-b-4 border-zinc-700 flex justify-between items-center bg-zinc-800 shrink-0">
+          <h2 className="font-bold text-sm sm:text-base uppercase tracking-wider text-pink-400 flex items-center gap-2">
             <CalendarClock size={20} /> {tFin.autoPay}
           </h2>
           <button onClick={onClose} className="text-zinc-500 hover:text-white transition-colors">
-            <X size={24} />
+            <X size={20} />
           </button>
         </div>
 
-        <div className="p-6 flex flex-col gap-4">
+        <div className="p-4 sm:p-6 flex-1 min-h-0 flex flex-col gap-4 overflow-y-auto custom-scrollbar">
           <div className="flex flex-col gap-2 max-h-48 overflow-y-auto mb-2">
             {recurringTransactions.length === 0 && (
               <p className="text-xs text-zinc-500 text-center italic py-4">
@@ -777,6 +783,7 @@ function RecurringModal({
             >
               {tFin.saveSchedule}
             </button>
+            <div className="h-16 md:h-4 w-full shrink-0" />
           </div>
         </div>
       </div>
@@ -878,13 +885,13 @@ function AddAccountModal({
   return (
     <div className="fixed inset-0 bg-black/80 backdrop-blur-md z-[999] flex items-center justify-center p-4">
       <div
-        className={`bg-zinc-900 border-4 rounded-none w-full max-w-md overflow-hidden shadow-[8px_8px_0_#000] animate-in zoom-in duration-200 ${
+        className={`bg-zinc-900 border-4 rounded-none w-full max-w-md max-h-[80dvh] flex flex-col shadow-[8px_8px_0_#000] animate-in zoom-in duration-200 mb-4 ${
           type === "rekening" ? "border-emerald-500" : "border-cyan-500"
         }`}
       >
-        <div className="p-5 border-b-4 border-zinc-700 flex justify-between items-center bg-zinc-800">
+        <div className="p-4 sm:p-5 border-b-4 border-zinc-700 flex justify-between items-center bg-zinc-800 shrink-0">
           <h2
-            className={`font-bold text-base uppercase tracking-wider flex items-center gap-2 ${
+            className={`font-bold text-sm sm:text-base uppercase tracking-wider flex items-center gap-2 ${
               type === "rekening" ? "text-emerald-400" : "text-cyan-400"
             }`}
           >
@@ -892,14 +899,14 @@ function AddAccountModal({
             {type === "rekening" ? tFin.addAccWallet : tFin.addAccTarget}
           </h2>
           <button onClick={onClose} className="text-zinc-500 hover:text-white transition-colors">
-            <X size={24} />
+            <X size={20} />
           </button>
         </div>
 
-        <div className="p-6 flex flex-col gap-5">
+        <div className="p-4 sm:p-6 flex-1 min-h-0 flex flex-col gap-4 sm:gap-5 overflow-y-auto custom-scrollbar">
           {type === "rekening" && (
             <div>
-              <label className="text-sm font-bold text-zinc-400 mb-3 block uppercase">
+              <label className="text-[10px] sm:text-sm font-bold text-zinc-400 mb-2 sm:mb-3 block uppercase">
                 {tFin.quickSelect}
               </label>
               <div className="grid grid-cols-3 sm:grid-cols-4 gap-3">
@@ -941,11 +948,13 @@ function AddAccountModal({
               >
                 {tFin.tabGold}
               </button>
+              {/* Spacer */}
+              <div className="h-2 w-full shrink-0" />
             </div>
           )}
 
           <div>
-            <label className="text-sm font-bold text-zinc-400 mb-2 block uppercase">
+            <label className="text-[10px] sm:text-sm font-bold text-zinc-400 mb-2 block uppercase">
               {tFin.accName}
             </label>
             <input
@@ -994,7 +1003,7 @@ function AddAccountModal({
           <div className="grid grid-cols-2 gap-4">
             {isGold ? (
               <div>
-                <label className="text-sm font-bold text-yellow-500 mb-2 block uppercase">
+                <label className="text-[10px] sm:text-sm font-bold text-yellow-500 mb-2 block uppercase">
                   {tFin.startWeight}
                 </label>
                 <input
@@ -1010,7 +1019,7 @@ function AddAccountModal({
               </div>
             ) : (
               <div>
-                <label className="text-sm font-bold text-zinc-400 mb-2 block uppercase">
+                <label className="text-[10px] sm:text-sm font-bold text-zinc-400 mb-2 block uppercase">
                   {tFin.startBal} ({currency})
                 </label>
                 <input
@@ -1030,7 +1039,7 @@ function AddAccountModal({
 
             {type === "tabungan" && (
               <div>
-                <label className="text-sm font-bold text-zinc-400 mb-2 block uppercase">
+                <label className="text-[10px] sm:text-sm font-bold text-zinc-400 mb-2 block uppercase">
                   {tFin.targetBal} ({currency})
                 </label>
                 <input
@@ -1049,13 +1058,19 @@ function AddAccountModal({
             )}
           </div>
 
+          {/* Spacer */}
+          <div className="h-16 md:h-4 w-full shrink-0" />
+        </div>
+
+        <div className="px-4 pt-4 pb-6 sm:px-5 sm:pt-5 sm:pb-7 bg-zinc-800 border-t-4 border-zinc-700 flex gap-4 shrink-0">
+          <button onClick={onClose} className="flex-1 py-3 text-xs sm:text-sm font-bold text-zinc-400 hover:text-white transition-colors uppercase">
+            {tFin.cancel}
+          </button>
           <button
             onClick={handleSave}
             disabled={!name}
-            className={`w-full py-4 rounded-none font-bold text-base text-zinc-950 transition-all mt-2 shadow-[4px_4px_0_#000] active:translate-y-[2px] active:shadow-[2px_2px_0_#000] ${
-              type === "rekening"
-                ? "bg-emerald-500 hover:bg-emerald-400"
-                : "bg-cyan-500 hover:bg-cyan-400"
+            className={`flex-1 py-3 text-xs sm:text-sm rounded-none font-bold text-zinc-950 transition-all uppercase shadow-[4px_4px_0_#000] active:translate-y-[2px] active:shadow-[2px_2px_0_#000] ${
+              type === "rekening" ? "bg-emerald-500 hover:bg-emerald-400" : "bg-cyan-500 hover:bg-cyan-400"
             } disabled:opacity-50 disabled:cursor-not-allowed`}
           >
             {tFin.saveAcc}
@@ -1184,24 +1199,24 @@ function TransactionModal({
   return (
     <div className="fixed inset-0 bg-black/80 backdrop-blur-md z-[999] flex items-center justify-center p-4">
       <div
-        className={`bg-zinc-900 border-4 rounded-none w-full max-w-sm overflow-hidden shadow-[8px_8px_0_#000] animate-in zoom-in duration-200 ${
+        className={`bg-zinc-900 border-4 rounded-none w-full max-w-sm max-h-[80dvh] flex flex-col shadow-[8px_8px_0_#000] animate-in zoom-in duration-200 mb-4 ${
           isAdding ? "border-emerald-500" : "border-pink-500"
         }`}
       >
-        <div className="p-5 border-b-4 border-zinc-700 flex justify-between items-center bg-zinc-800">
+        <div className="p-4 sm:p-5 border-b-4 border-zinc-700 flex justify-between items-center bg-zinc-800 shrink-0">
           <h2
-            className={`font-bold text-base uppercase tracking-wider ${
+            className={`font-bold text-sm sm:text-base uppercase tracking-wider ${
               isAdding ? "text-emerald-400" : "text-pink-400"
             }`}
           >
             {isAdding ? tFin.incomeOp : tFin.expenseOp}
           </h2>
           <button onClick={onClose} className="text-zinc-500 hover:text-white transition-colors">
-            <X size={24} />
+            <X size={20} />
           </button>
         </div>
 
-        <div className="p-6 flex flex-col gap-4 text-left">
+        <div className="p-4 sm:p-6 flex-1 min-h-0 flex flex-col gap-4 text-left overflow-y-auto custom-scrollbar">
           <div className="text-center bg-zinc-800 p-3 rounded-none border-2 border-zinc-600">
             <p className="text-sm text-zinc-400 uppercase font-bold">
               {tFin.account} <span className="text-white">{accountName}</span>
@@ -1281,18 +1296,20 @@ function TransactionModal({
               {tFin.useAll}
             </button>
           )}
+          {/* Spacer */}
+          <div className="h-16 md:h-4 w-full shrink-0" />
         </div>
 
-        <div className="p-5 bg-zinc-800 border-t-4 border-zinc-700 flex gap-4">
+        <div className="px-4 pt-4 pb-6 sm:px-5 sm:pt-5 sm:pb-7 bg-zinc-800 border-t-4 border-zinc-700 flex gap-4 shrink-0">
           <button
             onClick={onClose}
-            className="flex-1 py-3 text-sm font-bold text-zinc-400 hover:text-white transition-colors uppercase"
+            className="flex-1 py-3 text-xs sm:text-sm font-bold text-zinc-400 hover:text-white transition-colors uppercase"
           >
             {tFin.cancel}
           </button>
           <button
             onClick={handleConfirm}
-            className={`flex-1 py-3 text-zinc-950 text-sm rounded-none transition-all uppercase font-bold shadow-[4px_4px_0_#000] active:translate-y-[2px] active:shadow-[2px_2px_0_#000] ${
+            className={`flex-1 py-3 text-zinc-950 text-xs sm:text-sm rounded-none transition-all uppercase font-bold shadow-[4px_4px_0_#000] active:translate-y-[2px] active:shadow-[2px_2px_0_#000] ${
               isAdding ? "bg-emerald-500 hover:bg-emerald-400" : "bg-pink-500 hover:bg-pink-400"
             }`}
           >

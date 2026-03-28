@@ -104,6 +104,7 @@ export default function TaskBoard({ searchQuery, activeCategory, openAddModal, s
               </div>
             </div>
           ))}
+          <div className="h-24 md:h-4 w-full shrink-0 pointer-events-none" />
         </div>
       </div>
 
@@ -152,6 +153,7 @@ export default function TaskBoard({ searchQuery, activeCategory, openAddModal, s
               <button onClick={(e) => { e.stopPropagation(); deleteTask(task.id); }} className="opacity-0 group-hover:opacity-100 text-zinc-500 hover:text-pink-500 transition-opacity"><X size={14}/></button>
             </div>
           ))}
+          <div className="h-24 md:h-4 w-full shrink-0 pointer-events-none" />
         </div>
       </div>
 
@@ -204,6 +206,7 @@ export default function TaskBoard({ searchQuery, activeCategory, openAddModal, s
               </div>
             </div>
           ))}
+          <div className="h-24 md:h-4 w-full shrink-0 pointer-events-none" />
         </div>
       </div>
     </div>

@@ -108,7 +108,7 @@ export default function CalendarBoard() {
       </div>
 
       <div className="flex-1 bg-zinc-800 border-4 border-zinc-700 p-4 shadow-[8px_8px_0_#000] flex flex-col">
-        <div className="grid grid-cols-7 gap-2 mb-2 shrink-0">
+        <div className="grid grid-cols-7 gap-1 md:gap-2 mb-2 shrink-0">
           {daysInWeek.map((day: string, index: number) => (
             <div key={day} className="text-center font-bold text-zinc-500 text-xs py-2 border-b-2 border-zinc-700">
               {day}
@@ -116,7 +116,7 @@ export default function CalendarBoard() {
           ))}
         </div>
         
-        <div className="grid grid-cols-7 gap-2 flex-1 auto-rows-[minmax(0,1fr)]">
+        <div className="grid grid-cols-7 gap-1 md:gap-2 flex-1 auto-rows-[minmax(0,1fr)]">
           {calendarGrid.map((dayNum, idx) => {
             const dayTasks = getTasksForDate(dayNum);
             const isToday = dayNum === new Date().getDate() && month === new Date().getMonth() && year === new Date().getFullYear();
@@ -126,7 +126,7 @@ export default function CalendarBoard() {
               <div 
                 key={idx} 
                 onClick={() => handleDayClick(dayNum, dayTasks)}
-                className={`border-2 p-2 relative group transition-colors flex flex-col overflow-hidden ${
+                className={`border-2 p-1 md:p-2 relative group transition-colors flex flex-col overflow-hidden ${
                   dayNum 
                     ? `cursor-pointer hover:border-amber-500 hover:bg-zinc-900/80 ${isToday ? 'border-amber-700 bg-zinc-900 shadow-[inset_0_0_10px_rgba(6,182,212,0.2)]' : 'border-zinc-700 bg-zinc-900'}`
                     : 'border-transparent bg-transparent opacity-30 pointer-events-none'
@@ -134,11 +134,11 @@ export default function CalendarBoard() {
               >
                 {/* Header Tanggal & Info Klik */}
                 <div className="flex justify-between items-start shrink-0">
-                  <span className={`text-sm font-bold ${isToday ? 'text-cyan-400' : hasTasks ? 'text-zinc-200' : 'text-zinc-500'}`}>
+                  <span className={`text-xs md:text-sm font-bold ${isToday ? 'text-cyan-400' : hasTasks ? 'text-zinc-200' : 'text-zinc-500'}`}>
                     {dayNum || ''}
                   </span>
                   {dayNum && (
-                    <span className="text-[7px] text-purple-400 opacity-0 group-hover:opacity-100 transition-opacity font-bold uppercase tracking-tighter mt-0.5">
+                    <span className="hidden md:inline text-[7px] text-purple-400 opacity-0 group-hover:opacity-100 transition-opacity font-bold uppercase tracking-tighter mt-0.5">
                       {t.detail} {'>'}
                     </span>
                   )}
@@ -154,14 +154,14 @@ export default function CalendarBoard() {
                     return (
                       <div 
                         key={task.id} 
-                        className={`p-1 flex items-center gap-1.5 overflow-hidden border ${
+                        className={`p-0.5 md:p-1 flex items-center justify-center md:justify-start gap-1.5 overflow-hidden border ${
                           task.done 
                             ? 'bg-emerald-900/30 border-emerald-800/50' 
-                            : `bg-zinc-800 border-zinc-600 border-l-2 border-l-${themeColor}-500`
+                            : `bg-zinc-800 border-zinc-600 md:border-l-2 md:border-l-${themeColor}-500`
                         }`}
                       >
                         <Icon size={10} className={task.done ? 'text-emerald-500 shrink-0' : `text-${themeColor}-400 shrink-0`} />
-                        <span className={`text-[9px] truncate tracking-wide ${
+                        <span className={`hidden md:inline text-[9px] truncate tracking-wide ${
                           task.done ? 'text-emerald-500/70 line-through' : 'text-zinc-300'
                         }`}>
                           {task.title}
@@ -172,8 +172,8 @@ export default function CalendarBoard() {
 
                   {/* Indikator Jika Lebih dari 2 */}
                   {dayTasks.length > 2 && (
-                    <div className="text-[8px] font-bold text-zinc-400 text-center mt-0.5 bg-zinc-900 border border-zinc-700 py-0.5">
-                      +{dayTasks.length - 2} {t.others}
+                    <div className="text-[7px] md:text-[8px] font-bold text-zinc-400 text-center mt-0.5 bg-zinc-900 border border-zinc-700 py-0.5">
+                      +{dayTasks.length - 2} <span className="hidden md:inline">{t.others}</span>
                     </div>
                   )}
                 </div>
