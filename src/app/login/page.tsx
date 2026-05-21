@@ -371,14 +371,14 @@ const PolicyModal = ({ isOpen, onClose, title, children, lang = 'id' }: { isOpen
         <main className="p-6 overflow-y-auto">
           {children}
         </main>
-        <footer className="p-4 border-t border-zinc-700 flex-shrink-0 text-right">
+        <div className="p-4 border-t border-zinc-700 flex-shrink-0 text-right">
           <button 
             onClick={onClose}
             className="bg-amber-500 hover:bg-amber-400 text-zinc-900 px-6 py-2 rounded-lg font-bold text-sm transition-colors"
           >
             {lang === 'id' ? 'Tutup' : 'Close'}
           </button>
-        </footer>
+        </div>
       </div>
     </div>
   );
@@ -394,17 +394,17 @@ export default function LoginPage() {
   const router = useRouter();
   const { setUserProfile, settings, updateSetting } = useStore();
   
-  const [tab,     setTab]    = useState<Tab>('login');
-  const [email,   setEmail]  = useState('');
-  const [pass,    setPass]   = useState('');
-  const [pass2,   setPass2]  = useState('');
-  const [error,   setError]  = useState('');
-  const [loading, setLoading] = useState(false);
+  const [tab,         setTab]    = useState<Tab>('login');
+  const [email,       setEmail]  = useState('');
+  const [pass,        setPass]   = useState('');
+  const [pass2,       setPass2]  = useState('');
+  const [error,       setError]  = useState('');
+  const [loading,     setLoading] = useState(false);
   const [showTransition, setShowTransition] = useState(false);
-  const [isMounted, setIsMounted] = useState(false);
-  const [isLangOpen, setIsLangOpen] = useState(false);
-  const [showPass,  setShowPass]  = useState(false);
-  const [showPass2, setShowPass2] = useState(false);
+  const [isMounted,   setIsMounted] = useState(false);
+  const [isLangOpen,  setIsLangOpen] = useState(false);
+  const [showPass,    setShowPass]  = useState(false);
+  const [showPass2,   setShowPass2] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalContent, setModalContent] = useState<{ title: string; content: React.ReactNode } | null>(null);
 
@@ -421,9 +421,9 @@ export default function LoginPage() {
     loginBtn: lang === 'id' ? 'Masuk' : 'Login',
     titleLogin: lang === 'id' ? 'Masuk ke Arena' : 'Enter the Arena',
     titleRegister: lang === 'id' ? 'Daftar Sebagai Petarung' : 'Register as a Fighter',
-    emailReq: lang === 'id' ? 'Email dan kata sandi wajib diisi.' : 'Email and password are required.',
+    emailReq: lang === 'id' ? 'Email atau nama karakter dan kata sandi wajib diisi.' : 'Email or character name and password are required.',
     passMatch: lang === 'id' ? 'Kata sandi tidak cocok!' : 'Passwords do not match!',
-    emailPlaceholder: 'Email',
+    emailPlaceholder: lang === 'id' ? 'Email atau Nama Karakter' : 'Email or Character Name',
     passPlaceholder: lang === 'id' ? 'Kata Sandi' : 'Password',
     confirmPassPlaceholder: lang === 'id' ? 'Konfirmasi Kata Sandi' : 'Confirm Password',
     loadingBtn: lang === 'id' ? 'Membuka Gerbang...' : 'Opening Gates...',
@@ -583,7 +583,7 @@ export default function LoginPage() {
   };
   
   return (
-    <div className="min-h-[100dvh] bg-zinc-900 flex flex-col relative w-full overflow-x-hidden" style={{ fontFamily: "'Inter', 'Segoe UI', sans-serif" }}>
+<div className="min-h-[100dvh] bg-zinc-900 text-zinc-200 font-mono flex flex-col relative w-full overflow-x-hidden selection:bg-purple-600 selection:text-white">
       
       {isModalOpen && modalContent && (
         <PolicyModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} title={modalContent.title} lang={lang}>
@@ -597,8 +597,9 @@ export default function LoginPage() {
         .input-habitica {
           background: rgba(255,255,255,0.05);
           color: #ffffff;
-          border: 1px solid rgba(251, 191, 36, 0.2);
+          border: 2px solid rgba(251, 191, 36, 0.2);
           transition: all 0.2s;
+          font-family: monospace;
         }
         .input-habitica:focus { background: rgba(255,255,255,0.1); outline: none; border-color: rgba(251, 191, 36, 0.8); }
         .input-habitica::placeholder { color: rgba(255,255,255,0.3); }
@@ -640,8 +641,6 @@ export default function LoginPage() {
           />
         </div>
         <nav className="flex items-center gap-4 md:gap-6">
-          
-          {/* TOMBOL AYO MULAI DIKEMBALIKAN & DIJAMIN MUNCUL */}
           <Link href="/start" className="text-sm text-amber-200/70 hover:text-amber-400 transition-colors font-semibold">
             {t.start}
           </Link>
@@ -686,7 +685,7 @@ export default function LoginPage() {
           
           <button
             type="button"
-            onClick={() => setTab(tab === 'login' ? 'register' : 'login')}
+            onClick={() => { setTab(tab === 'login' ? 'register' : 'login'); setError(''); }}
             className="bg-amber-500 hover:bg-amber-400 text-zinc-900 px-4 md:px-6 py-2 rounded shadow-md font-bold text-xs md:text-sm transition-colors">
             {tab === 'login' ? t.registerBtn : t.loginBtn}
           </button>
@@ -713,7 +712,7 @@ export default function LoginPage() {
               </div>
             </div>
 
-            <h1 className="text-white text-3xl sm:text-4xl lg:text-5xl font-extrabold leading-tight mb-4 max-w-2xl tracking-tight px-2">
+            <h1 className="text-white text-3xl sm:text-4xl lg:text-5xl font-extrabold leading-tight mb-4 max-w-2xl tracking-tight px-2 font-pixel">
               {t.heroTitle}
             </h1>
             <p className="text-zinc-300 text-xs sm:text-sm md:text-base max-w-2xl leading-relaxed font-medium mb-8 px-4">
@@ -750,20 +749,21 @@ export default function LoginPage() {
           </div>
         </div>
 
-        {/* KANAN: Form */}
+        {/* KANAN: Form Input Arena */}
         <div className="w-full max-w-sm md:max-w-md flex-shrink-0 lg:sticky lg:top-0 pb-32 lg:pb-0 mx-auto px-4 sm:px-0 pointer-events-auto relative z-[50]">
           <div className="text-center mb-6 mt-0 lg:mt-24">
-            <h2 className="text-white text-2xl md:text-3xl font-bold">
+            <h2 className="text-white text-2xl md:text-3xl font-bold font-pixel tracking-wide">
               {tab === 'login' ? t.titleLogin : t.titleRegister}
             </h2>
           </div>
 
           <form onSubmit={handleSubmit} className="flex flex-col gap-4 relative z-[50]">
             <input
-              type="email"
+              type={tab === 'login' ? "text" : "email"} // 💡 Bertukar ke 'text' di mode login agar mendukung input Nickname murni
               value={email} onChange={e => setEmail(e.target.value)}
-              placeholder={t.emailPlaceholder}
+              placeholder={tab === 'login' ? t.emailPlaceholder : 'Email'}
               className="input-habitica w-full px-4 py-3 rounded text-sm relative z-10"
+              required
             />
             <div className="relative z-10">
               <input
@@ -771,6 +771,7 @@ export default function LoginPage() {
                 value={pass} onChange={e => setPass(e.target.value)}
                 placeholder={t.passPlaceholder}
                 className="input-habitica w-full px-4 py-3 rounded text-sm pr-10"
+                required
               />
               <button
                 type="button"
@@ -786,7 +787,7 @@ export default function LoginPage() {
                 <button
                   type="button"
                   onClick={() => router.push('/forgot-password')}
-                  className="text-xs text-amber-500 hover:text-amber-400 transition-colors cursor-pointer relative z-[50] bg-transparent border-none p-0 outline-none"
+                  className="text-xs text-amber-500 hover:text-amber-400 transition-colors cursor-pointer relative z-[50] bg-transparent border-none p-0 outline-none font-bold"
                 >
                   {t.forgotPass}
                 </button>
@@ -800,6 +801,7 @@ export default function LoginPage() {
                   value={pass2} onChange={e => setPass2(e.target.value)}
                   placeholder={t.confirmPassPlaceholder}
                   className="input-habitica w-full px-4 py-3 rounded text-sm pr-10"
+                  required
                 />
                 <button
                   type="button"
@@ -811,10 +813,10 @@ export default function LoginPage() {
               </div>
             )}
 
-            {error && <div className="text-red-400 text-xs text-center">{error}</div>}
+            {error && <div className="text-red-400 text-xs text-center font-bold font-mono bg-red-500/10 border border-red-500/20 py-2 px-3">{error}</div>}
 
             <button type="submit" disabled={loading}
-              className="w-full py-3 bg-amber-500 text-zinc-900 font-bold rounded shadow-lg hover:bg-amber-400 transition-colors mt-2 cursor-pointer relative z-[50]">
+              className="w-full py-3 bg-amber-500 text-zinc-900 font-bold rounded shadow-lg hover:bg-amber-400 transition-all border-b-4 border-amber-700 active:border-b-0 active:translate-y-[4px] mt-2 cursor-pointer relative z-[50] uppercase tracking-wider text-xs md:text-sm">
               {loading ? t.loadingBtn : tab === 'login' ? t.loginBtn : t.continueBtn}
             </button>
 
@@ -824,7 +826,7 @@ export default function LoginPage() {
               <div className="flex-1 h-px bg-amber-200"/>
             </div>
 
-            <button type="button" onClick={() => handleOAuthLogin('google')} className="w-full py-3 bg-transparent border border-amber-500/30 text-zinc-300 rounded font-medium text-sm hover:bg-amber-500/10 transition-colors flex items-center justify-center gap-3 cursor-pointer relative z-[50]">
+            <button type="button" onClick={() => handleOAuthLogin('google')} className="w-full py-3 bg-transparent border-2 border-zinc-700 text-zinc-300 rounded font-bold text-xs hover:bg-zinc-800 transition-colors flex items-center justify-center gap-3 cursor-pointer relative z-[50] uppercase tracking-wider">
               <svg viewBox="0 0 20 20" width="18" height="18">
                 <path d="M19.6 10.2c0-.6-.1-1.3-.2-1.9H10v3.6h5.4c-.2 1.2-1 2.3-2.1 3v2.5h3.4c2-1.8 3.1-4.5 3.1-7.2z" fill="#4285F4"/>
                 <path d="M10 20c2.7 0 5-.9 6.7-2.4l-3.4-2.5c-.9.6-2 1-3.3 1-2.5 0-4.7-1.7-5.5-4H1v2.6C2.7 17.8 6.2 20 10 20z" fill="#34A853"/>
@@ -834,7 +836,7 @@ export default function LoginPage() {
               {tab === 'login' ? t.googleLogin : t.googleReg}
             </button>
             
-            <button type="button" onClick={() => handleOAuthLogin('github')} className="w-full py-3 bg-transparent border border-amber-500/30 text-zinc-300 rounded font-medium text-sm hover:bg-amber-500/10 transition-colors flex items-center justify-center gap-3 cursor-pointer relative z-[50]">
+            <button type="button" onClick={() => handleOAuthLogin('github')} className="w-full py-3 bg-transparent border-2 border-zinc-700 text-zinc-300 rounded font-bold text-xs hover:bg-zinc-800 transition-colors flex items-center justify-center gap-3 cursor-pointer relative z-[50] uppercase tracking-wider">
               <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M12 2C6.477 2 2 6.477 2 12c0 4.42 2.865 8.166 6.839 9.489.5.092.682-.217.682-.482 0-.237-.008-.866-.013-1.7-2.782.603-3.369-1.34-3.369-1.34-.454-1.156-1.11-1.462-1.11-1.462-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.831.092-.646.35-1.086.636-1.336-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.025A9.578 9.578 0 0112 6.836c.85.004 1.705.114 2.504.336 1.909-1.294 2.747-1.025 2.747-1.025.546 1.379.203 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.743 0 .267.18.578.688.48C19.138 20.161 22 16.418 22 12c0-5.523-4.477-10-10-10z"/></svg>
               {tab === 'login' ? t.githubLogin : t.githubReg}
             </button>
@@ -882,13 +884,13 @@ export default function LoginPage() {
             <div className="flex items-center gap-2">
               <Instagram size={18}/>
               <a href="https://www.instagram.com/renhapiz" target="_blank" rel="noreferrer" className="hover:text-amber-400 transition-colors cursor-pointer">renhapiz</a>,
-              <a href="https://www.instagram.com/wldnxd" target="_blank" rel="noreferrer" className="hover:text-amber-400 transition-colors ml-1 cursor-pointer">wldnxd</a>,
+              <a href="https://www.instagram.com/rafaeldimaass" target="_blank" rel="noreferrer" className="hover:text-amber-400 transition-colors ml-1 cursor-pointer">rafael</a>,
               <a href="https://www.instagram.com/rappizr" target="_blank" rel="noreferrer" className="hover:text-amber-400 transition-colors ml-1 cursor-pointer">rappizr</a>
             </div>
             <div className="flex items-center gap-2">
               <Github size={18}/>
               <a href="https://github.com/renka01" target="_blank" rel="noreferrer" className="hover:text-amber-400 transition-colors cursor-pointer">renka01</a>,
-              <a href="https://github.com/wldnxd" target="_blank" rel="noreferrer" className="hover:text-amber-400 transition-colors ml-1 cursor-pointer">wldnxd</a>,
+              <a href="https://github.com/rafaeldimaass" target="_blank" rel="noreferrer" className="hover:text-amber-400 transition-colors ml-1 cursor-pointer">rafael</a>,
               <a href="https://github.com/Rappizr" target="_blank" rel="noreferrer" className="hover:text-amber-400 transition-colors ml-1 cursor-pointer">Rappizr</a>
             </div>
           </div>

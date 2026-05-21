@@ -15,8 +15,7 @@ import {
   TaskFormModal,
   TaskDetailModal,
   GlobalAlerts,
-  ExtendedTask,
-  ToggleStatusPanelButton
+  ExtendedTask
 } from "@/components/TaskModals";
 import {
   Search,
@@ -30,7 +29,8 @@ import {
   CheckSquare,
   Filter,
   Trophy,
-  LogOut
+  LogOut,
+  User
 } from "lucide-react";
 import Finance from "./finance";
 import CalendarBoard from "@/components/CalendarBoard";
@@ -97,7 +97,7 @@ export default function Home() {
   const { settings } = useStore();
   const tPage = translations[settings?.language || 'id']?.page || translations['id'].page;
   const tDropdown = translations[settings?.language || 'id']?.dropdown || translations['id'].dropdown;
-  const tSyslog = translations[settings?.language || 'id']?.syslog || translations['id'].syslog;
+  const tSublog = translations[settings?.language || 'id']?.syslog || translations['id'].syslog;
   const tQuotes = translations[settings?.language || 'id']?.quotes || translations['id'].quotes;
 
   const isTaskCreated = tasks.length > 0;
@@ -190,7 +190,7 @@ export default function Home() {
     setIsFormOpen(true);
   };
 
-  const handleDashboardFinanceAction = (type: "rekening" | "tabungan" | "tagihan") => {
+  const handleDashboardFinanceAction = (type: "rekening" | "tabungan" | "tagihan" | null) => {
     setDashboardFinanceAction(type);
     setActiveMenu("Keuangan");
   };
@@ -205,7 +205,6 @@ export default function Home() {
     setActiveMenu("Keuangan");
   };
 
-  // UPDATE DARI TEMAN: Menggunakan await signOut() agar session di backend terhapus tuntas
   const handleLogout = async () => {
     setUserProfile({ accountName: "", nickname: "", gender: null, avatarId: null });
     setHasLoadedFromCloud(false); 
@@ -226,9 +225,6 @@ export default function Home() {
     setTimeout(() => { setIsTransitioning(false); }, 800);
   };
 
-  // ========================================================
-  // RENDER PENGUNCI LOADING SPARTAN FULLSCREEN
-  // ========================================================
   if (!isMounted || !isAppReady || !userProfile?.accountName) {
     return (
       <div className="fixed inset-0 z-[9999] bg-zinc-950 flex flex-col items-center justify-center">
@@ -252,7 +248,6 @@ export default function Home() {
     );
   }
   
-  // Jika belum pilih gender (Character Selection)
   if (!userProfile?.gender) {
       return (
         <div className="animate-in fade-in duration-700">
@@ -450,14 +445,30 @@ export default function Home() {
     }
   };
 
-  const HeaderQuote = ({ text, accentColor = "amber", label = "HERO'S LOG" }: { 
+  const HeaderQuote = ({ text, label = "HERO'S LOG" }: { 
     text: string; 
-    accentColor?: "amber" | "teal" | "purple";
     label?: string;
   }) => (
     <div className="hidden md:flex relative max-w-xl w-full h-[54px] bg-zinc-800 border-2 border-zinc-600 shadow-[4px_4px_0_#000] overflow-hidden">
-      <div className={`w-1.5 flex-shrink-0 ${accentColor === "teal" ? "bg-teal-500" : accentColor === "purple" ? "bg-purple-500" : "bg-amber-500"}`} 
-           style={{ backgroundImage: `repeating-linear-gradient(to bottom, currentColor 0px, currentColor 4px, transparent 4px, transparent 8px)` }} />
+      {/* ⚡ SOLUSI VISUAL: Diganti ke corak sekat vertikal murni yang padat, tajam & tidak akan blur di layar monitor */}
+      <div 
+        className="w-2 flex-shrink-0" 
+        style={{ 
+          backgroundColor: '#18181b',
+          backgroundImage: `linear-gradient(
+            to bottom,
+            #f59e0b 0px, #f59e0b 6px,
+            #18181b 6px, #18181b 12px,
+            #f59e0b 12px, #f59e0b 18px,
+            #18181b 18px, #18181b 24px,
+            #f59e0b 24px, #f59e0b 30px,
+            #18181b 30px, #18181b 36px,
+            #f59e0b 36px, #f59e0b 42px,
+            #18181b 42px, #18181b 48px,
+            #f59e0b 48px, #f59e0b 54px
+          )`
+        }} 
+      />
       <div className="flex items-center gap-3 px-4 py-2 flex-1 min-w-0">
         <div className="flex flex-col gap-0.5 flex-1 min-w-0">
           <span className="font-pixel text-[6px] tracking-widest text-purple-400 uppercase">{label}</span>
@@ -520,10 +531,13 @@ export default function Home() {
               </div>
             </div>
 
-            <ToggleStatusPanelButton
-              isOpen={isStatusPanelOpen}
-              onToggle={() => setIsStatusPanelOpen(!isStatusPanelOpen)}
-            />
+            <button 
+              onClick={() => { setIsStatusPanelOpen(!isStatusPanelOpen); setIsNotifOpen(false); setIsSettingsOpen(false); }}
+              className={`text-zinc-400 hover:text-white transition-colors p-2 bg-zinc-800 border-2 border-zinc-600 shadow-[4px_4px_0_#000] active:translate-y-[2px] active:shadow-none shrink-0 ${isStatusPanelOpen ? "text-amber-400 border-amber-500" : ""}`}
+              title="Toggle Status Log"
+            >
+              <User size={20} />
+            </button>
 
             <div className="relative">
               <button
@@ -540,7 +554,7 @@ export default function Home() {
                 <div className="absolute top-full mt-4 right-0 w-max max-w-[90vw] bg-zinc-800 border-2 border-amber-500 px-3 sm:px-4 py-2 sm:py-2.5 rounded-none shadow-[4px_4px_0_#000] flex items-center gap-2 sm:gap-3 animate-in slide-in-from-top-2 fade-in duration-300 z-[60] pointer-events-none text-left">
                    <Coins size={16} className="text-amber-400 animate-bounce" />
                    <div className="flex flex-col">
-                     <span className="text-[9px] text-zinc-400 font-bold uppercase tracking-wider mb-0.5">{tSyslog.income}</span>
+                     <span className="text-[9px] text-zinc-400 font-bold uppercase tracking-wider mb-0.5">{tSublog.income}</span>
                      <span className="text-amber-400 font-pixel text-xs drop-shadow-sm">+{coinPopup.amount} Gold</span>
                    </div>
                 </div>
@@ -549,7 +563,7 @@ export default function Home() {
               {isNotifOpen && (
                 <div className="absolute right-0 mt-4 w-72 sm:w-80 max-w-[90vw] bg-zinc-900 border-4 border-zinc-700 rounded-none shadow-[8px_8px_0_#000] z-[100] animate-in fade-in slide-in-from-top-2 overflow-hidden text-left">
                   <div className="p-4 border-b-4 border-zinc-700 flex justify-between items-center bg-zinc-800">
-                    <span className="font-bold text-sm text-white uppercase tracking-widest">{tSyslog.title}</span>
+                    <span className="font-bold text-sm text-white uppercase tracking-widest">{tSublog.title}</span>
                     <button onClick={() => setIsNotifOpen(false)} className="text-zinc-500 hover:text-white">
                       <X size={16} />
                     </button>
@@ -558,19 +572,19 @@ export default function Home() {
                   <div className="p-4 flex flex-col gap-4 max-h-[75vh] overflow-y-auto custom-scrollbar">
                     <div className="flex flex-col gap-3">
                       <h4 className="text-[10px] font-bold text-amber-400 uppercase tracking-widest border-b-2 border-zinc-700 pb-2 mb-1 flex items-center gap-2">
-                        <CheckSquare size={14}/> {tSyslog.dailyQuests}
+                        <CheckSquare size={14}/> {tSublog.dailyQuests}
                       </h4>
                       
                       <div className={`flex flex-col gap-2 p-3 border-2 ${dp.loginClaimed ? 'bg-emerald-950/20 border-emerald-900/50' : 'bg-zinc-800 border-zinc-600'}`}>
                         <div className="flex items-center justify-between">
                           <div className="flex flex-col gap-0.5">
-                            <span className={`text-xs font-bold ${dp.loginClaimed ? 'text-emerald-500/70 line-through' : 'text-zinc-200'}`}>{tSyslog.login}</span>
+                            <span className={`text-xs font-bold ${dp.loginClaimed ? 'text-emerald-500/70 line-through' : 'text-zinc-200'}`}>{tSublog.login}</span>
                             <span className="text-[9px] text-amber-400 font-pixel mt-1">15 XP | 10 G</span>
                           </div>
                           {dp.loginClaimed ? (
-                            <span className="text-[10px] text-emerald-500 font-bold bg-emerald-500/10 px-2 py-1 border border-emerald-500/20">{tSyslog.done}</span>
+                            <span className="text-[10px] text-emerald-500 font-bold bg-emerald-500/10 px-2 py-1 border border-emerald-500/20">{tSublog.done}</span>
                           ) : (
-                            <button onClick={() => handleClaimReward('login')} className="px-3 py-1.5 bg-amber-500 text-amber-950 text-[10px] font-bold uppercase hover:bg-amber-400 transition-all shadow-[2px_2px_0_#000] active:translate-y-[2px] active:shadow-none shrink-0">{tSyslog.claim}</button>
+                            <button onClick={() => handleClaimReward('login')} className="px-3 py-1.5 bg-amber-500 text-amber-950 text-[10px] font-bold uppercase hover:bg-amber-400 transition-all shadow-[2px_2px_0_#000] active:translate-y-[2px] active:shadow-none shrink-0">{tSublog.claim}</button>
                           )}
                         </div>
                       </div>
@@ -578,16 +592,16 @@ export default function Home() {
                       <div className={`flex flex-col gap-2 p-3 border-2 ${dp.taskClaimed ? 'bg-emerald-950/20 border-emerald-900/50' : 'bg-zinc-800 border-zinc-600'}`}>
                         <div className="flex items-center justify-between">
                           <div className="flex flex-col gap-0.5 w-full pr-4">
-                            <span className={`text-xs font-bold ${dp.taskClaimed ? 'text-emerald-500/70 line-through' : 'text-zinc-200'}`}>{tSyslog.ops3}</span>
+                            <span className={`text-xs font-bold ${dp.taskClaimed ? 'text-emerald-500/70 line-through' : 'text-zinc-200'}`}>{tSublog.ops3}</span>
                             <span className="text-[9px] text-amber-400 font-pixel mt-1 mb-1">30 XP | 20 G</span>
                             <div className="w-full bg-zinc-900 h-1.5 border border-zinc-700">
                                <div className="bg-amber-400 h-full transition-all" style={{ width: `${Math.min(100, (dp.tasksCompleted / 3) * 100)}%` }}></div>
                             </div>
                           </div>
                           {dp.taskClaimed ? (
-                            <span className="text-[10px] text-emerald-500 font-bold bg-emerald-500/10 px-2 py-1 border border-emerald-500/20 shrink-0">{tSyslog.done}</span>
+                            <span className="text-[10px] text-emerald-500 font-bold bg-emerald-500/10 px-2 py-1 border border-emerald-500/20 shrink-0">{tSublog.done}</span>
                           ) : dp.tasksCompleted >= 3 ? (
-                            <button onClick={() => handleClaimReward('task')} className="px-3 py-1.5 bg-amber-500 text-amber-950 text-[10px] font-bold uppercase hover:bg-amber-400 transition-all shadow-[2px_2px_0_#000] active:translate-y-[2px] active:shadow-none shrink-0">{tSyslog.claim}</button>
+                            <button onClick={() => handleClaimReward('task')} className="px-3 py-1.5 bg-amber-500 text-amber-950 text-[10px] font-bold uppercase hover:bg-amber-400 transition-all shadow-[2px_2px_0_#000] active:translate-y-[2px] active:shadow-none shrink-0">{tSublog.claim}</button>
                           ) : (
                             <span className="text-[10px] text-zinc-500 font-bold shrink-0">{dp.tasksCompleted}/3</span>
                           )}
@@ -597,13 +611,13 @@ export default function Home() {
                       <div className={`flex flex-col gap-2 p-3 border-2 ${dp.bossClaimed ? 'bg-emerald-950/20 border-emerald-900/50' : 'bg-zinc-800 border-zinc-600'}`}>
                         <div className="flex items-center justify-between">
                           <div className="flex flex-col gap-0.5">
-                            <span className={`text-xs font-bold ${dp.bossClaimed ? 'text-emerald-500/70 line-through' : 'text-zinc-200'}`}>{tSyslog.boss1}</span>
+                            <span className={`text-xs font-bold ${dp.bossClaimed ? 'text-emerald-500/70 line-through' : 'text-zinc-200'}`}>{tSublog.boss1}</span>
                             <span className="text-[9px] text-amber-400 font-pixel mt-1">50 XP | 30 G</span>
                           </div>
                           {dp.bossClaimed ? (
-                            <span className="text-[10px] text-emerald-500 font-bold bg-emerald-500/10 px-2 py-1 border border-emerald-500/20 shrink-0">{tSyslog.done}</span>
+                            <span className="text-[10px] text-emerald-500 font-bold bg-emerald-500/10 px-2 py-1 border border-emerald-500/20 shrink-0">{tSublog.done}</span>
                           ) : dp.bossesDefeated >= 1 ? (
-                            <button onClick={() => handleClaimReward('boss')} className="px-3 py-1.5 bg-amber-500 text-amber-950 text-[10px] font-bold uppercase hover:bg-amber-400 transition-all shadow-[2px_2px_0_#000] active:translate-y-[2px] active:shadow-none shrink-0">{tSyslog.claim}</button>
+                            <button onClick={() => handleClaimReward('boss')} className="px-3 py-1.5 bg-amber-500 text-amber-950 text-[10px] font-bold uppercase hover:bg-amber-400 transition-all shadow-[2px_2px_0_#000] active:translate-y-[2px] active:shadow-none shrink-0">{tSublog.claim}</button>
                           ) : (
                             <span className="text-[10px] text-zinc-500 font-bold shrink-0">{dp.bossesDefeated}/1</span>
                           )}
@@ -613,10 +627,10 @@ export default function Home() {
 
                     {(!isTaskCreated || !isTaskCompleted) && (
                       <div className="mt-2 pt-4 border-t-2 border-zinc-700 border-dashed">
-                        <h4 className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest mb-3">{tSyslog.onboarding}</h4>
+                        <h4 className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest mb-3">{tSublog.onboarding}</h4>
                         <div className="mt-1 mb-3">
                           <div className="flex justify-between text-[10px] font-bold mb-1.5 text-zinc-300 uppercase">
-                            <span>{tSyslog.advProg}</span>
+                            <span>{tSublog.advProg}</span>
                             <span>{onboardingProgress}%</span>
                           </div>
                           <div className="h-2 bg-zinc-900 border border-zinc-700 rounded-none overflow-hidden">
@@ -629,16 +643,16 @@ export default function Home() {
                             <div className="flex items-start gap-3 p-3 bg-pink-500/10 border-l-2 border-pink-500">
                               <CheckSquare size={14} className="text-pink-500 shrink-0 mt-0.5" />
                               <div className="flex flex-col">
-                                <span className="text-xs font-bold text-pink-400">{tSyslog.createFirst}</span>
-                                <span className="text-[10px] text-zinc-400">{tSyslog.usePlus}</span>
+                                <span className="text-xs font-bold text-pink-400">{tSublog?.createFirst || "Buat Misi Pertama"}</span>
+                                <span className="text-[10px] text-zinc-400">{tSublog.usePlus}</span>
                               </div>
                             </div>
                           ) : (
                             <div className="flex items-start gap-3 p-3 bg-emerald-500/10 border-l-2 border-emerald-500 opacity-60">
                               <Check size={14} className="text-emerald-500 shrink-0 mt-0.5" />
                               <div className="flex flex-col">
-                                <span className="text-xs font-bold text-emerald-400 line-through">{tSyslog.createFirst}</span>
-                                <span className="text-[10px] text-zinc-500">{tSyslog.done}</span>
+                                <span className="text-xs font-bold text-emerald-400 line-through">{tSublog?.createFirst || "Buat Misi Pertama"}</span>
+                                <span className="text-[10px] text-zinc-500">{tSublog.done}</span>
                               </div>
                             </div>
                           )}
@@ -647,16 +661,16 @@ export default function Home() {
                             <div className="flex items-start gap-3 p-3 bg-pink-500/10 border-l-2 border-pink-500">
                               <CheckSquare size={14} className="text-pink-500 shrink-0 mt-0.5" />
                               <div className="flex flex-col">
-                                <span className="text-xs font-bold text-pink-400">{tSyslog.finishFirst}</span>
-                                <span className="text-[10px] text-zinc-400">{tSyslog.checkFirst}</span>
+                                <span className="text-xs font-bold text-pink-400">{tSublog?.finishFirst || "Selesaikan Misi Pertama"}</span>
+                                <span className="text-[10px] text-zinc-400">{tSublog.checkFirst}</span>
                               </div>
                             </div>
                           ) : (
                             <div className="flex items-start gap-3 p-3 bg-emerald-500/10 border-l-2 border-emerald-500 opacity-60">
                               <Check size={14} className="text-emerald-500 shrink-0 mt-0.5" />
                               <div className="flex flex-col">
-                                <span className="text-xs font-bold text-emerald-400 line-through">{tSyslog.finishFirst}</span>
-                                <span className="text-[10px] text-zinc-500">{tSyslog.done}</span>
+                                <span className="text-xs font-bold text-emerald-400 line-through">{tSublog?.finishFirst || "Selesaikan Misi Pertama"}</span>
+                                <span className="text-[10px] text-zinc-500">{tSublog.done}</span>
                               </div>
                             </div>
                           )}
@@ -679,7 +693,8 @@ export default function Home() {
               {isSettingsOpen && (
                 <div className="absolute right-0 mt-4 w-48 bg-zinc-900 border-4 border-zinc-700 rounded-none shadow-[8px_8px_0_#000] z-[100] animate-in fade-in slide-in-from-top-2 overflow-hidden text-left">
                   <div className="flex flex-col">
-                    <button onClick={() => { setActiveMenu("Pencapaian"); setIsSettingsOpen(false); }} className="px-4 py-3 text-xs font-bold text-zinc-300 hover:bg-zinc-800 hover:text-white text-left border-b border-zinc-800 transition-colors flex items-center gap-2"><Trophy size={14} /> {tDropdown.achievements}</button>                    <button onClick={() => { setActiveMenu("Pengaturan"); setIsSettingsOpen(false); }} className="px-4 py-3 text-xs font-bold text-zinc-300 hover:bg-zinc-800 hover:text-white text-left border-b border-zinc-800 transition-colors flex items-center gap-2"><Settings size={14} /> {tDropdown.settings}</button>
+                    <button onClick={() => { setActiveMenu("Pencapaian"); setIsSettingsOpen(false); }} className="px-4 py-3 text-xs font-bold text-zinc-300 hover:bg-zinc-800 hover:text-white text-left border-b border-zinc-800 transition-colors flex items-center gap-2"><Trophy size={14} /> {tDropdown.achievements}</button>
+                    <button onClick={() => { setActiveMenu("Pengaturan"); setIsSettingsOpen(false); }} className="px-4 py-3 text-xs font-bold text-zinc-300 hover:bg-zinc-800 hover:text-white text-left border-b border-zinc-800 transition-colors flex items-center gap-2"><Settings size={14} /> {tDropdown.settings}</button>
                     <button onClick={handleLogout} className="px-4 py-3 text-xs font-bold text-pink-500 hover:bg-pink-500/10 text-left transition-colors flex items-center gap-2"><LogOut size={14} /> {tDropdown.logout}</button>
                   </div>
                 </div>
@@ -688,9 +703,12 @@ export default function Home() {
           </div>
         </header>
 
-        <main className="flex-1 overflow-y-auto overflow-x-hidden bg-zinc-900 p-4 lg:p-8 custom-scrollbar">
+        <main 
+          className={`flex-1 overflow-y-auto overflow-x-hidden bg-zinc-900 p-4 lg:p-8 custom-scrollbar transition-all duration-300 ease-in-out ${
+            isStatusPanelOpen ? 'xl:pr-80' : 'xl:pr-0'
+          }`}
+        >
           {renderContent()}
-          {/* Spacer fisik untuk menjamin konten mobile aman dari navbar */}
           <div className="h-32 md:h-8 w-full shrink-0 block pointer-events-none" />
         </main>
       </div>

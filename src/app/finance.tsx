@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useStore } from "@/store/useStore";
 import {
   Plus,
@@ -107,18 +107,26 @@ export default function Finance({
   });
   const [isRecurringOpen, setIsRecurringOpen] = useState(false);
 
+  // KUNCI PENGAMAN: Menggunakan useRef agar initialOpenType hanya diproses satu kali saja saat mount pertama
+  const hasProcessedInitialType = useRef(false);
+
   useEffect(() => {
     processRecurringTransactions();
   }, [processRecurringTransactions]);
 
+  // Efek dikoreksi total dengan pengaman useRef untuk memutus loop pembukaan otomatis
   useEffect(() => {
+    if (initialOpenType && !hasProcessedInitialType.current) {
       if (initialOpenType === "tagihan") {
         setIsRecurringOpen(true);
       } else if (initialOpenType === "rekening" || initialOpenType === "tabungan") {
         setAddType(initialOpenType);
         setIsAddOpen(true);
       }
-    }, [initialOpenType]);
+      // Kunci pemicu setelah berhasil dijalankan sekali
+      hasProcessedInitialType.current = true;
+    }
+  }, [initialOpenType]);
   
   const openAddModal = (type: "rekening" | "tabungan") => {
     setAddType(type);
@@ -927,29 +935,35 @@ function AddAccountModal({
           )}
 
           {type === "tabungan" && (
-            <div className="bg-zinc-800 p-1 rounded-none border-2 border-zinc-700 flex">
-              <button
-                onClick={() => setIsGold(false)}
-                className={`flex-1 py-2 text-xs font-bold uppercase rounded-none transition-all ${
-                  !isGold
-                    ? "bg-cyan-500 text-zinc-950 shadow"
-                    : "text-zinc-500 hover:text-zinc-300"
-                }`}
-              >
-                {tFin.tabMoney}
-              </button>
-              <button
-                onClick={() => setIsGold(true)}
-                className={`flex-1 py-2 text-xs font-bold uppercase rounded-none transition-all ${
-                  isGold
-                    ? "bg-yellow-500 text-zinc-950 shadow"
-                    : "text-zinc-500 hover:text-zinc-300"
-                }`}
-              >
-                {tFin.tabGold}
-              </button>
-              {/* Spacer */}
-              <div className="h-2 w-full shrink-0" />
+            <div>
+              <label className="text-[10px] sm:text-sm font-bold text-zinc-400 mb-2 sm:mb-3 block uppercase">
+                Tipe Tabungan
+              </label>
+              <div className="grid grid-cols-2 gap-3">
+                <button
+                  onClick={() => setIsGold(false)}
+                  className={`flex flex-col items-center justify-center gap-2 p-4 rounded-none border-2 transition-all ${
+                    !isGold
+                      ? "bg-cyan-500/10 border-cyan-500 text-cyan-400 shadow-[4px_4px_0_theme(colors.cyan.700)] translate-y-[-2px]"
+                      : "bg-zinc-800 border-zinc-700 text-zinc-500 hover:border-zinc-500 hover:text-zinc-300"
+                  }`}
+                >
+                  <Banknote size={28} className={!isGold ? "text-cyan-400" : "text-zinc-500"} />
+                  <span className="text-xs font-bold uppercase tracking-wider">{tFin.tabMoney}</span>
+                </button>
+
+                <button
+                  onClick={() => setIsGold(true)}
+                  className={`flex flex-col items-center justify-center gap-2 p-4 rounded-none border-2 transition-all ${
+                    isGold
+                      ? "bg-yellow-500/10 border-yellow-500 text-yellow-500 shadow-[4px_4px_0_theme(colors.yellow.700)] translate-y-[-2px]"
+                      : "bg-zinc-800 border-zinc-700 text-zinc-500 hover:border-zinc-500 hover:text-zinc-300"
+                  }`}
+                >
+                  <Coins size={28} className={isGold ? "text-yellow-500" : "text-zinc-500"} />
+                  <span className="text-xs font-bold uppercase tracking-wider">{tFin.tabGold}</span>
+                </button>
+              </div>
             </div>
           )}
 

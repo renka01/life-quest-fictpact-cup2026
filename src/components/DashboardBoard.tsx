@@ -22,7 +22,7 @@ import { translations } from "@/utils/translations";
 
 interface DashboardBoardProps {
   onOpenTaskModal: (type?: TaskType | null) => void;
-  onOpenFinanceAction: (type: "rekening" | "tabungan" | "tagihan") => void;
+  onOpenFinanceAction: (type: "rekening" | "tabungan" | "tagihan" | null) => void;
   onOpenBills: () => void;
   onGoToFinance: () => void;
 }
@@ -79,6 +79,11 @@ export default function DashboardBoard({
   const greeting = focusTasks.length > 0
       ? t.greetActive.replace('{n}', focusTasks.length.toString())
       : t.greetQuiet;
+
+  const handleGoToFinanceClean = () => {
+    onOpenFinanceAction(null);
+    onGoToFinance();
+  };
 
   return (
     <div className="animate-in fade-in duration-500 flex flex-col gap-6">
@@ -176,7 +181,7 @@ export default function DashboardBoard({
             </div>
 
             <button
-              onClick={onGoToFinance}
+              onClick={handleGoToFinanceClean}
               className="w-full mt-3 bg-zinc-800 border-2 border-zinc-600 text-zinc-300 px-3 py-3 text-xs font-bold hover:border-white hover:text-white transition-all shadow-[3px_3px_0_#000]"
             >
               <span className="flex items-center justify-center gap-2">

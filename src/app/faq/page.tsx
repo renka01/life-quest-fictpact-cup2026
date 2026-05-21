@@ -68,7 +68,7 @@ const GrandSpartanLandscape = () => (
 const PrivacyContent = ({ lang = 'id' }: { lang?: string }) => (
   lang === 'id' ? (
     <div className="space-y-4 text-zinc-300 text-sm">
-      <p>Terakhir diperbarui: 26 Maret 2026</p>
+      <p>Terakhir diperbarui: 20 Mei 2026</p>
       <p>Aplikasi Daily Dungeon ("kami") menghargai privasi Anda. Kebijakan Privasi ini menjelaskan bagaimana kami mengumpulkan, menggunakan, dan melindungi informasi Anda saat Anda menggunakan aplikasi kami.</p>
       <h3 className="font-bold text-amber-400 pt-2">1. Informasi yang Kami Kumpulkan</h3>
       <p>Kami hanya mengumpulkan informasi yang esensial untuk fungsionalitas aplikasi, yaitu: alamat email Anda untuk keperluan autentikasi akun. Kami tidak mengumpulkan data pribadi sensitif lainnya.</p>

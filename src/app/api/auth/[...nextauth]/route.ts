@@ -3,7 +3,7 @@ import GoogleProvider from "next-auth/providers/google";
 import GithubProvider from "next-auth/providers/github";
 import CredentialsProvider from "next-auth/providers/credentials";
 import bcrypt from "bcryptjs";
-import prisma from "../../progress/prisma"; // Pastikan path prisma-mu benar
+import prisma from "../../progress/prisma"; // Menggunakan path prisma asli sesuai proyekmu
 
 export const authOptions: NextAuthOptions = {
   providers: [
@@ -18,27 +18,39 @@ export const authOptions: NextAuthOptions = {
     CredentialsProvider({
       name: "Credentials",
       credentials: {
-        email: { label: "Email", type: "email" },
+        // Mengubah label menjadi deskriptif untuk mendukung dual-input
+        email: { label: "Email atau Nama Karakter", type: "text" }, 
         password: { label: "Password", type: "password" }
       },
       async authorize(credentials) {
         if (!credentials?.email || !credentials?.password) {
-          throw new Error("Email dan password wajib diisi");
+          throw new Error("Email/Nama Karakter dan kata sandi wajib diisi!");
         }
         
-        const user = await prisma.user.findUnique({
-          where: { email: credentials.email }
+        const inputIdentifier = credentials.email.trim();
+
+        // 🔄 PERBAIKAN UTAMA: Menggunakan findFirst + OR agar bisa mencari ke kolom email ATAU kolom name (nickname)
+        const user = await prisma.user.findFirst({
+          where: {
+            OR: [
+              { email: inputIdentifier },
+              { name: inputIdentifier } // 💡 Ini yang membaca akun seperti "despacito" atau "Rappizr"
+            ]
+          }
         });
 
+        // Jika user sama sekali tidak ditemukan di kedua kolom tersebut
         if (!user || !user.password) {
-          throw new Error("Email tidak ditemukan atau akun ini terdaftar melalui Google/Github.");
+          throw new Error("Email/Nama Karakter tidak ditemukan atau akun ini terdaftar melalui Google/Github.");
         }
 
+        // Validasi kecocokan hash password dengan bcrypt
         const isPasswordValid = await bcrypt.compare(credentials.password, user.password);
         if (!isPasswordValid) {
-          throw new Error("Kata sandi salah");
+          throw new Error("Kata sandi yang Anda masukkan salah!");
         }
 
+        // Mengembalikan data user yang sukses diautentikasi
         return { id: user.id.toString(), email: user.email, name: user.name };
       }
     })
@@ -80,7 +92,7 @@ export const authOptions: NextAuthOptions = {
       return true;
     },
 
-    // (Opsional) Mengirimkan data session agar ID user bisa dipakai di frontend kalau dibutuhkan
+    // Mengirimkan data session agar ID user bisa dipakai di frontend kalau dibutuhkan
     async session({ session, token }) {
       if (session.user && token.sub) {
         // @ts-ignore

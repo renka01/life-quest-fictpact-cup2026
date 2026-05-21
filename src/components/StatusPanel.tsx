@@ -113,30 +113,42 @@ export default function StatusPanel({ isOpen, onClose }: { isOpen: boolean, onCl
 
   return (
     <>
+      {/* ── Backdrop Overlay Dimmer (Hanya untuk layar Mobile/Tablet saat menu terbuka) ── */}
+      {isOpen && (
+        <div 
+          className="fixed inset-0 bg-black/50 backdrop-blur-xs z-[999] xl:hidden animate-in fade-in duration-200"
+          onClick={onClose}
+        />
+      )}
+
+      {/* ── Status Panel Container (Collapsible Sidebar Drawer) ── */}
       <aside
         className={`
-          fixed top-0 right-0 h-full w-64 bg-zinc-900 border-l-4 border-zinc-700
-          p-6 flex-col gap-6 z-40 shadow-[-4px_0_0_rgba(0,0,0,0.5)] overflow-y-auto
-          shrink-0 transition-transform duration-300
-          ${isOpen ? 'translate-x-0 flex' : 'translate-x-full hidden xl:flex'}
-          xl:static xl:translate-x-0 xl:w-80
+          fixed top-0 right-0 h-full bg-zinc-900 border-l-4 border-zinc-700
+          p-6 flex flex-col gap-6 z-[1000] overflow-y-auto shrink-0
+          transition-all duration-300 ease-in-out
+          ${isOpen 
+            ? 'translate-x-0 w-64 sm:w-72 md:w-80 opacity-100 shadow-[-8px_0_16px_rgba(0,0,0,0.6)]' 
+            : 'translate-x-full w-0 p-0 border-l-0 opacity-0 pointer-events-none'
+          }
         `}
       >
-        {/* ── Header ────────────────────────────────────────── */}
-        <div className="flex justify-between items-center">
+        {/* ── Header ── */}
+        <div className="flex justify-between items-center shrink-0">
           <h3 className="font-pixel text-[10px] text-amber-400 tracking-widest">{tLog.title}</h3>
           <div className="flex items-center gap-4">
             <button onClick={() => window.location.reload()} className="text-zinc-500 hover:text-white active:rotate-180 transition-transform duration-300">
               <RefreshCw size={14}/>
             </button>
-            <button onClick={onClose} className="xl:hidden text-zinc-500 hover:text-white transition-colors">
+            {/* Tombol penutup X sekarang di-render global untuk semua breakpoint layar */}
+            <button onClick={onClose} className="text-zinc-500 hover:text-white transition-colors">
               <X size={20}/>
             </button>
           </div>
         </div>
 
-        {/* ── Avatar card ───────────────────────────────────── */}
-        <div className="bg-zinc-800 p-3 rounded-none border-4 border-zinc-700 shadow-[8px_8px_0_#000] flex flex-col gap-4">
+        {/* ── Avatar card ── */}
+        <div className="bg-zinc-800 p-3 rounded-none border-4 border-zinc-700 shadow-[8px_8px_0_#000] flex flex-col gap-4 shrink-0">
 
           {(userProfile?.nickname || userProfile?.accountName) && (
             <div className="text-center mt-2">
@@ -184,9 +196,8 @@ export default function StatusPanel({ isOpen, onClose }: { isOpen: boolean, onCl
           </div>
         </div>
 
-        {/* ── Stat bars ─────────────────────────────────────── */}
-        <div className="flex flex-col gap-5">
-
+        {/* ── Stat bars ── */}
+        <div className="flex flex-col gap-5 shrink-0">
           {/* HP */}
           <div className="flex flex-col gap-1.5">
             <div className="flex justify-between items-end">
@@ -241,32 +252,28 @@ export default function StatusPanel({ isOpen, onClose }: { isOpen: boolean, onCl
               </span>
             </div>
           </div>
+        </div>
 
-          {/* ── BIO / DESKRIPSI (CLICKABLE) ── */}
-          <div 
-            onClick={handleOpenBioModal}
-            className="mt-2 bg-zinc-900 border-2 border-zinc-700 p-3 text-center shadow-[4px_4px_0_#000] cursor-pointer hover:border-amber-500 hover:shadow-[4px_4px_0_#f59e0b] group transition-all relative"
-          >
-            {/* Ikon Edit kecil yang muncul saat hover */}
-            <div className="absolute top-2 right-2 text-zinc-500 opacity-0 group-hover:opacity-100 group-hover:text-amber-400 transition-opacity">
-              <Edit3 size={12} />
-            </div>
-            <p className="text-[8px] text-zinc-500 uppercase tracking-widest mb-2 font-bold group-hover:text-amber-500 transition-colors">
-              {tLog.bio}
-            </p>
-            <p className="text-[11px] text-zinc-300 italic px-1 font-mono break-words leading-relaxed group-hover:text-white transition-colors">
-              {userProfile?.bio ? `"${userProfile.bio}"` : `"${tLog.bioPh}"`}
-            </p>
+        {/* ── Bio Panel ── */}
+        <div 
+          onClick={handleOpenBioModal}
+          className="mt-2 bg-zinc-900 border-2 border-zinc-700 p-3 text-center shadow-[4px_4px_0_#000] cursor-pointer hover:border-amber-500 hover:shadow-[4px_4px_0_#f59e0b] group transition-all relative shrink-0"
+        >
+          <div className="absolute top-2 right-2 text-zinc-500 opacity-0 group-hover:opacity-100 group-hover:text-amber-400 transition-opacity">
+            <Edit3 size={12} />
           </div>
-          {/* Mobile Spacer */}
-          <div className="h-24 xl:h-0 w-full shrink-0 pointer-events-none" />
-
+          <p className="text-[8px] text-zinc-500 uppercase tracking-widest mb-2 font-bold group-hover:text-amber-500 transition-colors">
+            {tLog.bio}
+          </p>
+          <p className="text-[11px] text-zinc-300 italic px-1 font-mono break-words leading-relaxed group-hover:text-white transition-colors">
+            {userProfile?.bio ? `"${userProfile.bio}"` : `"${tLog.bioPh}"`}
+          </p>
         </div>
       </aside>
 
       {/* ── MODAL EDIT BIO ── */}
       {isBioModalOpen && (
-        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-[100] flex justify-center items-center p-4">
+        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-[9999] flex justify-center items-center p-4">
           <div className="w-full max-w-md bg-zinc-900 border-4 border-amber-500 shadow-[8px_8px_0_#000] flex flex-col animate-in zoom-in duration-200">
             <div className="bg-zinc-800 border-b-4 border-amber-500 p-4 flex justify-between items-center">
               <h3 className="font-pixel text-[10px] text-amber-400 uppercase tracking-widest flex items-center gap-2">
@@ -306,9 +313,8 @@ export default function StatusPanel({ isOpen, onClose }: { isOpen: boolean, onCl
 
       {/* ── MODAL KONFIRMASI RESET KARAKTER ── */}
       {isResetModalOpen && (
-        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-[100] flex justify-center items-center p-4">
+        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-[9999] flex justify-center items-center p-4">
           <div className="w-full max-w-sm bg-zinc-900 border-4 border-red-500 shadow-[8px_8px_0_#000] flex flex-col animate-in zoom-in duration-200">
-            {/* Header Modal */}
             <div className="bg-red-950/50 border-b-4 border-red-500 p-4 flex justify-between items-center">
               <h3 className="font-pixel text-[10px] text-red-400 uppercase tracking-widest flex items-center gap-2">
                 <AlertTriangle size={14} className="text-red-500 animate-pulse" /> Peringatan Sistem
@@ -317,8 +323,6 @@ export default function StatusPanel({ isOpen, onClose }: { isOpen: boolean, onCl
                 <X size={18} />
               </button>
             </div>
-            
-            {/* Body Modal */}
             <div className="p-6 text-center">
               <p className="text-sm text-zinc-300 leading-relaxed mb-4">
                 Yakin ingin <strong className="text-red-400">mengulang karakter</strong>? 
@@ -327,8 +331,6 @@ export default function StatusPanel({ isOpen, onClose }: { isOpen: boolean, onCl
                 "Ini akan membawamu kembali ke layar pemilihan karakter. Aset dan item mungkin tetap tersimpan, tetapi identitas petarungmu akan terhapus."
               </p>
             </div>
-
-            {/* Footer Modal */}
             <div className="p-4 border-t-2 border-zinc-700 bg-zinc-800 flex justify-end gap-3">
               <button 
                 onClick={() => setIsResetModalOpen(false)}
