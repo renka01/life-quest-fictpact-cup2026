@@ -888,7 +888,7 @@ export default function LoginPage() {
               <a href="https://www.instagram.com/rappizr" target="_blank" rel="noreferrer" className="hover:text-amber-400 transition-colors ml-1 cursor-pointer">rappizr</a>
             </div>
             <div className="flex items-center gap-2">
-              <Github size={18}/>
+              <Github size={18}/> 
               <a href="https://github.com/renka01" target="_blank" rel="noreferrer" className="hover:text-amber-400 transition-colors cursor-pointer">renka01</a>,
               <a href="https://github.com/rafaeldimaass" target="_blank" rel="noreferrer" className="hover:text-amber-400 transition-colors ml-1 cursor-pointer">rafael</a>,
               <a href="https://github.com/Rappizr" target="_blank" rel="noreferrer" className="hover:text-amber-400 transition-colors ml-1 cursor-pointer">Rappizr</a>

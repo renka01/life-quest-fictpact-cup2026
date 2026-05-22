@@ -64,6 +64,13 @@ export const translations: any = {
       equippedBadge: "DIGUNAKAN",
       ownedBadge: "DIMILIKI",
       emptySlot: "Slot kosong",
+      // Tambahan baru untuk pop-up detail item
+      popupHeader: "DETAIL ITEM",
+      actionBuy: "BELI ITEM",
+      actionEquip: "GUNAKAN",
+      actionUnequip: "LEPAS ITEM",
+      goldShortage: "GOLD KURANG",
+      itemPrice: "HARGA"
     },
 
     // UI General
@@ -117,7 +124,7 @@ export const translations: any = {
       breakdown: "Breakdown Misi",
       topCat: "Kategori Teraktif",
       flow: "Arus Keuangan",
-      charProg: "Progres Karakter",
+      charProg: "Progress Karakter",
       total: "Total",
       done: "Selesai",
       pending: "Tertunda",
@@ -204,7 +211,6 @@ export const translations: any = {
     quotes: {
       dash: "Setiap hari adalah kesempatan untuk grinding.", cal: "Pantau tenggat waktu dan jadwalkan misimu.",
       focus: "Kalahkan monster kemalasan dengan focus penuh.", stats: "Data tidak pernah berbohong.", set: "Sesuaikan dunia sesuai keinginanmu.",
-      // DAFTAR QUOTE ACAK ID
       random: [
         "Setiap hari adalah kesempatan untuk grinding.",
         "Misi kecil hari ini adalah kemenangan besar esok hari.",
@@ -381,6 +387,13 @@ export const translations: any = {
       equippedBadge: "EQUIPPED",
       ownedBadge: "OWNED",
       emptySlot: "Empty slot",
+      // Tambahan baru untuk pop-up detail item
+      popupHeader: "ITEM DETAILS",
+      actionBuy: "BUY ITEM",
+      actionEquip: "EQUIP",
+      actionUnequip: "UNEQUIP ITEM",
+      goldShortage: "GOLD SHORTAGE",
+      itemPrice: "PRICE"
     },
 
     // UI General
@@ -521,7 +534,6 @@ export const translations: any = {
     quotes: {
       dash: "Every day is an opportunity to grind.", cal: "Monitor deadlines and schedule your missions.",
       focus: "Defeat the monster of laziness with full focus.", stats: "Data never lies.", set: "Customize the world to your liking.",
-      // DAFTAR QUOTE ACAK EN
       random: [
         "Every day is an opportunity to grind.",
         "A small quest today is a grand victory tomorrow.",
