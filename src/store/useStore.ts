@@ -107,6 +107,7 @@ export interface AppSettings {
   startOfDay: string;
   audioTheme: string;
   holidayMode: boolean;
+  tutorialCompleted?: boolean;
 }
 
 export type EquipSlot = 'weapon' | 'armor' | 'helmet' | 'cloak' | 'accessory' | 'potion';
@@ -141,6 +142,7 @@ interface LifeQuestStore {
 
   settings: AppSettings;
   updateSetting: <K extends keyof AppSettings>(key: K, value: AppSettings[K]) => void;
+  restartTutorial: () => void;
   playSound: (soundName: string) => void;
 
   userProfile: UserProfile;
@@ -244,6 +246,7 @@ export const useStore = create<LifeQuestStore>()(
         startOfDay: "00:00",
         audioTheme: "retro",
         holidayMode: false,
+        tutorialCompleted: false,
       },
       dailyProgress: {
         loginClaimed: false,
@@ -263,7 +266,7 @@ export const useStore = create<LifeQuestStore>()(
         level: 1,
         hp: 50, maxHp: 50,
         exp: 0, maxExp: 300,
-        gold: 0,
+        gold: 50, // Modal awal untuk tutorial
         streak: 0,
         lastLoginDate: ""
       },
@@ -370,6 +373,10 @@ export const useStore = create<LifeQuestStore>()(
       // --- ACTIONS SETTINGS & AUDIO ---
       updateSetting: (key, value) => set((state) => ({ 
         settings: { ...state.settings, [key]: value } 
+      })),
+      restartTutorial: () => set((state) => ({
+        settings: { ...state.settings, tutorialCompleted: false },
+        stats: { ...state.stats, gold: Math.max(state.stats.gold, 50) }
       })),
       playSound: (soundName) => {
         const { settings } = get();

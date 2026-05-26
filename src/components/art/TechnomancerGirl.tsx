@@ -217,8 +217,19 @@ const LeviathanAxe = () => (
   </g>
 );
 
+const WoodenSword = () => (
+  <g transform="rotate(135 22.5 22.5) translate(7, 2)">
+    <rect x="15" y="4" width="2" height="16" fill="#854d0e"/>
+    <rect x="14" y="5" width="1" height="14" fill="#a16207"/>
+    <rect x="12" y="20" width="8" height="1" fill="#78350f"/>
+    <rect x="14" y="21" width="4" height="6" fill="#451a03"/>
+    <rect x="15" y="27" width="2" height="1" fill="#78350f"/>
+  </g>
+);
+
 const RightHandWeapon = ({ weaponId }: { weaponId?: number }) => {
   switch (weaponId) {
+    case 1:  return <WoodenSword />;
     case 2:  return <DemonEdge />;
     case 9:  return <EnmaKatana />;
     case 10: return <KasakaFang />;

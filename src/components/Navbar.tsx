@@ -47,6 +47,7 @@ export default function Navbar({ activeMenu, setActiveMenu }: { activeMenu: stri
           return (
             <button 
               key={idx} 
+              id={`tour-nav-${item.id.replace(/\s+/g, '').replace('&', '')}`}
               onClick={() => setActiveMenu(item.id)}
               className={`flex flex-col md:flex-row items-center justify-center md:justify-start gap-1 md:gap-4 px-2 py-2 md:px-4 md:py-3 border-0 md:border-2 transition-all group rounded-none shrink-0 min-w-[64px] sm:min-w-0 sm:flex-1 md:flex-none w-auto md:w-full ${
                 isActive 

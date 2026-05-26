@@ -875,11 +875,21 @@ const StarFragmentIcon = () => (
   </svg>
 );
 
+const WoodenSwordIcon = () => (
+  <svg viewBox="0 0 32 32" width="56" height="56" xmlns="http://www.w3.org/2000/svg" style={{ imageRendering: 'pixelated' }}>
+    <rect x="15" y="4" width="2" height="16" fill="#854d0e"/>
+    <rect x="14" y="5" width="1" height="14" fill="#a16207"/>
+    <rect x="12" y="20" width="8" height="1" fill="#78350f"/>
+    <rect x="14" y="21" width="4" height="6" fill="#451a03"/>
+    <rect x="15" y="27" width="2" height="1" fill="#78350f"/>
+  </svg>
+);
+
 // ============================================================
 // ITEM DATA
 // ============================================================
 export const ITEMS: ShopItem[] = [
-  { id: 1, name: "Shadow Monarch's Cloak", price: 300, rarity: 'legendary', slot: 'cloak',      stat: 'SHADOW ATK +50 / MAGIC DEF +30', icon: <ShadowCloakIcon /> },
+  { id: 1, name: "Training Wooden Sword",  price: 5,   rarity: 'common',    slot: 'weapon',     stat: 'ATK +5 / FOR APPRENTICES',       icon: <WoodenSwordIcon /> },
   { id: 2, name: "Demon's Edge",           price: 150, rarity: 'epic',       slot: 'weapon',     stat: 'ATK +80 / LIFESTEAL 5%',         icon: <DemonEdgeIcon /> },
   { id: 3, name: "Arcane Mage Robe",       price: 80,  rarity: 'rare',       slot: 'armor',      stat: 'MAGIC ATK +60 / MP +20',         icon: <ArcaneMageRobeIcon /> },
   { id: 4, name: "Knight's Aegis",         price: 75,  rarity: 'rare',       slot: 'armor',      stat: 'DEF +100 / HP +30',              icon: <KnightAegisIcon /> },
@@ -933,12 +943,13 @@ export const ITEMS: ShopItem[] = [
   { id: 52, name: "Mithril Ingot",         price: 25,  rarity: 'rare',       slot: 'potion', stat: 'CONSUMABLE: 30 HP',   icon: <MithrilIngotIcon /> },
   { id: 53, name: "Beskar Ingot",          price: 40,  rarity: 'epic',       slot: 'potion', stat: 'CONSUMABLE: 40 HP',   icon: <BeskarIngotIcon /> },
   { id: 54, name: "Vibranium Ore",         price: 60,  rarity: 'legendary', slot: 'potion', stat: 'CONSUMABLE: 60 HP',   icon: <VibraniumOreIcon /> },
-  { id: 55, name: "Senzu Bean",            price: 100, rarity: 'uncommon',  slot: 'potion', stat: 'CONSUMABLE: FULL HP', icon: <SenzuBeanIcon /> },
-  { id: 56, name: "Slime Jelly",           price: 10,  rarity: 'common',    slot: 'potion', stat: 'CONSUMABLE: 20 HP',   icon: <SlimeJellyIcon /> },
-  { id: 57, name: "Dragon Scale",          price: 35,  rarity: 'epic',       slot: 'potion', stat: 'CONSUMABLE: 35 HP',   icon: <DragonScaleIcon /> },
-  { id: 58, name: "Demon Horn",            price: 20,  rarity: 'rare',       slot: 'potion', stat: 'CONSUMABLE: 25 HP',   icon: <DemonHornIcon /> },
-  { id: 59, name: "Kryptonite Shard",      price: 50,  rarity: 'legendary', slot: 'potion', stat: 'CONSUMABLE: 45 HP',   icon: <KryptoniteIcon /> },
-  { id: 60, name: "Star Fragment",         price: 70,  rarity: 'legendary', slot: 'potion', stat: 'CONSUMABLE: 50 HP',   icon: <StarFragmentIcon /> },
+  { id: 55, name: "Senzu Bean",            price: 100, rarity: 'uncommon',  slot: 'potion',     stat: 'CONSUMABLE: FULL HP', icon: <SenzuBeanIcon /> },
+  { id: 56, name: "Slime Jelly",           price: 10,  rarity: 'common',    slot: 'potion',     stat: 'CONSUMABLE: 20 HP',   icon: <SlimeJellyIcon /> },
+  { id: 57, name: "Dragon Scale",          price: 35,  rarity: 'epic',       slot: 'potion',     stat: 'CONSUMABLE: 35 HP',   icon: <DragonScaleIcon /> },
+  { id: 58, name: "Demon Horn",            price: 20,  rarity: 'rare',       slot: 'potion',     stat: 'CONSUMABLE: 25 HP',   icon: <DemonHornIcon /> },
+  { id: 59, name: "Kryptonite Shard",      price: 50,  rarity: 'legendary', slot: 'potion',     stat: 'CONSUMABLE: 45 HP',   icon: <KryptoniteIcon /> },
+  { id: 60, name: "Star Fragment",         price: 70,  rarity: 'legendary', slot: 'potion',     stat: 'CONSUMABLE: 50 HP',   icon: <StarFragmentIcon /> },
+  { id: 61, name: "Shadow Monarch's Cloak", price: 300, rarity: 'legendary', slot: 'cloak',      stat: 'SHADOW ATK +50 / MAGIC DEF +30', icon: <ShadowCloakIcon /> },
 ];
 
 // ============================================================
@@ -1128,7 +1139,7 @@ export default function ShopBoard({ searchQuery = "", activeCategory = "all" }: 
         }
 
         return (
-          <div className="fixed inset-0 bg-black/80 z-[999] flex items-center justify-center p-4 backdrop-blur-xs animate-in fade-in duration-150">
+          <div id="shop-item-modal" className="fixed inset-0 bg-black/80 z-[999] flex items-center justify-center p-4 backdrop-blur-xs animate-in fade-in duration-150">
             <div className={`w-full max-w-sm bg-zinc-900 border-4 ${rs.border} shadow-[8px_8px_0_rgba(0,0,0,0.7)] flex flex-col overflow-hidden`}>
               
               {/* Header Box */}
@@ -1283,6 +1294,7 @@ export default function ShopBoard({ searchQuery = "", activeCategory = "all" }: 
           return (
             <button
               key={item.id}
+              id={item.id === 1 ? "tour-shop-item-1" : undefined}
               onMouseEnter={() => setHoveredId(item.id)}
               onMouseLeave={() => setHoveredId(null)}
               // DIKLIk SEKARANG MEMBUKA POP-UP DETAIL

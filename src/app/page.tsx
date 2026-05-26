@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation'; 
+import { useRouter } from 'next/navigation';
 import Navbar from "@/components/Navbar";
 import StatusPanel from "@/components/StatusPanel";
 import TaskBoard from "@/components/TaskBoard";
@@ -37,6 +37,7 @@ import CalendarBoard from "@/components/CalendarBoard";
 import SettingsBoard from "@/components/SettingsBoard";
 import { translations } from "@/utils/translations";
 import { signOut } from "next-auth/react";
+import OnboardingTour from "@/components/OnboardingTour";
 
 // --- KOMPONEN TRANSISI RETRO (CYBER SHUTTERS) ---
 const RetroTransition = ({ isActive }: { isActive: boolean }) => {
@@ -58,14 +59,14 @@ const RetroTransition = ({ isActive }: { isActive: boolean }) => {
 };
 
 export default function Home() {
-  const { 
-    tasks, stats, checkDailyStreak, coinPopup, userProfile, 
+  const {
+    tasks, stats, checkDailyStreak, coinPopup, userProfile,
     setUserProfile, dailyProgress, claimDailyReward, playSound,
     inventory, accounts, equippedItems,
-    hasLoadedFromCloud, setHasLoadedFromCloud 
+    hasLoadedFromCloud, setHasLoadedFromCloud
   } = useStore();
-  
-  const router = useRouter(); 
+
+  const router = useRouter();
   const extendedTasks = tasks as ExtendedTask[];
 
   const [isMounted, setIsMounted] = useState(false);
@@ -74,7 +75,7 @@ export default function Home() {
   const [activeCategory, setActiveCategory] = useState("Semua");
   const [shopCategory, setShopCategory] = useState("all");
   const [financeCategory, setFinanceCategory] = useState("all");
-  
+
   const defaultCategories = ["Kesehatan", "Pendidikan", "Pekerjaan", "Proyek"];
   const customCategories = Array.from(new Set(extendedTasks.map(t => t.category).filter(c => c && !defaultCategories.includes(c))));
   const availableCategories = ["Semua", ...defaultCategories, ...customCategories];
@@ -91,7 +92,7 @@ export default function Home() {
   const [isTransitioning, setIsTransitioning] = useState(false);
 
   // --- STATE UNTUK QUOTE ACAK ---
-  const [quoteIndex, setQuoteIndex] = useState(0); 
+  const [quoteIndex, setQuoteIndex] = useState(0);
 
   const [dashboardFinanceAction, setDashboardFinanceAction] = useState<"rekening" | "tabungan" | "tagihan" | null>(null);
   const { settings } = useStore();
@@ -124,7 +125,7 @@ export default function Home() {
         if (resProfile.ok) {
           const dbData = await resProfile.json();
           if (dbData && (dbData.accountName || dbData.email || dbData.nickname)) {
-            
+
             setUserProfile({
               ...dbData,
               accountName: dbData.accountName || dbData.email || 'Petarung',
@@ -136,19 +137,19 @@ export default function Home() {
             if (progRes.ok) {
               const progData = await progRes.json();
               if (progData.gameState) {
-                 useStore.getState().loadFromCloud(progData.gameState);
+                useStore.getState().loadFromCloud(progData.gameState);
               } else {
-                 setHasLoadedFromCloud(true); 
+                setHasLoadedFromCloud(true);
               }
             }
-            
+
             // BERHASIL LOAD SEMUA, BUKA GERBANG LOADING
             setIsAppReady(true);
-            return; 
+            return;
           }
         }
       } catch (err) { console.error(err); }
-      
+
       router.push('/login');
     };
 
@@ -160,15 +161,15 @@ export default function Home() {
   // ========================================================
   useEffect(() => {
     if (!isMounted || !userProfile?.accountName || !hasLoadedFromCloud) return;
-    
+
     const autoSaveTimer = setTimeout(() => {
-      console.log("💾 Mengamankan progres ke Cloud..."); 
-      useStore.getState().syncToCloud(); 
-    }, 3000); 
+      console.log("💾 Mengamankan progres ke Cloud...");
+      useStore.getState().syncToCloud();
+    }, 3000);
 
     return () => clearTimeout(autoSaveTimer);
   }, [
-    tasks, stats, dailyProgress, inventory, accounts, equippedItems, 
+    tasks, stats, dailyProgress, inventory, accounts, equippedItems,
     isMounted, userProfile?.accountName, hasLoadedFromCloud
   ]);
 
@@ -207,7 +208,7 @@ export default function Home() {
 
   const handleLogout = async () => {
     setUserProfile({ accountName: "", nickname: "", gender: null, avatarId: null });
-    setHasLoadedFromCloud(false); 
+    setHasLoadedFromCloud(false);
     await signOut({ redirect: true, callbackUrl: "/login" });
   };
 
@@ -230,11 +231,11 @@ export default function Home() {
       <div className="fixed inset-0 z-[9999] bg-zinc-950 flex flex-col items-center justify-center">
         <div className="mb-12 relative flex justify-center items-center" style={{ animation: 'float 2s ease-in-out infinite alternate' }}>
           <div className="absolute inset-0 bg-amber-500/30 blur-[50px] rounded-full animate-pulse" />
-          <img 
-            src="/favicon.ico" 
-            alt="Daily Dungeon Loading" 
-            className="w-32 h-32 md:w-48 md:h-48 relative z-10 drop-shadow-[0_10px_15px_rgba(0,0,0,0.8)]" 
-            style={{ imageRendering: 'pixelated' }} 
+          <img
+            src="/favicon.ico"
+            alt="Daily Dungeon Loading"
+            className="w-32 h-32 md:w-48 md:h-48 relative z-10 drop-shadow-[0_10px_15px_rgba(0,0,0,0.8)]"
+            style={{ imageRendering: 'pixelated' }}
           />
         </div>
         <div className="w-64 md:w-80 h-6 bg-zinc-900 border-4 border-zinc-700 p-0.5 relative overflow-hidden shadow-[0_0_15px_rgba(251,191,36,0.2)]">
@@ -247,15 +248,15 @@ export default function Home() {
       </div>
     );
   }
-  
+
   if (!userProfile?.gender) {
-      return (
-        <div className="animate-in fade-in duration-700">
-          <CharacterSelection onComplete={() => console.log("Karakter siap!")} />
-        </div>
-      );
+    return (
+      <div className="animate-in fade-in duration-700">
+        <CharacterSelection onComplete={() => console.log("Karakter siap!")} />
+      </div>
+    );
   }
-  
+
   const renderContent = () => {
     switch (activeMenu) {
       case "Dashboard":
@@ -276,7 +277,7 @@ export default function Home() {
             <div className="flex flex-col md:flex-row md:justify-between md:items-end gap-4 mb-6 shrink-0 border-b border-zinc-700/50 pb-6">
               <div className="flex flex-col gap-3 text-left">
                 <h1 className="font-pixel text-sm md:text-base text-white flex items-center gap-3 drop-shadow-[2px_2px_0_#000] uppercase">
-                  <span className="text-amber-500"><CheckSquare size={18} /></span> 
+                  <span className="text-amber-500"><CheckSquare size={18} /></span>
                   {translations[settings?.language || 'id']?.tasks?.log || "LOG MISI"}
                 </h1>
                 <p className="font-pixel text-[7px] md:text-[8px] text-zinc-400 uppercase leading-relaxed tracking-widest">
@@ -360,7 +361,7 @@ export default function Home() {
           <div className="animate-in fade-in slide-in-from-left-4 duration-500 w-full flex flex-col">
             <AchievementBoard />
           </div>
-        );  
+        );
 
     }
   };
@@ -435,7 +436,7 @@ export default function Home() {
             </div>
           </>
         );
-      
+
       case "Dashboard": return <HeaderQuote text={tQuotes?.random?.[quoteIndex] || tQuotes.dash} />;
       case "Kalender": return <HeaderQuote text={tQuotes.cal} />;
       case "Focus Arena": return <HeaderQuote text={tQuotes.focus} />;
@@ -445,15 +446,15 @@ export default function Home() {
     }
   };
 
-  const HeaderQuote = ({ text, label = "HERO'S LOG" }: { 
-    text: string; 
+  const HeaderQuote = ({ text, label = "HERO'S LOG" }: {
+    text: string;
     label?: string;
   }) => (
     <div className="hidden md:flex relative max-w-xl w-full h-[54px] bg-zinc-800 border-2 border-zinc-600 shadow-[4px_4px_0_#000] overflow-hidden">
       {/* ⚡ SOLUSI VISUAL: Diganti ke corak sekat vertikal murni yang padat, tajam & tidak akan blur di layar monitor */}
-      <div 
-        className="w-2 flex-shrink-0" 
-        style={{ 
+      <div
+        className="w-2 flex-shrink-0"
+        style={{
           backgroundColor: '#18181b',
           backgroundImage: `linear-gradient(
             to bottom,
@@ -467,7 +468,7 @@ export default function Home() {
             #18181b 42px, #18181b 48px,
             #f59e0b 48px, #f59e0b 54px
           )`
-        }} 
+        }}
       />
       <div className="flex items-center gap-3 px-4 py-2 flex-1 min-w-0">
         <div className="flex flex-col gap-0.5 flex-1 min-w-0">
@@ -519,21 +520,22 @@ export default function Home() {
       <div className="flex-1 flex flex-col h-full relative z-10 min-w-0">
 
         <header className="h-auto min-h-[5rem] md:h-20 bg-zinc-900 border-b-4 border-zinc-700 flex flex-col md:flex-row justify-between items-center gap-3 md:gap-4 p-3 md:p-4 lg:px-8 z-50 shrink-0">
-          
+
           <div className="flex items-center gap-2 md:gap-4 w-full md:flex-1 max-w-2xl relative h-full">
             {renderHeaderContent()}
           </div>
 
           <div className="flex items-center justify-end gap-2 sm:gap-4 w-full md:w-auto mt-2 md:mt-0">
-            <div className="flex items-center gap-2 px-2 sm:px-4 py-1.5 bg-zinc-800 border-2 border-zinc-600 rounded-none shadow-[inset_2px_2px_4px_rgba(0,0,0,0.5)]">
+            <div id="tour-gold-panel" className="flex items-center gap-2 px-2 sm:px-4 py-1.5 bg-zinc-800 border-2 border-zinc-600 rounded-none shadow-[inset_2px_2px_4px_rgba(0,0,0,0.5)]">
               <div className="flex items-center gap-1.5 text-amber-400 font-pixel text-[8px] sm:text-[10px]">
                 <Coins size={14} /> {stats?.gold || userProfile?.gold || 0}
               </div>
             </div>
 
-            <button 
+            <button
+              id="tour-status-panel"
               onClick={() => { setIsStatusPanelOpen(!isStatusPanelOpen); setIsNotifOpen(false); setIsSettingsOpen(false); }}
-              className={`text-zinc-400 hover:text-white transition-colors p-2 bg-zinc-800 border-2 border-zinc-600 shadow-[4px_4px_0_#000] active:translate-y-[2px] active:shadow-none shrink-0 ${isStatusPanelOpen ? "text-amber-400 border-amber-500" : ""}`}
+              className={`hover:text-white transition-colors p-2 bg-zinc-800 border-2 shadow-[4px_4px_0_#000] active:translate-y-[2px] active:shadow-none shrink-0 ${isStatusPanelOpen ? "text-amber-400 border-amber-500" : "text-zinc-400 border-zinc-600"}`}
               title="Toggle Status Log"
             >
               <User size={20} />
@@ -552,11 +554,11 @@ export default function Home() {
 
               {showCoinAnim && (
                 <div className="absolute top-full mt-4 right-0 w-max max-w-[90vw] bg-zinc-800 border-2 border-amber-500 px-3 sm:px-4 py-2 sm:py-2.5 rounded-none shadow-[4px_4px_0_#000] flex items-center gap-2 sm:gap-3 animate-in slide-in-from-top-2 fade-in duration-300 z-[60] pointer-events-none text-left">
-                   <Coins size={16} className="text-amber-400 animate-bounce" />
-                   <div className="flex flex-col">
-                     <span className="text-[9px] text-zinc-400 font-bold uppercase tracking-wider mb-0.5">{tSublog.income}</span>
-                     <span className="text-amber-400 font-pixel text-xs drop-shadow-sm">+{coinPopup.amount} Gold</span>
-                   </div>
+                  <Coins size={16} className="text-amber-400 animate-bounce" />
+                  <div className="flex flex-col">
+                    <span className="text-[9px] text-zinc-400 font-bold uppercase tracking-wider mb-0.5">{tSublog.income}</span>
+                    <span className="text-amber-400 font-pixel text-xs drop-shadow-sm">+{coinPopup.amount} Gold</span>
+                  </div>
                 </div>
               )}
 
@@ -572,9 +574,9 @@ export default function Home() {
                   <div className="p-4 flex flex-col gap-4 max-h-[75vh] overflow-y-auto custom-scrollbar">
                     <div className="flex flex-col gap-3">
                       <h4 className="text-[10px] font-bold text-amber-400 uppercase tracking-widest border-b-2 border-zinc-700 pb-2 mb-1 flex items-center gap-2">
-                        <CheckSquare size={14}/> {tSublog.dailyQuests}
+                        <CheckSquare size={14} /> {tSublog.dailyQuests}
                       </h4>
-                      
+
                       <div className={`flex flex-col gap-2 p-3 border-2 ${dp.loginClaimed ? 'bg-emerald-950/20 border-emerald-900/50' : 'bg-zinc-800 border-zinc-600'}`}>
                         <div className="flex items-center justify-between">
                           <div className="flex flex-col gap-0.5">
@@ -595,7 +597,7 @@ export default function Home() {
                             <span className={`text-xs font-bold ${dp.taskClaimed ? 'text-emerald-500/70 line-through' : 'text-zinc-200'}`}>{tSublog.ops3}</span>
                             <span className="text-[9px] text-amber-400 font-pixel mt-1 mb-1">30 XP | 20 G</span>
                             <div className="w-full bg-zinc-900 h-1.5 border border-zinc-700">
-                               <div className="bg-amber-400 h-full transition-all" style={{ width: `${Math.min(100, (dp.tasksCompleted / 3) * 100)}%` }}></div>
+                              <div className="bg-amber-400 h-full transition-all" style={{ width: `${Math.min(100, (dp.tasksCompleted / 3) * 100)}%` }}></div>
                             </div>
                           </div>
                           {dp.taskClaimed ? (
@@ -689,7 +691,7 @@ export default function Home() {
               >
                 <Settings size={20} />
               </button>
-              
+
               {isSettingsOpen && (
                 <div className="absolute right-0 mt-4 w-48 bg-zinc-900 border-4 border-zinc-700 rounded-none shadow-[8px_8px_0_#000] z-[100] animate-in fade-in slide-in-from-top-2 overflow-hidden text-left">
                   <div className="flex flex-col">
@@ -703,10 +705,9 @@ export default function Home() {
           </div>
         </header>
 
-        <main 
-          className={`flex-1 overflow-y-auto overflow-x-hidden bg-zinc-900 p-4 lg:p-8 custom-scrollbar transition-all duration-300 ease-in-out ${
-            isStatusPanelOpen ? 'xl:pr-80' : 'xl:pr-0'
-          }`}
+        <main
+          className={`flex-1 overflow-y-auto overflow-x-hidden bg-zinc-900 p-4 lg:p-8 custom-scrollbar transition-all duration-300 ease-in-out ${isStatusPanelOpen ? 'xl:pr-80' : 'xl:pr-0'
+            }`}
         >
           {renderContent()}
           <div className="h-32 md:h-8 w-full shrink-0 block pointer-events-none" />
@@ -714,20 +715,28 @@ export default function Home() {
       </div>
 
       <StatusPanel isOpen={isStatusPanelOpen} onClose={() => setIsStatusPanelOpen(false)} />
-      
-      <TaskFormModal 
-        isOpen={isFormOpen} 
-        onClose={() => setIsFormOpen(false)} 
+
+      <TaskFormModal
+        isOpen={isFormOpen}
+        onClose={() => setIsFormOpen(false)}
         initialType={formType}
         isFixed={isFixed}
       />
-      
+
       <TaskDetailModal
         task={selectedTask}
         onClose={() => setSelectedTask(null)}
       />
 
       <GlobalAlerts />
+
+      {/* ONBOARDING TOUR */}
+      <OnboardingTour
+        activeMenu={activeMenu}
+        setActiveMenu={handleMenuChange}
+        isStatusPanelOpen={isStatusPanelOpen}
+        setIsStatusPanelOpen={setIsStatusPanelOpen}
+      />
     </div>
   );
 }

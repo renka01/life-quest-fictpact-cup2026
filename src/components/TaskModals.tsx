@@ -89,7 +89,7 @@ export const TaskFormModal = ({ isOpen, onClose, initialType, isFixed }: { isOpe
   const mTheme = newTaskType ? themeColors[newTaskType] : themeColors.neutral;
 
   return (
-    <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-[100] flex justify-center items-center p-4">
+    <div id="task-form-modal" className="fixed inset-0 bg-black/80 backdrop-blur-sm z-[100] flex justify-center items-center p-4">
       <div className={`w-full max-w-md max-h-[80dvh] bg-zinc-900 border-4 rounded-none flex flex-col overflow-hidden transition-all duration-300 ${mTheme.border} ${mTheme.shadow} mb-4`}>
         <div className={`${mTheme.headerBg} border-b-4 ${mTheme.headerBorder} p-4 flex justify-between items-center`}>
           <h3 className={`font-pixel text-[10px] uppercase tracking-widest ${mTheme.text}`}>{isFixed ? mTheme.title : tForm.newTitle}</h3>

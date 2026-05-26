@@ -27,7 +27,8 @@ import {
   Instagram,
   AlertTriangle,
   CheckCircle,
-  Check
+  Check,
+  HelpCircle
 } from "lucide-react";
 import { translations } from "@/utils/translations";
 
@@ -80,7 +81,7 @@ interface ExtendedSession {
 }
 
 export default function SettingsBoard() {
-  const { userProfile, setUserProfile, settings, updateSetting, playSound, showAlert, isSyncing, syncToCloud } = useStore();
+  const { userProfile, setUserProfile, settings, updateSetting, restartTutorial, playSound, showAlert, isSyncing, syncToCloud } = useStore();
   const t = translations[settings?.language || 'id']?.settings || translations['id'].settings;
   const tUi = translations[settings?.language || 'id']?.ui || translations['id'].ui;
   const { data: session } = useSession() as { data: ExtendedSession | null };
@@ -407,6 +408,13 @@ export default function SettingsBoard() {
           <SettingSelect icon={Clock} label={t.startDay} value={settings.startOfDay} onChange={(val: string) => updateSetting('startOfDay', val)} options={[{label: 'Default (00:00)', value: '00:00'}, {label: 'Subuh (04:00)', value: '04:00'}, {label: 'Pagi (06:00)', value: '06:00'}]} />
           <SettingSelect icon={Music} label={t.audioTheme} value={settings.audioTheme} onChange={(val: string) => updateSetting('audioTheme', val)} options={[{label: 'Retro Arcade', value: 'retro'}, {label: 'Mute (Hening)', value: 'mute'}]} />
           <SettingToggle icon={ShieldAlert} label={t.holiday} description={t.holidayDesc} checked={settings.holidayMode} onChange={(val: boolean) => { updateSetting('holidayMode', val); if(val) showAlert("HOLIDAY MODE ON", t.holidayDesc, "info"); }} />
+          <SettingAction 
+            icon={HelpCircle} 
+            label="Panduan & Tutorial" 
+            value="Mulai ulang pemandu interaktif untuk pengenalan fitur LifeQuest" 
+            actionText="MULAI" 
+            onClick={() => { restartTutorial(); playSound('success'); }} 
+          />
         </div>
       </section>
 

@@ -57,7 +57,7 @@ export default function TaskBoard({ searchQuery, activeCategory, openAddModal, s
       `}</style>
 
       {/* ==================== KOLOM 1: SIKLUS MISI (HABIT) ==================== */}
-      <div className="bg-zinc-900 border-4 border-amber-600 rounded-none flex flex-col h-full min-h-[50vh] md:min-h-[75vh] overflow-hidden shadow-[8px_8px_0_rgba(0,0,0,0.5)]">
+      <div id="tour-habit-column" className="bg-zinc-900 border-4 border-amber-600 rounded-none flex flex-col h-full min-h-[50vh] md:min-h-[75vh] overflow-hidden shadow-[8px_8px_0_rgba(0,0,0,0.5)]">
         <div className="p-4 border-b-4 border-amber-600 flex flex-col gap-3 bg-zinc-800">
           <div className="flex items-center gap-2">
             <Activity size={18} className="text-amber-500" />
@@ -109,7 +109,7 @@ export default function TaskBoard({ searchQuery, activeCategory, openAddModal, s
       </div>
 
       {/* ==================== KOLOM 2: OPERASI HARIAN (DAILY) ==================== */}
-      <div className="bg-zinc-900 border-4 border-cyan-600 rounded-none flex flex-col h-full min-h-[50vh] md:min-h-[75vh] overflow-hidden shadow-[8px_8px_0_rgba(0,0,0,0.5)]">
+      <div id="tour-daily-column" className="bg-zinc-900 border-4 border-cyan-600 rounded-none flex flex-col h-full min-h-[50vh] md:min-h-[75vh] overflow-hidden shadow-[8px_8px_0_rgba(0,0,0,0.5)]">
         <div className="p-4 border-b-4 border-cyan-600 flex flex-col gap-3 bg-zinc-800">
           <div className="flex items-center gap-2">
             <Repeat size={18} className="text-cyan-500" />
@@ -123,7 +123,7 @@ export default function TaskBoard({ searchQuery, activeCategory, openAddModal, s
         </div>
         
         <div className="p-4 flex-1 overflow-y-auto flex flex-col gap-3">
-          <button onClick={() => openAddModal('daily', true)} className="w-full bg-zinc-800 border-2 border-dashed border-zinc-600 hover:border-cyan-500 text-zinc-400 hover:text-cyan-400 p-3 rounded-none flex items-center justify-center gap-2 transition-all text-xs font-bold mb-2 hover:bg-cyan-500/10">
+          <button id="tour-add-daily" onClick={() => openAddModal('daily', true)} className="w-full bg-zinc-800 border-2 border-dashed border-zinc-600 hover:border-cyan-500 text-zinc-400 hover:text-cyan-400 p-3 rounded-none flex items-center justify-center gap-2 transition-all text-xs font-bold mb-2 hover:bg-cyan-500/10">
             <Plus size={16} /> {t.addDaily}
           </button>
 
@@ -158,7 +158,7 @@ export default function TaskBoard({ searchQuery, activeCategory, openAddModal, s
       </div>
 
       {/* ==================== KOLOM 3: TARGET UTAMA (TO-DO) ==================== */}
-      <div className="bg-zinc-900 border-4 border-pink-600 rounded-none flex flex-col h-full min-h-[50vh] md:min-h-[75vh] overflow-hidden shadow-[8px_8px_0_rgba(0,0,0,0.5)]">
+      <div id="tour-todo-column" className="bg-zinc-900 border-4 border-pink-600 rounded-none flex flex-col h-full min-h-[50vh] md:min-h-[75vh] overflow-hidden shadow-[8px_8px_0_rgba(0,0,0,0.5)]">
         <div className="p-4 border-b-4 border-pink-600 flex flex-col gap-3 bg-zinc-800">
           <div className="flex items-center gap-2">
             <ListTodo size={18} className="text-pink-500" />

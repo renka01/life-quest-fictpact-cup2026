@@ -220,7 +220,7 @@ export default function Finance({
       <div className="grid grid-cols-1 xl:grid-cols-3 gap-6 flex-1 items-start">
         {/* KOLOM 1 */}
         {(activeCategory === 'all' || activeCategory === 'rekening') && (
-        <div className="bg-zinc-900 border-4 border-emerald-600 rounded-none flex flex-col min-h-[450px] overflow-hidden shadow-[8px_8px_0_rgba(0,0,0,0.5)]">
+        <div id="tour-wallet-column" className="bg-zinc-900 border-4 border-emerald-600 rounded-none flex flex-col min-h-[450px] overflow-hidden shadow-[8px_8px_0_rgba(0,0,0,0.5)]">
           <div className="p-5 border-b-4 border-emerald-600 flex items-center gap-3 text-emerald-400 bg-zinc-800">
             <CreditCard size={20} />
             <h2 className="text-base font-bold uppercase tracking-wider">
@@ -285,7 +285,7 @@ export default function Finance({
 
         {/* KOLOM 2 */}
         {(activeCategory === 'all' || activeCategory === 'tabungan') && (
-        <div className="bg-zinc-900 border-4 border-cyan-600 rounded-none flex flex-col min-h-[450px] overflow-hidden shadow-[8px_8px_0_rgba(0,0,0,0.5)]">
+        <div id="tour-savings-column" className="bg-zinc-900 border-4 border-cyan-600 rounded-none flex flex-col min-h-[450px] overflow-hidden shadow-[8px_8px_0_rgba(0,0,0,0.5)]">
           <div className="p-5 border-b-4 border-cyan-600 flex items-center gap-3 text-cyan-400 bg-zinc-800">
             <PiggyBank size={20} />
             <h2 className="text-base font-bold uppercase tracking-wider">
@@ -398,7 +398,7 @@ export default function Finance({
         )}
 
         {/* KOLOM 3 */}
-        <div className="bg-zinc-900 border-4 border-pink-600 rounded-none flex flex-col h-[450px] overflow-hidden shadow-[8px_8px_0_rgba(0,0,0,0.5)]">
+        <div id="tour-history-column" className="bg-zinc-900 border-4 border-pink-600 rounded-none flex flex-col h-[450px] overflow-hidden shadow-[8px_8px_0_rgba(0,0,0,0.5)]">
           <div className="p-4 sm:p-5 border-b-4 border-pink-600 flex justify-between items-center gap-2 text-pink-400 bg-zinc-800">
             <div className="flex items-center gap-2 sm:gap-3 min-w-0">
               <History size={18} className="shrink-0 sm:w-5 sm:h-5" />
