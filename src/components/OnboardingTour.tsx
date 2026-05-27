@@ -29,9 +29,9 @@ interface Step {
 
 const STEPS: Step[] = [
   {
-    title: { id: "SELAMAT DATANG DI LIFEQUEST! ⚔️", en: "WELCOME TO LIFEQUEST! ⚔️" },
+    title: { id: "SELAMAT DATANG DI DAILY DUNGEON! ⚔️", en: "WELCOME TO DAILY DUNGEON! ⚔️" },
     text: { 
-      id: "Halo Pahlawan! Ini adalah gerbang awal petualanganmu. LifeQuest mengubah tugas harian, kebiasaan positif, dan pengelolaan keuanganmu menjadi game RPG yang epik!",
+      id: "Halo Pahlawan! Ini adalah gerbang awal petualanganmu. Daily Dungeon mengubah tugas harian, kebiasaan positif, dan pengelolaan keuanganmu menjadi game RPG yang epik!",
       en: "Hello Hero! This is the gateway to your adventure!"
     },
     menu: "Dashboard",
@@ -174,7 +174,7 @@ const STEPS: Step[] = [
   {
     title: { id: "🎉 SELAMAT BERPETUALANG! 🎉", en: "🎉 HAPPY ADVENTURING! 🎉" },
     text: {
-      id: "Persiapan komando awal petualanganmu telah selesai. Kamu sekarang siap naik level dan menjadi pahlawan legendaris di LifeQuest!",
+      id: "Persiapan komando awal petualanganmu telah selesai. Kamu sekarang siap naik level dan menjadi pahlawan legendaris di Daily Dungeon!",
       en: "You are now ready to be a hero!"
     },
     menu: "Dashboard",
