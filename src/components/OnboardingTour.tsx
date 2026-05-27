@@ -207,6 +207,15 @@ export default function OnboardingTour({
   const [isCompleted, setIsCompleted] = useState(false);
   const resizeTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
+  // Reset tour state if restarted from elsewhere (e.g. StatusPanel button)
+  useEffect(() => {
+    if (!settings.tutorialCompleted) {
+      setIsCompleted(false);
+      setCurrentStep(0);
+      setIsMinimized(false);
+    }
+  }, [settings.tutorialCompleted]);
+
   const lang = settings.language || 'id';
   const currentData = STEPS[currentStep];
 
@@ -270,41 +279,62 @@ export default function OnboardingTour({
       pointerEvents: 'none'
     });
 
-    let top = rect.bottom + 20 + (currentData.offsetY || 0);
-    let left = rect.left + rect.width / 2;
-    let transform = 'translateX(-50%)';
+    const isMobile = window.innerWidth < 768;
+    const activeWidth = Math.min(TOOLTIP_WIDTH, window.innerWidth - TOOLTIP_MARGIN * 2);
 
-    if (currentData.position === 'left') {
-      left = rect.left - 20; 
-      transform = 'translateX(-100%)'; 
-      top = rect.top + (currentData.offsetY || 0); 
-    } else if (currentData.position === 'right') {
+    let top: number | string = rect.bottom + 12 + (currentData.offsetY || 0);
+    let left: number | string = rect.left + rect.width / 2;
+    let transform = 'translateX(-50%)';
+    let bottom: number | string | undefined = undefined;
+
+    if (!isMobile && currentData.position === 'left') {
+      left = rect.left - 20;
+      transform = 'translateX(-100%)';
+      top = rect.top + (currentData.offsetY || 0);
+    } else if (!isMobile && currentData.position === 'right') {
       left = rect.right + 20;
       transform = 'translateX(0)';
       top = rect.top + (currentData.offsetY || 0);
+    } else if (isMobile) {
+      // Force vertical layout on mobile to prevent side cut-offs
+      left = window.innerWidth / 2;
+      transform = 'translateX(-50%)';
+      
+      const isTargetInBottomHalf = rect.top > window.innerHeight / 2;
+      if (isTargetInBottomHalf) {
+        // Place tooltip at the top of the viewport (below the header)
+        top = 80;
+        bottom = 'auto';
+      } else {
+        // Place tooltip near the bottom of the viewport (above mobile navigation)
+        top = 'auto';
+        bottom = 90;
+      }
     }
 
-    let absoluteLeft = left;
-    if (transform === 'translateX(-100%)') {
-      absoluteLeft = left - TOOLTIP_WIDTH;
-    } else if (transform === 'translateX(-50%)') {
-      absoluteLeft = left - TOOLTIP_WIDTH / 2;
+    let absoluteLeft = typeof left === 'number' ? left : window.innerWidth / 2;
+    if (transform === 'translateX(-100%)' && typeof left === 'number') {
+      absoluteLeft = left - activeWidth;
+    } else if (transform === 'translateX(-50%)' && typeof left === 'number') {
+      absoluteLeft = left - activeWidth / 2;
     }
 
-    if (absoluteLeft < TOOLTIP_MARGIN) {
-      left = TOOLTIP_MARGIN;
-      transform = 'translateX(0)';
-    } else if (absoluteLeft + TOOLTIP_WIDTH > window.innerWidth - TOOLTIP_MARGIN) {
-      left = window.innerWidth - TOOLTIP_MARGIN - TOOLTIP_WIDTH;
-      transform = 'translateX(0)';
+    if (typeof left === 'number') {
+      if (absoluteLeft < TOOLTIP_MARGIN) {
+        left = TOOLTIP_MARGIN;
+        transform = 'translateX(0)';
+      } else if (absoluteLeft + activeWidth > window.innerWidth - TOOLTIP_MARGIN) {
+        left = window.innerWidth - TOOLTIP_MARGIN - activeWidth;
+        transform = 'translateX(0)';
+      }
     }
 
-    const estimatedTooltipHeight = 240;
-    if (currentData.position !== 'left' && currentData.position !== 'right') {
+    const estimatedTooltipHeight = 250;
+    if (!isMobile && currentData.position !== 'left' && currentData.position !== 'right' && typeof top === 'number') {
       if (top + estimatedTooltipHeight > window.innerHeight - TOOLTIP_MARGIN) {
         top = Math.max(12, rect.top - estimatedTooltipHeight - 16);
       }
-    } else {
+    } else if (!isMobile && typeof top === 'number') {
       if (top + estimatedTooltipHeight > window.innerHeight - TOOLTIP_MARGIN) {
         top = window.innerHeight - estimatedTooltipHeight - TOOLTIP_MARGIN;
       }
@@ -313,6 +343,7 @@ export default function OnboardingTour({
     setTooltipStyle({
       position: 'fixed',
       top,
+      bottom,
       left,
       transform,
       zIndex: 99999
@@ -476,7 +507,7 @@ export default function OnboardingTour({
 
       <div 
         style={tooltipStyle} 
-        className="w-[320px] bg-zinc-950 border-4 border-amber-500 shadow-[8px_8px_0_#000] flex flex-col font-mono text-left animate-in zoom-in-95 duration-200 pointer-events-auto"
+        className="w-[320px] max-w-[calc(100vw-24px)] bg-zinc-950 border-4 border-amber-500 shadow-[8px_8px_0_#000] flex flex-col font-mono text-left animate-in zoom-in-95 duration-200 pointer-events-auto"
       >
         <div className="bg-zinc-900 border-b-4 border-amber-500 p-3 flex justify-between items-center relative overflow-hidden">
           <div className="absolute inset-0 bg-gradient-to-r from-amber-500/10 to-transparent pointer-events-none" />
