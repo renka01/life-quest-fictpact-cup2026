@@ -123,6 +123,7 @@ export default function StatusPanel({ isOpen, onClose }: { isOpen: boolean, onCl
 
       {/* ── Status Panel Container (Collapsible Sidebar Drawer) ── */}
       <aside
+       id="tour-status-panel" 
         className={`
           fixed top-0 right-0 h-full bg-zinc-900 border-l-4 border-zinc-700
           p-6 flex flex-col gap-6 z-[1000] overflow-y-auto shrink-0

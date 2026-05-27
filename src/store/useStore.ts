@@ -121,7 +121,7 @@ export type EquippedItems = {
   [key in EquipSlot]?: number;
 };
 
-// 🔥 TIPE DATA BARU UNTUK FOCUS ARENA
+// TIPE DATA UNTUK FOCUS ARENA
 export interface ActiveFocusSession {
   isActive: boolean;
   bossId: string | number | null;
@@ -198,7 +198,7 @@ interface LifeQuestStore {
   healPlayer: (amount: number) => void;
   consumeItem: (itemId: number) => void;
 
-  // 🔥 STATE & ACTIONS FOCUS ARENA
+  // STATE & ACTIONS FOCUS ARENA
   activeFocusSession: ActiveFocusSession;
   startFocus: (bossId: string | number, duration: number) => void;
   stopFocus: () => void;
@@ -238,7 +238,8 @@ export const useStore = create<LifeQuestStore>()(
         avatarId: null,
         level: 1,
         gold: 0,
-        exp: 0
+        exp: 0,
+        bio: ""
       },
       settings: {
         language: "id",
@@ -264,16 +265,18 @@ export const useStore = create<LifeQuestStore>()(
       coinPopup: { show: false, amount: 0, id: 0 },
       stats: {
         level: 1,
-        hp: 50, maxHp: 50,
-        exp: 0, maxExp: 300,
-        gold: 50, // Modal awal untuk tutorial
+        hp: 50,
+        maxHp: 50,
+        exp: 0,
+        maxExp: 300,
+        gold: 50,
         streak: 0,
         lastLoginDate: ""
       },
       alertDialog: { isOpen: false, title: "", message: "", type: "info" },
       confirmDialog: { isOpen: false, message: "", onConfirm: () => {} },
       
-      // 🔥 INITIAL DATA FOCUS ARENA
+      // INITIAL DATA FOCUS ARENA
       activeFocusSession: {
         isActive: false,
         bossId: null,
@@ -287,7 +290,7 @@ export const useStore = create<LifeQuestStore>()(
           isActive: true,
           bossId,
           duration,
-          endTime: Date.now() + duration * 60 * 1000 // Menit diubah jadi milidetik
+          endTime: Date.now() + duration * 60 * 1000
         }
       }),
       stopFocus: () => set({
@@ -309,11 +312,10 @@ export const useStore = create<LifeQuestStore>()(
         set((state) => ({
           ...state,
           ...cloudState,
-          // PENTING: Jangan timpa pengaturan bahasa lokal dengan data cloud
-                    settings: {
-                        ...(cloudState.settings || state.settings),
-                        language: state.settings?.language || cloudState.settings?.language || 'id',
-                    },
+          settings: {
+            ...(cloudState.settings || state.settings),
+            language: state.settings?.language || cloudState.settings?.language || 'id',
+          },
           alertDialog: state.alertDialog,
           confirmDialog: state.confirmDialog,
           coinPopup: state.coinPopup,
@@ -339,7 +341,7 @@ export const useStore = create<LifeQuestStore>()(
             inventory: state.inventory,
             equippedItems: state.equippedItems,
             recurringTransactions: state.recurringTransactions,
-            activeFocusSession: state.activeFocusSession // 🔥 Fokus sekarang ikut di-save ke database!
+            activeFocusSession: state.activeFocusSession
           };
 
           const res = await fetch('/api/progress', {
@@ -374,10 +376,12 @@ export const useStore = create<LifeQuestStore>()(
       updateSetting: (key, value) => set((state) => ({ 
         settings: { ...state.settings, [key]: value } 
       })),
+      
       restartTutorial: () => set((state) => ({
         settings: { ...state.settings, tutorialCompleted: false },
         stats: { ...state.stats, gold: Math.max(state.stats.gold, 50) }
       })),
+      
       playSound: (soundName) => {
         const { settings } = get();
         if (settings.audioTheme === 'mute') return; 
@@ -456,15 +460,18 @@ export const useStore = create<LifeQuestStore>()(
         });
         return true;
       },
+      
       sellItem: (itemId, price) => {
-        // Optional
+        // Optional - bisa diimplementasikan nanti
       },
+      
       equipItem: (slot, itemId) => set((state) => ({
         equippedItems: {
           ...state.equippedItems,
           [slot]: itemId
         }
       })),
+      
       unequipItem: (slot) => set((state) => {
         const newEquipped = { ...state.equippedItems };
         delete newEquipped[slot];
@@ -481,6 +488,7 @@ export const useStore = create<LifeQuestStore>()(
       addTask: (taskData) => set((state) => ({
         tasks: [{ id: Date.now(), ...taskData, habitCount: taskData.habitCount || 0 }, ...state.tasks]
       })),
+      
       deleteTask: (id) => {
         const { showConfirm, closeConfirm } = get();
         showConfirm("Apakah kamu yakin ingin menghapus misi ini?", () => {
@@ -536,7 +544,7 @@ export const useStore = create<LifeQuestStore>()(
       }),
 
       updateBalance: (id, amount, weightChange = 0, meta) => {
-        const { accounts, transactions, showAlert, _applySimpleReward, stats } = get();
+        const { accounts, transactions, showAlert, _applySimpleReward } = get();
         const targetAccount = accounts.find(acc => acc.id === id);
         if (!targetAccount) return;
 
@@ -861,7 +869,7 @@ export const useStore = create<LifeQuestStore>()(
 
       consumeItem: (itemId) => set((state) => {
         const existing = state.inventory.find(i => i.id === itemId);
-        if (!existing) return state;
+        if (!existing || existing.quantity <= 0) return state;
         const newInv = state.inventory.map(i => i.id === itemId ? { ...i, quantity: i.quantity - 1 } : i).filter(i => i.quantity > 0);
         return { inventory: newInv };
       })
@@ -871,7 +879,6 @@ export const useStore = create<LifeQuestStore>()(
       name: 'lifequest-storage',
       storage: createJSONStorage(() => localStorage), 
       partialize: (state) => Object.fromEntries(
-        // JANGAN persist state ini ke local storage
         Object.entries(state).filter(([key]) => !['coinPopup', 'alertDialog', 'confirmDialog', 'isSyncing', 'hasLoadedFromCloud'].includes(key))
       ),
     }

@@ -22,7 +22,6 @@ import {
   Plus,
   Bell,
   Settings,
-  Diamond,
   Coins,
   X,
   Check,
@@ -70,7 +69,7 @@ export default function Home() {
   const extendedTasks = tasks as ExtendedTask[];
 
   const [isMounted, setIsMounted] = useState(false);
-  const [isAppReady, setIsAppReady] = useState(false); // STATE PENGUNCI LOADING
+  const [isAppReady, setIsAppReady] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [activeCategory, setActiveCategory] = useState("Semua");
   const [shopCategory, setShopCategory] = useState("all");
@@ -90,11 +89,9 @@ export default function Home() {
   const [activeMenu, setActiveMenu] = useState("Dashboard");
   const [showCoinAnim, setShowCoinAnim] = useState(false);
   const [isTransitioning, setIsTransitioning] = useState(false);
-
-  // --- STATE UNTUK QUOTE ACAK ---
   const [quoteIndex, setQuoteIndex] = useState(0);
-
   const [dashboardFinanceAction, setDashboardFinanceAction] = useState<"rekening" | "tabungan" | "tagihan" | null>(null);
+  
   const { settings } = useStore();
   const tPage = translations[settings?.language || 'id']?.page || translations['id'].page;
   const tDropdown = translations[settings?.language || 'id']?.dropdown || translations['id'].dropdown;
@@ -113,9 +110,7 @@ export default function Home() {
     setQuoteIndex(Math.floor(Math.random() * 10));
   }, []);
 
-  // ========================================================
-  // <-- LOGIC GATES & CLOUD LOAD -->
-  // ========================================================
+  // LOGIC GATES & CLOUD LOAD (FIXED: Deteksi tegas status tutorial untuk user baru)
   useEffect(() => {
     const initializeUser = async () => {
       if (!isMounted) return;
@@ -132,18 +127,21 @@ export default function Home() {
               nickname: dbData.nickname || (dbData.email ? dbData.email.split('@')[0] : 'Petarung')
             });
 
-            // LOAD CLOUD DATA
             const progRes = await fetch('/api/progress');
             if (progRes.ok) {
               const progData = await progRes.json();
-              if (progData.gameState) {
+              if (progData && progData.gameState) {
                 useStore.getState().loadFromCloud(progData.gameState);
               } else {
+                // Jika data cloud kosong (User Baru), paksa set state tutorialCompleted lokal ke false
+                useStore.getState().updateSetting('tutorialCompleted', false);
                 setHasLoadedFromCloud(true);
               }
+            } else {
+              useStore.getState().updateSetting('tutorialCompleted', false);
+              setHasLoadedFromCloud(true);
             }
 
-            // BERHASIL LOAD SEMUA, BUKA GERBANG LOADING
             setIsAppReady(true);
             return;
           }
@@ -156,9 +154,7 @@ export default function Home() {
     initializeUser();
   }, [isMounted, router, setUserProfile, setHasLoadedFromCloud]);
 
-  // ========================================================
-  // 🔥 AUTO-SAVE BACKGROUND DAEMON 🔥
-  // ========================================================
+  // AUTO-SAVE BACKGROUND DAEMON
   useEffect(() => {
     if (!isMounted || !userProfile?.accountName || !hasLoadedFromCloud) return;
 
@@ -169,8 +165,15 @@ export default function Home() {
 
     return () => clearTimeout(autoSaveTimer);
   }, [
-    tasks, stats, dailyProgress, inventory, accounts, equippedItems,
-    isMounted, userProfile?.accountName, hasLoadedFromCloud
+    JSON.stringify(tasks),
+    JSON.stringify(stats),
+    JSON.stringify(dailyProgress),
+    JSON.stringify(inventory),
+    JSON.stringify(accounts),
+    JSON.stringify(equippedItems),
+    isMounted,
+    userProfile?.accountName,
+    hasLoadedFromCloud
   ]);
 
   useEffect(() => {
@@ -216,7 +219,7 @@ export default function Home() {
     claimDailyReward(type);
     playSound('coin');
   };
-
+  
   const handleMenuChange = (menuName: string) => {
     if (menuName === activeMenu) return;
     playSound('glitch');
@@ -362,7 +365,6 @@ export default function Home() {
             <AchievementBoard />
           </div>
         );
-
     }
   };
 
@@ -446,12 +448,8 @@ export default function Home() {
     }
   };
 
-  const HeaderQuote = ({ text, label = "HERO'S LOG" }: {
-    text: string;
-    label?: string;
-  }) => (
+  const HeaderQuote = ({ text, label = "HERO'S LOG" }: { text: string; label?: string }) => (
     <div className="hidden md:flex relative max-w-xl w-full h-[54px] bg-zinc-800 border-2 border-zinc-600 shadow-[4px_4px_0_#000] overflow-hidden">
-      {/* ⚡ SOLUSI VISUAL: Diganti ke corak sekat vertikal murni yang padat, tajam & tidak akan blur di layar monitor */}
       <div
         className="w-2 flex-shrink-0"
         style={{
@@ -533,7 +531,6 @@ export default function Home() {
             </div>
 
             <button
-              id="tour-status-panel"
               onClick={() => { setIsStatusPanelOpen(!isStatusPanelOpen); setIsNotifOpen(false); setIsSettingsOpen(false); }}
               className={`hover:text-white transition-colors p-2 bg-zinc-800 border-2 shadow-[4px_4px_0_#000] active:translate-y-[2px] active:shadow-none shrink-0 ${isStatusPanelOpen ? "text-amber-400 border-amber-500" : "text-zinc-400 border-zinc-600"}`}
               title="Toggle Status Log"
@@ -706,8 +703,7 @@ export default function Home() {
         </header>
 
         <main
-          className={`flex-1 overflow-y-auto overflow-x-hidden bg-zinc-900 p-4 lg:p-8 custom-scrollbar transition-all duration-300 ease-in-out ${isStatusPanelOpen ? 'xl:pr-80' : 'xl:pr-0'
-            }`}
+          className={`flex-1 overflow-y-auto overflow-x-hidden bg-zinc-900 p-4 lg:p-8 custom-scrollbar transition-all duration-300 ease-in-out ${isStatusPanelOpen ? 'xl:pr-80' : 'xl:pr-0'}`}
         >
           {renderContent()}
           <div className="h-32 md:h-8 w-full shrink-0 block pointer-events-none" />
@@ -730,7 +726,6 @@ export default function Home() {
 
       <GlobalAlerts />
 
-      {/* ONBOARDING TOUR */}
       <OnboardingTour
         activeMenu={activeMenu}
         setActiveMenu={handleMenuChange}

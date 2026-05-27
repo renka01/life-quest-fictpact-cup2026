@@ -381,7 +381,7 @@ type Phase = 'select' | 'battle' | 'victory' | 'defeat';
 export default function FocusArena() {
   const {
     stats, equippedItems, inventory, userProfile, settings,
-    activeFocusSession, startFocus, stopFocus, // 🔥 STORE BARU
+    activeFocusSession, startFocus, stopFocus,
     _applyReward, takeDamage, healPlayer, consumeItem, recordBossDefeated
   } = useStore();
 
@@ -398,7 +398,6 @@ export default function FocusArena() {
   const [dmgNums,      setDmgNums]      = useState<DmgNum[]>([]);
   const [combo,        setCombo]        = useState(0);
 
-  // States untuk UI Timer
   const [focusMinutes, setFocusMinutes] = useState<number | string>(25);
   const [timeLeft,     setTimeLeft]     = useState(0);
   const [canAttack,    setCanAttack]    = useState(false);
@@ -411,12 +410,12 @@ export default function FocusArena() {
       const currentBoss = BOSSES.find(b => b.id === activeFocusSession.bossId);
       if (currentBoss) {
         setBoss(currentBoss);
-        setBossHp(currentBoss.maxHp); // Harusnya disimpan di store jika ingin HP boss juga tidak keriset, tapi ini cukup untuk me-resume timer
+        setBossHp(currentBoss.maxHp);
         setLocalHp(stats.hp);
         setPhase('battle');
         addLog(`[RESUME] Melanjutkan sesi melawan ${currentBoss.name}!`);
       } else {
-        stopFocus(); // Jika boss tidak valid, reset sesi
+        stopFocus();
       }
     }
   }, [activeFocusSession.isActive]);
@@ -431,19 +430,17 @@ export default function FocusArena() {
         const remainingSeconds = Math.floor((activeFocusSession.endTime - now) / 1000);
 
         if (remainingSeconds <= 0) {
-          // WAKTU HABIS
           setTimeLeft(0);
           stopFocus();
-          setCanAttack(true); // Izinkan menyerang
+          setCanAttack(true);
           new Audio('/sounds/success.mp3').play().catch(() => {});
           addLog(`[TIME] Waktu fokus selesai! SEKARANG SERANG!`);
         } else {
-          // Terus hitung mundur
           setTimeLeft(remainingSeconds);
         }
       };
 
-      checkTime(); // Panggil sekali langsung
+      checkTime();
       interval = setInterval(checkTime, 1000);
     }
 
@@ -467,7 +464,7 @@ export default function FocusArena() {
   useEffect(() => {
     if (phase !== 'battle') return;
     if (localHp <= 0) {
-      if (takeDamage) takeDamage(Math.floor(stats.maxHp * 0.3)); // penalty 30% HP
+      if (takeDamage) takeDamage(Math.floor(stats.maxHp * 0.3));
       addLog(`[DEFEAT] You have fallen... HP penalty applied.`);
       setTimeout(() => setPhase('defeat'), 600);
     }
@@ -560,9 +557,8 @@ export default function FocusArena() {
     else if (newCombo % 3 === 0) addLog(`[COMBO] Combo x${newCombo}! +${comboBonus} bonus — ${dmg} dmg`);
     else addLog(`[ATK] You deal ${dmg} damage to ${boss.name}!`);
 
-    setCanAttack(false); // Reset timer attack
+    setCanAttack(false);
     
-    // Boss counter attack
     setTimeout(() => doBossAttack(), 1000);
 
   }, [boss, phase, canAttack, bossHp, combo, pStats]);
@@ -600,7 +596,7 @@ export default function FocusArena() {
     if (activeFocusSession.isActive) {
       stopFocus();
       setTimeLeft(0);
-      doBossAttack(true); // Kena hit karena kabur saat fokus
+      doBossAttack(true);
     }
     addLog('[FLEE] You fled the battle...');
     setPhase('select');
@@ -628,10 +624,10 @@ export default function FocusArena() {
   const playerHpPct = (localHp / stats.maxHp) * 100;
 
   // ════════════════════════════════════════════════════════════
-  // RENDER: SELECT SCREEN
+  // RENDER: SELECT SCREEN (dengan ID)
   // ════════════════════════════════════════════════════════════
   if (phase === 'select') return (
-    <div className="p-6 min-h-full" style={{ fontFamily: "'Courier New', monospace" }}>
+    <div id="tour-focus-arena" className="p-6 min-h-full" style={{ fontFamily: "'Courier New', monospace" }}>
       <div className="flex flex-col md:flex-row md:justify-between md:items-end gap-4 mb-6 shrink-0 border-b border-zinc-700/50 pb-6">
         <div className="flex flex-col gap-3 text-left">
           <h1 className="font-pixel text-sm md:text-base text-white flex items-center gap-3 drop-shadow-[2px_2px_0_#000]">
@@ -695,10 +691,10 @@ export default function FocusArena() {
   );
 
   // ════════════════════════════════════════════════════════════
-  // RENDER: VICTORY & DEFEAT
+  // RENDER: VICTORY & DEFEAT (dengan ID)
   // ════════════════════════════════════════════════════════════
   if (phase === 'victory' && boss) return (
-    <div className="flex flex-col items-center justify-center min-h-[60vh] gap-6" style={{ fontFamily: "'Courier New', monospace" }}>
+    <div id="tour-focus-arena" className="flex flex-col items-center justify-center min-h-[60vh] gap-6" style={{ fontFamily: "'Courier New', monospace" }}>
       <div className="text-center">
         <div className="flex justify-center mb-3">
           <Trophy size={48} className="text-amber-400 drop-shadow-[0_0_15px_rgba(251,191,36,0.5)]" />
@@ -721,7 +717,7 @@ export default function FocusArena() {
   );
 
   if (phase === 'defeat' && boss) return (
-    <div className="flex flex-col items-center justify-center min-h-[60vh] gap-6" style={{ fontFamily: "'Courier New', monospace" }}>
+    <div id="tour-focus-arena" className="flex flex-col items-center justify-center min-h-[60vh] gap-6" style={{ fontFamily: "'Courier New', monospace" }}>
       <div className="text-center">
         <div className="flex justify-center mb-3">
           <Skull size={48} className="text-zinc-400 drop-shadow-[0_0_15px_rgba(148,163,184,0.5)]" />
@@ -746,12 +742,12 @@ export default function FocusArena() {
   );
 
   // ════════════════════════════════════════════════════════════
-  // RENDER: BATTLE
+  // RENDER: BATTLE (dengan ID)
   // ════════════════════════════════════════════════════════════
   if (!boss) return null;
 
   return (
-    <div className="p-4 min-h-full flex flex-col gap-4" style={{ fontFamily: "'Courier New', monospace" }}>
+    <div id="tour-focus-arena" className="p-4 min-h-full flex flex-col gap-4" style={{ fontFamily: "'Courier New', monospace" }}>
 
       {/* ── Header ── */}
       <div className="flex justify-between items-center border-b-2 border-zinc-700 pb-3">
@@ -818,7 +814,6 @@ export default function FocusArena() {
               <Timer size={14} className="text-cyan-400"/> {tFocus.pomodoro}
             </p>
             
-            {/* 🔥 MENGGUNAKAN LOGIKA GLOBAL STORE DI SINI */}
             {!activeFocusSession.isActive && !canAttack && (
               <div className="flex flex-col gap-2">
                 <label className="text-[9px] text-zinc-500 uppercase">{tFocus.setMins}</label>
@@ -826,7 +821,7 @@ export default function FocusArena() {
                   className="bg-zinc-900 border border-zinc-700 p-2 text-white font-mono text-center outline-none focus:border-cyan-500"/>
                 <button onClick={() => { 
                     const mins = Number(focusMinutes) || 1; 
-                    startFocus(boss.id, mins); // Panggil fungsi Zustand!
+                    startFocus(boss.id, mins);
                     addLog(`[TIME] Memulai sesi fokus ${mins} menit. JANGAN MENYERAH!`); 
                   }}
                   className="mt-2 py-3 bg-cyan-600 hover:bg-cyan-500 text-white text-xs font-bold uppercase tracking-widest border-2 border-cyan-400 shadow-[0_4px_0_#0891b2] active:translate-y-[4px] active:shadow-none transition-all flex items-center justify-center gap-2">
@@ -843,7 +838,7 @@ export default function FocusArena() {
                 <button onClick={() => { 
                     stopFocus(); 
                     setTimeLeft(0); 
-                    doBossAttack(true); // Hukuman dari bos
+                    doBossAttack(true);
                   }}
                   className="w-full py-2 bg-zinc-800 text-zinc-400 hover:bg-red-950 hover:text-red-400 border border-zinc-700 hover:border-red-500 text-[10px] font-bold uppercase transition-all flex items-center justify-center gap-2">
                   <Square size={12}/> {tFocus.giveUp}

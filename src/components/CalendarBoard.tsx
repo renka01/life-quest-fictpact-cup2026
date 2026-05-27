@@ -11,7 +11,6 @@ export default function CalendarBoard() {
   
   const [currentDate, setCurrentDate] = useState(new Date());
   
-  // State untuk menyimpan data hari yang sedang di-klik
   const [selectedDayTasks, setSelectedDayTasks] = useState<{ date: number, month: number, year: number, tasks: ExtendedTask[] } | null>(null);
 
   const prevMonth = () => { setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() - 1, 1)); playSound('click'); };
@@ -35,19 +34,16 @@ export default function CalendarBoard() {
   const getTasksForDate = (dayNum: number | null) => {
     if (!dayNum) return [];
     
-    // Set jam ke 00:00:00 agar perbandingan tanggal murni angka hari
     const currentCalDate = new Date(year, month, dayNum);
     currentCalDate.setHours(0, 0, 0, 0);
 
     return tasks.filter((task: ExtendedTask) => {
-      // 1. Logika TARGET UTAMA (type: 'todo')
       if (task.type === 'todo' && task.dueDate) {
         const due = new Date(task.dueDate);
         due.setHours(0, 0, 0, 0);
         return due.getTime() === currentCalDate.getTime();
       }
 
-      // 2. Logika OPERASI HARIAN (type: 'daily')
       if (task.type === 'daily' && task.startDate && task.repeatEvery) {
         const start = new Date(task.startDate);
         start.setHours(0, 0, 0, 0);
@@ -81,7 +77,8 @@ export default function CalendarBoard() {
   };
 
   return (
-    <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 h-full flex flex-col relative">
+    // 🔥 TAMBAHKAN ID DI SINI
+    <div id="tour-calendar-board" className="animate-in fade-in slide-in-from-bottom-4 duration-500 h-full flex flex-col relative">
       <div className="flex flex-col md:flex-row md:justify-between md:items-end gap-4 mb-6 shrink-0 border-b border-zinc-700/50 pb-6">
         <div className="flex flex-col gap-3 text-left">
           <h1 className="font-pixel text-sm md:text-base text-white flex items-center gap-3 drop-shadow-[2px_2px_0_#000]">
@@ -93,7 +90,6 @@ export default function CalendarBoard() {
           </p>
         </div>
 
-        {/* Navigator Bulan */}
         <div className="flex items-center gap-4 bg-zinc-800 border-2 border-emerald-500 px-4 py-2 shadow-[4px_4px_0_#000] shrink-0 w-full md:w-auto justify-between md:justify-center">
           <button onClick={prevMonth} className="text-emerald-500 hover:text-white transition-colors active:scale-90">
             <ChevronLeft size={20} />
@@ -107,7 +103,8 @@ export default function CalendarBoard() {
         </div>
       </div>
 
-      <div className="flex-1 bg-zinc-800 border-4 border-zinc-700 p-4 shadow-[8px_8px_0_#000] flex flex-col">
+      {/* 🔥 TAMBAHKAN ID JUGA DI GRID KALENDER */}
+      <div id="tour-calendar-grid" className="flex-1 bg-zinc-800 border-4 border-zinc-700 p-4 shadow-[8px_8px_0_#000] flex flex-col">
         <div className="grid grid-cols-7 gap-1 md:gap-2 mb-2 shrink-0">
           {daysInWeek.map((day: string, index: number) => (
             <div key={day} className="text-center font-bold text-zinc-500 text-xs py-2 border-b-2 border-zinc-700">
@@ -132,7 +129,6 @@ export default function CalendarBoard() {
                     : 'border-transparent bg-transparent opacity-30 pointer-events-none'
                 }`}
               >
-                {/* Header Tanggal & Info Klik */}
                 <div className="flex justify-between items-start shrink-0">
                   <span className={`text-xs md:text-sm font-bold ${isToday ? 'text-cyan-400' : hasTasks ? 'text-zinc-200' : 'text-zinc-500'}`}>
                     {dayNum || ''}
@@ -144,7 +140,6 @@ export default function CalendarBoard() {
                   )}
                 </div>
 
-                {/* List Misi Terbatas (Max 2) */}
                 <div className="mt-1 flex flex-col gap-1 overflow-hidden pb-1 pointer-events-none">
                   {dayTasks.slice(0, 2).map((task: ExtendedTask) => {
                     const isTodo = task.type === 'todo';
@@ -170,7 +165,6 @@ export default function CalendarBoard() {
                     );
                   })}
 
-                  {/* Indikator Jika Lebih dari 2 */}
                   {dayTasks.length > 2 && (
                     <div className="text-[7px] md:text-[8px] font-bold text-zinc-400 text-center mt-0.5 bg-zinc-900 border border-zinc-700 py-0.5">
                       +{dayTasks.length - 2} <span className="hidden md:inline">{t.others}</span>
@@ -183,12 +177,10 @@ export default function CalendarBoard() {
         </div>
       </div>
 
-      {/* MODAL / POP-UP DETAIL HARI */}
       {selectedDayTasks && (
         <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-[100] flex justify-center items-center p-4 animate-in fade-in duration-200" onClick={() => setSelectedDayTasks(null)}>
           <div className="w-full max-w-md bg-zinc-900 border-4 border-zinc-600 flex flex-col shadow-[8px_8px_0_#000] animate-in zoom-in-95 duration-200" onClick={e => e.stopPropagation()}>
             
-            {/* Header Pop-up */}
             <div className="bg-zinc-800 border-b-4 border-zinc-600 p-4 flex justify-between items-center">
               <h3 className="font-pixel text-[10px] text-white tracking-widest uppercase flex items-center gap-2">
                 <CalIcon size={14} className="text-cyan-400" />
@@ -197,7 +189,6 @@ export default function CalendarBoard() {
               <button onClick={() => setSelectedDayTasks(null)} className="text-zinc-400 hover:text-white transition-colors"><X size={18} /></button>
             </div>
 
-            {/* List Misi */}
             <div className="p-5 flex flex-col gap-3 max-h-[60vh] overflow-y-auto">
               {selectedDayTasks.tasks.length > 0 ? (
                 selectedDayTasks.tasks.map((task: ExtendedTask) => {
@@ -216,7 +207,6 @@ export default function CalendarBoard() {
                         </div>
                       </div>
                       
-                      {/* Status Badge */}
                       <div className="shrink-0 ml-2">
                         {task.done ? (
                           <span className="text-[9px] font-bold bg-emerald-500/20 text-emerald-400 px-2 py-1 border border-emerald-500/50">{t.done}</span>

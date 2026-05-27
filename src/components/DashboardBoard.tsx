@@ -86,7 +86,8 @@ export default function DashboardBoard({
   };
 
   return (
-    <div className="animate-in fade-in duration-500 flex flex-col gap-6">
+    // 🔥 TAMBAHKAN ID DI SINI
+    <div id="tour-dashboard-board" className="animate-in fade-in duration-500 flex flex-col gap-6">
       {/* HERO */}
       <div className="bg-zinc-800 border-4 border-zinc-700 shadow-[6px_6px_0_#000] p-5 lg:p-6">
         <div className="grid grid-cols-1 xl:grid-cols-[1.5fr_0.9fr] gap-6 items-start">

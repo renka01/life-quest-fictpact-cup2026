@@ -1,7 +1,7 @@
 "use client";
 import React from 'react';
 import Technomancer from '@/components/art/Technomancer';
-import { useStore } from '@/store/useStore'; // <-- Tambahan import store
+import { useStore } from '@/store/useStore';
 import { 
   LayoutDashboard, 
   Calendar, 
@@ -11,13 +11,15 @@ import {
   ChevronRight, 
   Wallet, 
   ListTodo,
-  User 
+  User,
+  Coins  // <-- Tambah icon Coins
 } from 'lucide-react';
 import { translations } from '@/utils/translations';
 
 export default function Navbar({ activeMenu, setActiveMenu }: { activeMenu: string, setActiveMenu: (name: string) => void }) {
   const { userProfile, stats, settings } = useStore();
   const t = translations[settings?.language || 'id']?.nav || translations['id'].nav;
+  const lang = settings?.language || 'id';
 
   return (
     <aside className="fixed bottom-0 left-0 w-full h-16 bg-zinc-900 border-t-4 border-zinc-700 flex flex-row z-50 shadow-[0_-4px_0_rgba(0,0,0,0.5)] md:static md:h-screen md:w-20 lg:w-64 md:flex-col md:border-t-0 md:border-r-4 md:shadow-[4px_0_0_rgba(0,0,0,0.5)]">
@@ -29,6 +31,18 @@ export default function Navbar({ activeMenu, setActiveMenu }: { activeMenu: stri
           alt="Daily Dungeon" 
           className="w-[85%] max-h-full object-contain drop-shadow-[3px_3px_0_rgba(0,0,0,1)] transform -translate-x-1" 
         />
+      </div>
+
+      {/* Gold Panel - untuk tutorial */}
+      <div 
+        id="tour-gold-panel"
+        className="hidden lg:flex items-center justify-between mx-4 mt-4 p-2 bg-zinc-800 border-2 border-amber-500/30 rounded-none shadow-[2px_2px_0_#000]"
+      >
+        <div className="flex items-center gap-2">
+          <Coins size={16} className="text-amber-400" />
+          <span className="text-[10px] text-zinc-400 font-pixel">{lang === 'id' ? 'EMAS' : 'GOLD'}</span>
+        </div>
+        <span className="font-pixel text-sm text-amber-400 font-bold">{stats.gold || 0}</span>
       </div>
 
       {/* Navigation Links */}
@@ -43,11 +57,17 @@ export default function Navbar({ activeMenu, setActiveMenu }: { activeMenu: stri
           { id: "Toko & Loot", name: t.TokoLoot, icon: ShoppingCart },
         ].map((item, idx) => {
           const isActive = activeMenu === item.id;
+          
+          // Generate ID untuk tutorial
+          let tourId = '';
+          if (item.id === "Toko & Loot") tourId = "tour-nav-TokoLoot";
+          else if (item.id === "Focus Arena") tourId = "tour-nav-FocusArena";
+          else tourId = `tour-nav-${item.id}`;
 
           return (
             <button 
               key={idx} 
-              id={`tour-nav-${item.id.replace(/\s+/g, '').replace('&', '')}`}
+              id={tourId}
               onClick={() => setActiveMenu(item.id)}
               className={`flex flex-col md:flex-row items-center justify-center md:justify-start gap-1 md:gap-4 px-2 py-2 md:px-4 md:py-3 border-0 md:border-2 transition-all group rounded-none shrink-0 min-w-[64px] sm:min-w-0 sm:flex-1 md:flex-none w-auto md:w-full ${
                 isActive 
@@ -62,6 +82,16 @@ export default function Navbar({ activeMenu, setActiveMenu }: { activeMenu: stri
           );
         })}
       </nav>
+
+      {/* Profile Mini untuk mobile - optional */}
+      <div className="hidden md:flex flex-col items-center justify-center border-t-4 border-zinc-700 p-3 mt-auto">
+        <div className="w-10 h-10 bg-zinc-800 rounded-full flex items-center justify-center border-2 border-zinc-600">
+          <User size={18} className="text-zinc-500" />
+        </div>
+        <span className="text-[8px] text-zinc-600 mt-1 font-pixel">
+          Lv.{stats.level || 1}
+        </span>
+      </div>
     </aside>
   );
 }

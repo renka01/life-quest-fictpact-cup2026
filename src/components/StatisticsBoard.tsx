@@ -113,7 +113,8 @@ export default function StatisticsBoard() {
       : "Rookie Adventurer";
 
   return (
-    <div className="animate-in fade-in duration-500 flex flex-col gap-6">
+    // 🔥 TAMBAHKAN ID DI SINI
+    <div id="tour-statistics-board" className="animate-in fade-in duration-500 flex flex-col gap-6">
       {/* HERO */}
       <div className="bg-zinc-800 border-4 border-zinc-700 shadow-[6px_6px_0_#000] p-5 lg:p-6">
         <div className="flex flex-col gap-4">
@@ -218,7 +219,6 @@ export default function StatisticsBoard() {
           </div>
 
           <div className="space-y-4">
-            {/* MENGGANTI NAMA HABIT / DAILY / TODO SESUAI PERMINTAAN */}
             <SimpleBar label={translations[settings?.language || 'id']?.tasks?.habit || "Siklus Misi"} value={habitTasks} max={Math.max(totalTasks, 1)} color="bg-cyan-400" />
             <SimpleBar label={translations[settings?.language || 'id']?.tasks?.daily || "Operasi Harian"} value={dailyTasks} max={Math.max(totalTasks, 1)} color="bg-emerald-400" />
             <SimpleBar label={translations[settings?.language || 'id']?.tasks?.todo || "Target Utama"} value={todoTasks} max={Math.max(totalTasks, 1)} color="bg-pink-400" />

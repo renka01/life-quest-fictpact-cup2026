@@ -1,6 +1,6 @@
 "use client";
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useSession } from "next-auth/react";
-import { useState, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { useStore } from "@/store/useStore";
 import {
@@ -69,7 +69,6 @@ interface SettingToggleProps {
   description?: string;
 }
 
-// --- Ekstensi tipe Session untuk menyertakan provider ---
 interface ExtendedSession {
   user?: {
     name?: string | null;
@@ -92,7 +91,6 @@ export default function SettingsBoard() {
   const [isLoading, setIsLoading] = useState(false);
   const [isCloudSyncing, setIsCloudSyncing] = useState(false);
 
-  // --- STATE UNTUK MODAL KONFIRMASI DANGER ---
   const [confirmModal, setConfirmModal] = useState<{
     isOpen: boolean;
     type: 'reset' | 'delete' | null;
@@ -102,7 +100,6 @@ export default function SettingsBoard() {
     isDangerAction: boolean; 
   }>({ isOpen: false, type: null, title: '', message: '', actionText: '', isDangerAction: false });
 
-  // --- STATE UNTUK MODAL SUKSES ---
   const [successModal, setSuccessModal] = useState<{
     isOpen: boolean;
     type: 'reset' | 'delete' | null;
@@ -110,17 +107,15 @@ export default function SettingsBoard() {
     message: string;
   }>({ isOpen: false, type: null, title: '', message: '' });
 
-  // --- MENENTUKAN METODE LOGIN SAAT INI (DIPERBAIKI - TANPA ERROR) ---
+  const lang = settings?.language || 'id';
+
+  // --- MENENTUKAN METODE LOGIN SAAT INI ---
   let connectedProvider = 'credentials';
-  
-  // Cek dari session provider jika ada (menggunakan extended session)
   if (session?.provider === 'github') {
     connectedProvider = 'github';
   } else if (session?.provider === 'google') {
     connectedProvider = 'google';
-  } 
-  // Fallback ke pengecekan image (metode lama)
-  else if (session?.user?.image) {
+  } else if (session?.user?.image) {
     if (session.user.image.includes('github')) {
       connectedProvider = 'github';
     } else if (session.user.image.includes('googleusercontent')) {
@@ -167,7 +162,7 @@ export default function SettingsBoard() {
     }
   }, [syncToCloud, showAlert]);
 
-  // --- FUNGSI EKSEKUSI KE BACKEND (TIDAK KIRIM EMAIL) ---
+  // --- FUNGSI EKSEKUSI KE BACKEND ---
   const executeDangerAction = useCallback(async () => {
     if (!confirmModal.type) return;
     
@@ -178,7 +173,6 @@ export default function SettingsBoard() {
       const response = await fetch(endpoint, {
         method: confirmModal.type === 'reset' ? 'POST' : 'DELETE',
         headers: { 'Content-Type': 'application/json' },
-        // Tidak mengirim email di body - backend harus baca dari session
         body: JSON.stringify({}),
       });
 
@@ -323,24 +317,47 @@ export default function SettingsBoard() {
           <span className="text-amber-500">
             <Settings size={18} />
           </span>
-          {t.title}
+          {t?.title || "PENGATURAN"}
         </h1>
         <p className="font-pixel text-[7px] md:text-[8px] text-zinc-400 uppercase tracking-widest leading-relaxed">
-          {t.subtitle}
+          {t?.subtitle || "KONFIGURASI OPERASI SISTEM DAN DATA PAHLAWAN."}
         </p>
       </div>
 
       {/* SECTION: AKUN */}
       <section className="flex flex-col gap-3">
         <h2 className="text-[10px] font-bold text-amber-400 uppercase tracking-widest flex items-center gap-2 mb-2">
-          <User size={14} /> {t.profSec}
+          <User size={14} /> {t?.profSec || "PROFIL PAHLAWAN"}
         </h2>
         <div className="flex flex-col gap-2">
-          <SettingAction icon={User} label={t.username} value={userProfile?.accountName || "DoremiFa"} actionText={t.change} onClick={() => handleEditClick('accountName', t.username)} />
-          <SettingAction icon={Mail} label={t.email} value={session?.user?.email || "Email tidak ditemukan"} actionText={t.change} onClick={() => { showAlert("LOCKED", t.alertEmail, "info"); playSound('error'); }} />
-          <SettingAction icon={Edit3} label={t.displayName} value={userProfile?.nickname || "Tuyul BisVy"} actionText={t.change} onClick={() => handleEditClick('nickname', t.displayName)} />
-          <SettingAction icon={MessageSquare} label={t.aboutMe} value={userProfile?.bio ? `"${userProfile.bio.substring(0, 30)}${userProfile.bio.length > 30 ? '...' : ''}"` : "-"} actionText={t.change} onClick={() => handleEditClick('bio', t.aboutMe)} />
-          <SettingAction icon={Key} label={t.password} value="********" actionText={t.change} onClick={() => { showAlert("SECURITY", t.alertPass, "info"); playSound('error'); }} />
+          <SettingAction icon={User} label={t?.username || "Nama Akun"} value={userProfile?.accountName || "Petarung"} actionText={t?.change || "UBAH"} onClick={() => handleEditClick('accountName', t?.username || "Nama Akun")} />
+          
+          {/* FIX: Pesan showAlert diamankan agar tidak crash jika objek translations kosong */}
+          <SettingAction 
+            icon={Mail} 
+            label={t?.email || "Alamat Email"} 
+            value={session?.user?.email || "Email tidak ditemukan"} 
+            actionText={t?.change || "UBAH"} 
+            onClick={() => { 
+              showAlert("LOCKED", lang === 'en' ? "Email cannot be changed manually for third-party providers." : "Email terikat dan tidak dapat diubah secara manual.", "info"); 
+              playSound('error'); 
+            }} 
+          />
+          
+          <SettingAction icon={Edit3} label={t?.displayName || "Nama Panggilan"} value={userProfile?.nickname || "Petarung"} actionText={t?.change || "UBAH"} onClick={() => handleEditClick('nickname', t?.displayName || "Nama Panggilan")} />
+          <SettingAction icon={MessageSquare} label={t?.aboutMe || "Tentang Saya"} value={userProfile?.bio ? `"${userProfile.bio.substring(0, 30)}${userProfile.bio.length > 30 ? '...' : ''}"` : "-"} actionText={t?.change || "UBAH"} onClick={() => handleEditClick('bio', t?.aboutMe || "Tentang Saya")} />
+          
+          {/* FIX: Pesan showAlert diamankan dari potensi undefined string */}
+          <SettingAction 
+            icon={Key} 
+            label={t?.password || "Kata Sandi"} 
+            value="********" 
+            actionText={t?.change || "UBAH"} 
+            onClick={() => { 
+              showAlert("SECURITY", lang === 'en' ? "Please reset password via login screen provider." : "Perubahan password harus dilakukan melalui layar otentikasi awal.", "info"); 
+              playSound('error'); 
+            }} 
+          />
           
           {/* CLOUD SAVE BUTTON */}
           <SettingAction 
@@ -353,27 +370,20 @@ export default function SettingsBoard() {
           />
         </div>
         <div className="flex flex-col gap-2 mt-2">
-          <SettingAction icon={RefreshCw} label={t.resetAcc} value={t.resetDesc} actionText={isLoading ? "PROSES..." : "RESET"} onClick={triggerResetConfirm} danger disabled={isLoading} />
-          <SettingAction icon={Trash2} label={t.delAcc} value={t.delDesc} actionText={isLoading ? "PROSES..." : "HAPUS"} onClick={triggerDeleteConfirm} danger disabled={isLoading} />
+          <SettingAction icon={RefreshCw} label={t?.resetAcc || "Reset Progres"} value={t?.resetDesc || "Mengosongkan kembali seluruh progres petualangan."} actionText={isLoading ? "PROSES..." : "RESET"} onClick={triggerResetConfirm} danger disabled={isLoading} />
+          <SettingAction icon={Trash2} label={t?.delAcc || "Hapus Akun"} value={t?.delDesc || "Menghapus akun pahlawan secara permanen dari basis data."} actionText={isLoading ? "PROSES..." : "HAPUS"} onClick={triggerDeleteConfirm} danger disabled={isLoading} />
         </div>
       </section>
 
+      {/* SECTION: LOGIN METHOD */}
       <section className="flex flex-col gap-3">
         <h2 className="text-[10px] font-bold text-amber-400 uppercase tracking-widest flex items-center gap-2 mb-2">
-          <Smartphone size={14} /> {t.loginMethod}
+          <Smartphone size={14} /> {t?.loginMethod || "METODE OTENTIKASI"}
         </h2>
         
         <div className="flex flex-row gap-4 pt-2">
-          {/* KOTAK GITHUB */}
-          <div className={`
-            relative w-20 h-20 border-2 flex flex-col items-center justify-center 
-            transition-all duration-300 shadow-[4px_4px_0_#000]
-            ${connectedProvider === 'github' 
-              ? 'bg-emerald-950 border-emerald-500' 
-              : 'bg-zinc-800 border-zinc-700'}
-          `}>
+          <div className={`relative w-20 h-20 border-2 flex flex-col items-center justify-center transition-all duration-300 shadow-[4px_4px_0_#000] ${connectedProvider === 'github' ? 'bg-emerald-950 border-emerald-500' : 'bg-zinc-800 border-zinc-700'}`}>
             <Github size={32} className={connectedProvider === 'github' ? 'text-emerald-400 drop-shadow-[0_0_8px_rgba(52,211,153,0.5)]' : 'text-zinc-600'} />
-            
             {connectedProvider === 'github' && (
               <div className="absolute top-1 right-1 flex items-center justify-center w-5 h-5 bg-emerald-500 rounded-full border-2 border-emerald-950 shadow-sm">
                 <Check size={12} className="text-emerald-950" strokeWidth={4} />
@@ -381,13 +391,7 @@ export default function SettingsBoard() {
             )}
           </div>
 
-          <div className={`
-            relative w-20 h-20 border-2 flex flex-col items-center justify-center 
-            transition-all duration-300 shadow-[4px_4px_0_#000]
-            ${connectedProvider === 'google' 
-              ? 'bg-emerald-950 border-emerald-500' 
-              : 'bg-zinc-800 border-zinc-700'}
-          `}>
+          <div className={`relative w-20 h-20 border-2 flex flex-col items-center justify-center transition-all duration-300 shadow-[4px_4px_0_#000] ${connectedProvider === 'google' ? 'bg-emerald-950 border-emerald-500' : 'bg-zinc-800 border-zinc-700'}`}>
             <GoogleIcon size={32} className={connectedProvider === 'google' ? 'text-emerald-400 drop-shadow-[0_0_8px_rgba(52,211,153,0.5)]' : 'text-zinc-600'} />
             {connectedProvider === 'google' && (
               <div className="absolute top-1 right-1 flex items-center justify-center w-5 h-5 bg-emerald-500 rounded-full border-2 border-emerald-950 shadow-sm">
@@ -398,16 +402,17 @@ export default function SettingsBoard() {
         </div>
       </section>
 
+      {/* SECTION: PREFERENCES */}
       <section className="flex flex-col gap-3">
         <h2 className="text-[10px] font-bold text-amber-400 uppercase tracking-widest flex items-center gap-2 mb-2">
-          <MonitorPlay size={14} /> {t.sitePref}
+          <MonitorPlay size={14} /> {t?.sitePref || "PREFERENSI SISTEM"}
         </h2>
         <div className="flex flex-col gap-2">
-          <SettingSelect icon={Globe} label={t.sysLang} value={settings.language} onChange={(val: string) => updateSetting('language', val)} options={[{label: 'Bahasa Indonesia', value: 'id'}, {label: 'English (US)', value: 'en'}]} />
-          <SettingSelect icon={Calendar} label={t.dateFmt} value={settings.dateFormat} onChange={(val: string) => updateSetting('dateFormat', val)} options={[{label: 'DD/MM/YYYY', value: 'DD/MM/YYYY'}, {label: 'MM/DD/YYYY', value: 'MM/DD/YYYY'}, {label: 'YYYY-MM-DD', value: 'YYYY-MM-DD'}]} />
-          <SettingSelect icon={Clock} label={t.startDay} value={settings.startOfDay} onChange={(val: string) => updateSetting('startOfDay', val)} options={[{label: 'Default (00:00)', value: '00:00'}, {label: 'Subuh (04:00)', value: '04:00'}, {label: 'Pagi (06:00)', value: '06:00'}]} />
-          <SettingSelect icon={Music} label={t.audioTheme} value={settings.audioTheme} onChange={(val: string) => updateSetting('audioTheme', val)} options={[{label: 'Retro Arcade', value: 'retro'}, {label: 'Mute (Hening)', value: 'mute'}]} />
-          <SettingToggle icon={ShieldAlert} label={t.holiday} description={t.holidayDesc} checked={settings.holidayMode} onChange={(val: boolean) => { updateSetting('holidayMode', val); if(val) showAlert("HOLIDAY MODE ON", t.holidayDesc, "info"); }} />
+          <SettingSelect icon={Globe} label={t?.sysLang || "Bahasa Sistem"} value={settings.language} onChange={(val: string) => updateSetting('language', val)} options={[{label: 'Bahasa Indonesia', value: 'id'}, {label: 'English (US)', value: 'en'}]} />
+          <SettingSelect icon={Calendar} label={t?.dateFmt || "Format Tanggal"} value={settings.dateFormat} onChange={(val: string) => updateSetting('dateFormat', val)} options={[{label: 'DD/MM/YYYY', value: 'DD/MM/YYYY'}, {label: 'MM/DD/YYYY', value: 'MM/DD/YYYY'}, {label: 'YYYY-MM-DD', value: 'YYYY-MM-DD'}]} />
+          <SettingSelect icon={Clock} label={t?.startDay || "Awal Hari Kerja"} value={settings.startOfDay} onChange={(val: string) => updateSetting('startOfDay', val)} options={[{label: 'Default (00:00)', value: '00:00'}, {label: 'Subuh (04:00)', value: '04:00'}, {label: 'Pagi (06:00)', value: '06:00'}]} />
+          <SettingSelect icon={Music} label={t?.audioTheme || "Tema Audio Efek"} value={settings.audioTheme} onChange={(val: string) => updateSetting('audioTheme', val)} options={[{label: 'Retro Arcade', value: 'retro'}, {label: 'Mute (Hening)', value: 'mute'}]} />
+          <SettingToggle icon={ShieldAlert} label={t?.holiday || "Mode Liburan"} description={t?.holidayDesc || "Menghentikan pengurangan HP harian saat pahlawan sedang beristirahat."} checked={settings.holidayMode} onChange={(val: boolean) => { updateSetting('holidayMode', val); if(val) showAlert("HOLIDAY MODE ON", t?.holidayDesc || "Mode liburan diaktifkan.", "info"); }} />
           <SettingAction 
             icon={HelpCircle} 
             label="Panduan & Tutorial" 
@@ -418,6 +423,7 @@ export default function SettingsBoard() {
         </div>
       </section>
 
+      {/* SECTION: ABOUT */}
       <section className="flex flex-col gap-3 mt-4 pt-8 border-t-2 border-zinc-700/50">
         <h2 className="text-[10px] font-bold text-amber-400 uppercase tracking-widest flex items-center gap-2 mb-2">
           <Info size={14} /> Tentang Daily Dungeon
@@ -428,11 +434,12 @@ export default function SettingsBoard() {
         </div>
       </section>
 
+      {/* MODAL EDIT */}
       {editModal.isOpen && (
         <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-[100] flex justify-center items-center p-4">
           <div className="w-full max-w-md bg-zinc-900 border-4 border-amber-500 shadow-[8px_8px_0_#000] flex flex-col animate-in zoom-in duration-200">
             <div className="bg-zinc-800 border-b-4 border-amber-500 p-4 flex justify-between items-center">
-              <h3 className="font-pixel text-[10px] text-amber-400 uppercase tracking-widest">{t.change} {editModal.title}</h3>
+              <h3 className="font-pixel text-[10px] text-amber-400 uppercase tracking-widest">{t?.change || "UBAH"} {editModal.title}</h3>
               <button onClick={() => setEditModal(prev => ({...prev, isOpen: false}))} className="text-zinc-400 hover:text-white" aria-label="Close modal">
                 <X size={18} />
               </button>
@@ -457,255 +464,127 @@ export default function SettingsBoard() {
               )}
             </div>
             <div className="p-4 border-t-2 border-zinc-700 bg-zinc-800 flex justify-end gap-3">
-              <button onClick={() => setEditModal(prev => ({...prev, isOpen: false}))} className="px-4 py-2 text-xs font-bold text-zinc-400 hover:text-white uppercase transition-colors">{tUi.cancel}</button>
-              <button onClick={handleSaveEdit} className="px-6 py-2 bg-amber-500 text-amber-950 text-xs font-bold uppercase shadow-[4px_4px_0_#000] active:translate-y-[2px] active:shadow-none hover:bg-amber-400 transition-all">{t.save}</button>
+              <button onClick={() => setEditModal(prev => ({...prev, isOpen: false}))} className="px-4 py-2 text-xs font-bold text-zinc-400 hover:text-white uppercase transition-colors">{tUi?.cancel || "BATAL"}</button>
+              <button onClick={handleSaveEdit} className="px-6 py-2 bg-amber-500 text-amber-950 text-xs font-bold uppercase shadow-[4px_4px_0_#000] active:translate-y-[2px] active:shadow-none hover:bg-amber-400 transition-all">{t?.save || "SIMPAN"}</button>
             </div>
           </div>
         </div>
       )}
 
-{infoModal.isOpen && (
-  <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-[100] flex justify-center items-center p-4">
-    <div className="w-full max-w-md bg-zinc-900 border-4 border-amber-500 shadow-[8px_8px_0_#000] flex flex-col animate-in zoom-in duration-200">
-      
-      <div className="bg-zinc-800 border-b-4 border-amber-500 p-4 flex justify-between items-center">
-        <h3 className="font-pixel text-[10px] text-amber-400 uppercase tracking-widest flex items-center gap-2">
-          {infoModal.type === 'team' ? (
-            <>
-              <Users size={14} /> Tim Developer
-            </>
-          ) : (
-            <>
-              <Globe size={14} /> Sosial
-            </>
-          )}
-        </h3>
+      {/* MODAL INFO */}
+      {infoModal.isOpen && (
+        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-[100] flex justify-center items-center p-4">
+          <div className="w-full max-w-md bg-zinc-900 border-4 border-amber-500 shadow-[8px_8px_0_#000] flex flex-col animate-in zoom-in duration-200">
+            <div className="bg-zinc-800 border-b-4 border-amber-500 p-4 flex justify-between items-center">
+              <h3 className="font-pixel text-[10px] text-amber-400 uppercase tracking-widest flex items-center gap-2">
+                {infoModal.type === 'team' ? <><Users size={14} /> Tim Developer</> : <><Globe size={14} /> Sosial</>}
+              </h3>
+              <button onClick={() => setInfoModal(prev => ({ ...prev, isOpen: false }))} className="text-zinc-400 hover:text-white" aria-label="Close modal">
+                <X size={18} />
+              </button>
+            </div>
 
-        <button
-          onClick={() => setInfoModal(prev => ({ ...prev, isOpen: false }))}
-          className="text-zinc-400 hover:text-white"
-          aria-label="Close modal"
-        >
-          <X size={18} />
-        </button>
-      </div>
+            <div className="p-6">
+              {infoModal.type === 'team' ? (
+                <>
+                  <div className="grid grid-cols-1 gap-3">
+                    <a href="https://instagram.com/renhapiz" target="_blank" rel="noreferrer" className="bg-zinc-800 border-2 border-zinc-700 p-3 flex flex-col justify-between text-center shadow-[4px_4px_0_#0f172a] hover:border-emerald-500 hover:-translate-y-1 transition-all active:translate-y-[2px] active:shadow-none group">
+                      <p className="font-bold text-emerald-400 text-[13px] leading-5 break-words group-hover:text-emerald-300">Faren Hafiza Afanda</p>
+                      <p className="text-[8px] text-zinc-500 font-pixel uppercase mt-2">@renhapiz</p>
+                    </a>
 
-      <div className="p-6">
+                    <a href="https://instagram.com/rafaeldimaass" target="_blank" rel="noreferrer" className="bg-zinc-800 border-2 border-zinc-700 p-3 flex flex-col justify-between text-center shadow-[4px_4px_0_#0f172a] hover:border-cyan-500 hover:-translate-y-1 transition-all active:translate-y-[2px] active:shadow-none group">
+                      <p className="font-bold text-cyan-400 text-[13px] leading-5 break-words group-hover:text-cyan-300">Rafael Dimas Cahyo Laksono</p>
+                      <p className="text-[8px] text-zinc-500 font-pixel uppercase mt-2">@rafaeldimaass</p>
+                    </a>
 
-        {infoModal.type === 'team' ? (
-          <>
-           <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                    <a href="https://www.instagram.com/rappizr" target="_blank" rel="noreferrer" className="bg-zinc-800 border-2 border-zinc-700 p-3 flex flex-col justify-between text-center shadow-[4px_4px_0_#0f172a] hover:border-pink-500 hover:-translate-y-1 transition-all active:translate-y-[2px] active:shadow-none group">
+                      <p className="font-bold text-pink-400 text-[13px] leading-5 break-words group-hover:text-pink-300">Mukhammad Raffi Zabra</p>
+                      <p className="text-[8px] text-zinc-500 font-pixel uppercase mt-2">@rappizr</p>
+                    </a>
+                  </div>
+                  <p className="text-[10px] text-zinc-500 mt-4 text-center italic border-t border-zinc-700 pt-4">Dikembangkan untuk INTERCOMPT 2026</p>
+                </>
+              ) : (
+                <div className="flex flex-col gap-4">
+                  <p className="text-xs text-zinc-400 mb-2 text-center uppercase tracking-widest">Ikuti Petualangan Kami</p>
+                  <a href="https://www.instagram.com/renhapiz" target="_blank" rel="noreferrer" className="flex items-center gap-4 bg-zinc-800 border-2 border-pink-600 hover:bg-pink-600/20 transition-colors p-4 shadow-[4px_4px_0_#000] active:translate-y-[2px] active:shadow-none group">
+                    <div className="p-2 bg-pink-500/10 rounded-full group-hover:scale-110 transition-transform shrink-0"><Instagram className="text-pink-500" size={24} /></div>
+                    <div className="flex flex-col">
+                      <span className="font-bold text-white text-sm tracking-wide">Instagram</span>
+                      <span className="text-[10px] text-zinc-400">@renhapiz</span>
+                    </div>
+                  </a>
 
-  <a
-    href="https://instagram.com/renhapiz"
-    target="_blank"
-    rel="noreferrer"
-    className="bg-zinc-800 border-2 border-zinc-700 p-3 min-h-[140px] flex flex-col justify-between text-center shadow-[4px_4px_0_#0f172a] hover:border-emerald-500 hover:-translate-y-1 transition-all active:translate-y-[2px] active:shadow-none block group"
-  >
-    <div>
-      <p className="font-bold text-emerald-400 text-[13px] leading-5 break-words group-hover:text-emerald-300">
-        Faren Hafiza Afanda
-      </p>
-    </div>
+                  <a href="https://github.com/renka01/life-quest-fictpact-cup2026" target="_blank" rel="noreferrer" className="flex items-center gap-4 bg-zinc-800 border-2 border-zinc-500 hover:bg-zinc-500/20 transition-colors p-4 shadow-[4px_4px_0_#000] active:translate-y-[2px] active:shadow-none group">
+                    <div className="p-2 bg-zinc-500/10 rounded-full group-hover:scale-110 transition-transform shrink-0"><Github className="text-zinc-300" size={24} /></div>
+                    <div className="flex flex-col">
+                      <span className="font-bold text-white text-sm tracking-wide">GitHub Repository</span>
+                      <span className="text-[10px] text-zinc-400">Bjorbun Team</span>
+                    </div>
+                  </a>
+                </div>
+              )}
+            </div>
 
-    <p className="text-[8px] text-zinc-500 font-pixel uppercase mt-3 break-all">
-      @renhapiz
-    </p>
-  </a>
-
-  <a
-    href="https://instagram.com/rafaeldimaass"
-    target="_blank"
-    rel="noreferrer"
-    className="bg-zinc-800 border-2 border-zinc-700 p-3 min-h-[140px] flex flex-col justify-between text-center shadow-[4px_4px_0_#0f172a] hover:border-cyan-500 hover:-translate-y-1 transition-all active:translate-y-[2px] active:shadow-none block group"
-  >
-    <div>
-      <p className="font-bold text-cyan-400 text-[13px] leading-5 break-words group-hover:text-cyan-300">
-        Rafael Dimas Cahyo Laksono
-      </p>
-    </div>
-
-    <p className="text-[8px] text-zinc-500 font-pixel uppercase mt-3 break-all">
-      @rafaeldimaass
-    </p>
-  </a>
-
-  <a
-    href="https://www.instagram.com/rappizr"
-    target="_blank"
-    rel="noreferrer"
-    className="bg-zinc-800 border-2 border-zinc-700 p-3 min-h-[140px] flex flex-col justify-between text-center shadow-[4px_4px_0_#0f172a] hover:border-pink-500 hover:-translate-y-1 transition-all active:translate-y-[2px] active:shadow-none block group"
-  >
-    <div>
-      <p className="font-bold text-pink-400 text-[13px] leading-5 break-words group-hover:text-pink-300">
-        Mukhammad Raffi Zabra
-      </p>
-    </div>
-
-    <p className="text-[8px] text-zinc-500 font-pixel uppercase mt-3 break-all">
-      @rappizr
-    </p>
-  </a>
-
-</div>
-
-            <p className="text-[10px] text-zinc-500 mt-4 text-center italic border-t border-zinc-700 pt-4">
-              Dikembangkan untuk INTERCOMPT 2026
-            </p>
-          </>
-        ) : (
-          <div className="flex flex-col gap-4">
-
-            <p className="text-xs text-zinc-400 mb-2 text-center uppercase tracking-widest">
-              Ikuti Petualangan Kami
-            </p>
-
-            <a
-              href="https://www.instagram.com/renhapiz"
-              target="_blank"
-              rel="noreferrer"
-              className="flex items-center gap-4 bg-zinc-800 border-2 border-pink-600 hover:bg-pink-600/20 transition-colors p-4 shadow-[4px_4px_0_#000] active:translate-y-[2px] active:shadow-none group"
-            >
-              <div className="p-2 bg-pink-500/10 rounded-full group-hover:scale-110 transition-transform shrink-0">
-                <Instagram className="text-pink-500" size={24} />
-              </div>
-
-              <div className="flex flex-col">
-                <span className="font-bold text-white text-sm tracking-wide">
-                  Instagram
-                </span>
-
-                <span className="text-[10px] text-zinc-400">
-                  @renhapiz
-                </span>
-              </div>
-            </a>
-
-            <a
-              href="https://github.com/renka01/life-quest-fictpact-cup2026"
-              target="_blank"
-              rel="noreferrer"
-              className="flex items-center gap-4 bg-zinc-800 border-2 border-zinc-500 hover:bg-zinc-500/20 transition-colors p-4 shadow-[4px_4px_0_#000] active:translate-y-[2px] active:shadow-none group"
-            >
-              <div className="p-2 bg-zinc-500/10 rounded-full group-hover:scale-110 transition-transform shrink-0">
-                <Github className="text-zinc-300" size={24} />
-              </div>
-
-              <div className="flex flex-col">
-                <span className="font-bold text-white text-sm tracking-wide">
-                  GitHub Repository
-                </span>
-
-                <span className="text-[10px] text-zinc-400">
-                  Bjorbun Team
-                </span>
-              </div>
-            </a>
+            <div className="p-4 border-t-2 border-zinc-700 bg-zinc-800 flex justify-center">
+              <button onClick={() => setInfoModal(prev => ({ ...prev, isOpen: false }))} className="px-8 py-2 bg-zinc-700 text-white text-xs font-bold uppercase shadow-[4px_4px_0_#000] active:translate-y-[2px] active:shadow-none hover:bg-zinc-600 transition-colors">Tutup</button>
+            </div>
           </div>
-        )}
-      </div>
+        </div>
+      )}
 
-      <div className="p-4 border-t-2 border-zinc-700 bg-zinc-800 flex justify-center">
-        <button
-          onClick={() => setInfoModal(prev => ({ ...prev, isOpen: false }))}
-          className="px-8 py-2 bg-zinc-700 text-white text-xs font-bold uppercase shadow-[4px_4px_0_#000] active:translate-y-[2px] active:shadow-none hover:bg-zinc-600 transition-colors"
-        >
-          Tutup
-        </button>
-      </div>
-
-    </div>
-  </div>
-)}
-
+      {/* MODAL KONFIRMASI DANGER */}
       {confirmModal.isOpen && (
         <div className="fixed inset-0 bg-black/90 backdrop-blur-sm z-[200] flex justify-center items-center p-4">
           <div className={`w-full max-w-sm bg-zinc-900 border-4 ${confirmModal.isDangerAction ? 'border-red-500' : 'border-orange-500'} shadow-[8px_8px_0_#000] flex flex-col animate-in zoom-in-95 duration-200`}>
-            
             <div className={`bg-zinc-800 border-b-4 ${confirmModal.isDangerAction ? 'border-red-500' : 'border-orange-500'} p-4 flex justify-between items-center`}>
               <h3 className={`font-pixel text-[10px] ${confirmModal.isDangerAction ? 'text-red-500' : 'text-orange-500'} uppercase tracking-widest flex items-center gap-2`}>
                 <AlertTriangle size={16} /> {confirmModal.title}
               </h3>
-              <button 
-                onClick={() => setConfirmModal(prev => ({ ...prev, isOpen: false }))} 
-                disabled={isLoading}
-                className="text-zinc-400 hover:text-white disabled:opacity-50"
-                aria-label="Close modal"
-              >
+              <button onClick={() => setConfirmModal(prev => ({ ...prev, isOpen: false }))} disabled={isLoading} className="text-zinc-400 hover:text-white disabled:opacity-50" aria-label="Close modal">
                 <X size={18} />
               </button>
             </div>
             
             <div className="p-6 text-center">
-              <div className={`w-16 h-16 mx-auto mb-4 border-2 flex items-center justify-center animate-pulse ${
-                confirmModal.isDangerAction 
-                  ? 'bg-red-500/10 border-red-500 text-red-500' 
-                  : 'bg-orange-500/10 border-orange-500 text-orange-500'
-              }`}>
+              <div className={`w-16 h-16 mx-auto mb-4 border-2 flex items-center justify-center animate-pulse ${confirmModal.isDangerAction ? 'bg-red-500/10 border-red-500 text-red-500' : 'bg-orange-500/10 border-orange-500 text-orange-500'}`}>
                 {confirmModal.isDangerAction ? <Trash2 size={32} /> : <RefreshCw size={32} />}
               </div>
-              <p className="text-sm text-zinc-300 leading-relaxed font-mono">
-                {confirmModal.message}
-              </p>
+              <p className="text-sm text-zinc-300 leading-relaxed font-mono">{confirmModal.message}</p>
             </div>
             
             <div className="p-4 border-t-2 border-zinc-700 bg-zinc-800 flex flex-col sm:flex-row justify-end gap-3">
-              <button 
-                onClick={() => setConfirmModal(prev => ({ ...prev, isOpen: false }))} 
-                disabled={isLoading}
-                className="px-4 py-2 text-xs font-bold text-zinc-400 hover:bg-zinc-700 hover:text-white uppercase transition-colors disabled:opacity-50 w-full sm:w-auto"
-              >
-                BATAL
-              </button>
+              <button onClick={() => setConfirmModal(prev => ({ ...prev, isOpen: false }))} disabled={isLoading} className="px-4 py-2 text-xs font-bold text-zinc-400 hover:bg-zinc-700 hover:text-white uppercase transition-colors disabled:opacity-50 w-full sm:w-auto">BATAL</button>
               <button 
                 onClick={executeDangerAction} 
                 disabled={isLoading}
-                className={`px-6 py-2 text-xs font-bold uppercase shadow-[4px_4px_0_#000] active:translate-y-[2px] active:shadow-none transition-all w-full sm:w-auto ${
-                  confirmModal.isDangerAction
-                    ? 'bg-red-500 text-white hover:bg-red-400'
-                    : 'bg-orange-500 text-orange-950 hover:bg-orange-400'
-                } disabled:opacity-50 disabled:cursor-not-allowed flex justify-center items-center gap-2`}
+                className={`px-6 py-2 text-xs font-bold uppercase shadow-[4px_4px_0_#000] active:translate-y-[2px] active:shadow-none transition-all w-full sm:w-auto ${confirmModal.isDangerAction ? 'bg-red-500 text-white hover:bg-red-400' : 'bg-orange-500 text-orange-950 hover:bg-orange-400'} disabled:opacity-50 disabled:cursor-not-allowed flex justify-center items-center gap-2`}
               >
-                {isLoading ? (
-                  <>
-                    <div className="w-3 h-3 border-2 border-current border-t-transparent rounded-full animate-spin"></div>
-                    MEMPROSES...
-                  </>
-                ) : (
-                  confirmModal.actionText
-                )}
+                {isLoading ? <><div className="w-3 h-3 border-2 border-current border-t-transparent rounded-full animate-spin"></div> MEMPROSES...</> : confirmModal.actionText}
               </button>
             </div>
           </div>
         </div>
       )}
 
+      {/* MODAL SUKSES */}
       {successModal.isOpen && (
         <div className="fixed inset-0 bg-black/90 backdrop-blur-sm z-[200] flex justify-center items-center p-4">
           <div className="w-full max-w-sm bg-zinc-900 border-4 border-emerald-500 shadow-[8px_8px_0_#000] flex flex-col animate-in zoom-in-95 duration-300">
-            
             <div className="bg-zinc-800 border-b-4 border-emerald-500 p-4 flex justify-between items-center">
-              <h3 className="font-pixel text-[10px] text-emerald-400 uppercase tracking-widest flex items-center gap-2">
+              <h3 className="font-pixel text-[10px] text-emerald-400 uppercase tracking-widestxl flex items-center gap-2">
                 <CheckCircle size={16} /> {successModal.title}
               </h3>
             </div>
-            
             <div className="p-6 text-center">
               <div className="w-16 h-16 mx-auto mb-4 border-2 flex items-center justify-center bg-emerald-500/10 border-emerald-500 text-emerald-500 animate-bounce">
                 <CheckCircle size={32} />
               </div>
-              <p className="text-sm text-zinc-300 leading-relaxed font-bold font-mono">
-                {successModal.message}
-              </p>
+              <p className="text-sm text-zinc-300 leading-relaxed font-bold font-mono">{successModal.message}</p>
             </div>
-            
             <div className="p-4 border-t-2 border-zinc-700 bg-zinc-800 flex justify-center">
-              <button 
-                onClick={handleSuccessClose} 
-                className="px-8 py-2 text-xs font-bold uppercase shadow-[4px_4px_0_#000] active:translate-y-[2px] active:shadow-none w-full bg-emerald-500 text-zinc-900 hover:bg-emerald-400 transition-colors"
-              >
-                LANJUTKAN
-              </button>
+              <button onClick={handleSuccessClose} className="px-8 py-2 text-xs font-bold uppercase shadow-[4px_4px_0_#000] active:translate-y-[2px] active:shadow-none w-full bg-emerald-500 text-zinc-900 hover:bg-emerald-400 transition-colors">LANJUTKAN</button>
             </div>
           </div>
         </div>

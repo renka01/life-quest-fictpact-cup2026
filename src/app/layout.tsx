@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { NextAuthProvider } from "@/components/Providers";
-// Import komponen yang baru saja kita buat
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -28,15 +27,18 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" className="dark">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-zinc-950 text-zinc-50 min-h-screen`}
       >
         <NextAuthProvider>
-          {children}
+          {/* Berikan wrapper div utama di sini agar stacking context terkunci */}
+          <div className="relative min-h-screen flex flex-col bg-zinc-950">
+            {children}
+          </div>
         </NextAuthProvider>
+        
         {/* --- GLOBAL COMPONENTS LAYER --- */}
-        {/* Komponen ini akan stand-by menunggu trigger dari useStore */}
       </body>
     </html>
   );

@@ -20,7 +20,7 @@ export interface ShopItem {
 }
 
 // ============================================================
-// PIXEL ART SVG ICONS (pure <rect> pixel grid, image-rendering: pixelated)
+// PIXEL ART SVG ICONS (pure <rect> pixel grid)
 // ============================================================
 
 const ShadowCloakIcon = () => (
@@ -612,6 +612,7 @@ const HollowMaskIcon = () => (
     <rect x="14" y="16" width="4" height="1" fill="#94a3b8"/>
   </svg>
 );
+
 const GordonGlassesIcon = () => (
   <svg viewBox="0 0 32 32" width="56" height="56" xmlns="http://www.w3.org/2000/svg" style={{ imageRendering: 'pixelated' }}>
     <rect x="11" y="10" width="10" height="4" fill="#451a03"/>
@@ -1061,7 +1062,6 @@ export default function ShopBoard({ searchQuery = "", activeCategory = "all" }: 
   const [activeFilter, setActiveFilter] = useState<EquipSlot | 'all'>('all');
   const [ownershipFilter, setOwnershipFilter] = useState<'all' | 'owned' | 'notOwned'>('all');
   
-  // State Baru untuk Pop-up Item Detail
   const [selectedItem, setSelectedItem] = useState<ShopItem | null>(null);
 
   const categories = [
@@ -1078,7 +1078,6 @@ export default function ShopBoard({ searchQuery = "", activeCategory = "all" }: 
     setTimeout(() => setToast(null), 2000);
   };
 
-  // Fungsi Utama Ketika Aksi Pop-up Dikonfirmasi
   const handleConfirmAction = (item: ShopItem) => {
     const isEquipped = equippedItems[item.slot] === item.id;
     const ownedCount = inventory.find(i => i.id === item.id)?.quantity || 0;
@@ -1090,19 +1089,21 @@ export default function ShopBoard({ searchQuery = "", activeCategory = "all" }: 
       if (item.slot !== 'potion') {
         equipItem(item.slot, item.id);
         showToast(`Digunakan: ${item.name}!`);
+      } else {
+        showToast(`Sudah memiliki ${item.name}`);
       }
     } else {
-      // Proses Pembelian
       const success = buyItem(item.id, item.price);
       if (success) {
         showToast(`Berhasil membeli ${item.name}!`);
       }
     }
-    setSelectedItem(null); // Tutup pop-up
+    setSelectedItem(null);
   };
 
   return (
-    <div className="p-6" style={{ fontFamily: "'Courier New', monospace" }}>
+    // 🔥 HANYA MENAMBAHKAN ID INI, TIDAK MENGUBAH FUNGSI LAIN
+    <div id="tour-shop-board" className="p-6" style={{ fontFamily: "'Courier New', monospace" }}>
 
       {/* TOAST NOTIFICATION */}
       {toast && (
@@ -1113,14 +1114,13 @@ export default function ShopBoard({ searchQuery = "", activeCategory = "all" }: 
         </div>
       )}
 
-      {/* --- POP-UP ITEM DETAIL MODAL (PENGGANTI POP-UP KONFIRMASI) --- */}
+      {/* --- POP-UP ITEM DETAIL MODAL --- */}
       {selectedItem && (() => {
         const item = selectedItem;
         const rs = RARITY_STYLE[item.rarity];
         const isEquipped = equippedItems[item.slot] === item.id;
         const ownedCount = inventory.find(i => i.id === item.id)?.quantity || 0;
         
-        // Deteksi jenis tombol aksi utama secara dinamis
         let actionLabel = `${t.buy || 'BELI'}`;
         let isActionDisabled = false;
         
@@ -1129,7 +1129,7 @@ export default function ShopBoard({ searchQuery = "", activeCategory = "all" }: 
         } else if (ownedCount > 0) {
           if (item.slot === 'potion') {
             actionLabel = `${t.ownedBadge || 'DIMILIKI'}`;
-            isActionDisabled = true; // Ramuan tidak bisa "dipakai" lewat armor/weapon slots
+            isActionDisabled = true;
           } else {
             actionLabel = `${t.use || 'GUNAKAN'}`;
           }
@@ -1142,7 +1142,6 @@ export default function ShopBoard({ searchQuery = "", activeCategory = "all" }: 
           <div id="shop-item-modal" className="fixed inset-0 bg-black/80 z-[999] flex items-center justify-center p-4 backdrop-blur-xs animate-in fade-in duration-150">
             <div className={`w-full max-w-sm bg-zinc-900 border-4 ${rs.border} shadow-[8px_8px_0_rgba(0,0,0,0.7)] flex flex-col overflow-hidden`}>
               
-              {/* Header Box */}
               <div className="bg-zinc-950 px-3 py-2 flex justify-between items-center border-b-2 border-zinc-800">
                 <span className={`text-[10px] font-pixel font-bold tracking-widest ${rs.labelClass}`}>
                   ✦ {rs.label} ITEM ✦
@@ -1152,9 +1151,7 @@ export default function ShopBoard({ searchQuery = "", activeCategory = "all" }: 
                 </button>
               </div>
 
-              {/* Core Body */}
               <div className="p-5 flex flex-col items-center text-center flex-1">
-                {/* Visual Grid Backdrop untuk Ikon Item */}
                 <div 
                   className="w-24 h-24 bg-zinc-950 border-2 border-zinc-800 flex items-center justify-center mb-4 relative"
                   style={{
@@ -1168,14 +1165,12 @@ export default function ShopBoard({ searchQuery = "", activeCategory = "all" }: 
                   </div>
                 </div>
 
-                {/* Nama Item */}
                 <h2 className="text-sm font-bold text-white uppercase tracking-wide mb-2 font-mono px-2">
                   {item.name}
                 </h2>
 
                 <div className="w-full h-px bg-zinc-800 my-2" />
 
-                {/* Status Atribut / Stats Effector */}
                 <div className="w-full bg-zinc-950/50 border border-zinc-800/80 p-3 mb-4 font-mono">
                   {item.stat.split('/').map((s, i) => (
                     <p key={i} className="text-[11px] font-bold text-emerald-400 leading-relaxed">
@@ -1187,8 +1182,7 @@ export default function ShopBoard({ searchQuery = "", activeCategory = "all" }: 
                   </p>
                 </div>
 
-                {/* Harga Info khusus mode Pembelian */}
-                {ownedCount === 0 && (
+                {ownedCount === 0 && !isEquipped && (
                   <div className="flex items-center gap-1.5 mb-2 bg-amber-500/10 border border-amber-500/30 px-3 py-1">
                     <div
                       className="w-2.5 h-2.5 bg-amber-400"
@@ -1201,7 +1195,6 @@ export default function ShopBoard({ searchQuery = "", activeCategory = "all" }: 
                 )}
               </div>
 
-              {/* Action Buttons Footer (LANJUT / BATAL Style) */}
               <div className="grid grid-cols-2 gap-2 p-3 bg-zinc-950 border-t-2 border-zinc-800">
                 <button
                   onClick={() => setSelectedItem(null)}
@@ -1230,9 +1223,8 @@ export default function ShopBoard({ searchQuery = "", activeCategory = "all" }: 
           </div>
         );
       })()}
-      {/* ---------------------------------------------------- */}
 
-      {/* --- HEADER TOKO & LOOT STYLE FOCUS ARENA --- */}
+      {/* --- HEADER TOKO --- */}
       <div className="flex flex-col md:flex-row md:justify-between md:items-end gap-4 mb-8 shrink-0 border-b border-zinc-700/50 pb-6">
         <div className="flex flex-col gap-3 text-left">
           <h1 className="font-pixel text-sm md:text-base text-white flex items-center gap-3 drop-shadow-[2px_2px_0_#000]">
@@ -1263,7 +1255,6 @@ export default function ShopBoard({ searchQuery = "", activeCategory = "all" }: 
 
         <div className="w-px h-8 bg-zinc-700 hidden lg:block"></div>
 
-        {/* OWNERSHIP FILTER */}
         <div className="flex flex-wrap gap-2">
           <button onClick={() => setOwnershipFilter('all')} className={`px-3 py-1.5 text-[10px] font-bold border-2 transition-colors uppercase tracking-widest ${ownershipFilter === 'all' ? 'border-purple-400 text-purple-400 bg-zinc-800 shadow-[2px_2px_0_#c084fc]' : 'border-zinc-700 text-zinc-500 hover:border-zinc-500 bg-zinc-900'}`}>{t.all}</button>
           <button onClick={() => setOwnershipFilter('owned')} className={`px-3 py-1.5 text-[10px] font-bold border-2 transition-colors uppercase tracking-widest ${ownershipFilter === 'owned' ? 'border-emerald-400 text-emerald-400 bg-zinc-800 shadow-[2px_2px_0_#34d399]' : 'border-zinc-700 text-zinc-500 hover:border-zinc-500 bg-zinc-900'}`}>{t.owned}</button>
@@ -1297,7 +1288,6 @@ export default function ShopBoard({ searchQuery = "", activeCategory = "all" }: 
               id={item.id === 1 ? "tour-shop-item-1" : undefined}
               onMouseEnter={() => setHoveredId(item.id)}
               onMouseLeave={() => setHoveredId(null)}
-              // DIKLIk SEKARANG MEMBUKA POP-UP DETAIL
               onClick={() => setSelectedItem(item)}
               style={{ imageRendering: 'pixelated' }}
               className={`
@@ -1308,13 +1298,11 @@ export default function ShopBoard({ searchQuery = "", activeCategory = "all" }: 
                 ${ownedCount > 0 && !isEquipped ? 'border-dashed border-emerald-500/50' : ''}
               `}
             >
-              {/* Top bar */}
               <div className="flex justify-between items-center px-2 py-1.5 bg-zinc-950/50 border-b border-zinc-800 shrink-0">
                 <span className={`text-[8px] font-bold tracking-widest ${rs.labelClass}`}>{rs.label}</span>
                 <div className={`w-1.5 h-1.5 ${rs.dot}`} />
               </div>
 
-              {/* Content Wrapper (Icon + Name) */}
               <div
                 className="flex-1 flex flex-col items-center justify-between p-3 pb-2 relative text-center gap-2"
                 style={{
@@ -1323,7 +1311,6 @@ export default function ShopBoard({ searchQuery = "", activeCategory = "all" }: 
                   backgroundSize: '4px 4px',
                 }}
               >
-                {/* BADGE DIGUNAKAN */}
                 {isEquipped && (
                   <div className="absolute top-1.5 right-1.5 z-10 pointer-events-none">
                     <div className="bg-amber-400 text-amber-950 text-[6px] font-pixel px-1.5 py-0.5 tracking-wider border border-amber-900 shadow-[1px_1px_0_#000]">
@@ -1332,7 +1319,6 @@ export default function ShopBoard({ searchQuery = "", activeCategory = "all" }: 
                   </div>
                 )}
 
-                {/* BADGE DIMILIKI */}
                 {!isEquipped && ownedCount > 0 && (
                   <div className="absolute top-1.5 right-1.5 z-10 pointer-events-none">
                     <div className="bg-emerald-500 text-emerald-950 text-[6px] font-pixel px-1.5 py-0.5 tracking-wider border border-emerald-900 shadow-[1px_1px_0_#000]">
@@ -1341,7 +1327,6 @@ export default function ShopBoard({ searchQuery = "", activeCategory = "all" }: 
                   </div>
                 )}
 
-                {/* Container Icon */}
                 <div 
                   className="flex-1 flex items-center justify-center min-h-[95px] w-full mt-2"
                   style={{ imageRendering: 'pixelated' }}
@@ -1357,7 +1342,6 @@ export default function ShopBoard({ searchQuery = "", activeCategory = "all" }: 
                   </div>
                 </div>
 
-                {/* Container Nama Item */}
                 <div className="w-full pt-1 min-h-[34px] flex items-center justify-center border-t border-zinc-800/40">
                   <span className="text-[10px] sm:text-[11px] font-bold text-zinc-100 uppercase tracking-wide line-clamp-2 leading-tight px-0.5">
                     {item.name}
@@ -1365,7 +1349,6 @@ export default function ShopBoard({ searchQuery = "", activeCategory = "all" }: 
                 </div>
               </div>
 
-              {/* Hover tooltip overlay */}
               {isHovered && (
                 <div
                   className="absolute inset-0 flex flex-col items-center justify-center px-3 z-20"
@@ -1389,7 +1372,6 @@ export default function ShopBoard({ searchQuery = "", activeCategory = "all" }: 
                 </div>
               )}
 
-              {/* Price */}
               <div className="bg-zinc-950 border-t border-zinc-800/80 py-2.5 flex items-center justify-center gap-2 shrink-0">
                 <div
                   className="w-2.5 h-2.5 bg-amber-400 shadow-[1px_1px_0_rgba(0,0,0,0.5)]"
